@@ -1,0 +1,24 @@
+@mixin width-center() {
+    width: 100%;
+    margin: auto;
+}
+
+@mixin flexible() {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flexibleSpace() {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin activeShadow() {
+  box-shadow: 6px 6px 10px black;
+}
+
+@mixin border() {
+  border: 1px solid black;
+}

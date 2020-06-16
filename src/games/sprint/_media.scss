@@ -1,0 +1,13 @@
+@media (hover:hover) {
+
+  .intro div:hover {
+    transform: scale(0.9);
+    opacity: 0.8;
+    color: #005986;
+    background-color: #faffcd;
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+}
