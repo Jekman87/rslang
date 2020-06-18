@@ -1,15 +1,16 @@
-/* eslint-disable quotes */
-/* eslint-disable class-methods-use-this */
-import creatingHelper from '../../HelpFunctions/createElementsHelper';
-import { clearRegister, clearLogin } from './clearAuthorization';
-import createAuthorizationForm from './authorization.template';
-import createUser from './asyncCreateUser';
-import loginUser from './asyncLoginUser';
+import $$ from '../../core/domManipulation.js';
+import { clearRegister, clearLogin } from './clearAuthorization.js';
+import createAuthorizationForm from './authorization.template.js';
+import createUser from './asyncCreateUser.js';
+import loginUser from './asyncLoginUser.js';
+import destroyAuthorization from './destroyAuthorization.js';
 
 export default class Authorization {
   constructor() {
-    this.authorizationWrapper = creatingHelper('div', 'container-fluid');
+    this.authorizationWrapper = $$.create('div', 'container-fluid').$el;
+    this.authorizationWrapper.style.marginTop = '7%';
     this.authorizationWrapper.insertAdjacentHTML('afterbegin', createAuthorizationForm());
+    this.app = document.getElementById('app');
   }
 
   async onSubmitRegisterForm(event) {
@@ -18,12 +19,16 @@ export default class Authorization {
 
     const user = document.getElementById('registerName').value;
     const password = document.getElementById('registerPassword').value;
-    const createdUser = await createUser({ email: `${user}`, password: `${password}` });
 
-    if (createdUser.error) {
-      document.querySelector('.alert-error-register').classList.remove('d-none');
-    } else {
+    try {
+      await createUser({
+        email: `${user}`,
+        password: `${password}`,
+      });
+
       document.querySelector('.alert-success-register').classList.remove('d-none');
+    } catch {
+      document.querySelector('.alert-error-register').classList.remove('d-none');
     }
 
     setTimeout(clearRegister, 2000);
@@ -38,15 +43,15 @@ export default class Authorization {
     const user = document.getElementById('loginName').value;
     const password = document.getElementById('loginPassword').value;
 
-    const loginUserResponse = await loginUser({ email: `${user}`, password: `${password}` });
+    try {
+      const loginUserResponse = await loginUser({
+        email: `${user}`,
+        password: `${password}`,
+      });
 
-    if (loginUserResponse.message === 'Authenticated') {
       localStorage.setItem('currentToken', loginUserResponse.token);
-
-      while (document.body.firstChild) {
-        document.body.removeChild(document.body.firstChild);
-      }
-    } else {
+      destroyAuthorization();
+    } catch {
       document.querySelector('.alert-error-login').classList.remove('d-none');
     }
   }
@@ -60,7 +65,7 @@ export default class Authorization {
 
   // == INIT + ADD LISTENERS
   render() {
-    document.body.append(this.authorizationWrapper);
+    this.app.append(this.authorizationWrapper);
 
     this.registerForm = document.querySelector('.register-form');
     this.registerForm.onsubmit = this.onSubmitRegisterForm;

@@ -4,13 +4,13 @@ export default function createAuthorizationForm() {
       RS Lang
     </h1>
     <div class="my-5 col-10 col-md-5 ml-auto mr-auto py-4 authorization-form">
-      
+
       <form class="register-form">
         <div class="alert alert-success text-center alert-success-register d-none" role="alert">
           Success!
         </div>
         <div class="alert alert-danger text-center alert-error-register d-none" role="alert">
-          Something went wrong...
+          User already exists.
         </div>
         <div class="form-group">
           <input
@@ -41,7 +41,7 @@ export default function createAuthorizationForm() {
             letter, one uppercase letter, special character
           </small>
         </div>
-        
+
         <button type="submit" class="btn btn-primary btn-lg btn-block" name = "btn-submit-register">
           REGISTER
         </button>
@@ -84,8 +84,6 @@ export default function createAuthorizationForm() {
         </p>
       </form>
     </div>
+   
   `;
 }
-
-/* <div class="container-fluid authorization-page"> */
-// </div>
