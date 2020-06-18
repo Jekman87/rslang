@@ -84,6 +84,5 @@ export default function createAuthorizationForm() {
         </p>
       </form>
     </div>
-   
   `;
 }
