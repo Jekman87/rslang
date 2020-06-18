@@ -1,4 +1,11 @@
-import { capitalize } from './utils.js';
+import { capitalize } from './utils';
+
+function getMethodName(eventName) {
+  if (typeof eventName !== 'string') {
+    return '';
+  }
+  return `on${capitalize(eventName)}`;
+}
 
 export default class DomListener {
   constructor($root, listeners = []) {
@@ -20,11 +27,4 @@ export default class DomListener {
       this.$root.off(listener, this[method]);
     });
   }
-}
-
-function getMethodName(eventName) {
-  if (typeof eventName !== 'string') {
-    return '';
-  }
-  return `on${capitalize(eventName)}`;
 }
