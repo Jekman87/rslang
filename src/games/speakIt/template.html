@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://bootswatch.com/4/flatly/bootstrap.min.css"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <title>Speakit</title>
+  </head>
+  <body>
+    <div class="speakit container h-100" style="height: 100vh;">
+      <div class="intro h-100 d-none flex-column text-center justify-content-center align-items-center">
+        <h1 class="intro__title">Speakit</h1>
+        <p class="intro__subtitle">
+          Click on the words to hear them sound.</br>
+          Click on the button and speak the words into the microphone.
+        </p>
+        <button data-action="start" class="btn btn-warning btn-lg">
+          Start
+        </button>
+      </div>
+      <div class="header d-flex justify-content-center mt-3">
+        <div class="inner">
+          <nav class="nav nav-pills nav-justified">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-warning p-2" data-group="1">
+                <input
+                  type="radio"
+                  name="options"
+                  id="option1"
+                  autocomplete="off"
+                  checked=""
+                />
+                <span class="fa-stack">
+                  <i class="fa fa-circle-o fa-stack-2x"></i>
+                  <strong class="fa-stack-1x">
+                    1
+                  </strong>
+                </span>
+              </label>
+              <label class="btn btn-info p-2" data-group="2">
+                <input
+                  type="radio"
+                  name="options"
+                  id="option1"
+                  autocomplete="off"
+                />
+                <span class="fa-stack">
+                  <i class="fa fa-circle-o fa-stack-2x"></i>
+                  <strong class="fa-stack-1x">
+                    2
+                  </strong>
+                </span>
+              </label>
+              <label class="btn btn-info p-2" data-group="3">
+                <input
+                  type="radio"
+                  name="options"
+                  id="option1"
+                  autocomplete="off"
+                />
+                <span class="fa-stack">
+                  <i class="fa fa-circle-o fa-stack-2x"></i>
+                  <strong class="fa-stack-1x">
+                    3
+                  </strong>
+                </span>
+              </label>
+              <label class="btn btn-info p-2" data-group="4">
+                <input
+                  type="radio"
+                  name="options"
+                  id="option1"
+                  autocomplete="off"
+                />
+                <span class="fa-stack">
+                  <i class="fa fa-circle-o fa-stack-2x"></i>
+                  <strong class="fa-stack-1x">
+                    4
+                  </strong>
+                </span>
+              </label>
+              <label class="btn btn-info p-2" data-group="5">
+                <input
+                  type="radio"
+                  name="options"
+                  id="option1"
+                  autocomplete="off"
+                />
+                <span class="fa-stack">
+                  <i class="fa fa-circle-o fa-stack-2x"></i>
+                  <strong class="fa-stack-1x">
+                    5
+                  </strong>
+                </span>
+              </label>
+              <label class="btn btn-info p-2" data-group="6">
+                <input
+                  type="radio"
+                  name="options"
+                  id="option1"
+                  autocomplete="off"
+                />
+                <span class="fa-stack">
+                  <i class="fa fa-circle-o fa-stack-2x"></i>
+                  <strong class="fa-stack-1x">
+                    6
+                  </strong>
+                </span>
+              </label>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div class="buttons-container d-flex justify-content-center mt-3">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-outline-primary">
+            <i class="fa fa-refresh" aria-hidden="true"></i> Restart
+          </button>
+          <button type="button" class="btn btn-outline-primary">
+            <i class="fa fa-microphone" aria-hidden="true"></i> Speak please
+          </button>
+          <button type="button" class="btn btn-outline-primary">
+            <i class="fa fa-bar-chart" aria-hidden="true"></i> Results
+          </button>
+        </div>
+      </div>
+      <div class="card-container d-flex justify-content-center mt-3">
+        <div
+          class="card mb-3 word-card text-white bg-primary"
+          style="max-width: 20rem;"
+        >
+          <div class="text-center">
+            <img
+              class="card-img-top img-thumbnail img-fluid word-card__img"
+              src="https://raw.githubusercontent.com/vviiiii/rslang-data/master/data/20_0381.jpg"
+              alt=""
+            />
+          </div>
+          <div class="card-body text-center p-1">
+            <p class="card-text word-card__translation">достижения</p>
+            <div class="form-group m-1 d-none">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-microphone" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <input
+                  class="form-control card-text word-card__input"
+                  type="text"
+                  readonly=""
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="score d-flex justify-content-center m-auto">
+        <div class="correct">
+          <i class="fa fa-2x fa-star text-danger" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="cards-desk my-3 mx-4">
+        <div
+          class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center"
+        >
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-success p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-success text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+          <div class="card btn btn-info p-0">
+            <div
+              class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
+            >
+              <div class="card-audio">
+                <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+              </div>
+              <p class="term card-text m-0 p-1">
+                copper
+              </p>
+              <p class="transcription card-text m-0 p-1">
+                [kɑ́pər]
+              </p>
+              <p class="translation d-none">
+                Thisialongercard
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="audio-container d-none">
+        <audio class="audio" id="audio" src=""></audio>
+      </div>
+      <div class="results h-100 d-none justify-content-center align-items-center">
+        <div class="results-container w-50 d-flex flex-column justify-content-center  m-auto p-5 border border-primary">
+          <p class="errors">Ошибок <span class="errors-num text-danger">3</span></p>
+          <div class="errors-item mb-3">
+            <div class="set__item d-flex align-items-center">
+              <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+              <p class="term mr-3 mb-0">bury</p>
+              <p class="transcription mr-3 mb-0">[béri]</p>
+              <p class="translation mr-3 mb-0"> хоронить </p>
+            </div>
+            <div class="set__item d-flex align-items-center">
+              <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+              <p class="term mr-3 mb-0">bury</p>
+              <p class="transcription mr-3 mb-0">[béri]</p>
+              <p class="translation mr-3 mb-0"> хоронить </p>
+            </div>
+            <div class="set__item d-flex align-items-center">
+              <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+              <p class="term mr-3 mb-0">bury</p>
+              <p class="transcription mr-3 mb-0">[béri]</p>
+              <p class="translation mr-3 mb-0"> хоронить </p>
+            </div>
+          </div>
+       <p class="succes">Знаю <span class="succes-num text-success">7</span></p>
+       <div class="succes-item mb-3">
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+          <div class="set__item d-flex align-items-center">
+            <i class="fa fa-volume-up mr-3" aria-hidden="true"></i>
+            <p class="term mr-3 mb-0">bury</p>
+            <p class="transcription mr-3 mb-0">[béri]</p>
+            <p class="translation mr-3 mb-0"> хоронить </p>
+          </div>
+        </div>
+        <div class="buttons-container d-flex justify-content-center">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary">
+              <i class="fa fa-refresh" aria-hidden="true"></i> Return
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+              <i class="fa fa-microphone" aria-hidden="true"></i> New Game
+            </button>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
