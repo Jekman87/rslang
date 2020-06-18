@@ -1,4 +1,4 @@
-import DomListener from './DomListener.js';
+import DomListener from './DomListener';
 
 export default class Component extends DomListener {
   constructor($root, options = {}) {
