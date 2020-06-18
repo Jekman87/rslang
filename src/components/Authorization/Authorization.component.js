@@ -26,12 +26,18 @@ export default class Authorization {
         password: `${password}`,
       });
 
-      document.querySelector('.alert-success-register').classList.remove('d-none');
+      const loginUserResponse = await loginUser({
+        email: `${user}`,
+        password: `${password}`,
+      });
+
+      localStorage.setItem('currentToken', loginUserResponse.token);
+
+      destroyAuthorization();
     } catch {
       document.querySelector('.alert-error-register').classList.remove('d-none');
+      setTimeout(clearRegister, 2000);
     }
-
-    setTimeout(clearRegister, 2000);
   }
 
   async onSubmitLoginForm(event) {
