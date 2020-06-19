@@ -1,10 +1,10 @@
 import './scss/sprint.scss';
 
-import Component from '../../core/Component.js';
-import createGameField from './sprint.template.js';
-import $$ from '../../core/domManipulation.js';
-import { hideIntro, readySetGo, check } from './sprint.functions.js';
-import DICTIONARY from './sprint.data.js';
+import Component from '../../core/Component';
+import createGameField from './sprint.template';
+import $$ from '../../core/domManipulation';
+import { hideIntro, readySetGo, check } from './sprint.functions';
+import DICTIONARY from './sprint.data';
 
 export default class Sprint extends Component {
   static className = 'sprint';
@@ -31,7 +31,6 @@ export default class Sprint extends Component {
     const keys = ['Enter'];
     if (keys.includes(event.key)) {
       event.preventDefault();
-      
     }
   }
 
