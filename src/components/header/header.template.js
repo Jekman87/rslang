@@ -1,5 +1,35 @@
+import { mainMenuTitles, gameMenuTitles } from '../../constants/menu.constants';
+
 export default function createHeaderHTML() {
-  return `
+  const gameMenu = gameMenuTitles.map((item) => `
+    <a class="dropdown-item" href="#" data-name="${item[0]}">${item[1]}</a>
+  `).join('');
+
+  const menu = mainMenuTitles.map((item, index) => {
+    let navItem;
+
+    if (item[0] !== 'games') {
+      navItem = `
+        <li class="nav-item ${index === 0 ? 'active' : ''}">
+          <a class="nav-link" href="#" data-name="${item[0]}">${item[1]}</a>
+        </li>
+      `;
+    } else {
+      navItem = `
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" data-name="${item[0]}"
+            role="button" aria-haspopup="true" aria-expanded="false">${item[1]}</a>
+          <div class="dropdown-menu">
+            ${gameMenu}
+          </div>
+        </li>
+      `;
+    }
+
+    return navItem;
+  }).join('');
+
+  const header = `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
         <a class="navbar-brand" href="#">RS Lang</a>
@@ -8,42 +38,13 @@ export default function createHeaderHTML() {
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Главная</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Тренировка</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Игры</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">SpeakIt</a>
-                <a class="dropdown-item" href="#">English puzzle</a>
-                <a class="dropdown-item" href="#">Саванна</a>
-                <a class="dropdown-item" href="#">Аудиовызов</a>
-                <a class="dropdown-item" href="#">Спринт</a>
-                <a class="dropdown-item" href="#">Своя игра</a>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Словарь</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Статистика</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Настройки</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Промо</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">О команде</a>
-            </li>
+            ${menu}
           </ul>
           <button class="btn btn-secondary mt-5 my-lg-0" type="submit">Выход <i class="fas fa-sign-out-alt"></i></button>
         </div>
       </div>
     </nav>
   `;
+
+  return header;
 }
