@@ -1,7 +1,7 @@
 import './plugins/bootstrap/index';
 import './plugins/fontawesome/index';
 import MainApp from './components/mainApp';
-// import Header from './components/header';
+import Header from './components/header';
 // import Page from './components/page';
 
 // проверяем есть ли токен в локалсторадж
@@ -9,5 +9,5 @@ import MainApp from './components/mainApp';
 // вызываем компонент авторизации
 // если с токеном все ок - запускаем главную страницу mainApp
 
-// const mainApp = new MainApp('#app', { components: [Header, Page] });
+const mainApp = new MainApp('#app', { components: [Header] });
 // mainApp.render();
