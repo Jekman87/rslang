@@ -7,12 +7,4 @@ const capitalize = (string) => {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 
-const storage = (key, data = null) => {
-  if (!data) {
-    return JSON.parse(localStorage.getItem(key));
-  }
-  localStorage.setItem(key, JSON.stringify(data));
-  return true;
-};
-
-export { capitalize, delay, storage };
+export { capitalize, delay };

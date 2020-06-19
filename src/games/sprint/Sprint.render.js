@@ -1,7 +1,7 @@
 import $$ from '../../core/domManipulation.js';
 import Observer from '../../core/Observer.js';
 
-export default class Wrapper {
+export default class SprintRender {
   constructor(selector, options) {
     this.$el = $$(selector);
     this.components = options.components || [];
@@ -10,7 +10,7 @@ export default class Wrapper {
   }
 
   getRoot() {
-    const $root = $$.create('div', 'wrapper');
+    const $root = $$.create('div', 'sprint-container');
 
     const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
     this.components = this.components.map((Component) => {

@@ -1,8 +1,10 @@
-import './sprint.scss';
+import './scss/sprint.scss';
+
 import Component from '../../core/Component.js';
-import createHeaderHTML from './sprint.template.js';
+import createGameField from './sprint.template.js';
 import $$ from '../../core/domManipulation.js';
-import { storage } from '../../core/utils.js';
+import { hideIntro, readySetGo, check } from './sprint.functions.js';
+import DICTIONARY from './sprint.data.js';
 
 export default class Sprint extends Component {
   static className = 'sprint';
@@ -13,12 +15,15 @@ export default class Sprint extends Component {
       listeners: ['click', 'keydown'],
       ...options,
     });
+    this.time = 60;
   }
 
-  async onClick(event) {
+  onClick(event) {
     const clickedElement = $$(event.target);
-    if (clickedElement.tagName === 'DIV') {
-      console.log(14);
+    const currentTarget = event.target;
+    if (currentTarget.dataset.button === 'start') {
+      hideIntro(this.$root);
+      readySetGo();
     }
   }
 
@@ -26,11 +31,11 @@ export default class Sprint extends Component {
     const keys = ['Enter'];
     if (keys.includes(event.key)) {
       event.preventDefault();
-      console.log(13);
+      
     }
   }
 
   toHTML() {
-    return createHeaderHTML(storage('lang')).trim();
+    return createGameField().trim();
   }
 }

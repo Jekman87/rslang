@@ -1,7 +1,9 @@
+$fontColor: #005e8d;
+
 .game-block {
+  width: 40%;
   display: flex;
   flex-direction: column;
-  width: 40%;
   margin: auto;
   padding: 2%;
   border-radius: 5px;
@@ -9,30 +11,50 @@
   background-color: #ffffff5c;
 }
 
+.sprint-score {
+  width: 40%;
+  min-height: 10vh;
+  @include flexible;
+  margin: auto;
+  margin-bottom: 3%;
+  background-color: transparent;
+  position: relative;
+  border: none;
+
+  .score {
+    font-size: 2rem;
+    color: $fontColor;
+  }
+
+  .mute {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}
+
 .progress-place  {
-  width: 80%;
+  width: 90%;
   @include flexible;
   position: relative;
   margin: auto;
+  margin-bottom: 7%;
 
   & div {
     width: 30px;
     height: 30px;
     border-radius: 50%;
     margin-right: 4%;
-    background-color: #0080008f;
+/*     background-color: #0080008f; */
     border: 1px solid #005e8d;
-    margin-bottom: 7%;
   }
 
-  & img {
+  & i {
     width: 40px;
     position: absolute;
-    top: 0;
     right: 0;
   }
 }
-
 
 .birds,
 .language-eng,
@@ -60,6 +82,20 @@
     border: 1px solid #005e8d;
   }
 }
+
+.button {
+  @include flexible;
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff5c;
+  border: 1px solid #005e8d;
+}
+
+.icon-parameters {
+  font-size: 1.5rem;
+  color: $fontColor;
+}
+
 
 
 
