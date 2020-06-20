@@ -5,8 +5,9 @@ import createGameField from './sprint.template';
 /* import $$ from '../../core/domManipulation'; */
 import {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playClickAudio, playWordAudio,
+  playWordAudio,
   compareAnswers, rewriteStatistic,
+  muteGameVoice, onGameVoice,
 } from './sprint.functions';
 /* import DICTIONARY from './sprint.data'; */
 
@@ -41,19 +42,25 @@ export default class Sprint extends Component {
       console.log(event.target.dataset.click);
     } */
 
+    if (event.target.dataset.click === 'mute') {
+      muteGameVoice();
+    }
+
+    if (event.target.dataset.click === 'unmute') {
+      onGameVoice();
+    }
+
     if (event.target.dataset.click === 'audio') {
       playWordAudio();
     }
 
     if (currentTarget.dataset.button === 'Wrong') {
-      playClickAudio();
       writeUserAnswer(currentTarget.dataset.button);
       compareAnswers();
       rewriteStatistic();
     }
 
     if (currentTarget.dataset.button === 'Correct') {
-      playClickAudio();
       writeUserAnswer(currentTarget.dataset.button);
       compareAnswers();
       rewriteStatistic();
@@ -63,14 +70,12 @@ export default class Sprint extends Component {
   onKeyup(event) {
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
-      playClickAudio();
       writeUserAnswer(event.key);
       compareAnswers();
       rewriteStatistic();
     }
     if (event.key === 'ArrowRight') {
       event.preventDefault();
-      playClickAudio();
       writeUserAnswer(event.key);
       compareAnswers();
       rewriteStatistic();

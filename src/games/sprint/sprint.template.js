@@ -1,8 +1,8 @@
 export default function createGameField() {
   return `
     <div class="intro">
-      <h1>ENGLISH<br>SPRINT</h1>
-      <p>Simple layout.</p>
+      <h1>ENGLISH<br><i class="fas fa-running"></i>SPRINT<i class="fas fa-rabbit-fast"></i></h1>
+      <p>True or false?</p>
       <div class='start-block' data-button="start">Let's start</div>
     </div>
 
@@ -18,12 +18,18 @@ export default function createGameField() {
 
       <header>
         <div class="timer">Timer</div>
-        <button class="btn btn-outline-secondary button"><i class="fa fa-times icon-parameters" aria-hidden="true"></i></button>
+        <button class="btn btn-outline-danger button"><i class="fa fa-times icon-parameters" aria-hidden="true"></i></button>
       </header>
 
       <div class="sprint-score">
         <div class="score">0</div>
-        <button class="btn btn-outline-secondary button mute"><i class="fa fa-music icon-parameters"></i></button>
+        <span class="mute">
+          <i class="fas fa-music icon-parameters note" data-click="mute"></i>
+        </span>
+        <span class="unmute">
+          <i class="fas fa-music icon-parameters crossed-note" data-click="unmute"></i>
+          <i class="fas fa-slash icon-parameters cross-line" data-click="unmute"></i>
+        </span>
       </div>
 
       <div class='game-block'>
@@ -35,27 +41,30 @@ export default function createGameField() {
           <span class="audio-icon"><i class="fa fa-volume-down icon-parameters" aria-hidden="true" data-click="audio"></i></span>
         </div>
 
+        <span class="points-progress">+10 points for the correct answer</span>
+
         <div class="birds">
-          <img src="assets/img/bird.png" alt="bird" />
+          <img class="bird-1" src="assets/img/bird-1.png" alt="bird" />
           <span></span>
         </div>
         <div class="language-eng">ENGLISH</div>
         <div class="language-rus">RUSSIAN</div>
 
         <div class="click-buttons">
-          <button data-button="Wrong">Wrong</button>
-          <button data-button="Correct">Correct</button>
+          <button class="btn btn-danger" data-button="Wrong">Wrong</button>
+          <button class="btn btn-success" data-button="Correct">Correct</button>
         </div>
 
         <div class="press-buttons">
-          <button><i class="fas fa-long-arrow-alt-left"></i></button>
-          <button><i class="fas fa-long-arrow-alt-right"></i></button>
+          <span class="left-arrow"><i class="fas fa-long-arrow-alt-left" data-button="Wrong"></i></span>
+          <span class="right-arrow"><i class="fas fa-long-arrow-alt-right" data-button="Correct"></i></span>
         </div>
 
         <audio class="tick-voice" src="assets/voices/bip.mp3"></audio>
         <audio class="start-voice" src="assets/voices/gong.mp3"></audio>
-        <audio class="click-voice" src="assets/voices/pew.mp3"></audio>
+        <audio class="click-voice" crossOrigin="anonymous" src="assets/voices/pew.mp3"></audio>
         <audio class="word-voice" src="assets/voices/pew.mp3"></audio>
+        <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
 
       </div>
 

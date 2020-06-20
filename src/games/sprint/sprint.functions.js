@@ -8,7 +8,9 @@ const state = {
   translateWord: '',
   audioWord: '',
   points: 0,
+  pointsWeigth: 10,
   comboAnswers: 0,
+  colorCount: 0,
 };
 
 function hideIntro(el) {
@@ -80,11 +82,16 @@ function playStartAudio() {
 }
 
 function playClickAudio() {
-  document.querySelector('.click-voice').play();
+  document.querySelector('.click-voice').play().catch((err) => console.log(err));
+  return true;
 }
 
 function playWordAudio() {
   document.querySelector('.word-voice').play();
+}
+
+function playWrongAudio() {
+  document.querySelector('.wrong-voice').play().catch((err) => console.log(err));
 }
 
 function getRandomNumber(min, max) {
@@ -107,7 +114,7 @@ function generateCorrectWordCouple() {
 
 function generateWrongWordCouple() {
   const keys = Object.keys(DICTIONARY);
-  const randomNumber = getRandomNumber(1, 50);
+  const randomNumber = getRandomNumber(1, 599);
   const randomValue = keys[randomNumber];
   const randomValue2 = keys[randomNumber + 1];
   const randomEngWord = DICTIONARY[randomValue].word;
@@ -132,22 +139,77 @@ function writeUserAnswer(answer) {
 
 function compareAnswers() {
   if (state.userAnswer === state.roundStatus) {
-    state.points += 10;
+    state.points += state.pointsWeigth;
     state.comboAnswers += 1;
+    state.colorCount += 1;
+    if (state.comboAnswers !== 4
+    || state.comboAnswers !== 8
+    || state.comboAnswers !== 12) {
+      playClickAudio();
+    }
+  } else {
+    playWrongAudio();
+    state.comboAnswers = 0;
+    state.colorCount = 0;
+    state.pointsWeigth = 10;
+    document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+    document.querySelectorAll('.bird').forEach((el) => el.remove());
+  }
+}
+
+function pointsCount() {
+  console.log(state.pointsWeigth);
+  switch (state.comboAnswers) {
+    case 4:
+      console.log('work4');
+      playStartAudio();
+      document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+      state.colorCount = 0;
+      state.pointsWeigth += state.pointsWeigth;
+      document.querySelector('.birds').insertAdjacentHTML('afterbegin',
+        '<img class="bird bird-2" src="assets/img/bird-2.png" alt="bird" />');
+
+      document.querySelector('.score').innerHTML = state.points;
+      document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+      break;
+    case 8:
+      console.log('work7');
+      playStartAudio();
+      document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+      state.colorCount = 0;
+      state.pointsWeigth += state.pointsWeigth;
+      document.querySelector('.birds').insertAdjacentHTML('afterbegin',
+        '<img class="bird bird-3" src="assets/img/bird-3.png" alt="bird" />');
+
+      document.querySelector('.score').innerHTML = state.points;
+      document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+      break;
+    case 12:
+      console.log('work7');
+      playStartAudio();
+      document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+      state.colorCount = 0;
+      state.pointsWeigth += state.pointsWeigth;
+      document.querySelector('.birds').insertAdjacentHTML('afterbegin',
+        '<img class="bird bird-4" src="assets/img/bird-4.png" alt="bird" />');
+
+      document.querySelector('.score').innerHTML = state.points;
+      document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+      break;
+    default:
+      console.log();
+      break;
   }
 }
 
 function rewriteStatistic() {
   document.querySelector('.score').innerHTML = state.points;
+  document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+  pointsCount();
   callRandomFunction();
   showWordsInThePage();
-  if (state.comboAnswers > 3) {
-    state.comboAnswers = 0;
-    document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-    document.querySelectorAll('.birds img').forEach((el) => el.remove());
-  } else {
-    document.querySelector(`[data-score-place="${state.comboAnswers}"]`).style.backgroundColor = '#0080008f';
-    document.querySelector('.birds').insertAdjacentHTML('afterbegin', '<img src="assets/img/bird.png" alt="bird" />');
+  if (state.colorCount > 0) {
+    document.querySelector(`[data-score-place="${state.colorCount}"]`).style.backgroundColor = '#0080008f';
   }
 }
 
@@ -164,8 +226,25 @@ function showWordsInThePage() {
   document.querySelector('.word-voice').src = url;
 }
 
+function muteGameVoice() {
+  document.querySelector('.mute').style.display = 'none';
+  document.querySelector('.click-voice').src = '';
+  document.querySelector('.wrong-voice').src = '';
+
+  document.querySelector('.unmute').style.display = 'flex';
+}
+
+function onGameVoice() {
+  document.querySelector('.mute').style.display = 'flex';
+  document.querySelector('.click-voice').src = 'assets/voices/pew.mp3';
+  document.querySelector('.wrong-voice').src = 'assets/voices/wrong.mp3';
+
+  document.querySelector('.unmute').style.display = 'none';
+}
+
 export {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playClickAudio, playWordAudio,
-  compareAnswers, rewriteStatistic,
+  playWordAudio,
+  compareAnswers, rewriteStatistic, pointsCount,
+  muteGameVoice, onGameVoice,
 };

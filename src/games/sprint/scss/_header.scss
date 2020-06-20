@@ -11,4 +11,13 @@ header {
     background-color: #ffffff5c;
     border: 1px solid #005e8d;
   }
+
+  button i {
+    transition: all 0.8s;
+  }
+
+  .timer {
+    font-size: 1.5rem;
+    color: $fontColor;
+  }
 }

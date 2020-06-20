@@ -12,8 +12,51 @@
 
   .audio-icon:hover i {
     transform: scale(1.2);
-    transition: all 0.6s;
+    transition: all 0.8s;
     cursor: pointer;
   }
 
+  .mute:hover i {
+    color: red;
+    transform: scale(1.2);
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .unmute:hover .crossed-note {
+    color: $fontColor;
+    transform: scale(1.2);
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .unmute:hover .cross-line {
+    color: $fontColor;
+    transform: scale(1.2);
+    transition: all 0.8s;
+    transform: rotate(-236deg);
+    cursor: pointer;
+  }
+
+  header button:hover i {
+    color: white;
+    transition: all 0.8s;
+    transform: rotate(360deg);
+  }
+
+  .left-arrow:hover i {
+    transition: all 0.8s;
+    transform: scale(1.2);
+    transform: rotate(360deg);
+    color: #042158;
+    cursor: pointer;
+  }
+
+  .right-arrow:hover i {
+    transition: all 0.8s;
+    transform: scale(1.2);
+    transform: rotate(-360deg);
+    color: #042158;
+    cursor: pointer;
+  }
 }
