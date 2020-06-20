@@ -14,7 +14,7 @@ export default class MainApp {
 
     const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
     this.components = this.components.map((Component) => {
-      const element = $$.create(Component.tagName, Component.className);
+      const element = $$.create(Component.tagName || 'div', Component.className);
       const component = new Component(element, componentOptions);
 
       element.html(component.toHTML());

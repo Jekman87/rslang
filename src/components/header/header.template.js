@@ -2,23 +2,23 @@ import { mainMenuTitles, gameMenuTitles } from '../../constants/menu.constants';
 
 export default function createHeaderHTML() {
   const gameMenu = gameMenuTitles.map((item) => `
-    <a class="dropdown-item" href="#" data-name="${item[0]}">${item[1]}</a>
+    <a class="dropdown-item" href="#" data-name="${item.data}">${item.title}</a>
   `).join('');
 
   const menu = mainMenuTitles.map((item, index) => {
     let navItem;
 
-    if (item[0] !== 'games') {
+    if (item.data !== 'games') {
       navItem = `
         <li class="nav-item ${index === 0 ? 'active' : ''}">
-          <a class="nav-link" href="#" data-name="${item[0]}">${item[1]}</a>
+          <a class="nav-link" href="#" data-name="${item.data}">${item.title}</a>
         </li>
       `;
     } else {
       navItem = `
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" data-name="${item[0]}"
-            role="button" aria-haspopup="true" aria-expanded="false">${item[1]}</a>
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" data-name="${item.data}"
+            role="button" aria-haspopup="true" aria-expanded="false">${item.title}</a>
           <div class="dropdown-menu">
             ${gameMenu}
           </div>
@@ -40,7 +40,7 @@ export default function createHeaderHTML() {
           <ul class="navbar-nav mr-auto">
             ${menu}
           </ul>
-          <button class="btn btn-secondary mt-5 my-lg-0" type="submit">Выход <i class="fas fa-sign-out-alt"></i></button>
+          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout">Выход <i class="fas fa-sign-out-alt"></i></button>
         </div>
       </div>
     </nav>

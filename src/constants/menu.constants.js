@@ -1,20 +1,20 @@
 const mainMenuTitles = [
-  ['main', 'Главная'],
-  ['training', 'Тренировка'],
-  ['games', 'Игры'],
-  ['vocabulary', 'Словарь'],
-  ['statistics', 'Статистика'],
-  ['promo', 'Промо'],
-  ['team', 'О команде'],
+  { data: 'main', title: 'Главная' },
+  { data: 'training', title: 'Тренировка' },
+  { data: 'games', title: 'Игры' },
+  { data: 'vocabulary', title: 'Словарь' },
+  { data: 'statistics', title: 'Статистика' },
+  { data: 'promo', title: 'Промо' },
+  { data: 'team', title: 'О команде' },
 ];
 
 const gameMenuTitles = [
-  ['speakit', 'SpeakIt'],
-  ['puzzle', 'English puzzle'],
-  ['savannah', 'Саванна'],
-  ['audiocall', 'Аудиовызов'],
-  ['sprint', 'Спринт'],
-  ['ourgame', 'Своя игра'],
+  { data: 'speakit', title: 'SpeakIt' },
+  { data: 'puzzle', title: 'English puzzle' },
+  { data: 'savannah', title: 'Саванна' },
+  { data: 'audiocall', title: 'Аудиовызов' },
+  { data: 'sprint', title: 'Спринт' },
+  { data: 'ourgame', title: 'Своя игра' },
 ];
 
 export { mainMenuTitles, gameMenuTitles };

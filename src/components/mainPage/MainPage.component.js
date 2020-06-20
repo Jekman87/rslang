@@ -1,30 +1,24 @@
 import Component from '../../core/Component';
-import createPageHTML from './page.template';
 import $$ from '../../core/domManipulation';
+import createMainPageHTML from './mainPage.template';
 
-export default class Header extends Component {
-  static tagName = 'main';
-
-  static className = 'page';
+export default class MainPage extends Component {
+  static className = 'mainPage';
 
   constructor($root, options) {
     super($root, {
-      name: 'Page',
+      name: 'MainPage',
       listeners: ['click'],
       ...options,
     });
   }
 
-  init() {
-    super.init();
-  }
-
   onClick(event) {
     const clickedElement = $$(event.target);
-    console.log('page onClick', clickedElement);
+    console.log('MainPage onClick', clickedElement);
   }
 
   toHTML() {
-    return createPageHTML().trim();
+    return createMainPageHTML().trim();
   }
 }
