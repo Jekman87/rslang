@@ -16,6 +16,7 @@ export default class CardContainer extends Component {
   init() {
     super.init();
     this.subscribe('intro:start', () => {
+      console.log(this.$root);
       this.$root.removeClass('d-none');
     });
   }

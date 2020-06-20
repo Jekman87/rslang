@@ -8,12 +8,12 @@ export default function createCardContainerHTML() {
       <div class="text-center">
         <img
           class="card-img-top img-thumbnail img-fluid word-card__img"
-          src="https://raw.githubusercontent.com/vviiiii/rslang-data/master/data/20_0381.jpg"
+          src="https://vviiiii-speakit.netlify.app/assets/img/blank.jpg"
           alt=""
         />
       </div>
       <div class="card-body text-center p-1">
-        <p class="card-text word-card__translation">достижения</p>
+        <p class="card-text word-card__translation d-none">достижения</p>
         <div class="form-group m-1 d-none">
           <div class="input-group">
             <div class="input-group-prepend">

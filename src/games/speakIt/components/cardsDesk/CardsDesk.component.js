@@ -1,8 +1,9 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createCardsDeskHTML from './cardsDesk.template';
-// import getTranslation from '../../api/translate.api';
-import getWords from '../../api/words.api';
+import createCardHTML from './card.template';
+import { getRandomNum } from '../../../../core/utils';
+// import getWords from '../../api/words.api';
 
 export default class CardsDesk extends Component {
   static className = 'cards-desk';
@@ -13,25 +14,32 @@ export default class CardsDesk extends Component {
       listeners: ['click'],
       ...options,
     });
-    this.gameLevel = {
-      page: 1,
-      group: 1,
-    };
   }
 
   init() {
     super.init();
     this.subscribe('intro:start', () => {
+      const cardsData = prepareCardsData.apply(this);
+      const cardsRow = this.$root.find('.row');
+      // console.log(cardsData);
+      // console.log(cardsRow);
+      cardsRow.html(cardsData);
       this.$root.removeClass('d-none');
     });
-    // const res = await getTranslation({ word: 'dog', langs: 'en-ru' });
-    // console.log(res);
-    prepareCardsData.apply(this);
   }
 
   onClick(event) {
-    const clickedElement = $$(event.target);
-    console.log(clickedElement);
+    let clickedElement = $$(event.target);
+    if (clickedElement.hasClass('card') || clickedElement.closest('.card')) {
+      if (!clickedElement.hasClass('card')) {
+        clickedElement = $$(clickedElement.closest('.card'));
+      }
+      this.$root.findAll('.card-body').forEach((el) => {
+        $$(el).removeClass('bg-success').addClass('bg-info');
+      });
+      const cardBody = clickedElement.find('.card-body');
+      cardBody.removeClass('bg-info').addClass('bg-success');
+    }
   }
 
   toHTML() {
@@ -39,7 +47,14 @@ export default class CardsDesk extends Component {
   }
 }
 
-async function prepareCardsData() {
-  const res2 = await getWords({ ...this.gameLevel });
-  console.log(res2);
+function prepareCardsData() {
+  const randomNum = getRandomNum(0, 1);
+  const wordsArr = this.dataForApp.words;
+  const wordsTen = randomNum ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
+  const cards = wordsTen.map((name) => {
+    const { word: term, wordTranslate: translation, transcription } = name;
+    const card = createCardHTML({ term, translation, transcription });
+    return card;
+  });
+  return cards.join('');
 }

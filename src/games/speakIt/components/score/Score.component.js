@@ -1,6 +1,7 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
-import createScoreHTML from './score.template';
+import createScoreContainerHTML from './scoreContainer.template';
+// import createScoreHTML from './score.template';
 
 export default class Score extends Component {
   static className = 'score';
@@ -26,6 +27,6 @@ export default class Score extends Component {
   }
 
   toHTML() {
-    return createScoreHTML().trim();
+    return createScoreContainerHTML().trim();
   }
 }

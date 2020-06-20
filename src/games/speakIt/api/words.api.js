@@ -1,6 +1,6 @@
 import { WORDS_URL } from './constants';
 
-export default async function getWords(config) {
+export async function getWords(config) {
   const { page, group } = config;
   try {
     const url = `${WORDS_URL}page=${page}&group=${group}`;
@@ -11,3 +11,5 @@ export default async function getWords(config) {
     return err;
   }
 }
+
+export { getWords as default };

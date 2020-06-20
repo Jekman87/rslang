@@ -1,20 +1,19 @@
-export default function createCardHTML() {
+export default function createCardHTML(data) {
+  const { term, transcription, translation } = data;
   return `
-  <div class="card btn btn-info p-0">
+  <div class="card">
     <div
       class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
     >
-      <div class="card-audio">
-        <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
-      </div>
+      <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
       <p class="term card-text m-0 p-1">
-        copper
+        ${term}
       </p>
       <p class="transcription card-text m-0 p-1">
-        [kɑ́pər]
+        ${transcription}
       </p>
       <p class="translation d-none">
-        Thisialongercard
+        ${translation}
       </p>
     </div>
   </div>
