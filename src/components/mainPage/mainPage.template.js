@@ -1,4 +1,4 @@
-export default function createPageHTML() {
+export default function createMainPageHTML() {
   return `
     <div class="container mt-3">
       <div class="jumbotron">

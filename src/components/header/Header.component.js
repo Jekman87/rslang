@@ -15,10 +15,6 @@ export default class Header extends Component {
     });
   }
 
-  // init() {
-  //   super.init();
-  // }
-
   onClick(event) {
     const clickedElement = $$(event.target);
     if (clickedElement.$el.tagName.toLowerCase() === 'a') {

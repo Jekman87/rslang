@@ -1,6 +1,6 @@
 const mainMenuTitles = [
-  { data: 'main', title: 'Главная' },
-  { data: 'training', title: 'Тренировка' },
+  { data: 'MainPage', title: 'Главная' },
+  { data: 'MainGame', title: 'Тренировка' },
   { data: 'games', title: 'Игры' },
   { data: 'vocabulary', title: 'Словарь' },
   { data: 'statistics', title: 'Статистика' },
