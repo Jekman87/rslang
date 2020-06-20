@@ -16,19 +16,21 @@
     <title>Speakit</title>
   </head>
   <body>
-    <div class="speakit container h-100" style="height: 100vh;">
-      <div class="intro h-100 d-none flex-column text-center justify-content-center align-items-center">
-        <h1 class="intro__title">Speakit</h1>
-        <p class="intro__subtitle">
-          Click on the words to hear them sound.</br>
-          Click on the button and speak the words into the microphone.
-        </p>
-        <button data-action="start" class="btn btn-warning btn-lg">
-          Start
-        </button>
+    <div class="speakit container" style="height: 100vh;">
+      <div class="intro h-100">
+        <div class="intro-content h-100 d-flex flex-column text-center justify-content-center align-items-center">
+          <h1 class="intro__title">Speakit</h1>
+          <p class="intro__subtitle">
+            Click on the words to hear them sound.</br>
+            Click on the button and speak the words into the microphone.
+          </p>
+          <button data-action="start" class="btn btn-warning btn-lg">
+            Start
+          </button>
+        </div>
       </div>
-      <div class="header d-flex justify-content-center mt-3">
-        <div class="inner">
+      <div class="header">
+        <div class="header-content d-flex flex-column justify-content-center align-items-center mt-3">
           <nav class="nav nav-pills nav-justified">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-warning p-2" data-group="1">
@@ -118,58 +120,63 @@
               </label>
             </div>
           </nav>
-        </div>
-      </div>
-      <div class="buttons-container d-flex justify-content-center mt-3">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-outline-primary">
-            <i class="fa fa-refresh" aria-hidden="true"></i> Restart
-          </button>
-          <button type="button" class="btn btn-outline-primary">
-            <i class="fa fa-microphone" aria-hidden="true"></i> Speak please
-          </button>
-          <button type="button" class="btn btn-outline-primary">
-            <i class="fa fa-bar-chart" aria-hidden="true"></i> Results
-          </button>
-        </div>
-      </div>
-      <div class="card-container d-flex justify-content-center mt-3">
-        <div
-          class="card mb-3 word-card text-white bg-primary"
-          style="max-width: 20rem;"
-        >
-          <div class="text-center">
-            <img
-              class="card-img-top img-thumbnail img-fluid word-card__img"
-              src="https://raw.githubusercontent.com/vviiiii/rslang-data/master/data/20_0381.jpg"
-              alt=""
-            />
-          </div>
-          <div class="card-body text-center p-1">
-            <p class="card-text word-card__translation">достижения</p>
-            <div class="form-group m-1 d-none">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="fa fa-microphone" aria-hidden="true"></i>
-                  </span>
-                </div>
-                <input
-                  class="form-control card-text word-card__input"
-                  type="text"
-                  readonly=""
-                />
-              </div>
+          <div class="buttons-container d-flex justify-content-center mt-3">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-primary">
+                <i class="fa fa-refresh" aria-hidden="true"></i> Restart
+              </button>
+              <button type="button" class="btn btn-outline-primary">
+                <i class="fa fa-microphone" aria-hidden="true"></i> Speak please
+              </button>
+              <button type="button" class="btn btn-outline-primary">
+                <i class="fa fa-bar-chart" aria-hidden="true"></i> Results
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="score d-flex justify-content-center m-auto">
+<div class="card-container">
+  <div class="card-container-content d-flex justify-content-center mt-3">
+    <div
+      class="card mb-3 word-card text-white bg-primary"
+      style="max-width: 20rem;"
+    >
+      <div class="text-center">
+        <img
+          class="card-img-top img-thumbnail img-fluid word-card__img"
+          src="https://raw.githubusercontent.com/vviiiii/rslang-data/master/data/20_0381.jpg"
+          alt=""
+        />
+      </div>
+      <div class="card-body text-center p-1">
+        <p class="card-text word-card__translation">достижения</p>
+        <div class="form-group m-1 d-none">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fa fa-microphone" aria-hidden="true"></i>
+              </span>
+            </div>
+            <input
+              class="form-control card-text word-card__input"
+              type="text"
+              readonly=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="score-content d-flex justify-content-center m-auto">
         <div class="correct">
           <i class="fa fa-2x fa-star text-danger" aria-hidden="true"></i>
         </div>
       </div>
-      <div class="cards-desk my-3 mx-4">
+      <div class="cards-desk-content my-3 mx-4">
+        <div class="audio-container d-none">
+          <audio class="audio" id="audio" src=""></audio>
+        </div>
         <div
           class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center"
         >
@@ -355,10 +362,7 @@
           </div>
         </div>
       </div>
-      <div class="audio-container d-none">
-        <audio class="audio" id="audio" src=""></audio>
-      </div>
-      <div class="results h-100 d-none justify-content-center align-items-center">
+      <div class="results-content h-100 d-flex justify-content-center align-items-center">
         <div class="results-container w-50 d-flex flex-column justify-content-center  m-auto p-5 border border-primary">
           <p class="errors">Ошибок <span class="errors-num text-danger">3</span></p>
           <div class="errors-item mb-3">
@@ -437,7 +441,7 @@
           </div>
         </div>
         </div>
-      </div>
+      </div> 
     </div>
   </body>
 </html>
