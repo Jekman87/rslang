@@ -1,5 +1,5 @@
-import $$ from '../../core/domManipulation.js';
-import Observer from '../../core/Observer.js';
+import $$ from '../../core/domManipulation';
+import Observer from '../../core/Observer';
 
 export default class SprintRender {
   constructor(selector, options) {
