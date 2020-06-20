@@ -33,14 +33,17 @@ export default function createHeaderHTML() {
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
         <a class="navbar-brand" href="#">RS Lang</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+         aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
             ${menu}
           </ul>
-          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout">Выход <i class="fas fa-sign-out-alt"></i></button>
+          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout">
+            Выход <i class="fas fa-sign-out-alt"></i>
+          </button>
         </div>
       </div>
     </nav>

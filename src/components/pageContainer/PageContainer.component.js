@@ -1,8 +1,6 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 
-// остальные страницы приложения (кроме игр?)
-
 export default class PageContainer extends Component {
   static tagName = 'main';
 
@@ -22,7 +20,12 @@ export default class PageContainer extends Component {
     this.renderPage(this.pages.MainPage);
     this.subscribe('header:menu', (NewPage) => {
       console.log('subscribe', NewPage);
-      this.renderPage(this.pages[NewPage]);
+
+      if (this.pages[NewPage]) {
+        this.renderPage(this.pages[NewPage]);
+      } else {
+        console.log('Тут будет страница: ', NewPage);
+      }
     });
   }
 

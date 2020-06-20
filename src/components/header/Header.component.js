@@ -18,15 +18,25 @@ export default class Header extends Component {
   onClick(event) {
     const clickedElement = $$(event.target);
     if (clickedElement.$el.tagName.toLowerCase() === 'a') {
+      const itemName = clickedElement.data.name;
       // clickedElement.data.name берем название страницы и переходим на нее
-      this.emit('header:menu', clickedElement.data.name);
-      console.log('header onClick', clickedElement.data.name);
+      // переключение меню
+      this.changeMenuItem(itemName);
+
+      this.emit('header:menu', itemName);
+      console.log('header onClick', itemName);
     }
     if (clickedElement.$el.id === 'logout') {
       // удаляем токен из локалсторажда и запускаем авторизацию
       // this.emit('header:logout');
       console.log('header onClick выход', clickedElement);
     }
+  }
+
+  changeMenuItem(itemName) {
+    const menu = $$('.navbar-nav');
+    console.log('changeMenuItem', itemName);
+    console.log('menu', menu);
   }
 
   toHTML() {

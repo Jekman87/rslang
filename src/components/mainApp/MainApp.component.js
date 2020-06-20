@@ -2,7 +2,7 @@ import $$ from '../../core/domManipulation';
 import Observer from '../../core/Observer';
 import MainPage from '../mainPage';
 import MainGame from '../mainGame';
-
+// остальные страницы приложения (кроме игр?)
 export default class MainApp {
   constructor(selector, options) {
     this.$el = $$(selector);
