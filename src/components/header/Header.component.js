@@ -1,6 +1,7 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createHeaderHTML from './header.template';
+import { mainMenuTitles, gameMenuTitles } from '../../constants/menu.constants';
 
 export default class Header extends Component {
   static tagName = 'header';
@@ -17,26 +18,37 @@ export default class Header extends Component {
 
   onClick(event) {
     const clickedElement = $$(event.target);
-    if (clickedElement.$el.tagName.toLowerCase() === 'a') {
-      const itemName = clickedElement.data.name;
-      // clickedElement.data.name берем название страницы и переходим на нее
-      // переключение меню
-      this.changeMenuItem(itemName);
+    const clickedTag = clickedElement.$el.tagName.toLowerCase();
+    const tagData = clickedElement.data;
 
-      this.emit('header:menu', itemName);
-      console.log('header onClick', itemName);
-    }
-    if (clickedElement.$el.id === 'logout') {
+    if (clickedTag === 'a') {
+      const isMainMenuEl = mainMenuTitles.some((title) => title.data === tagData.name);
+
+      if (isMainMenuEl && tagData.name !== 'games') {
+        this.changeMenuItem(clickedElement);
+        this.emit('header:menu', tagData.name);
+      } else {
+        const isGameMenuEl = gameMenuTitles.some((title) => title.data === tagData.name);
+
+        if (isGameMenuEl) {
+          console.log('GameMenu', tagData.name);
+          // запускаем игру
+          // this.emit('header:menu', tagData.name);
+        }
+      }
+    } else if (clickedElement.$el.id === 'logout') {
       // удаляем токен из локалсторажда и запускаем авторизацию
       // this.emit('header:logout');
       console.log('header onClick выход', clickedElement);
     }
   }
 
-  changeMenuItem(itemName) {
+  changeMenuItem(clickedElement) {
     const menu = $$('.navbar-nav');
-    console.log('changeMenuItem', itemName);
-    console.log('menu', menu);
+    const menuItems = menu.findAll('li');
+    menuItems.forEach((item) => $$(item).removeClass('active'));
+    const parentClickedElement = $$(clickedElement.$el.closest('li'));
+    parentClickedElement.addClass('active');
   }
 
   toHTML() {

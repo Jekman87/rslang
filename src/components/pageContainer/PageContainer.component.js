@@ -11,29 +11,28 @@ export default class PageContainer extends Component {
       name: 'PageContainer',
       ...options,
     });
-    this.pages = options.pages || {};
     this.$root = $root;
     this.options = options;
+    this.pages = options.pages || {};
   }
 
   init() {
     this.renderPage(this.pages.MainPage);
     this.subscribe('header:menu', (NewPage) => {
-      console.log('subscribe', NewPage);
-
       if (this.pages[NewPage]) {
+        this.component.destroy();
         this.renderPage(this.pages[NewPage]);
       } else {
-        console.log('Тут будет страница: ', NewPage);
+        console.log('Страница пока не готова: ', NewPage);
       }
     });
   }
 
   renderPage(NewPage) {
     const element = $$.create(NewPage.tagName || 'div', NewPage.className);
-    const component = new NewPage(element, this.options);
-    element.html(component.toHTML());
+    this.component = new NewPage(element, this.options);
+    element.html(this.component.toHTML());
     this.$root.clear().append(element.$el);
-    component.init();
+    this.component.init();
   }
 }

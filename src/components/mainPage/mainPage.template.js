@@ -10,7 +10,7 @@ export default function createMainPageHTML() {
               <div class="card-body">
                 <h5 class="card-title">Статистика за сегодня</h5>
                 <p class="card-text">Слов на сегодня: 15 из 30</p>
-                <p class="card-text">Карточек на сегодня: 30 50</p>
+                <p class="card-text">Карточек на сегодня: 30 из 50</p>
                 <a href="#" class="btn btn-primary">Подробнее</a>
               </div>
             </div>

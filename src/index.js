@@ -1,5 +1,5 @@
-import './plugins/bootstrap/index';
-import './plugins/fontawesome/index';
+import './plugins/bootstrap';
+import './plugins/fontawesome';
 import MainApp from './components/mainApp';
 import Header from './components/header';
 import PageContainer from './components/pageContainer';
