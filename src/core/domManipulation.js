@@ -28,6 +28,10 @@ class Dom {
     return this.$el.classList.contains(className);
   }
 
+  closest(className) {
+    return this.$el.closest(className);
+  }
+
   removeClass(className) {
     this.$el.classList.remove(className);
     return this;

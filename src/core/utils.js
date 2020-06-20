@@ -15,4 +15,8 @@ const storage = (key, data = null) => {
   return true;
 };
 
-export { capitalize, delay, storage };
+const getRandomNum = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+export {
+  capitalize, delay, storage, getRandomNum,
+};
