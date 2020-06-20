@@ -4,8 +4,7 @@ export default function createAuthorizationForm() {
       RS Lang
     </h1>
     <div class="my-5 col-10 col-md-5 ml-auto mr-auto py-4 authorization-form">
-
-      <form class="register-form">
+      <form class="register-form d-none">
         <div class="alert alert-success text-center alert-success-register d-none" role="alert">
           Success!
         </div>
@@ -41,7 +40,6 @@ export default function createAuthorizationForm() {
             letter, one uppercase letter, special character
           </small>
         </div>
-
         <button type="submit" class="btn btn-primary btn-lg btn-block" name = "btn-submit-register">
           REGISTER
         </button>
@@ -54,7 +52,7 @@ export default function createAuthorizationForm() {
           </a>
         </p>
       </form>
-      <form class="login-form d-none">
+      <form class="login-form">
         <div class="alert alert-danger alert-error-login text-center d-none" role="alert">
           Incorrect E-mail or password, please try again.
         </div>
