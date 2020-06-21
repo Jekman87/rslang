@@ -1,5 +1,6 @@
 export default function createStartPage() {
   return `
+  <div class="container d-flex flex-column">
     <div class="row pt-3">
         <div class="col-11"></div>
         <div class="col">
@@ -8,7 +9,7 @@ export default function createStartPage() {
             </button>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-5 mt-auto">
         <div class="col"></div>
         <div class="col">
             <p class="my-5 text-uppercase text-center text-white display-4 game-title">
@@ -24,7 +25,7 @@ export default function createStartPage() {
             </p>
         </div>
     </div>
-    <div class="row my-5">
+    <div class="row my-5 mb-auto">
         <div class="col"></div>
         <div class="col">
             <button type="button" class="d-block btn btn-outline-light ml-auto mr-auto text-uppercase btn-start-game">
@@ -33,7 +34,6 @@ export default function createStartPage() {
         </div>
         <div class="col"></div>
     </div>
+</div>
     `;
 }
-
-/* <div class="container-fluid audio-call-start-page"></div> */

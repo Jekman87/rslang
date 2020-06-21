@@ -9,11 +9,17 @@ import './core/domManipulation';
 import './core/Observer';
 import './core/utils';
 
-import { Authorization, checkTokenValidity } from './components/Authorization/authorization.index';
+// import { Authorization, checkTokenValidity }
+//  from './components/Authorization/authorization.index';
 
-console.log('Help me!');
+// console.log('Help me!');
 
-if (!checkTokenValidity()) {
-  const authorization = new Authorization();
-  authorization.render();
-}
+// if (!checkTokenValidity()) {
+//   const authorization = new Authorization();
+//   authorization.render();
+// }
+
+import StartPage from './components/AudioCall/index';
+
+const startPage = new StartPage();
+startPage.render();
