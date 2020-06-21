@@ -1,5 +1,6 @@
 import $$ from '../../../core/domManipulation';
 import createStartPage from './startPage.template';
+import AudioCall from '../AudioCallGame/AudioCall.component';
 
 export default class StartPage {
   constructor() {
@@ -8,24 +9,34 @@ export default class StartPage {
 
     this.startPageWrapper.insertAdjacentHTML('afterbegin', createStartPage());
     this.app = document.getElementById('app');
+
+    this.render = this.render.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
-  onStartGameBtnClick() {
-    //   this.destroy()
+  onClick(event) {
+    const { target } = event;
+
+    switch (target.dataset.event) {
+      case 'close':
+        this.destroy();
+        break;
+      case 'startGame':
+        this.destroy();
+        new AudioCall().render();
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
     this.app.append(this.startPageWrapper);
-
-    this.startGameBtn = document.querySelector('.btn-start-game');
-    this.startGameBtn.addEventListener('click', this.onStartGameBtnClick);
+    this.startPageWrapper.addEventListener('click', this.onClick);
   }
 
-  //   destroy() {
-  //     while (this.app.firstChild) {
-  //       this.app.removeChild(this.app.firstChild);
-  //     }
-
-  //     this.startPageBtn.removeEventListener('click', this.onStartGameBtnClick);
-  //   }
+  destroy() {
+    document.querySelector('.audio-call-start-page').removeEventListener('click', this.onClick);
+    document.getElementById('app').innerHTML = '';
+  }
 }
