@@ -4,10 +4,11 @@ import createAuthorizationForm from './authorization.template';
 import createUser from './asyncCreateUser';
 import loginUser from './asyncLoginUser';
 import destroyAuthorization from './destroyAuthorization';
+import startMainApp from '../../main';
 
 export default class Authorization {
   constructor() {
-    this.authorizationWrapper = $$.create('div', 'container-fluid').$el;
+    this.authorizationWrapper = $$.create('div', 'container').$el;
     this.authorizationWrapper.style.marginTop = '7%';
     this.authorizationWrapper.insertAdjacentHTML('afterbegin', createAuthorizationForm());
     this.app = document.getElementById('app');
@@ -34,6 +35,7 @@ export default class Authorization {
       localStorage.setItem('currentToken', loginUserResponse.token);
       localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
       destroyAuthorization();
+      startMainApp();
     } catch {
       document.querySelector('.alert-error-register').classList.remove('d-none');
       setTimeout(clearRegister, 2000);
@@ -58,6 +60,7 @@ export default class Authorization {
       localStorage.setItem('currentToken', loginUserResponse.token);
       localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
       destroyAuthorization();
+      startMainApp();
     } catch {
       document.querySelector('.alert-error-login').classList.remove('d-none');
     }
