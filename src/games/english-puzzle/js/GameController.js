@@ -1,10 +1,14 @@
+import PuzzleDrawer from './PuzzleDrawer.js';
+
 export default class GameController {
   constructor() {
+    this.puzzleDrawer = new PuzzleDrawer();
     this.sentenceList = document.querySelectorAll('li.sentence');
     this.sentenceConstructor = document.querySelector('p.sentence-constructor');
     this.availableWords = document.querySelector('p.available-words');
     this.translateHelp = document.querySelector('p.sentence-translate');
     this.audioHelp = new Audio();
+    this.imgHelp = document.querySelector('img.puzzle-pic');
     this.playBtn = document.querySelector('button.play-btn');
     this.startBtn = document.querySelector('button.start-button');
     this.spinner = document.querySelector('div.spinner');
@@ -27,6 +31,26 @@ export default class GameController {
     document.dispatchEvent(new CustomEvent('dataRequired', { detail: GameController.defineNextRound() }));
   }
 
+  async handleNewData(e) {
+    this.sentenceIndex = 0;
+    this.sentencesData = e.detail.data.sentencesInfo;
+    this.pictureData = e.detail.data.pictureInfo;
+
+    this.hideAnswers();
+    this.cleanSentenceConstructor();
+    document.querySelector('div.answer-btn-group').classList.remove('hidden');
+    await this.createPuzzles();
+    this.fillHelpers();
+    this.getAvailableWords();
+    this.removeLoadingEffect();
+  }
+
+  hideAnswers() {
+    this.sentenceList.forEach((sentence) => {
+      sentence.classList.remove('sentence_guessed');
+    });
+  }
+
   removeLoadingEffect() {
     this.startBtn.classList.remove('visible');
     this.spinner.classList.remove('visible');
@@ -34,32 +58,25 @@ export default class GameController {
     document.querySelector('main.main').classList.add('visible');
   }
 
-  handleNewData(e) {
-    this.sentenceIndex = 0;
-    this.data = e.detail.data;
-    this.data.forEach((item, index) => {
-      const sentence = GameController.createSentence(item.text);
-      this.sentenceList[index].innerHTML = sentence;
-      this.sentenceList[index].classList.remove('sentence_guessed');
+  async createPuzzles() {
+    this.imgHelp.src = this.pictureData.link;
+    await new Promise((resolve) => {
+      this.imgHelp.onload = () => {
+        this.puzzleDrawer.setData(this.sentencesData);
+        this.puzzleDrawer.renderCanvases();
+        this.puzzleDrawer.drawPuzzles();
+        resolve();
+      };
     });
-    this.fillHelpers();
-    this.cleanSentenceConstructor();
-    this.getAvailableWords();
-    this.removeLoadingEffect();
-  }
-
-  static createSentence(words) {
-    const markUpArr = words.map((word) => `<span class="word">${word}</span>`);
-    return markUpArr.join('');
   }
 
   fillHelpers() {
-    this.translateHelp.textContent = this.data[this.sentenceIndex].translate;
+    this.translateHelp.textContent = this.sentencesData[this.sentenceIndex].translate;
     if (localStorage.translateHelp === 'off') {
       this.translateHelp.classList.remove('visible');
     }
 
-    this.audioHelp.src = this.data[this.sentenceIndex].audio;
+    this.audioHelp.src = this.sentencesData[this.sentenceIndex].audio;
     if (localStorage.autoplayHelp === 'on') {
       this.playAudio();
     }
@@ -80,9 +97,17 @@ export default class GameController {
 
   getAvailableWords() {
     const words = [...this.sentenceList[this.sentenceIndex].children];
-    GameController.shuffle(words);
-    words.forEach((word) => {
-      this.availableWords.append(word.cloneNode(true));
+    const newWords = words.map((word, i, arr) => {
+      const newWord = PuzzleDrawer.clonePuzzle(word, true);
+
+      if (i === arr.length - 1) newWord.classList.add('word_last');
+      newWord.dataset.content = this.sentencesData[this.sentenceIndex].text[i];
+
+      return newWord;
+    });
+    GameController.shuffle(newWords);
+    newWords.forEach((word) => {
+      this.availableWords.append(word);
     });
   }
 
@@ -130,8 +155,8 @@ export default class GameController {
     e.target.nextElementSibling.classList.remove('disabled');
 
     if (this.sentenceIndex === 9) {
-      document.querySelector('div.answer-btn-group').classList.toggle('hidden');
-      document.querySelector('div.next-round-block').classList.toggle('hidden');
+      document.querySelector('div.answer-btn-group').classList.add('hidden');
+      document.querySelector('div.next-round-block').classList.remove('hidden');
       e.target.textContent = 'Check';
     } else {
       this.sentenceIndex += 1;
@@ -151,7 +176,7 @@ export default class GameController {
     const words = [...this.sentenceList[this.sentenceIndex].children];
 
     words.forEach((word) => {
-      this.sentenceConstructor.append(word.cloneNode(true));
+      this.sentenceConstructor.append(PuzzleDrawer.clonePuzzle(word, true));
     });
     this.availableWords.innerHTML = '';
   }
@@ -161,17 +186,23 @@ export default class GameController {
   }
 
   compare(e) {
-    const answers = this.sentenceConstructor.querySelectorAll('span.word');
+    const answers = this.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
+    const result = [];
+    const answerIdx = [];
 
-    [...this.sentenceList[this.sentenceIndex].children].forEach((word, index) => {
-      if (word.textContent === answers[index].textContent) {
-        answers[index].classList.add('word_correct');
+    this.sentencesData[this.sentenceIndex].text.forEach((word, i) => {
+      if (word === answers[i].dataset.content) {
+        result.push(true);
+        answerIdx.push(i);
       } else {
-        answers[index].classList.add('word_incorrect');
+        result.push(false);
         this.isCorrect = false;
+        answerIdx.push(this.sentencesData[this.sentenceIndex].text.indexOf(answers[i].dataset.content));
       }
     });
+
+    this.showResult(result, answerIdx);
 
     if (this.isCorrect) {
       if (localStorage.autoplayHelp === 'off') {
@@ -191,6 +222,10 @@ export default class GameController {
     if (this.isCorrect) num.classList.add('sentence__num_correct');
     num.textContent = this.sentenceIndex + 1;
     this.sentenceList[this.sentenceIndex].prepend(num);
+  }
+
+  showResult(result, answerIdx) {
+    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, result, answerIdx);
   }
 
   static defineNextRound() {

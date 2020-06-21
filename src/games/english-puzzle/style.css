@@ -134,24 +134,54 @@ select {
   list-style: none;
 }
 
+/* CANVASES */
+
+.sentences-list {
+  width: 801px;
+  font-size: 0;
+  outline: 1px solid black;
+}
+
+.sentence {
+  padding-left: 22px;
+}
+
+.sentence .word {
+  pointer-events: none;
+}
+
+.word {
+  margin-left: -22px;
+  transition: opacity 0.5s linear;
+  background-color: transparent;
+}
+
 .sentence {
   position: relative;
   display: flex;
   justify-content: space-around;
-  margin: 5px 0;
-  border: 1px solid black;
-  background-color: rgba(173, 216, 230, 0.3);
+  opacity: 0;
 }
+
+.sentence:not(:first-child) {
+  margin-top: -1px;
+}
+
+.sentence_guessed {
+  opacity: 1;
+}
+
+/* End of Canvases */
 
 .sentence__num {
   position: absolute;
-  top: 1px;
-  left: -35px;
-  width: 26px;
-  height: 26px;
+  top: 7px;
+  left: -40px;
+  width: 30px;
+  height: 30px;
   text-align: center;
-  font-size: 1.5rem;
-  line-height: 2.4rem;
+  font-size: 1.8rem;
+  line-height: 2.8rem;
   background-color: rgba(255, 127, 80, 0.5);
   border: 1px solid black;
   border-radius: 50%;
@@ -161,40 +191,19 @@ select {
   background-color: rgba(144, 238, 144, 0.5);
 }
 
-.sentence span {
-  opacity: 0;
-  transition: opacity 0.5s linear;
-}
-
-.sentence_guessed span {
-  opacity: 1;
-}
-
-.word {
-  line-height: 2.6rem;
-  font-size: 2rem;
-}
-
 .sentence-constructor .word,
 .available-words .word,
 .word_transported {
-  padding: 5px;
-  background: #90ccf4;
-  border: 2px solid black;
-  border-radius: 4px;
   cursor: grab;
 }
 
-.word_transported {
-  background: white;
+.sentence-constructor .word_last:not(:last-child) {
+  margin-right: 23px;
 }
+
 
 .available-words .word {
   margin: 0 5px;
-}
-
-.word_available:hover {
-  color: lightblue;
 }
 
 .sentence-translate,
@@ -215,10 +224,11 @@ select {
 }
 
 .sentence-constructor {
-  padding: 1px;
-  min-width: 100px;
-  min-height: 40px;
+  padding-left: 22px;
+  min-width: 300px;
+  min-height: 50px;
   border: 2px solid black;
+  background-color: #90ccf4;
   border-radius: 5px;
 }
 
@@ -290,16 +300,6 @@ select {
 .give-up-btn {
   color: coral;
   border-color: coral;
-}
-
-.next-round__message {
-  width: 100%;
-  font-size: 2.2rem;
-  font-family: sans-serif;
-  font-weight: 700;
-  font-style: italic;
-  text-align: center;
-  color: #90ccf4;
 }
 
 .next-round__btn {
