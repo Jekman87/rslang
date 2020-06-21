@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Puzzle English</title>
+  <link rel="icon" type="image/png" href="./img/favicon.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i&display=swap&subset=cyrillic">
+</head>
+<body>
+  <div class="start-page">
+    <h1 class="h1">Puzzle English</h1>
+    <form class="entrance-form hidden" action="#" method="post">
+      <label class="entrance-form__label" for="userEmail">Email:</label>
+      <input id="userEmail" class="entrance-form__field" type="email" name="email" required>
+      <label class="entrance-form__label" for="userPassword">Password:</label>
+      <input id="userPassword" class="entrance-form__field" type="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[+\-_@$!%*?&#.,;:[\]{}]).{8,}" required>
+      <button id="register" class="button entrance-form__button" name="submit">Register</button>
+      <button id="login" class="button entrance-form__button" name="submit">Log In</button>
+    </form>
+    <button class="button start-button">Start</button>
+    <div class="spinner">
+      <div class="lds-hourglass"></div>
+    </div>
+  </div>
+  <p class="report-message report-message_hidden"></p>
+  <div class="wrapper">
+    <main class="main">
+      <section class="controls">
+        <div class="selection-group">
+          <div class="levels-block">
+            <span class="label">Level</span>
+            <button class="btn nav-btn level-btn nav-btn_closed">1</button>
+            <ul class="levels"></ul>
+          </div>
+          <div class="rounds-block">
+            <span class="label">Round</span>
+            <button class="btn nav-btn round-btn nav-btn_closed">1</button>
+            <ul class="rounds"></ul>
+          </div>
+        </div>
+        <button class="btn logout-btn" title="logout"></button>
+        <div class="help-btn-group">
+          <button class="btn help-btn autoplay-btn" data-type="autoplayHelp" title="autoplay helper"></button>
+          <button class="btn help-btn pronounce-btn" data-type="pronounceHelp" title="play-by-click helper"></button>
+          <button class="btn help-btn translate-btn" data-type="translateHelp" title="translate helper"></button>
+          <button class="btn help-btn background-btn" data-type="visualHelp" title="image helper"></button>
+        </div>
+      </section>
+      <section class="game-area">
+        <button class="btn play-btn" title="play"></button>
+        <ul class="sentences-list">
+          <li class="sentence"><span class="word">Word</span></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+          <li class="sentence"></li>
+        </ul>
+        <p class="sentence-translate visible"></p>
+        <p class="sentence-constructor"></p>
+        <p class="available-words"></p>
+        <div class="answer-btn-group">
+          <button class="btn answer-btn check-btn">Check</button>
+          <button class="btn answer-btn give-up-btn">Don't know</button>
+        </div>
+        <div class="next-round-block hidden">
+          <p class="next-round__message">Congratulations! You passed the rond.</p>
+          <button class="btn next-round__btn">Next round</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
