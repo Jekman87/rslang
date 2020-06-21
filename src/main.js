@@ -5,6 +5,6 @@ import Header from './components/header';
 import PageContainer from './components/pageContainer';
 
 export default function startMainApp() {
-  const mainApp = new MainApp('#app', { components: [Header, PageContainer] });
+  const mainApp = new MainApp('#app', { components: [Header, PageContainer]});
   mainApp.render();
 }

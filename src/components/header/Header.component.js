@@ -6,7 +6,7 @@ import { mainMenuTitles, gameMenuTitles } from '../../constants/menu.constants';
 export default class Header extends Component {
   static tagName = 'header';
 
-  static className = 'header';
+  static className = 'Header';
 
   constructor($root, options) {
     super($root, {
@@ -49,9 +49,7 @@ export default class Header extends Component {
         }
       }
     } else if (clickedElement.$el.id === 'logout') {
-      // удаляем токен из локалсторажда и запускаем авторизацию
-      // this.emit('header:logout');
-      console.log('header onClick выход', clickedElement);
+      this.emit('mainLogout');
     }
   }
 

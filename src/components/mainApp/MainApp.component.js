@@ -1,22 +1,18 @@
 import $$ from '../../core/domManipulation';
 import Observer from '../../core/Observer';
 
-import MainPage from '../mainPage';
-import MainGame from '../mainGame';
-// остальные страницы приложения и игры
-
 export default class MainApp {
   constructor(selector, options) {
     this.$el = $$(selector);
     this.components = options.components || [];
     this.observer = new Observer();
-    this.pages = { MainPage, MainGame };
+    this.options = options;
   }
 
   getRoot() {
     const $root = $$.create('div', 'main-app');
 
-    const componentOptions = { observer: this.observer, pages: this.pages };
+    const componentOptions = { observer: this.observer, ...this.options };
     this.components = this.components.map((Component) => {
       const element = $$.create(Component.tagName || 'div', Component.className);
       const component = new Component(element, componentOptions);

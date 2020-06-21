@@ -3,7 +3,7 @@ import $$ from '../../core/domManipulation';
 import createMainPageHTML from './mainPage.template';
 
 export default class MainPage extends Component {
-  static className = 'mainPage';
+  static className = 'MainPage';
 
   constructor($root, options) {
     super($root, {
@@ -11,6 +11,7 @@ export default class MainPage extends Component {
       listeners: ['click'],
       ...options,
     });
+
     this.pages = options.pages;
   }
 

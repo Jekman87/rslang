@@ -1,4 +1,4 @@
-import { mainMenuTitles, gameMenuTitles } from '../../constants/menu.constants';
+import { mainMenuTitles, gameMenuTitles, authPageName } from '../../constants/menu.constants';
 
 export default function createHeaderHTML() {
   const gameMenu = gameMenuTitles.map((item) => `
@@ -41,7 +41,7 @@ export default function createHeaderHTML() {
           <ul class="navbar-nav mr-auto">
             ${menu}
           </ul>
-          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout">
+          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout" data-name="${authPageName}">
             Выход <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>

@@ -15,4 +15,8 @@ const storage = (key, data = null) => {
   return true;
 };
 
+storage.remove = (key) => {
+  localStorage.removeItem(key);
+};
+
 export { capitalize, delay, storage };

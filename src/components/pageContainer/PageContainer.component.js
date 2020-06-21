@@ -1,23 +1,31 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
+import { storage } from '../../core/utils';
+import { authPageName } from '../../constants/menu.constants';
 
 export default class PageContainer extends Component {
   static tagName = 'main';
 
-  static className = 'page-container';
+  static className = 'PageContainer';
 
   constructor($root, options) {
     super($root, {
       name: 'PageContainer',
       ...options,
     });
+
     this.$root = $root;
     this.options = options;
     this.pages = options.pages;
+    this.component = options.startPage;
   }
 
   init() {
-    this.renderPage(this.pages.MainPage);
+    if (this.component === authPageName) {
+      this.emit('hideHeader');
+    }
+
+    this.renderPage(this.pages[this.component]);
 
     this.subscribe('changePage', (pageName) => {
       if (this.pages[pageName]) {
@@ -33,6 +41,16 @@ export default class PageContainer extends Component {
       this.emit('hideHeader');
       this.renderGame(this.pages[NewGame]);
     });
+
+    this.subscribe('mainLogout', () => {
+      this.component.destroy();
+      this.emit('hideHeader');
+
+      storage.remove('currentToken');
+      storage.remove('tokenExpiresIn');
+
+      this.renderPage(this.pages[authPageName]);
+    });
   }
 
   renderPage(NewPage) {
@@ -46,7 +64,7 @@ export default class PageContainer extends Component {
   renderGame(NewGame) {
     this.$root.clear();
     // одинаковый интерфейс для всех игр
-    // this.component = new NewGame('.page-container', this.options);
+    // this.component = new NewGame('.PageСontainer', this.options);
     // this.component.render();
     console.log('Игра пока не готова: ', NewGame);
   }

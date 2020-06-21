@@ -17,4 +17,6 @@ const gameMenuTitles = [
   { data: 'ourgame', title: 'Своя игра' },
 ];
 
-export { mainMenuTitles, gameMenuTitles };
+const authPageName = 'Authorization';
+
+export { mainMenuTitles, gameMenuTitles, authPageName };
