@@ -9,8 +9,6 @@ function clearLogin() {
   document.getElementById('loginName').value = '';
   document.getElementById('loginPassword').value = '';
   document.querySelector('.alert-error-login').classList.add('d-none');
-  // document.querySelector('.login-result-success').innerText = '';
-  // document.querySelector('.login-result-failure').innerText = '';
 }
 
 export { clearRegister, clearLogin };
