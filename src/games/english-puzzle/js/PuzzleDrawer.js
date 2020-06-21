@@ -60,29 +60,31 @@ export default class PuzzleDrawer {
     });
   }
 
-  drawSentence(sentence, i, colors = null, indexes = null) {
+  drawSentence(sentence, i, withPic = true, colors = null, indexes = null) {
     const pzls = sentence.querySelectorAll('canvas');
     this.currentPosition = 0;
     pzls.forEach((pzl, j) => {
       if (colors && indexes) {
-        this.drawPiece(pzl, i, indexes[j], colors[j] ? 'lightgreen' : 'coral');
+        this.drawPiece(pzl, i, indexes[j], withPic, colors[j] ? 'lightgreen' : 'coral');
       } else {
-        this.drawPiece(pzl, i, j);
+        this.drawPiece(pzl, i, j, withPic);
       }
     });
   }
 
-  drawPiece(pzl, i, j, color) {
+  drawPiece(pzl, i, j, withPic, color) {
     const textWord = this.textSentences[i][j];
     const lastWordIndex = this.sentenceParams[i].words - 1;
 
     const ctx = pzl.getContext('2d');
     PuzzleDrawer.drawShape(pzl, ctx, j, lastWordIndex);
 
-    ctx.globalAlpha = 0.5;
-    this.addImg(pzl, ctx, i);
+    if (withPic) {
+      this.addImg(pzl, ctx, i);
+    } else {
+      PuzzleDrawer.addBackground(pzl, ctx);
+    }
 
-    ctx.globalAlpha = 1;
     this.addText(pzl, ctx, textWord, j, lastWordIndex, color);
   }
 
@@ -120,30 +122,38 @@ export default class PuzzleDrawer {
     this.currentPosition = this.currentPosition + picWidth - (22 * coefficient);
     const picHeight = this.img.naturalHeight / 10;
     const top = i * picHeight;
+
+    ctx.globalAlpha = 0.5;
     ctx.drawImage(this.img, left, top, picWidth, picHeight, 0, 0, elem.width, elem.height);
   }
 
+  static addBackground(elem, ctx) {
+    ctx.fillStyle = '#b7b7b7';
+    ctx.fillRect(0, 0, elem.width, elem.height);
+  }
+
   addText(elem, ctx, text, j, lastIndex, color = 'white') {
-    ctx.font = '16px Montserrat';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = color;
     let horizontalPoint = elem.width / 2;
     if (j === 0) horizontalPoint = (elem.width - this.basicSizes.marginShift) / 2;
     if (j === lastIndex) horizontalPoint = (elem.width + this.basicSizes.marginShift) / 2;
+
+    ctx.font = '16px Montserrat';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 1;
+
     ctx.fillText(text, horizontalPoint, 29);
   }
 
-  static clonePuzzle(oldCanvas, isDeepClone) {
+  static clonePuzzle(oldCanvas) {
     const newCanvas = document.createElement('canvas');
     newCanvas.classList.add('word');
 
     newCanvas.width = oldCanvas.width;
     newCanvas.height = oldCanvas.height;
 
-    if (isDeepClone) {
-      const ctx = newCanvas.getContext('2d');
-      ctx.drawImage(oldCanvas, 0, 0);
-    }
+    const ctx = newCanvas.getContext('2d');
+    ctx.drawImage(oldCanvas, 0, 0);
 
     return newCanvas;
   }

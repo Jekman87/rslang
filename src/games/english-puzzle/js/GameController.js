@@ -50,15 +50,22 @@ export default class GameController {
     this.sentenceList.forEach((sentence) => {
       sentence.classList.remove('sentence_guessed');
     });
-
     this.translateHelp.classList.remove('visible');
-    this.painting.classList.toggle('hidden');
-    this.sentenceConstructor.classList.toggle('hidden');
-    this.availableWords.classList.toggle('hidden');
-    document.querySelector('div.answer-btn-group').classList.toggle('hidden');
 
     if (isEndOfRound) {
+      this.painting.classList.remove('hidden');
+      this.sentenceConstructor.classList.add('hidden');
+      this.availableWords.classList.add('hidden');
+      document.querySelector('div.answer-btn-group').classList.add('hidden');
       document.querySelector('div.next-round-block').classList.remove('hidden');
+    } else {
+      this.painting.classList.add('hidden');
+      this.sentenceConstructor.classList.remove('hidden');
+      this.availableWords.classList.remove('hidden');
+      document.querySelector('div.answer-btn-group').classList.remove('hidden');
+      document.querySelector('div.next-round-block').classList.add('hidden');
+      document.querySelector('button.check-btn').textContent = 'Check';
+      document.querySelector('button.give-up-btn').classList.remove('disabled');
     }
   }
 
@@ -110,14 +117,25 @@ export default class GameController {
 
   getAvailableWords() {
     const words = [...this.sentenceList[this.sentenceIndex].children];
-    const newWords = words.map((word, i, arr) => {
-      const newWord = PuzzleDrawer.clonePuzzle(word, true);
+    const tempContainer = document.createElement('div');
 
-      if (i === arr.length - 1) newWord.classList.add('word_last');
+    words.forEach((word, i, arr) => {
+      const newWord = PuzzleDrawer.clonePuzzle(word);
+
       newWord.dataset.content = this.sentencesData[this.sentenceIndex].text[i];
+      if (i === arr.length - 1) {
+        newWord.classList.add('word_last');
+      }
 
-      return newWord;
+      tempContainer.append(newWord);
     });
+
+    if (localStorage.getItem('visualHelp') === 'off') {
+      this.puzzleDrawer.drawSentence(tempContainer, this.sentenceIndex, false);
+    }
+
+    const newWords = [...tempContainer.children];
+
     GameController.shuffle(newWords);
     newWords.forEach((word) => {
       this.availableWords.append(word);
@@ -195,6 +213,10 @@ export default class GameController {
     words.forEach((word) => {
       this.sentenceConstructor.append(PuzzleDrawer.clonePuzzle(word, true));
     });
+
+    const withPic = localStorage.getItem('visualHelp') === 'on';
+    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic);
+
     this.availableWords.innerHTML = '';
   }
 
@@ -242,7 +264,8 @@ export default class GameController {
   }
 
   showResult(result, answerIdx) {
-    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, result, answerIdx);
+    const withPic = localStorage.getItem('visualHelp') === 'on';
+    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic, result, answerIdx);
   }
 
   static defineNextRound() {
