@@ -81,8 +81,7 @@ export default class LevelsController {
       this.roundCurrent += 1;
     }
     document.dispatchEvent(new CustomEvent('dataRequired', { detail: [this.roundCurrent, this.levelCurrent] }));
-    document.querySelector('div.answer-btn-group').classList.toggle('hidden');
-    document.querySelector('div.next-round-block').classList.toggle('hidden');
+    document.querySelector('div.next-round-block').classList.add('hidden');
   }
 
   savePassedRound() {

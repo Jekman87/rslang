@@ -1,4 +1,4 @@
-import PuzzleDrawer from './PuzzleDrawer.js';
+import PuzzleDrawer from './PuzzleDrawer';
 
 export default class GameController {
   constructor() {
@@ -8,7 +8,8 @@ export default class GameController {
     this.availableWords = document.querySelector('p.available-words');
     this.translateHelp = document.querySelector('p.sentence-translate');
     this.audioHelp = new Audio();
-    this.imgHelp = document.querySelector('img.puzzle-pic');
+    this.imgHelp = document.querySelector('img.painting-pic');
+    this.painting = document.querySelector('figure.painting-block');
     this.playBtn = document.querySelector('button.play-btn');
     this.startBtn = document.querySelector('button.start-button');
     this.spinner = document.querySelector('div.spinner');
@@ -36,19 +37,29 @@ export default class GameController {
     this.sentencesData = e.detail.data.sentencesInfo;
     this.pictureData = e.detail.data.pictureInfo;
 
-    this.hideAnswers();
+    this.switchElementsVisibility(false);
     this.cleanSentenceConstructor();
-    document.querySelector('div.answer-btn-group').classList.remove('hidden');
     await this.createPuzzles();
     this.fillHelpers();
     this.getAvailableWords();
+    this.setPaintingInfo();
     this.removeLoadingEffect();
   }
 
-  hideAnswers() {
+  switchElementsVisibility(isEndOfRound) {
     this.sentenceList.forEach((sentence) => {
       sentence.classList.remove('sentence_guessed');
     });
+
+    this.translateHelp.classList.remove('visible');
+    this.painting.classList.toggle('hidden');
+    this.sentenceConstructor.classList.toggle('hidden');
+    this.availableWords.classList.toggle('hidden');
+    document.querySelector('div.answer-btn-group').classList.toggle('hidden');
+
+    if (isEndOfRound) {
+      document.querySelector('div.next-round-block').classList.remove('hidden');
+    }
   }
 
   removeLoadingEffect() {
@@ -72,7 +83,9 @@ export default class GameController {
 
   fillHelpers() {
     this.translateHelp.textContent = this.sentencesData[this.sentenceIndex].translate;
-    if (localStorage.translateHelp === 'off') {
+    if (localStorage.translateHelp === 'on') {
+      this.translateHelp.classList.add('visible');
+    } else {
       this.translateHelp.classList.remove('visible');
     }
 
@@ -109,6 +122,11 @@ export default class GameController {
     newWords.forEach((word) => {
       this.availableWords.append(word);
     });
+  }
+
+  setPaintingInfo() {
+    const info = `${this.pictureData.author} - ${this.pictureData.name} (${this.pictureData.year})`;
+    this.painting.querySelector('figcaption').textContent = info;
   }
 
   static shuffle(arr) {
@@ -155,8 +173,7 @@ export default class GameController {
     e.target.nextElementSibling.classList.remove('disabled');
 
     if (this.sentenceIndex === 9) {
-      document.querySelector('div.answer-btn-group').classList.add('hidden');
-      document.querySelector('div.next-round-block').classList.remove('hidden');
+      this.switchElementsVisibility(true);
       e.target.textContent = 'Check';
     } else {
       this.sentenceIndex += 1;

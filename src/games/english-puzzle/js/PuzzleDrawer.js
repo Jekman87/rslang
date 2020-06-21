@@ -1,4 +1,4 @@
-import puzzleSizeSettings from './puzzleSizeSettings.js';
+import puzzleSizeSettings from './puzzleSizeSettings';
 
 export default class PuzzleDrawer {
   constructor() {
@@ -9,7 +9,7 @@ export default class PuzzleDrawer {
   setData(data) {
     this.sentenceParams = [];
     this.textSentences = [];
-    this.img = document.querySelector('img.puzzle-pic');
+    this.img = document.querySelector('img.painting-pic');
     data.forEach((sentence) => {
       this.textSentences.push(sentence.text);
     });

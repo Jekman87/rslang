@@ -105,6 +105,7 @@ select {
 
 .game-area {
   display: flex;
+  position: relative;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -214,13 +215,15 @@ select {
  display: flex;
  flex-wrap: wrap;
  justify-content: center;
- margin-top: 40px;
+ margin-top: 35px;
+ animation: show 1s linear;
 }
 
 .sentence-translate {
   width: 100%;
   font-size: 2rem;
   opacity: 0;
+  animation: none;
 }
 
 .sentence-constructor {
@@ -267,9 +270,9 @@ select {
   height: 40px;
 }
 
-.answer-btn-group,
 .next-round-block {
-  animation: show 1s linear;
+  margin-top: 90px;
+  width: 100%;
 }
 
 @keyframes show {
@@ -287,7 +290,7 @@ select {
 }
 
 .answer-btn,
-.next-round__btn {
+.next__btn {
   width: 150px;
   font-size: 2rem;
 }
@@ -302,7 +305,7 @@ select {
   border-color: coral;
 }
 
-.next-round__btn {
+.next__btn {
   color: #90ccf4;
 }
 
@@ -396,6 +399,30 @@ select {
   left: -2px;
   box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.5);
 }
+
+/* PICTURE */
+
+.painting-block {
+  display: flex;
+  position: absolute;
+  top: 80px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: show 1s linear;
+}
+
+.painting-pic {
+  width: 801px;
+  height: 441px;
+}
+
+.painting-info {
+  margin: 20px 0;
+  width: 100%;
+  font-size: 2rem;
+  text-align: center;
+}
+
 
 /* START PAGE */
 
