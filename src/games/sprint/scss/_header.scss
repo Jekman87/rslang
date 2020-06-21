@@ -12,6 +12,11 @@ header {
     border: 1px solid #005e8d;
   }
 
+  button {
+    box-shadow: 6px 6px 10px #7b8a8b;
+    transition: all 0.8s;
+  }
+
   button i {
     transition: all 0.8s;
   }

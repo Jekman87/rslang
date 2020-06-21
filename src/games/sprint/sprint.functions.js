@@ -11,6 +11,7 @@ const state = {
   pointsWeigth: 10,
   comboAnswers: 0,
   colorCount: 0,
+  wordCount: 0,
 };
 
 function hideIntro(el) {
@@ -49,7 +50,8 @@ function countdown() {
 
   if (state.currentTime < 1) {
     clearTimeout(timer);
-    location.reload();
+    rewriteCorrectAndWrongAnswers();
+    document.querySelector('.statistic-screen').style.display = 'flex';
   } else {
     timer = setTimeout(countdown, 1000);
   }
@@ -94,6 +96,10 @@ function playWrongAudio() {
   document.querySelector('.wrong-voice').play().catch((err) => console.log(err));
 }
 
+function playStatisticAudio(wordNumber) {
+  document.querySelector(`#statistic-audio-${wordNumber}`).play();
+}
+
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -106,6 +112,7 @@ function generateCorrectWordCouple() {
   const randomRusWord = DICTIONARY[randomValue].translate;
   state.word = randomEngWord;
   state.translateWord = randomRusWord;
+  state.correctTranslateWord = randomRusWord;
   state.audioWord = randomAudioWord;
 
   state.roundStatus = true;
@@ -119,13 +126,44 @@ function generateWrongWordCouple() {
   const randomValue2 = keys[randomNumber + 1];
   const randomEngWord = DICTIONARY[randomValue].word;
   const randomAudioWord = DICTIONARY[randomValue].audio.split('/').pop();
+  const translateForStatistic = DICTIONARY[randomValue].translate;
   const randomRusWord = DICTIONARY[randomValue2].translate;
   state.word = randomEngWord;
   state.translateWord = randomRusWord;
+  state.correctTranslateWord = translateForStatistic;
   state.audioWord = randomAudioWord;
 
   state.roundStatus = false;
   console.log(state.roundStatus, randomEngWord, randomRusWord);
+}
+
+function addAnswerToStatistic(answer) {
+  const url = `https://raw.githubusercontent.com/Alexandr-Voytekhovich/rslang-data/master/data/${state.audioWord}`;
+  const currentAnswer = `
+  <div class="statistic-block" id="statistic-block-${state.wordCount}">
+    <span>
+      <i class="fa fa-volume-down icon-parameters" aria-hidden="true" data-statistic="statistic-${state.wordCount}"></i>
+      <audio id="statistic-audio-${state.wordCount}" src="${url}"></i>
+    </span>
+    <p>${state.word}</p>
+    <p>[${state.word}]</p>
+    <p>[${state.correctTranslateWord}]</p>
+  </div>
+  `;
+  if (answer === 'correct') {
+    document.querySelector('.correct-block').insertAdjacentHTML('beforeend', currentAnswer);
+  }
+  if (answer === 'wrong') {
+    document.querySelector('.mistake-block').insertAdjacentHTML('beforeend', currentAnswer);
+  }
+}
+
+function rewriteCorrectAndWrongAnswers() {
+  const correctAnswers = document.querySelector('.correct-block').children.length;
+  const wrongAnswers = document.querySelector('.mistake-block').children.length;
+
+  document.querySelector('.mistake-answer').innerHTML = wrongAnswers;
+  document.querySelector('.correct-answer').innerHTML = correctAnswers;
 }
 
 function writeUserAnswer(answer) {
@@ -138,6 +176,7 @@ function writeUserAnswer(answer) {
 }
 
 function compareAnswers() {
+  state.wordCount += 1;
   if (state.userAnswer === state.roundStatus) {
     state.points += state.pointsWeigth;
     state.comboAnswers += 1;
@@ -147,13 +186,16 @@ function compareAnswers() {
     || state.comboAnswers !== 12) {
       playClickAudio();
     }
+    addAnswerToStatistic('correct');
   } else {
     playWrongAudio();
     state.comboAnswers = 0;
     state.colorCount = 0;
     state.pointsWeigth = 10;
     document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+    document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
     document.querySelectorAll('.bird').forEach((el) => el.remove());
+    addAnswerToStatistic('wrong');
   }
 }
 
@@ -164,6 +206,7 @@ function pointsCount() {
       console.log('work4');
       playStartAudio();
       document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+      document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
       state.colorCount = 0;
       state.pointsWeigth += state.pointsWeigth;
       document.querySelector('.birds').insertAdjacentHTML('afterbegin',
@@ -176,6 +219,7 @@ function pointsCount() {
       console.log('work7');
       playStartAudio();
       document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+      document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
       state.colorCount = 0;
       state.pointsWeigth += state.pointsWeigth;
       document.querySelector('.birds').insertAdjacentHTML('afterbegin',
@@ -188,10 +232,11 @@ function pointsCount() {
       console.log('work7');
       playStartAudio();
       document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+      document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
       state.colorCount = 0;
       state.pointsWeigth += state.pointsWeigth;
-      document.querySelector('.birds').insertAdjacentHTML('afterbegin',
-        '<img class="bird bird-4" src="assets/img/bird-4.png" alt="bird" />');
+      document.querySelector('.birds')
+        .insertAdjacentHTML('afterbegin', '<img class="bird bird-4" src="assets/img/bird-4.png" alt="bird" />');
 
       document.querySelector('.score').innerHTML = state.points;
       document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
@@ -210,6 +255,8 @@ function rewriteStatistic() {
   showWordsInThePage();
   if (state.colorCount > 0) {
     document.querySelector(`[data-score-place="${state.colorCount}"]`).style.backgroundColor = '#0080008f';
+    document.querySelector(`[data-score-place="${state.colorCount}"]`)
+      .insertAdjacentHTML('afterbegin', '<i class="fas fa-check"></i>');
   }
 }
 
@@ -244,7 +291,7 @@ function onGameVoice() {
 
 export {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playWordAudio,
+  playWordAudio, playStatisticAudio,
   compareAnswers, rewriteStatistic, pointsCount,
   muteGameVoice, onGameVoice,
 };

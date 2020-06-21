@@ -1,9 +1,9 @@
 export default function createGameField() {
   return `
     <div class="intro">
-      <h1>ENGLISH<br><i class="fas fa-running"></i>SPRINT<i class="fas fa-rabbit-fast"></i></h1>
+      <h1>ENGLISH<br><i class="fas fa-running"></i>SPRINT<i class="fas fa-rabbit-fast rabbit"></i></h1>
       <p>True or false?</p>
-      <div class='start-block' data-button="start">Let's start</div>
+      <button type="button" class="btn btn-outline-success" data-button="start">Let's start</button>
     </div>
 
     <div class="main-sp">
@@ -15,10 +15,11 @@ export default function createGameField() {
     </div>
 
     <div class="main-container">
-
       <header>
         <div class="timer">Timer</div>
-        <button class="btn btn-outline-danger button"><i class="fa fa-times icon-parameters" aria-hidden="true"></i></button>
+        <button class="btn btn-outline-danger button">
+          <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="return"></i>
+        </button>
       </header>
 
       <div class="sprint-score">
@@ -60,14 +61,35 @@ export default function createGameField() {
           <span class="right-arrow"><i class="fas fa-long-arrow-alt-right" data-button="Correct"></i></span>
         </div>
 
-        <audio class="tick-voice" src="assets/voices/bip.mp3"></audio>
-        <audio class="start-voice" src="assets/voices/gong.mp3"></audio>
-        <audio class="click-voice" crossOrigin="anonymous" src="assets/voices/pew.mp3"></audio>
-        <audio class="word-voice" src="assets/voices/pew.mp3"></audio>
-        <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
-
       </div>
-
     </div>
+
+    <div class="statistic-screen">
+      <div class="statistic-blocks">
+
+        <div class="mistake-container">
+          <p>I don't know</p>
+          <span class='mistake-answer'>0</span>
+        </div>
+        <div class='mistake-block'></div>
+
+        <div class="correct-container">
+          <p>I know</p>
+          <span class='correct-answer'>0</span>
+        </div>
+        <div class='correct-block'></div>
+
+        <div class='statistic-buttons'>
+          <button class="btn btn-success statistic-button" data-click="return">Return</button>
+          <button class="btn btn-success statistic-button">Game history</button>
+        </div>
+      </div>
+    </div>
+
+    <audio class="tick-voice" src="assets/voices/bip.mp3"></audio>
+    <audio class="start-voice" src="assets/voices/gong.mp3"></audio>
+    <audio class="click-voice" crossOrigin="anonymous" src="assets/voices/pew.mp3"></audio>
+    <audio class="word-voice" src="assets/voices/pew.mp3"></audio>
+    <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
   `;
 }

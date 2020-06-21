@@ -5,7 +5,7 @@ import createGameField from './sprint.template';
 /* import $$ from '../../core/domManipulation'; */
 import {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playWordAudio,
+  playWordAudio, playStatisticAudio,
   compareAnswers, rewriteStatistic,
   muteGameVoice, onGameVoice,
 } from './sprint.functions';
@@ -54,6 +54,10 @@ export default class Sprint extends Component {
       playWordAudio();
     }
 
+    if (event.target.dataset.statistic) {
+      playStatisticAudio(event.target.dataset.statistic.split('-')[1]);
+    }
+
     if (currentTarget.dataset.button === 'Wrong') {
       writeUserAnswer(currentTarget.dataset.button);
       compareAnswers();
@@ -64,6 +68,10 @@ export default class Sprint extends Component {
       writeUserAnswer(currentTarget.dataset.button);
       compareAnswers();
       rewriteStatistic();
+    }
+
+    if (event.target.dataset.click === 'return') {
+      location.reload();
     }
   }
 

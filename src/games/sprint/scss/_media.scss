@@ -1,6 +1,6 @@
 @media (hover:hover) {
 
-  .intro div:hover {
+  .intro button:hover {
     transform: scale(0.9);
     opacity: 0.8;
     color: #005986;
@@ -38,6 +38,11 @@
     cursor: pointer;
   }
 
+  header button:hover {
+    box-shadow: 1px 1px 10px #7b8a8b;
+    transition: all 0.8s;
+  }
+
   header button:hover i {
     color: white;
     transition: all 0.8s;
@@ -59,4 +64,18 @@
     color: #042158;
     cursor: pointer;
   }
+
+  .click-buttons button:hover {
+    box-shadow: 1px 1px 1px #7b8a8b;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .statistic-button:hover {
+    box-shadow: 1px 1px 1px #7b8a8b;
+    color: #002e46;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
 }

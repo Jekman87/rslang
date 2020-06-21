@@ -62,7 +62,6 @@
   }
 }
 
-
 .progress-place  {
   width: 90%;
   @include flexible;
@@ -73,10 +72,14 @@
   & div {
     width: 25px;
     height: 25px;
+    @include flexible;
     border-radius: 50%;
     margin-right: 4%;
-/*     background-color: #0080008f; */
     border: 1px solid #005e8d;
+
+    i {
+      color: white;
+    }
   }
 
   & .audio-icon {
@@ -178,6 +181,11 @@
       color: $fontColor;
     }
   }
+}
+
+.click-buttons button {
+  box-shadow: 6px 6px 10px #7b8a8b;
+  transition: all 0.8s;
 }
 
 .button {
