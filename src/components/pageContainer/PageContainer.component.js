@@ -13,18 +13,25 @@ export default class PageContainer extends Component {
     });
     this.$root = $root;
     this.options = options;
-    this.pages = options.pages || {};
+    this.pages = options.pages;
   }
 
   init() {
     this.renderPage(this.pages.MainPage);
-    this.subscribe('header:menu', (NewPage) => {
-      if (this.pages[NewPage]) {
+
+    this.subscribe('changePage', (pageName) => {
+      if (this.pages[pageName]) {
         this.component.destroy();
-        this.renderPage(this.pages[NewPage]);
+        this.renderPage(this.pages[pageName]);
       } else {
-        console.log('Страница пока не готова: ', NewPage);
+        console.log('Страница пока не готова: ', pageName);
       }
+    });
+
+    this.subscribe('playGame', (NewGame) => {
+      this.component.destroy();
+      this.emit('hideHeader');
+      this.renderGame(this.pages[NewGame]);
     });
   }
 
@@ -34,5 +41,17 @@ export default class PageContainer extends Component {
     element.html(this.component.toHTML());
     this.$root.clear().append(element.$el);
     this.component.init();
+  }
+
+  renderGame(NewGame) {
+    this.$root.clear();
+    // одинаковый интерфейс для всех игр
+    // this.component = new NewGame('.page-container', this.options);
+    // this.component.render();
+    console.log('Игра пока не готова: ', NewGame);
+  }
+
+  destroy() {
+    this.component.destroy();
   }
 }

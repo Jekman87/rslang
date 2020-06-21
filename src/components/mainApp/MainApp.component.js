@@ -3,7 +3,7 @@ import Observer from '../../core/Observer';
 
 import MainPage from '../mainPage';
 import MainGame from '../mainGame';
-// остальные страницы приложения (кроме игр?)
+// остальные страницы приложения и игры
 
 export default class MainApp {
   constructor(selector, options) {

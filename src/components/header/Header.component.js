@@ -16,24 +16,36 @@ export default class Header extends Component {
     });
   }
 
+  init() {
+    super.init();
+    const header = $$('header');
+
+    this.subscribe('selectPage', (pageName) => {
+      header.removeClass('d-none');
+      this.changeMenuItem(pageName);
+      this.emit('changePage', pageName);
+    });
+
+    this.subscribe('hideHeader', () => {
+      header.addClass('d-none');
+    });
+  }
+
   onClick(event) {
     const clickedElement = $$(event.target);
     const clickedTag = clickedElement.$el.tagName.toLowerCase();
-    const tagData = clickedElement.data;
 
     if (clickedTag === 'a') {
-      const isMainMenuEl = mainMenuTitles.some((title) => title.data === tagData.name);
+      const pageName = clickedElement.data.name;
+      const isMainMenuEl = mainMenuTitles.some((title) => title.data === pageName);
 
-      if (isMainMenuEl && tagData.name !== 'games') {
-        this.changeMenuItem(clickedElement);
-        this.emit('header:menu', tagData.name);
+      if (isMainMenuEl && pageName !== 'games') {
+        this.emit('selectPage', pageName);
       } else {
-        const isGameMenuEl = gameMenuTitles.some((title) => title.data === tagData.name);
+        const isGameMenuEl = gameMenuTitles.some((title) => title.data === pageName);
 
         if (isGameMenuEl) {
-          console.log('GameMenu', tagData.name);
-          // запускаем игру
-          // this.emit('header:menu', tagData.name);
+          this.emit('playGame', pageName);
         }
       }
     } else if (clickedElement.$el.id === 'logout') {
@@ -43,12 +55,14 @@ export default class Header extends Component {
     }
   }
 
-  changeMenuItem(clickedElement) {
+  changeMenuItem(pageName) {
     const menu = $$('.navbar-nav');
     const menuItems = menu.findAll('li');
     menuItems.forEach((item) => $$(item).removeClass('active'));
-    const parentClickedElement = $$(clickedElement.$el.closest('li'));
-    parentClickedElement.addClass('active');
+
+    const menuLink = menu.find(`[data-name=${pageName}]`);
+    const menuItem = $$(menuLink.$el.closest('li'));
+    menuItem.addClass('active');
   }
 
   toHTML() {

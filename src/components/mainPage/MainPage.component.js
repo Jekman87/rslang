@@ -11,11 +11,21 @@ export default class MainPage extends Component {
       listeners: ['click'],
       ...options,
     });
+    this.pages = options.pages;
+  }
+
+  init() {
+    super.init();
+    // подписка на события внутри компонента
   }
 
   onClick(event) {
     const clickedElement = $$(event.target);
-    console.log('MainPage onClick', clickedElement);
+
+    if (clickedElement.hasClass('btn')) {
+      const pageName = clickedElement.data.name;
+      this.emit('selectPage', pageName);
+    }
   }
 
   toHTML() {
