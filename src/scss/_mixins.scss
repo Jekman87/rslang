@@ -1,29 +1,29 @@
 @mixin media-laptop {
   @media (max-width: $desktop-width) {
-      @content;
+    @content;
   }
 }
 
 @mixin media-note {
   @media (max-width: $desktop-small-width) {
-      @content;
+    @content;
   }
 }
 
 @mixin media-tablet {
   @media (max-width: $tablet-width) {
-      @content;
+    @content;
   }
 }
 
 @mixin media-mobile {
   @media (max-width: $mobile-width) {
-      @content;
+    @content;
   }
 }
 
 @mixin media-mobilesmall {
   @media (max-width: $mobile-small-width) {
-      @content;
+    @content;
   }
 }

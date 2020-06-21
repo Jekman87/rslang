@@ -9,4 +9,11 @@ import './core/domManipulation';
 import './core/Observer';
 import './core/utils';
 
+import { Authorization, checkTokenValidity } from './components/Authorization/authorization.index';
+
 console.log('Help me!');
+
+if (!checkTokenValidity()) {
+  const authorization = new Authorization();
+  authorization.render();
+}
