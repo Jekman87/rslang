@@ -9,6 +9,10 @@ const loginUser = async (userLog) => {
   });
 
   const content = await rawResponse.json();
+
+  const now = new Date();
+  content.tokenExpiresIn = now.setHours(now.getHours() + 4);
+
   return content;
 };
 

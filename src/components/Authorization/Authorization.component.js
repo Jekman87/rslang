@@ -1,9 +1,9 @@
-import $$ from '../../core/domManipulation.js';
-import { clearRegister, clearLogin } from './clearAuthorization.js';
-import createAuthorizationForm from './authorization.template.js';
-import createUser from './asyncCreateUser.js';
-import loginUser from './asyncLoginUser.js';
-import destroyAuthorization from './destroyAuthorization.js';
+import $$ from '../../core/domManipulation';
+import { clearRegister, clearLogin } from './clearAuthorization';
+import createAuthorizationForm from './authorization.template';
+import createUser from './asyncCreateUser';
+import loginUser from './asyncLoginUser';
+import destroyAuthorization from './destroyAuthorization';
 
 export default class Authorization {
   constructor() {
@@ -32,7 +32,7 @@ export default class Authorization {
       });
 
       localStorage.setItem('currentToken', loginUserResponse.token);
-
+      localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
       destroyAuthorization();
     } catch {
       document.querySelector('.alert-error-register').classList.remove('d-none');
@@ -56,6 +56,7 @@ export default class Authorization {
       });
 
       localStorage.setItem('currentToken', loginUserResponse.token);
+      localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
       destroyAuthorization();
     } catch {
       document.querySelector('.alert-error-login').classList.remove('d-none');

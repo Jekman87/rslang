@@ -9,11 +9,11 @@ import './core/domManipulation';
 import './core/Observer';
 import './core/utils';
 
-import Authorization from './components/Authorization/Authorization.component';
+import { Authorization, checkTokenValidity } from './components/Authorization/authorization.index';
 
 console.log('Help me!');
 
-if (!localStorage.getItem('currentToken')) {
+if (!checkTokenValidity()) {
   const authorization = new Authorization();
   authorization.render();
 }
