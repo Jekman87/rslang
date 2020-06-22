@@ -2,4 +2,10 @@
   .card-body {
     min-height: 46px;
   }
+  .word-card{
+    &__img{
+      object-fit: cover;
+      height: 223px;
+    }
+  }
 }

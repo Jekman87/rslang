@@ -1,7 +1,9 @@
 export default function createCardHTML(data) {
-  const { term, transcription, translation } = data;
+  const {
+    id, term, transcription, translation,
+  } = data;
   return `
-  <div class="card">
+  <div class="desk-word card" data-wordid="${id}">
     <div
       class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-info text-white"
     >

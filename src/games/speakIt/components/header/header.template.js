@@ -92,16 +92,16 @@ export default function createHeaderHTML() {
     </nav>
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">
-        <button type="button" class="btn btn-warning">
+        <button type="button" class="btn btn-warning" data-type="restart">
         <i class="fas fa-retweet"></i> Restart
         </button>
-        <button type="button" class="btn btn-warning">
+        <button type="button" class="btn btn-warning" data-type="speak">
           <i class="fas fa-microphone" aria-hidden="true"></i> Speak please
         </button>
-        <button type="button" class="btn btn-warning">
+        <button type="button" class="btn btn-warning" data-type="results">
         <i class="fas fa-poll-h"></i> Results
         </button>
-        <button type="button" class="btn btn-warning">
+        <button type="button" class="btn btn-warning" data-type="exit">
         <i class="fas fa-power-off"></i> Exit
         </button>
       </div>

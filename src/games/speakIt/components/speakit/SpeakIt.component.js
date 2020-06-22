@@ -6,12 +6,12 @@ export default class SpeakIt {
     this.$el = $$(selector);
     this.components = options.components || [];
     this.observer = new Observer();
-    this.dataForApp = {};
+    this.dataForApp = { state: { speakMode: false, correct: 0 } };
   }
 
   getRoot() {
     const $root = $$.create('div', 'speakit');
-
+    $root.addClass('container');
     const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
     this.components = this.components.map((Component) => {
       const element = $$.create('div', Component.className);

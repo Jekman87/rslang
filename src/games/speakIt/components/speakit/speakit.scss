@@ -1,4 +1,6 @@
-body {
+.speakit {
+  height: 100vh;
+  overflow-x: auto;
   background: rgb(238, 174, 202);
   background: radial-gradient(
     circle,
@@ -6,7 +8,21 @@ body {
     rgba(148, 187, 233, 1) 100%
   );
 }
-.speakit {
-  height: 100vh;
-  overflow-x: auto;
+
+.fa-anim-flash {
+  color: red!important;
+  animation: fa-anim-flash 1s ease infinite;
+}
+@keyframes fa-anim-flash {
+  0% {
+      opacity: 0
+  }
+
+  50% {
+      opacity: 1
+  }
+
+  to {
+      opacity: 0
+  }
 }
