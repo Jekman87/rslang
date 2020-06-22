@@ -15,10 +15,10 @@ export default class SpeakIt {
     const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
     this.components = this.components.map((Component) => {
       const element = $$.create('div', Component.className);
-      if (['Intro', 'Results'].includes(Component.name)) {
+      if (['Intro'].includes(Component.name)) {
         element.addClass('h-100');
       }
-      if (Component.name !== 'Intro') {
+      if (!['Intro', 'Results'].includes(Component.name)) {
         element.addClass('d-none');
       }
       const component = new Component(element, componentOptions);

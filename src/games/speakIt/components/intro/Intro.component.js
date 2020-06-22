@@ -35,7 +35,6 @@ export default class Intro extends Component {
       this.dataForApp.words = await getWords({ group, page });
       hide.call(this);
       this.emit('intro:start', '');
-      console.log(this);
     }
   }
 

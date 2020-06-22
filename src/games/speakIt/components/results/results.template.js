@@ -1,24 +1,36 @@
 export default function createResultsHTML() {
   return `
-  <div class="results-content h-100 d-flex justify-content-center align-items-center">
-    <div class="results-container w-75 d-flex flex-column justify-content-center  m-auto p-5 border border-primary">
-      <p class="errors">Ошибок <span class="errors-num text-danger">3</span></p>
-      <div class="errors-item mb-3">
-      </div>
-      <p class="succes">Знаю <span class="succes-num text-success">7</span></p>
-      <div class="succes-item mb-3">
-      </div>
-      <div class="buttons-container d-flex justify-content-center">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-outline-primary">
+  <!-- The Modal -->
+  <div class="modal" id="results">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Results</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p class="errors">Ошибок <span class="errors-num text-danger">3</span></p>
+          <div class="errors-item mb-3">
+          </div>
+          <p class="succes">Знаю <span class="succes-num text-success">7</span></p>
+          <div class="succes-item mb-3">
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
           <i class="fas fa-undo"></i> Return
           </button>
-          <button type="button" class="btn btn-outline-primary">
+          <button type="button" class="btn btn-success" data-dismiss="modal">
           <i class="fas fa-gamepad"></i> New Game
           </button>
         </div>
+  
       </div>
     </div>
-  </div>
   `;
 }
