@@ -31,6 +31,15 @@ export default class SpeakIt {
   }
 
   render() {
+    const $body = $$(document).find('body');
+    $body.css({
+      background: `radial-gradient(
+      circle,
+      rgba(238, 174, 202, 1) 0%,
+      rgba(148, 187, 233, 1) 100%
+    )`,
+    });
+    // $body.attr('style', ' ');
     this.$el.append(this.getRoot());
     this.components.forEach((component) => component.init());
   }

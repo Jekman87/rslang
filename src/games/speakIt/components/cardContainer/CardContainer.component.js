@@ -73,6 +73,8 @@ export default class CardContainer extends Component {
           .filter((el) => el.word !== data);
         console.log(this.dataForApp);
         this.emit('cardContainer:findWord', id);
+      } else {
+        this.emit('cardContainer:notFindWord', '');
       }
     });
     this.subscribe('header:changeGameRound', () => {

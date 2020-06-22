@@ -8,7 +8,7 @@ class Dom {
       this.$el.innerHTML = html;
       return this;
     }
-    return this.$el.outerHTML.trim();
+    return this.$el.innerHTML.trim();
   }
 
   clear() {

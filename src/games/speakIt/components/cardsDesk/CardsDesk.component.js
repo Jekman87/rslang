@@ -43,15 +43,22 @@ export default class CardsDesk extends Component {
       }
     });
     this.subscribe('cardContainer:findWord', (id) => {
-      const $card = Array.from(this.$root.findAll('.card:not([data-find="found"])'))
+      const $card = Array.from(this.$root.findAll('.card'))
         .find((el) => $$(el).data.wordid === id);
       if ($card) {
+        playAudio.apply(this, ['correct.mp3', 'https://vviiiii-english-for-kids.netlify.app/assets/audio/']);
         const card = $$($card);
-        card.removeClass('bg-info').addClass('bg-success').attr('data-find', 'found');
+        card.removeClass('bg-info').addClass('bg-success');
         const cardBody = card.find('.card-body');
         cardBody.removeClass('bg-info').addClass('bg-success');
+      } else {
+        playAudio.apply(this, ['error.mp3', 'https://vviiiii-english-for-kids.netlify.app/assets/audio/']);
       }
     });
+    this.subscribe('cardContainer:notFindWord', () => {
+      playAudio.apply(this, ['error.mp3', 'https://vviiiii-english-for-kids.netlify.app/assets/audio/']);
+    });
+
     this.subscribe('header:changeGameRound', () => {
       const cardsData = prepareCardsDataHTML.apply(this);
       const cardsRow = this.$root.find('.row');
@@ -85,7 +92,7 @@ export default class CardsDesk extends Component {
           .find((el) => el.id === clickedElement.data.wordid);
         const { audio } = data;
         this.emit('cardsDesk:clickOnCard', data);
-        playAudio.apply(this, [audio.replace('files/', '')]);
+        playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
       }
     }
   }
@@ -112,11 +119,11 @@ function prepareCardsDataHTML() {
   return cards.join('');
 }
 
-function playAudio(file) {
+function playAudio(file, url) {
   if (file) {
     this.$audio.attr(
       'src',
-      `${ASSETS_URL}${file}`,
+      `${url}${file}`,
     );
     this.$audio.$el.currentTime = 0;
     this.$audio.$el.play();

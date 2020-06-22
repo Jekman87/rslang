@@ -82,9 +82,8 @@ export default class Header extends Component {
     }
     if (clickedElement.$el.id === 'gameRoundGroup') {
       this.dataForApp.gameLevel.group = +clickedElement.text();
-      changeGameRound.call(this);
+      this.emit('header:changeGameRound', '');
     }
-    console.log(this.dataForApp.gameLevel);
   }
 
   speechRecord(observer) {
@@ -119,7 +118,6 @@ function stopSpeak() {
 
 async function changeGameRound() {
   const { level: group, round: page } = this.dataForApp.gameLevel;
-  console.log(group, page);
   this.dataForApp.words = await getWords({ group, page });
   this.dataForApp.state.speakMode = false;
   this.emit('header:changeGameRound', '');
