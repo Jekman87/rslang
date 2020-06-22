@@ -117,26 +117,22 @@ export default class GameController {
 
   getAvailableWords() {
     const words = [...this.sentenceList[this.sentenceIndex].children];
-    const tempContainer = document.createElement('div');
 
-    words.forEach((word, i, arr) => {
-      const newWord = PuzzleDrawer.clonePuzzle(word);
+    const newWords = words.map((word, i, arr) => {
+      const newWord = PuzzleDrawer.cloneCanvas(word);
 
-      newWord.dataset.content = this.sentencesData[this.sentenceIndex].text[i];
       if (i === arr.length - 1) {
         newWord.classList.add('word_last');
       }
 
-      tempContainer.append(newWord);
+      return newWord;
     });
 
-    if (localStorage.getItem('visualHelp') === 'off') {
-      this.puzzleDrawer.drawSentence(tempContainer, this.sentenceIndex, false);
-    }
-
-    const newWords = [...tempContainer.children];
+    const withPic = localStorage.getItem('visualHelp') === 'on';
+    this.puzzleDrawer.drawSentence(newWords, this.sentenceIndex, withPic);
 
     GameController.shuffle(newWords);
+
     newWords.forEach((word) => {
       this.availableWords.append(word);
     });
@@ -192,7 +188,6 @@ export default class GameController {
 
     if (this.sentenceIndex === 9) {
       this.switchElementsVisibility(true);
-      e.target.textContent = 'Check';
     } else {
       this.sentenceIndex += 1;
       this.goToStart(e);
@@ -211,7 +206,7 @@ export default class GameController {
     const words = [...this.sentenceList[this.sentenceIndex].children];
 
     words.forEach((word) => {
-      this.sentenceConstructor.append(PuzzleDrawer.clonePuzzle(word, true));
+      this.sentenceConstructor.append(PuzzleDrawer.cloneCanvas(word));
     });
 
     const withPic = localStorage.getItem('visualHelp') === 'on';
@@ -228,20 +223,17 @@ export default class GameController {
     const answers = this.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
     const result = [];
-    const answerIdx = [];
 
-    this.sentencesData[this.sentenceIndex].text.forEach((word, i) => {
-      if (word === answers[i].dataset.content) {
+    answers.forEach((word, i) => {
+      if (Number(word.dataset.idx) === i) {
         result.push(true);
-        answerIdx.push(i);
       } else {
         result.push(false);
         this.isCorrect = false;
-        answerIdx.push(this.sentencesData[this.sentenceIndex].text.indexOf(answers[i].dataset.content));
       }
     });
 
-    this.showResult(result, answerIdx);
+    this.showResult();
 
     if (this.isCorrect) {
       if (localStorage.autoplayHelp === 'off') {
@@ -263,9 +255,9 @@ export default class GameController {
     this.sentenceList[this.sentenceIndex].prepend(num);
   }
 
-  showResult(result, answerIdx) {
+  showResult() {
     const withPic = localStorage.getItem('visualHelp') === 'on';
-    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic, result, answerIdx);
+    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic, true);
   }
 
   static defineNextRound() {

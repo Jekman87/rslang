@@ -24,7 +24,7 @@ export default class PuzzleDrawer {
       this.textSentences[i].forEach((word, j) => {
         const length = this.defineLength(word, j, i, bs);
         this.collectiveLength += length;
-        canvases.push(`<canvas class="word" width="${length}" height="${bs.containerHeight / 10}"></canvas>`);
+        canvases.push(`<canvas class="word" data-idx="${j}" width="${length}" height="${bs.containerHeight / 10}"></canvas>`);
       });
       sentence.innerHTML = '';
       sentence.innerHTML = canvases.join('');
@@ -37,7 +37,9 @@ export default class PuzzleDrawer {
     const letterSize = Math.round(((bs.containerWidth + bs.marginShift * (words - 1))
     - ((bs.minSpace + bs.marginShift) * (words - 1)) - 20) / letters);
 
-    return { words, letters, letterSize };
+    return {
+      words, letters, letterSize, lengths: [],
+    };
   }
 
   defineLength(word, j, i, bs) {
@@ -51,6 +53,7 @@ export default class PuzzleDrawer {
       canvasLength = word.length * this.sentenceParams[i].letterSize + bs.minSpace + bs.marginShift;
     }
 
+    this.sentenceParams[i].lengths.push(canvasLength);
     return canvasLength;
   }
 
@@ -60,12 +63,16 @@ export default class PuzzleDrawer {
     });
   }
 
-  drawSentence(sentence, i, withPic = true, colors = null, indexes = null) {
-    const pzls = sentence.querySelectorAll('canvas');
-    this.currentPosition = 0;
+  drawSentence(sentence, i, withPic = true, withColor = false) {
+    let pzls = sentence;
+    if (!Array.isArray(sentence)) {
+      pzls = sentence.querySelectorAll('canvas');
+    }
+
     pzls.forEach((pzl, j) => {
-      if (colors && indexes) {
-        this.drawPiece(pzl, i, indexes[j], withPic, colors[j] ? 'lightgreen' : 'coral');
+      if (withColor) {
+        const idx = Number(pzl.dataset.idx);
+        this.drawPiece(pzl, i, idx, withPic, j === idx ? 'lightgreen' : 'coral');
       } else {
         this.drawPiece(pzl, i, j, withPic);
       }
@@ -80,7 +87,7 @@ export default class PuzzleDrawer {
     PuzzleDrawer.drawShape(pzl, ctx, j, lastWordIndex);
 
     if (withPic) {
-      this.addImg(pzl, ctx, i);
+      this.addImg(pzl, ctx, i, j);
     } else {
       PuzzleDrawer.addBackground(pzl, ctx);
     }
@@ -109,17 +116,18 @@ export default class PuzzleDrawer {
       ctx.arc(7.5, 22.5, 12.5, (Math.PI / 180) * 127, (Math.PI / 180) * (-127), true);
     }
     ctx.lineTo(1, 0);
-
     ctx.stroke();
     ctx.clip();
+
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, elem.width, elem.height);
   }
 
-  addImg(elem, ctx, i) {
+  addImg(elem, ctx, i, j) {
     const coefficient = this.img.naturalWidth / this.basicSizes.containerWidth;
     const picWidth = elem.width * coefficient;
-    const left = this.currentPosition;
-    this.currentPosition = this.currentPosition + picWidth - (22 * coefficient);
+    const lengths = this.sentenceParams[i].lengths.slice(0, j);
+    const left = lengths.reduce((acc, length) => acc + (length - 22) * coefficient, 0);
     const picHeight = this.img.naturalHeight / 10;
     const top = i * picHeight;
 
@@ -145,15 +153,13 @@ export default class PuzzleDrawer {
     ctx.fillText(text, horizontalPoint, 29);
   }
 
-  static clonePuzzle(oldCanvas) {
+  static cloneCanvas(oldCanvas) {
     const newCanvas = document.createElement('canvas');
     newCanvas.classList.add('word');
+    newCanvas.dataset.idx = oldCanvas.dataset.idx;
 
     newCanvas.width = oldCanvas.width;
     newCanvas.height = oldCanvas.height;
-
-    const ctx = newCanvas.getContext('2d');
-    ctx.drawImage(oldCanvas, 0, 0);
 
     return newCanvas;
   }
