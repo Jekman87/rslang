@@ -16,11 +16,11 @@
 }
 
 .statistic-blocks {
-  width: 100%;
+  width: 90%;
   max-width: 700px;
   min-height: 600px;
   max-height: 700px;
-  padding: 10px 80px;
+  padding: 10px 60px;
   text-align: left;
   position: absolute;
   left: 50%;
@@ -60,11 +60,12 @@
 
 .statistic-block {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
+  width: 100%;
   min-height: 40px;
   border: 0;
-  padding: 0 0 0 50px;
+  padding: 0 0 0 20px;
   box-shadow: none;
 }
 
@@ -88,6 +89,7 @@
 
   .statistic-button {
     @include flexible;
+    margin: 2% auto;
     box-shadow: 6px 6px 10px #7b8a8b;
     border: 1px solid #005e8d;
     transition: all 0.8s;

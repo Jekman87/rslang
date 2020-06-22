@@ -16,7 +16,7 @@
   /* display: none; */
 
   & h1 {
-    font-size: 40px;
+    font-size: 3rem;
     margin: -100px auto 40px;
     color: #fff;
     opacity: 0.8;
@@ -42,9 +42,9 @@
 
   & button {
     @include flexible();
-    min-width: 200px;
-    padding: 15px 25px;
-    font-size: 24px;
+    min-width: 190px;
+    padding: 10px 20px;
+    font-size: 1.5rem;
     color: #fff;
     opacity: 0.8;
     background-color: #005986;
