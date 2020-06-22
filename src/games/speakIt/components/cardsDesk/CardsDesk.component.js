@@ -2,9 +2,7 @@ import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createCardsDeskHTML from './cardsDesk.template';
 import createCardHTML from './card.template';
-import { getRandomNum } from '../../../../core/utils';
 import { ASSETS_URL } from '../../api/constants';
-// import getWords from '../../api/words.api';
 
 export default class CardsDesk extends Component {
   static className = 'cards-desk';
@@ -21,9 +19,7 @@ export default class CardsDesk extends Component {
     super.init();
     this.$audio = this.$root.find('#audio');
     this.subscribe('intro:start', () => {
-      const cardsData = prepareCardsData.apply(this);
-      const cardsRow = this.$root.find('.row');
-      cardsRow.html(cardsData);
+      toCardHTML.call(this);
       this.$root.removeClass('d-none');
     });
     this.subscribe('header:speak', (speakMode) => {
@@ -46,6 +42,27 @@ export default class CardsDesk extends Component {
         });
       }
     });
+    this.subscribe('cardContainer:findWord', (id) => {
+      const $card = Array.from(this.$root.findAll('.card:not([data-find="found"])'))
+        .find((el) => $$(el).data.wordid === id);
+      if ($card) {
+        const card = $$($card);
+        card.removeClass('bg-info').addClass('bg-success').attr('data-find', 'found');
+        const cardBody = card.find('.card-body');
+        cardBody.removeClass('bg-info').addClass('bg-success');
+      }
+    });
+    this.subscribe('header:changeGameRound', () => {
+      const cardsData = prepareCardsDataHTML.apply(this);
+      const cardsRow = this.$root.find('.row');
+      cardsRow.html(cardsData);
+    });
+    this.subscribe('stopSpeak', () => {
+      const { group } = this.dataForApp.gameLevel;
+      const wordsArr = this.dataForApp.words;
+      const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
+      this.dataForApp.state.gameWords = wordsTen;
+    });
   }
 
   onClick(event) {
@@ -64,7 +81,8 @@ export default class CardsDesk extends Component {
         const cardBody = clickedElement.find('.card-body');
         clickedElement.addClass('bg-success');
         cardBody.removeClass('bg-info').addClass('bg-success');
-        const data = this.dataForApp.words.find((el) => el.id === clickedElement.data.wordid);
+        const data = this.dataForApp.state.gameWords
+          .find((el) => el.id === clickedElement.data.wordid);
         const { audio } = data;
         this.emit('cardsDesk:clickOnCard', data);
         playAudio.apply(this, [audio.replace('files/', '')]);
@@ -77,10 +95,10 @@ export default class CardsDesk extends Component {
   }
 }
 
-function prepareCardsData() {
-  const randomNum = getRandomNum(0, 1);
+function prepareCardsDataHTML() {
+  const { group } = this.dataForApp.gameLevel;
   const wordsArr = this.dataForApp.words;
-  const wordsTen = randomNum ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
+  const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
   const cards = wordsTen.map((name) => {
     const {
       id, word: term, wordTranslate: translation, transcription,
@@ -90,7 +108,7 @@ function prepareCardsData() {
     });
     return card;
   });
-  this.dataForApp.words = wordsTen;
+  this.dataForApp.state.gameWords = wordsTen;
   return cards.join('');
 }
 
@@ -103,4 +121,10 @@ function playAudio(file) {
     this.$audio.$el.currentTime = 0;
     this.$audio.$el.play();
   }
+}
+
+function toCardHTML() {
+  const cardsData = prepareCardsDataHTML.apply(this);
+  const cardsRow = this.$root.find('.row');
+  cardsRow.html(cardsData);
 }

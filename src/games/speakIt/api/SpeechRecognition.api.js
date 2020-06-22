@@ -1,20 +1,18 @@
 export default class SpeechRecognition {
-  constructor() {
+  constructor(observer) {
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     this.recognition = new window.SpeechRecognition();
     this.captureSpeak = this.captureSpeak.bind(this);
+    this.observer = observer;
   }
 
   startWindowSpeechRecognition() {
-    return new Promise((resolve) => {
-      this.recognition.resolve = resolve;
-      this.recognition.interimResults = false;
-      this.recognition.lang = 'en-US';
-      this.recognition.maxAlternatives = 1;
-      this.recognition.addEventListener('result', this.captureSpeak);
-      this.recognition.addEventListener('end', this.recognition.start);
-      this.recognition.start();
-    });
+    this.recognition.interimResults = false;
+    this.recognition.lang = 'en-US';
+    this.recognition.maxAlternatives = 1;
+    this.recognition.addEventListener('result', this.captureSpeak);
+    this.recognition.addEventListener('end', this.recognition.start);
+    this.recognition.start();
   }
 
   stopWindowsSpeachRecognition() {
@@ -28,7 +26,6 @@ export default class SpeechRecognition {
       .map((result) => result[0])
       .map((result) => result.transcript)
       .join('');
-    this.stopWindowsSpeachRecognition();
-    this.recognition.resolve(this.msg);
+    this.observer.emit('speech:recognition', this.msg);
   }
 }

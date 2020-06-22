@@ -3,7 +3,6 @@ import $$ from '../../../../core/domManipulation';
 import createIntroHTML from './intro.template';
 import createButtonSpinnerHTML from './button-spinner.template';
 import { getWords } from '../../api/words.api';
-// import { delay } from '../../../../core/utils';
 
 export default class Intro extends Component {
   static className = 'intro';
@@ -15,8 +14,9 @@ export default class Intro extends Component {
       ...options,
     });
     this.dataForApp.gameLevel = {
-      page: 1,
-      group: 1,
+      level: 0,
+      round: 0,
+      group: 0,
     };
   }
 
@@ -31,11 +31,11 @@ export default class Intro extends Component {
       // await delay(1000);
       // check game level
       // get words - from dictionary or from user level or from page 1 group 1
-
-      this.dataForApp.words = await getWords({ ...this.dataForApp.gameLevel });
-      console.log(this.dataForApp.words);
+      const { level: group, round: page } = this.dataForApp.gameLevel;
+      this.dataForApp.words = await getWords({ group, page });
       hide.call(this);
       this.emit('intro:start', '');
+      console.log(this);
     }
   }
 
