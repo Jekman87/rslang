@@ -1,19 +1,26 @@
-import './plugins/bootstrap/index';
-import './plugins/fontawesome/index';
+import './plugins/bootstrap';
+import './plugins/fontawesome';
 
-import './scss/_constants.scss';
-import './scss/_mixins.scss';
-import './core/Component';
-import './core/DomListener';
-import './core/domManipulation';
-import './core/Observer';
-import './core/utils';
+import checkTokenValidity from './components/authorization/checkTokenValidity';
 
-import { Authorization, checkTokenValidity } from './components/Authorization/authorization.index';
+// main components
+import MainApp from './components/mainApp';
+import Header from './components/header';
+import PageContainer from './components/pageContainer';
 
-console.log('Help me!');
+// pages and games
+import Authorization from './components/authorization';
+import MainPage from './components/mainPage';
+import MainGame from './components/mainGame';
 
-if (!checkTokenValidity()) {
-  const authorization = new Authorization();
-  authorization.render();
+let startPage;
+if (checkTokenValidity()) {
+  startPage = MainPage.className;
+} else {
+  startPage = Authorization.className;
 }
+
+const pages = { Authorization, MainPage, MainGame };
+
+const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages, startPage });
+mainApp.render();

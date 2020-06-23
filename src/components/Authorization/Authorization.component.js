@@ -1,16 +1,35 @@
 import $$ from '../../core/domManipulation';
+import Component from '../../core/Component';
 import { clearRegister, clearLogin } from './clearAuthorization';
 import createAuthorizationForm from './authorization.template';
 import createUser from './asyncCreateUser';
 import loginUser from './asyncLoginUser';
-import destroyAuthorization from './destroyAuthorization';
 
-export default class Authorization {
-  constructor() {
-    this.authorizationWrapper = $$.create('div', 'container-fluid').$el;
-    this.authorizationWrapper.style.marginTop = '7%';
-    this.authorizationWrapper.insertAdjacentHTML('afterbegin', createAuthorizationForm());
-    this.app = document.getElementById('app');
+export default class Authorization extends Component {
+  static className = 'Authorization';
+
+  constructor($root, options) {
+    super($root, {
+      name: 'Authorization',
+      listeners: ['click'],
+      ...options,
+    });
+
+    this.onSubmitLoginForm = this.onSubmitLoginForm.bind(this);
+    this.onSubmitRegisterForm = this.onSubmitRegisterForm.bind(this);
+    // бинды можно будет удалить после перехода на клик
+  }
+
+  onClick(event) {
+    const clickedElement = $$(event.target);
+    // тут делаем проверку на какой именно элемент кликнули
+    // например через дата атрибут, или через класс
+    // и в зависимости от этого вызываем нужную функцию
+    // this.submitForm например
+
+    if (clickedElement.hasClass('btn')) {
+      console.log(clickedElement);
+    }
   }
 
   async onSubmitRegisterForm(event) {
@@ -33,7 +52,8 @@ export default class Authorization {
 
       localStorage.setItem('currentToken', loginUserResponse.token);
       localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
-      destroyAuthorization();
+
+      this.emit('selectPage', 'MainPage');
     } catch {
       document.querySelector('.alert-error-register').classList.remove('d-none');
       setTimeout(clearRegister, 2000);
@@ -57,7 +77,8 @@ export default class Authorization {
 
       localStorage.setItem('currentToken', loginUserResponse.token);
       localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
-      destroyAuthorization();
+
+      this.emit('selectPage', 'MainPage');
     } catch {
       document.querySelector('.alert-error-login').classList.remove('d-none');
     }
@@ -70,9 +91,10 @@ export default class Authorization {
     document.querySelector('.register-form').classList.toggle('d-none');
   }
 
-  // == INIT + ADD LISTENERS
-  render() {
-    this.app.append(this.authorizationWrapper);
+  init() {
+    super.init();
+    // если кроме click нет других событий и нет никаких слушателей
+    // метод init можно удалить
 
     this.registerForm = document.querySelector('.register-form');
     this.registerForm.onsubmit = this.onSubmitRegisterForm;
@@ -84,5 +106,9 @@ export default class Authorization {
     this.changeFormLinks.forEach((link) => {
       link.addEventListener('click', this.onClickChangeFormLink);
     });
+  }
+
+  toHTML() {
+    return createAuthorizationForm().trim();
   }
 }
