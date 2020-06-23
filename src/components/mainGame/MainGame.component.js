@@ -1,6 +1,6 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
-import createMainGameHTML from './MainGame.template';
+import createMainGameHTML from './mainGame.template';
 
 export default class MainGame extends Component {
   static className = 'mainGame';
