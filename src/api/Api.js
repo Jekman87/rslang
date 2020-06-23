@@ -78,4 +78,63 @@ export default class Api {
 
     return content;
   }
+
+  // Users methods
+  async createUser(user) {
+    const rawResponse = await fetch(`${baseUrl}/users`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+
+    const content = await rawResponse.json();
+    return content;
+  }
+
+  async getUser() {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async updateUser(user) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async deleteUser(confirm) {
+    if (confirm !== true) {
+      return false;
+    }
+
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: '*/*',
+      },
+    });
+
+    return rawResponse.status;
+  }
 }

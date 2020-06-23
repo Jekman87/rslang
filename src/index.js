@@ -36,7 +36,7 @@ const user = { email: 'vasia2@mail.ru', password: 'Puzzle123!' };
 const word = { difficulty: 'weak', optional: { testFieldString: 'test', testFieldBoolean: true } };
 
 // api.createUserWord('5e9f5ee35eb9e72bc21af716', word).then((d) => console.log(d));
-api.getWords().then((d) => console.log(d));
+// api.getWords().then((d) => console.log(d));
 
 // api.createUser(user).then((d) => console.log(d));
 // api.loginUser(user).then((d) => console.log(d, api.token, api.userId));
