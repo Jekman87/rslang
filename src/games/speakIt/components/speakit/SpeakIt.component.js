@@ -15,12 +15,12 @@ export default class SpeakIt {
     const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
     this.components = this.components.map((Component) => {
       const element = $$.create('div', Component.className);
-      if (['Intro'].includes(Component.name)) {
+      if (['intro'].includes(Component.className)) {
         element.addClass('h-100');
       }
-      if (!['Intro', 'Results'].includes(Component.name)) {
-        element.addClass('d-none');
-      }
+      // if (['header', 'card-container', 'score', 'cards-desk'].includes(Component.className)) {
+      //   element.addClass('d-none');
+      // }
       const component = new Component(element, componentOptions);
       element.html(component.toHTML());
       $root.append(element);

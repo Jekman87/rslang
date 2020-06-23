@@ -8,7 +8,7 @@ export default function createCardContainerHTML() {
       <div class="text-center">
         <img
           class="card-img-top img-thumbnail img-fluid word-card__img"
-          src="https://vviiiii-speakit.netlify.app/assets/img/blank.jpg"
+          src="/assets/speakit/img/blank.jpg"
           alt=""
         />
       </div>

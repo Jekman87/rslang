@@ -3,6 +3,7 @@ import $$ from '../../../../core/domManipulation';
 import createIntroHTML from './intro.template';
 import createButtonSpinnerHTML from './button-spinner.template';
 import { getWords } from '../../api/words.api';
+import { delay } from '../../../../core/utils';
 
 export default class Intro extends Component {
   static className = 'intro';
@@ -28,7 +29,7 @@ export default class Intro extends Component {
     const clickedElement = $$(event.target);
     if (clickedElement.data.action === 'start') {
       clickedElement.html(createButtonSpinnerHTML().trim()).attr('disabled', true);
-      // await delay(1000);
+      await delay(1500);
       // check game level
       // get words - from dictionary or from user level or from page 1 group 1
       const { level: group, round: page } = this.dataForApp.gameLevel;
@@ -44,5 +45,5 @@ export default class Intro extends Component {
 }
 
 function hide() {
-  this.$root.addClass('d-none');
+  this.$root.addClass('none');
 }

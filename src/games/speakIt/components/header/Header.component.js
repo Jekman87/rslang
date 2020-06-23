@@ -17,10 +17,12 @@ export default class Header extends Component {
 
   init() {
     super.init();
+    window.aa_1 = this.dataForApp;
     this.$level = this.$root.find('#gameLevel');
     this.$round = this.$root.find('#gameRound');
     this.speakBtn = this.$root.find('[data-type="speak"');
     this.faMicrophone = this.$root.find('.fa-microphone');
+
     this.subscribe('intro:start', () => {
       this.$root.removeClass('d-none');
       Array.from(this.$level.$el.options).forEach((option) => {
@@ -33,12 +35,6 @@ export default class Header extends Component {
           $$(option).attr('selected', true);
         }
       });
-    });
-    this.subscribe('startSpeak', () => {
-      startSpeak.call(this);
-    });
-    this.subscribe('stopSpeak', () => {
-      stopSpeak.call(this);
     });
   }
 
@@ -56,16 +52,17 @@ export default class Header extends Component {
         if (!(clickedElement.data.type === 'speak')) {
           clickedElement = $$(clickedElement.closest('.btn'));
         }
-        this.emit('startSpeak', '');
+        startSpeak.call(this);
       }
     }
     if (clickedElement.data.type
       && (clickedElement.data.type === 'restart'
       || $$(clickedElement.closest('.btn')).data.type === 'restart')) {
-      this.dataForApp.state.speakMode = false;
       if (!(clickedElement.data.type === 'restart')) {
         clickedElement = $$(clickedElement.closest('.btn'));
       }
+      restart.call(this);
+      stopSpeak.call(this);
       this.emit('stopSpeak', '');
     }
   }
@@ -75,24 +72,21 @@ export default class Header extends Component {
     if (clickedElement.$el.id === 'gameLevel') {
       this.dataForApp.gameLevel.level = +clickedElement.text();
       changeGameRound.call(this);
+      restart.call(this);
+      stopSpeak.call(this);
     }
     if (clickedElement.$el.id === 'gameRound') {
       this.dataForApp.gameLevel.round = +clickedElement.text();
       changeGameRound.call(this);
+      restart.call(this);
+      stopSpeak.call(this);
     }
     if (clickedElement.$el.id === 'gameRoundGroup') {
       this.dataForApp.gameLevel.group = +clickedElement.text();
       this.emit('header:changeGameRound', '');
+      restart.call(this);
+      stopSpeak.call(this);
     }
-  }
-
-  speechRecord(observer) {
-    this.speech = new SpeechRecognition(observer);
-    this.speech.startWindowSpeechRecognition();
-  }
-
-  speechRecordStop() {
-    this.speech.stopWindowsSpeachRecognition();
   }
 
   toHTML() {
@@ -103,15 +97,18 @@ export default class Header extends Component {
 function startSpeak() {
   this.faMicrophone.addClass('fa-anim-flash');
   this.speakBtn.removeClass('btn-warning').addClass('btn-primary');
-  this.speechRecord(this.observer);
+  if (!(this.speech instanceof SpeechRecognition)) {
+    this.speech = new SpeechRecognition(this.observer);
+  }
+  this.speech.startWindowSpeechRecognition();
   this.emit('header:speak', this.dataForApp.state.speakMode);
 }
 
 function stopSpeak() {
   this.speakBtn.removeClass('btn-primary').addClass('btn-warning');
   this.faMicrophone.removeClass('fa-anim-flash');
-  if (this.speech) {
-    this.speechRecordStop();
+  if (this.speech instanceof SpeechRecognition) {
+    this.speech.stopWindowsSpeachRecognition();
   }
   this.emit('header:restart', this.dataForApp.state.speakMode);
 }
@@ -119,7 +116,10 @@ function stopSpeak() {
 async function changeGameRound() {
   const { level: group, round: page } = this.dataForApp.gameLevel;
   this.dataForApp.words = await getWords({ group, page });
-  this.dataForApp.state.speakMode = false;
   this.emit('header:changeGameRound', '');
-  this.emit('stopSpeak', '');
+}
+
+function restart() {
+  this.dataForApp.state.speakMode = false;
+  this.dataForApp.state.correct = 0;
 }

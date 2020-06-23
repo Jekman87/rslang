@@ -2,7 +2,7 @@ import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createCardsDeskHTML from './cardsDesk.template';
 import createCardHTML from './card.template';
-import { ASSETS_URL } from '../../api/constants';
+import { ASSETS_URL, LOCAL_ASSETS_URL } from '../../api/constants';
 
 export default class CardsDesk extends Component {
   static className = 'cards-desk';
@@ -46,17 +46,17 @@ export default class CardsDesk extends Component {
       const $card = Array.from(this.$root.findAll('.card'))
         .find((el) => $$(el).data.wordid === id);
       if ($card) {
-        playAudio.apply(this, ['correct.mp3', 'https://vviiiii-english-for-kids.netlify.app/assets/audio/']);
+        playAudio.apply(this, ['correct.mp3', `${LOCAL_ASSETS_URL}voices/`]);
         const card = $$($card);
         card.removeClass('bg-info').addClass('bg-success');
         const cardBody = card.find('.card-body');
         cardBody.removeClass('bg-info').addClass('bg-success');
       } else {
-        playAudio.apply(this, ['error.mp3', 'https://vviiiii-english-for-kids.netlify.app/assets/audio/']);
+        playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}voices/`]);
       }
     });
     this.subscribe('cardContainer:notFindWord', () => {
-      playAudio.apply(this, ['error.mp3', 'https://vviiiii-english-for-kids.netlify.app/assets/audio/']);
+      playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}voices/`]);
     });
 
     this.subscribe('header:changeGameRound', () => {

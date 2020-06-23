@@ -17,12 +17,15 @@ export default class Score extends Component {
   init() {
     super.init();
     this.$scoreContainer = this.$root.find('.score-content');
+
     this.subscribe('intro:start', () => {
       this.$root.removeClass('d-none');
     });
     this.subscribe('cardContainer:findWord', () => {
       const content = this.$scoreContainer.html();
       this.$scoreContainer.html(`${content}${createScoreHTML()}`);
+      increaseStateCorrect.call(this);
+      console.log(this.dataForApp);
     });
     this.subscribe('header:restart', (speakMode) => {
       if (!speakMode) {
@@ -34,4 +37,8 @@ export default class Score extends Component {
   toHTML() {
     return createScoreContainerHTML().trim();
   }
+}
+
+function increaseStateCorrect() {
+  this.dataForApp.state.correct += 1;
 }
