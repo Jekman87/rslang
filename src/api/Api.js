@@ -137,4 +137,77 @@ export default class Api {
 
     return rawResponse.status;
   }
+
+  // Users/Words methods
+  async getAllUserWords() {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async createUserWord(wordId, word) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+      method: 'POST',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(word),
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async getUserWordById(wordId) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+      method: 'GET',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async updateUserWord(wordId, word) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+      method: 'PUT',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(word),
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async deleteUserWord(wordId) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+      method: 'DELETE',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: '*/*',
+      },
+    });
+
+    return rawResponse.status;
+  }
 }

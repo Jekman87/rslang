@@ -4,6 +4,7 @@ import { clearRegister, clearLogin } from './clearAuthorization';
 import createAuthorizationForm from './authorization.template';
 import createUser from './asyncCreateUser';
 import loginUser from './asyncLoginUser';
+import { storage } from '../../core/utils';
 
 export default class Authorization extends Component {
   static className = 'Authorization';
@@ -50,8 +51,13 @@ export default class Authorization extends Component {
         password: `${password}`,
       });
 
-      localStorage.setItem('currentToken', loginUserResponse.token);
-      localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
+      storage('currentToken', loginUserResponse.token);
+      storage('currentToken', loginUserResponse.userId);
+      storage('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
+
+
+      // localStorage.setItem('currentToken', loginUserResponse.token);
+      // localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -75,8 +81,12 @@ export default class Authorization extends Component {
         password: `${password}`,
       });
 
-      localStorage.setItem('currentToken', loginUserResponse.token);
-      localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
+      storage('currentToken', loginUserResponse.token);
+      storage('userId', loginUserResponse.userId);
+      storage('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
+
+      // localStorage.setItem('currentToken', loginUserResponse.token);
+      // localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
     } catch {
