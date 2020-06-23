@@ -210,4 +210,38 @@ export default class Api {
 
     return rawResponse.status;
   }
+
+  // Users/AggregatedWords methods
+
+  // filter must be a string:
+  // filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}';
+  async getAllUserAggregatedWords(group, wordsPerPage, filter) {
+    let url = `${baseUrl}/users/${this.userId}/aggregatedWords?`;
+    const encodedFilter = encodeURIComponent(filter);
+    url += `group=${group}&wordsPerPage=${wordsPerPage}&filter=${encodedFilter}`;
+
+    const rawResponse = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async getUserAggregatedWordById(wordId) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/aggregatedWords/${wordId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
 }
