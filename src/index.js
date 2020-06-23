@@ -45,5 +45,24 @@ const filter = '{"$and":[{"userWord.difficulty":"hard", "userWord.optional.myKey
 // api.createUserWord('5e9f5ee35eb9e72bc21af4af', word).then((d) => console.log(d));
 // api.getUserWordById('5e9f5ee35eb9e72bc21af4a4').then((d) => console.log(d));
 // api.deleteUserWord('5e9f5ee35eb9e72bc21af4a2').then((d) => console.log(d));
-api.getUserAggregatedWordById('5e9f5ee35eb9e72bc21af4af').then((d) => console.log(d));
+// api.getAllUserAggregatedWords(0, 10, filter).then((d) => console.log(d));
 // encodeURIComponent('привет')
+
+const stats = {
+  learnedWords: 15,
+  optional: {
+    isTrye: 'nope',
+    helloRS: 'hi',
+  },
+};
+// api.updateStatistics(stats).then((d) => console.log(d));
+// api.getStatistics().then((d) => console.log(d));
+const settings = {
+  wordsPerDay: 15,
+  optional: {
+    isTrye: 'nope232',
+    helloRS: 'hi2323',
+  },
+};
+// api.updateSettings(settings).then((d) => console.log(d));
+api.getSettings().then((d) => console.log(d));

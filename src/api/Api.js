@@ -7,6 +7,7 @@ export default class Api {
     this.exp = exp;
   }
 
+  // Sign in
   async loginUser(userLog) {
     const rawResponse = await fetch(`${baseUrl}/signin`, {
       method: 'POST',
@@ -222,6 +223,7 @@ export default class Api {
 
     const rawResponse = await fetch(url, {
       method: 'GET',
+      withCredentials: true,
       headers: {
         Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
@@ -235,10 +237,71 @@ export default class Api {
   async getUserAggregatedWordById(wordId) {
     const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/aggregatedWords/${wordId}`, {
       method: 'GET',
+      withCredentials: true,
       headers: {
         Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  // Users/Statistic methods
+  async getStatistics() {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/statistics`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async updateStatistics(stats) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/statistics`, {
+      method: 'PUT',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(stats),
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  // Users/Settings methods
+  async getSettings() {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/settings`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async updateSettings(settings) {
+    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/settings`, {
+      method: 'PUT',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(settings),
     });
     const content = await rawResponse.json();
 
