@@ -2,12 +2,23 @@
   width: 400px;
   display: flex;
   flex-direction: column;
-  margin: auto;
+  margin: 0 auto 10%;
   padding: 2%;
   overflow: hidden;
   border-radius: 5px;
   border: 1px solid #005e8d;
   background-color: #ffffff5c;
+  transition: all 0.2s;
+}
+
+.correct-color {
+  background-color: #18bc9c4d;
+  transition: all 0.2s;
+}
+
+.wrong-color {
+  background-color: #d1343463;
+  transition: all 0.2s;
 }
 
 .sprint-score {
@@ -82,10 +93,13 @@
     }
   }
 
-  & .audio-icon {
+  .audio-icon {
     position: absolute;
     right: 0;
-    transition: all 0.6s;
+
+    i {
+      transition: all 0.6s;
+    }
   }
 }
 
@@ -185,7 +199,7 @@
 
 .click-buttons button {
   box-shadow: 6px 6px 10px #7b8a8b;
-  transition: all 0.8s;
+  transition: all 0.2s;
 }
 
 .button {
@@ -201,7 +215,17 @@
   color: $fontColor;
 }
 
+.right-arrow,
+.left-arrow {
+  transition: all 0.2s;
+}
+
 .right-arrow i,
 .left-arrow i {
   transition: all 0.8s;
+}
+
+.active-key {
+  opacity: 0.5;
+  transition: all 0.5s;
 }

@@ -52,8 +52,8 @@ export default function createGameField() {
         <div class="language-rus">RUSSIAN</div>
 
         <div class="click-buttons">
-          <button class="btn btn-danger" data-button="Wrong">Wrong</button>
-          <button class="btn btn-success" data-button="Correct">Correct</button>
+          <button class="btn btn-danger wrong" data-button="Wrong">Wrong</button>
+          <button class="btn btn-success correct" data-button="Correct">Correct</button>
         </div>
 
         <div class="press-buttons">
@@ -66,6 +66,8 @@ export default function createGameField() {
 
     <div class="statistic-screen">
       <div class="statistic-blocks">
+
+        <div class="points-result"></div>
 
         <div class="mistake-container">
           <p>I don't know</p>
@@ -80,10 +82,25 @@ export default function createGameField() {
         <div class='correct-block'></div>
 
         <div class='statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="return">Return</button>
-          <button class="btn btn-success statistic-button">Game history</button>
+          <button class="btn btn-success statistic-button" data-click="return">New game</button>
+          <button class="btn btn-success statistic-button" data-click="long-time-statistic">Game history</button>
+          <button class="btn btn-success statistic-button" data-click="return">Home</button>
         </div>
       </div>
+
+      <div class="game-history">
+
+        <div class="history">History of games:</div>
+
+        <div class='games'></div>
+
+        <div class='statistic-buttons'>
+          <button class="btn btn-success statistic-button" data-click="destroy">Clean statistic</button>
+          <button class="btn btn-success statistic-button" data-click="round-statistic">Back</button>
+        </div>
+
+      </div>
+
     </div>
 
     <audio class="tick-voice" src="assets/voices/bip.mp3"></audio>

@@ -5,9 +5,11 @@ import createGameField from './sprint.template';
 /* import $$ from '../../core/domManipulation'; */
 import {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playWordAudio, playStatisticAudio,
+  playWordAudio, playStatisticAudio, cleanLongTimeStatistic,
   compareAnswers, rewriteStatistic,
   muteGameVoice, onGameVoice,
+  markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
+  switchToLongTimeStatistic, switchToRoundStatistic,
 } from './sprint.functions';
 /* import DICTIONARY from './sprint.data'; */
 
@@ -17,7 +19,7 @@ export default class Sprint extends Component {
   constructor($root, options) {
     super($root, {
       name: 'Sprint',
-      listeners: ['click', 'keyup'],
+      listeners: ['click', 'mousedown', 'mouseup', 'keyup', 'keydown'],
       ...options,
     });
     this.time = 60;
@@ -73,6 +75,37 @@ export default class Sprint extends Component {
     if (event.target.dataset.click === 'return') {
       location.reload();
     }
+
+    if (event.target.dataset.click === 'destroy') {
+      cleanLongTimeStatistic();
+    }
+    if (event.target.dataset.click === 'long-time-statistic') {
+      switchToLongTimeStatistic();
+    }
+
+    if (event.target.dataset.click === 'round-statistic') {
+      switchToRoundStatistic();
+    }
+  }
+
+  onMousedown(event) {
+    if (event.target.dataset.button === 'Wrong') {
+      markLeftKeys();
+    }
+
+    if (event.target.dataset.button === 'Correct') {
+      markRightKeys();
+    }
+  }
+
+  onMouseup(event) {
+    if (event.target.dataset.button === 'Wrong') {
+      unmarkLeftKeys();
+    }
+
+    if (event.target.dataset.button === 'Correct') {
+      unmarkRightKeys();
+    }
   }
 
   onKeyup(event) {
@@ -81,12 +114,23 @@ export default class Sprint extends Component {
       writeUserAnswer(event.key);
       compareAnswers();
       rewriteStatistic();
+      unmarkLeftKeys();
     }
     if (event.key === 'ArrowRight') {
       event.preventDefault();
       writeUserAnswer(event.key);
       compareAnswers();
       rewriteStatistic();
+      unmarkRightKeys();
+    }
+  }
+
+  onKeydown(event) {
+    if (event.key === 'ArrowLeft') {
+      markLeftKeys();
+    }
+    if (event.key === 'ArrowRight') {
+      markRightKeys();
     }
   }
 
