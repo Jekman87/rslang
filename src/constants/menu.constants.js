@@ -2,19 +2,19 @@ const mainMenuTitles = [
   { data: 'MainPage', title: 'Главная' },
   { data: 'MainGame', title: 'Тренировка' },
   { data: 'games', title: 'Игры' },
-  { data: 'vocabulary', title: 'Словарь' },
-  { data: 'statistics', title: 'Статистика' },
-  { data: 'promo', title: 'Промо' },
-  { data: 'team', title: 'О команде' },
+  { data: 'Vocabulary', title: 'Словарь' },
+  { data: 'Statistics', title: 'Статистика' },
+  { data: 'Promo', title: 'Промо' },
+  { data: 'Team', title: 'О команде' },
 ];
 
 const gameMenuTitles = [
-  { data: 'speakit', title: 'SpeakIt' },
-  { data: 'puzzle', title: 'English puzzle' },
-  { data: 'savannah', title: 'Саванна' },
-  { data: 'audiocall', title: 'Аудиовызов' },
-  { data: 'sprint', title: 'Спринт' },
-  { data: 'ourgame', title: 'Своя игра' },
+  { data: 'Speakit', title: 'SpeakIt' },
+  { data: 'Puzzle', title: 'English puzzle' },
+  { data: 'Savannah', title: 'Саванна' },
+  { data: 'Audiocall', title: 'Аудиовызов' },
+  { data: 'Sprint', title: 'Спринт' },
+  { data: 'Ourgame', title: 'Своя игра' },
 ];
 
 const authPageName = 'Authorization';

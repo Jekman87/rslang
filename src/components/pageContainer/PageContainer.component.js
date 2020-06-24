@@ -30,6 +30,7 @@ export default class PageContainer extends Component {
     this.subscribe('changePage', (pageName) => {
       if (this.pages[pageName]) {
         this.component.destroy();
+        storage('currentPage', pageName);
         this.renderPage(this.pages[pageName]);
       } else {
         console.log('Страница пока не готова: ', pageName);
@@ -38,6 +39,7 @@ export default class PageContainer extends Component {
 
     this.subscribe('playGame', (NewGame) => {
       this.component.destroy();
+      storage('currentPage', NewGame);
       this.emit('hideHeader');
       this.renderGame(this.pages[NewGame]);
     });
@@ -46,8 +48,10 @@ export default class PageContainer extends Component {
       this.component.destroy();
       this.emit('hideHeader');
 
+      storage.remove('userId');
       storage.remove('currentToken');
       storage.remove('tokenExpiresIn');
+      storage.remove('currentPage');
 
       this.renderPage(this.pages[authPageName]);
     });
@@ -66,6 +70,17 @@ export default class PageContainer extends Component {
     // одинаковый интерфейс для всех игр
     // this.component = new NewGame('.PageСontainer', this.options);
     // this.component.render();
+
+    // .PageСontainer - в этот контейнер рендерится ваша игра
+    // в this.options содержатся observer и api
+    // чтобы вернуться в главное приложение вы можете вызвать событие
+    // this.options.observer.emit('selectPage', 'MainPage');
+    // чтобы выйти на страницу авторизации используйте
+    // this.options.observer.emit('mainLogout');
+    // в this.options.api уже содержатся token and userId
+    // также в этом объекте есть все необходимые методы
+    // чтобы раборало меню, поправьте название вашего класса в
+    // /constants/menu.constants
     console.log('Игра пока не готова: ', NewGame);
   }
 

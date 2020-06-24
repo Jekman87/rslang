@@ -1,10 +1,9 @@
-const baseUrl = 'https://afternoon-falls-25894.herokuapp.com';
+import { baseUrl } from '../constants/constants';
 
 export default class Api {
-  constructor(token, userId, exp) {
-    this.token = token;
+  constructor(userId, token) {
     this.userId = userId;
-    this.exp = exp;
+    this.token = token;
   }
 
   // Sign in
@@ -18,15 +17,14 @@ export default class Api {
       body: JSON.stringify(userLog),
     });
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
     const content = await rawResponse.json();
 
-    const now = new Date();
-    content.tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-    // запись в LocalStorage токен
-    // и время истечения?
-    this.token = content.token;
     this.userId = content.userId;
+    this.token = content.token;
 
     return content;
   }
@@ -45,8 +43,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -63,8 +65,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -75,8 +81,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -91,6 +101,10 @@ export default class Api {
       body: JSON.stringify(user),
     });
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
     const content = await rawResponse.json();
     return content;
   }
@@ -103,8 +117,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -118,8 +136,12 @@ export default class Api {
       },
       body: JSON.stringify(user),
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -148,8 +170,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -164,8 +190,12 @@ export default class Api {
       },
       body: JSON.stringify(word),
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -178,8 +208,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -194,8 +228,12 @@ export default class Api {
       },
       body: JSON.stringify(word),
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -229,8 +267,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -243,8 +285,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -257,8 +303,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -273,8 +323,12 @@ export default class Api {
       },
       body: JSON.stringify(stats),
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -287,8 +341,12 @@ export default class Api {
         Accept: 'application/json',
       },
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 
@@ -303,8 +361,12 @@ export default class Api {
       },
       body: JSON.stringify(settings),
     });
-    const content = await rawResponse.json();
 
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
     return content;
   }
 }
