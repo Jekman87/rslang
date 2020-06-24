@@ -18,9 +18,9 @@ export default class SpeakIt {
       if (['intro'].includes(Component.className)) {
         element.addClass('h-100');
       }
-      // if (['header', 'card-container', 'score', 'cards-desk'].includes(Component.className)) {
-      //   element.addClass('d-none');
-      // }
+      if (['header', 'card-container', 'score', 'cards-desk'].includes(Component.className)) {
+        element.addClass('d-none');
+      }
       const component = new Component(element, componentOptions);
       element.html(component.toHTML());
       $root.append(element);

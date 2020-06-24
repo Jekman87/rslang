@@ -62,6 +62,9 @@ export default class CardContainer extends Component {
         this.emit('cardContainer:notFindWord', '');
       }
     });
+    this.subscribe('score:finishGame', () => {
+
+    });
   }
 
   toHTML() {

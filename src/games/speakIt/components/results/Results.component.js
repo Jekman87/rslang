@@ -15,6 +15,7 @@ export default class Results extends Component {
 
   init() {
     super.init();
+    this.subscribe('cardsDesk:finishGame', () => {});
   }
 
   onClick(event) {

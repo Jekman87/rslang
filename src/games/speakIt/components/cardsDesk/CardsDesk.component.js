@@ -3,6 +3,7 @@ import $$ from '../../../../core/domManipulation';
 import createCardsDeskHTML from './cardsDesk.template';
 import createCardHTML from './card.template';
 import { ASSETS_URL, LOCAL_ASSETS_URL } from '../../api/constants';
+import { delay } from '../../../../core/utils';
 
 export default class CardsDesk extends Component {
   static className = 'cards-desk';
@@ -69,6 +70,11 @@ export default class CardsDesk extends Component {
       const wordsArr = this.dataForApp.words;
       const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
       this.dataForApp.state.gameWords = wordsTen;
+    });
+    this.subscribe('score:finishGame', async () => {
+      await delay(1500);
+      playAudio.apply(this, ['success.mp3', `${LOCAL_ASSETS_URL}voices/`]);
+      this.emit('cardsDesk:finishGame', '');
     });
   }
 

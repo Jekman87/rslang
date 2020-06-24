@@ -25,6 +25,10 @@ export default class Score extends Component {
       const content = this.$scoreContainer.html();
       this.$scoreContainer.html(`${content}${createScoreHTML()}`);
       increaseStateCorrect.call(this);
+      if (this.dataForApp.state.correct === 1) {
+        this.emit('score:finishGame', '');
+        console.log('finish');
+      }
       console.log(this.dataForApp);
     });
     this.subscribe('header:restart', (speakMode) => {
