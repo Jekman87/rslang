@@ -3,7 +3,7 @@ import $$ from '../../core/domManipulation';
 import createMainGameHTML from './mainGame.template';
 
 export default class MainGame extends Component {
-  static className = 'mainGame';
+  static className = 'MainGame';
 
   constructor($root, options) {
     super($root, {
