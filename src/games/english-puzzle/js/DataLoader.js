@@ -63,7 +63,6 @@ export default class Loader {
       const pictureInfo = await this.loadPicture();
 
       this.data[`${this.group}_${this.page}`] = { sentencesInfo, pictureInfo };
-      console.log(this.data[`${this.group}_${this.page}`]);
       document.dispatchEvent(new CustomEvent('newData', { detail: { data: this.data[`${this.group}_${this.page}`], position: [this.page + 1, this.group + 1] } }));
     } catch (e) {
       this.report('Something went wrong!');

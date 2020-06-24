@@ -174,7 +174,8 @@ select {
 
 /* End of Canvases */
 
-.sentence__num {
+.sentence__num,
+.counter {
   position: absolute;
   top: 7px;
   left: -40px;
@@ -188,7 +189,8 @@ select {
   border-radius: 50%;
 }
 
-.sentence__num_correct {
+.sentence__num_correct,
+.counter_correct {
   background-color: rgba(144, 238, 144, 0.5);
 }
 
@@ -205,6 +207,10 @@ select {
 
 .available-words .word {
   margin: 0 5px;
+}
+
+.available-words .word:not(.word_last) {
+  border-radius: 0 15px 15px 0;
 }
 
 .sentence-translate,
@@ -252,16 +258,14 @@ select {
 
 @keyframes highlight {
   0% {
-    border-color: grey;
-    background-color: lightgrey;
+    box-shadow: none;
   }
   50% {
-    border-color: red;
-    background-color: coral;
+    box-shadow: 0px 0px 15px 5px coral;
+    background-color: rgba( 255, 127, 80, 0.75);
   }
   100% {
-    border-color: grey;
-    background-color: lightgrey;
+    box-shadow: none;
   }
 }
 
@@ -290,7 +294,8 @@ select {
 }
 
 .answer-btn,
-.next__btn {
+.next__btn,
+.close-btn {
   width: 150px;
   font-size: 2rem;
 }
@@ -402,7 +407,8 @@ select {
 
 /* PICTURE */
 
-.painting-block {
+.painting-block,
+.pop-up {
   display: flex;
   position: absolute;
   top: 80px;
@@ -416,13 +422,93 @@ select {
   height: 441px;
 }
 
-.painting-info {
+.painting-info,
+.painting-info_small {
   margin: 20px 0;
   width: 100%;
   font-size: 2rem;
   text-align: center;
 }
 
+/* RESULT POP-UP */
+
+.pop-up {
+  top: 10px;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10%;
+  width: calc(800px + 5%);
+  min-height: 720px;
+  background-color: #fff;
+  border: 1px solid black;
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.7);
+}
+
+.painting-pic_small {
+  margin: 0 calc(50% - 100px);
+  width: 200px;
+}
+
+.painting-info_small {
+  font-size: 1.8rem;
+}
+
+.results-block {
+  width: 100%;
+}
+
+.answers-label {
+  margin: 15px;
+  font-size: 2rem;
+}
+
+.counter {
+  position: static;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.answers-list {
+  list-style: none;
+}
+
+.answer-list__item {
+  position: relative;
+  padding: 5px 0px 5px 40px;
+  font-size: 1.8rem;
+}
+
+.play-btn_small {
+  position: absolute;
+  left: 0;
+  margin: 0;
+  width: 25px;
+  height: 25px;
+}
+
+/* STAT TABLE */
+
+.statistics-table {
+  width: 100%;
+  font-size: 2rem;
+}
+
+.table-caption{
+  margin: 10px 0;
+  font-size: 2.5rem;
+}
+
+.th, .td {
+  padding: 5px 0;
+  width: 15%;
+  text-align: center;
+}
+
+.th:nth-child(3),
+.td:nth-child(3) {
+  width: 40%;
+}
 
 /* START PAGE */
 
@@ -574,4 +660,9 @@ select {
   opacity: 0.2;
   cursor: default;
   pointer-events: none;
+}
+
+.invisible {
+  transition: opacity 0.3s linear;
+  opacity: 0;
 }

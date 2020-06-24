@@ -1,4 +1,4 @@
-import userBasicSettings from './userBacicSettings';
+import userBasicSettings from './userBacicSettings.js';
 
 export default class Logger {
   constructor() {
@@ -110,6 +110,7 @@ export default class Logger {
     localStorage.setItem('visualHelp', data.visualHelp);
     localStorage.setItem('lastRound', data.lastRound);
     localStorage.setItem('rounds', data.rounds);
+    localStorage.setItem('statistics', data.statistics);
   }
 
   static logOut() {
@@ -122,6 +123,7 @@ export default class Logger {
     localStorage.setItem('visualHelp', '');
     localStorage.setItem('lastRound', '');
     localStorage.setItem('rounds', '');
+    localStorage.setItem('statistics', '');
     document.location.reload(true);
   }
 
@@ -170,6 +172,7 @@ export default class Logger {
         visualHelp: localStorage.getItem('visualHelp'),
         lastRound: localStorage.getItem('lastRound'),
         rounds: localStorage.getItem('rounds'),
+        statistics: localStorage.getItem('statistics'),
       },
     };
 

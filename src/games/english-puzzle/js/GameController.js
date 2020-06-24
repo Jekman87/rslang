@@ -1,4 +1,5 @@
-import PuzzleDrawer from './PuzzleDrawer';
+import PuzzleDrawer from './PuzzleDrawer.js';
+import monthNames from './calendarMap.js';
 
 export default class GameController {
   constructor() {
@@ -13,6 +14,9 @@ export default class GameController {
     this.playBtn = document.querySelector('button.play-btn');
     this.startBtn = document.querySelector('button.start-button');
     this.spinner = document.querySelector('div.spinner');
+    this.popUp = document.querySelector('div.pop-up');
+    this.resultsBlock = document.querySelector('div.results-block');
+    this.statTable = document.querySelector('table.statistics-table');
   }
 
   init() {
@@ -20,8 +24,13 @@ export default class GameController {
 
     document.querySelector('button.check-btn').addEventListener('click', this.handlePositiveAnswer.bind(this));
     document.querySelector('button.give-up-btn').addEventListener('click', this.handleNegativeAnswer.bind(this));
+
+    document.querySelector('button.results-btn').addEventListener('click', this.showRoundResults.bind(this));
+    document.querySelector('button.statistics-btn').addEventListener('click', this.showStatistics.bind(this));
+    document.querySelector('button.close-btn').addEventListener('click', this.closePopUp.bind(this));
     this.startBtn.addEventListener('click', this.startGame.bind(this));
     this.playBtn.addEventListener('click', this.playAudio.bind(this));
+    this.resultsBlock.addEventListener('click', this.playByClick.bind(this));
 
     this.audioHelp.addEventListener('ended', this.removePlayEffect.bind(this));
     this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
@@ -34,9 +43,12 @@ export default class GameController {
 
   async handleNewData(e) {
     this.sentenceIndex = 0;
+    this.correctCounter = 0;
+    this.results = {};
     this.sentencesData = e.detail.data.sentencesInfo;
     this.pictureData = e.detail.data.pictureInfo;
 
+    this.setPosition(e);
     this.switchElementsVisibility(false);
     this.cleanSentenceConstructor();
     await this.createPuzzles();
@@ -46,6 +58,12 @@ export default class GameController {
     this.removeLoadingEffect();
   }
 
+  setPosition(e) {
+    const [round, level] = e.detail.position;
+    this.roundCurrent = round;
+    this.levelCurrent = level;
+  }
+
   switchElementsVisibility(isEndOfRound) {
     this.sentenceList.forEach((sentence) => {
       sentence.classList.remove('sentence_guessed');
@@ -53,12 +71,15 @@ export default class GameController {
     this.translateHelp.classList.remove('visible');
 
     if (isEndOfRound) {
+      this.playBtn.classList.add('invisible');
       this.painting.classList.remove('hidden');
       this.sentenceConstructor.classList.add('hidden');
       this.availableWords.classList.add('hidden');
       document.querySelector('div.answer-btn-group').classList.add('hidden');
       document.querySelector('div.next-round-block').classList.remove('hidden');
     } else {
+      this.closePopUp();
+      this.playBtn.classList.remove('invisible');
       this.painting.classList.add('hidden');
       this.sentenceConstructor.classList.remove('hidden');
       this.availableWords.classList.remove('hidden');
@@ -140,7 +161,10 @@ export default class GameController {
 
   setPaintingInfo() {
     const info = `${this.pictureData.author} - ${this.pictureData.name} (${this.pictureData.year})`;
-    this.painting.querySelector('figcaption').textContent = info;
+    document.querySelectorAll('figcaption').forEach((el) => {
+      el.textContent = info;
+    });
+    document.querySelector('img.painting-pic_small').src = this.pictureData.link;
   }
 
   static shuffle(arr) {
@@ -187,6 +211,7 @@ export default class GameController {
     e.target.nextElementSibling.classList.remove('disabled');
 
     if (this.sentenceIndex === 9) {
+      this.saveRoundResult();
       this.switchElementsVisibility(true);
     } else {
       this.sentenceIndex += 1;
@@ -222,20 +247,18 @@ export default class GameController {
   compare(e) {
     const answers = this.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
-    const result = [];
 
     answers.forEach((word, i) => {
-      if (Number(word.dataset.idx) === i) {
-        result.push(true);
-      } else {
-        result.push(false);
+      if (Number(word.dataset.idx) !== i) {
         this.isCorrect = false;
       }
     });
 
     this.showResult();
+    this.results[this.sentenceIndex] = this.isCorrect;
 
     if (this.isCorrect) {
+      this.correctCounter += 1;
       if (localStorage.autoplayHelp === 'off') {
         this.playAudio();
       }
@@ -272,5 +295,96 @@ export default class GameController {
     }
 
     return [round, level];
+  }
+
+  saveRoundResult() {
+    const roundResult = `${this.levelCurrent}-${this.roundCurrent},${Date.now()},${this.correctCounter}`;
+    const oldStat = localStorage.getItem('statistics');
+    if (oldStat) {
+      localStorage.setItem('statistics', `${roundResult};${oldStat}`);
+    } else {
+      localStorage.setItem('statistics', `${roundResult}`);
+    }
+    document.dispatchEvent(new CustomEvent('userDataChange'));
+  }
+
+  closePopUp() {
+    this.popUp.classList.add('hidden');
+    this.resultsBlock.classList.add('hidden');
+    this.statTable.classList.add('hidden');
+  }
+
+  showRoundResults() {
+    this.fillRoundResults();
+    this.resultsBlock.classList.remove('hidden');
+    this.popUp.classList.remove('hidden');
+  }
+
+  showStatistics() {
+    GameController.fillStatistics();
+    this.statTable.classList.remove('hidden');
+    this.popUp.classList.remove('hidden');
+  }
+
+  fillRoundResults() {
+    const correctList = document.querySelector('ul.answers-list_correct');
+    const incorrectList = document.querySelector('ul.answers-list_incorrect');
+    const correctCounter = document.querySelector('span.counter_correct');
+    const incorrectCounter = document.querySelector('span.counter_incorrect');
+    const correctSentences = [];
+    const incorrectSentences = [];
+
+    this.sentencesData.forEach((item, i) => {
+      const sentenceItem = `<li class="answer-list__item"><button class="btn play-btn play-btn_small" data-src="${item.audio}" title="play"></button>${item.text.join(' ')}</li>`;
+      if (this.results[i] === true) {
+        correctSentences.push(sentenceItem);
+      } else {
+        incorrectSentences.push(sentenceItem);
+      }
+    });
+
+    correctCounter.textContent = correctSentences.length;
+    incorrectCounter.textContent = incorrectSentences.length;
+
+    correctList.innerHTML = correctSentences.join('');
+    incorrectList.innerHTML = incorrectSentences.join('');
+  }
+
+  static fillStatistics() {
+    document.querySelector('table.statistics-table').innerHTML = '';
+    const rows = ['<caption class="table-caption">Ваши ранее сыгранные игры:</caption><tr class="tr"><th class="th">Уровень</th><th class="th">Раунд</th><th class="th">Дата</th><th class="th">Время</th><th class="th">Счет</th></tr>'];
+    let statistics = localStorage.getItem('statistics');
+    statistics = statistics.split(';');
+    statistics = statistics.map((item) => item.split(','));
+    statistics.forEach((result) => {
+      const [level, round] = result[0].split('-');
+      const date = new Date(Number(result[1]));
+      const score = result[2];
+      const tr = `
+      <tr class="tr">
+        <td class="td">${level}</td>
+        <td class="td">${round}</td>
+        <td class="td">${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}</td>
+        <td class="td">${date.getHours()}:${date.getMinutes()}</td>
+        <td class="td">${score} / 10</td>
+      </tr>`;
+      rows.push(tr);
+      if (rows.length > 16) rows.length = 16;
+    });
+    document.querySelector('table.statistics-table').innerHTML = rows.join('');
+  }
+
+  playByClick(e) {
+    if (e.target.classList.contains('play-btn_small')) {
+      this.audioHelp.onplay = () => {
+        document.querySelectorAll('button.play-btn_small').forEach((btn) => {
+          btn.classList.remove('play-btn_active');
+        });
+        e.target.classList.add('play-btn_active');
+      };
+      this.audioHelp.src = e.target.dataset.src;
+      this.audioHelp.play();
+      this.audioHelp.onended = () => e.target.classList.remove('play-btn_active');
+    }
   }
 }
