@@ -1,0 +1,47 @@
+.vocabulary-wrapper{
+    max-width: 1020px;
+    margin: 0 auto;
+}
+.nav-item:nth-child(2) a.text-info.active{
+    // color:#E74C3C !important;
+    color:#ffffff !important;
+    background-color: #E74C3C;
+}
+.nav-item:first-child a.text-info.active{
+    // color:#18BC9C !important;
+    color:#ffffff !important;
+    background-color:#18BC9C;
+}
+.nav-item:last-child a.text-info.active{
+    // color:#7b8a8b !important;
+    color:#ffffff !important;
+    background-color: #7b8a8b;
+}
+.tab-content{
+    padding-top: 4rem;
+}
+.progress-wrapper{
+    width: 30%;
+    height: 1rem;
+}
+.progress{
+    width: 20%;
+    min-width: 1%;
+    height:0.8rem
+}
+.sound-button,
+.retrieval-button{
+    font-size: 2rem;
+    line-height: 2rem;
+    padding: 0.115rem 0.15rem !important;
+}
+img {
+    width: 5rem;
+    height: auto;
+    transition: all .5s ease-in-out;
+    cursor: pointer;
+}
+img:hover {
+    transform: scale(4) translate(-37%, 36%);
+    z-index: 4;
+}
