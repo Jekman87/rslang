@@ -25,7 +25,7 @@ export default class Score extends Component {
       const content = this.$scoreContainer.html();
       this.$scoreContainer.html(`${content}${createScoreHTML()}`);
       increaseStateCorrect.call(this);
-      if (this.dataForApp.state.correct === 3) {
+      if (this.dataForApp.state.correct === 10) {
         this.emit('score:finishGame', '');
       }
     });

@@ -39,8 +39,9 @@ export default class Header extends Component {
         }
       });
     });
-    this.subscribe('cardsDesk:finishGame', () => {
+    this.subscribe('score:finishGame', () => {
       this.finishBtn.addClass('d-none');
+      saveGameHistory.call(this);
       restart.call(this);
       stopSpeak.call(this);
     });
@@ -102,21 +103,7 @@ export default class Header extends Component {
       this.dataForApp.state.speakMode = false;
       this.finishBtn.addClass('d-none');
       stopSpeak.call(this);
-      // get statistic, set long statistic, post statistic to back
-      const right = this.dataForApp.state.successWords.length;
-      const date = Date.now();
-      const history = {
-        d: date, r: right,
-      };
-      let histories = [];
-      if (storage('speakit-history')) {
-        histories = storage('speakit-history');
-        histories.push(history);
-        storage('speakit-history', histories);
-      } else {
-        histories.push(history);
-        storage('speakit-history', histories);
-      }
+      saveGameHistory.call(this);
       this.emit('header:finishRound', '');
     }
   }
@@ -178,4 +165,25 @@ async function changeGameRound() {
 function restart() {
   this.dataForApp.state.speakMode = false;
   this.dataForApp.state.correct = 0;
+}
+
+function saveGameHistory() {
+  const correct = this.dataForApp.state.successWords.length;
+  const { level, round, group } = this.dataForApp.gameLevel;
+  const date = Date.now();
+  const history = {
+    d: date, c: correct, r: `${level + 1}-${round + 1}-${group + 1}`,
+  };
+  let histories = [];
+  if (storage('speakit-history')) {
+    histories = storage('speakit-history');
+    if (histories.length > 10) {
+      histories = histories.slice(1);
+    }
+    histories.push(history);
+    storage('speakit-history', histories);
+  } else {
+    histories.push(history);
+    storage('speakit-history', histories);
+  }
 }

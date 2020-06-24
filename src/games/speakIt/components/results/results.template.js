@@ -20,8 +20,8 @@ export default function createResultsHTML() {
         <button class="btn btn-outline-primary" data-target="resultsreturn">
           <i class="fas fa-undo" data-target="resultsreturn"></i> Назад
         </button>
-        <button class="btn btn-success" data-target="newgame">
-          <i class="fas fa-gamepad" data-target="newgame"></i> Новая игра
+        <button class="btn btn-success" data-target="continue">
+          <i class="fas fa-arrow-circle-right" data-target="continue"></i> Продолжить
         </button>
         </div>
       </div>

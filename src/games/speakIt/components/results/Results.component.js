@@ -66,7 +66,7 @@ export default class Results extends Component {
       if (clickedElement.data.target === 'resultsreturn') {
         this.$resultsDialog.$el.close();
       }
-      if (clickedElement.data.target === 'newgame') {
+      if (clickedElement.data.target === 'continue') {
         this.$resultsDialog.$el.close();
       }
       if (clickedElement.data.target === 'historyreturn') {
@@ -91,7 +91,11 @@ function updateResults() {
 }
 
 function updateGameHistory() {
-  const history = storage('speakit-history').reverse();
-  const historyToHTML = history.map((game) => createHistoryHTML(game));
-  this.$historyItems.html(historyToHTML.join(''));
+  const history = storage('speakit-history');
+  if (history) {
+    const historyToHTML = history.reverse().map((game) => createHistoryHTML(game));
+    this.$historyItems.html(historyToHTML.join(''));
+  } else {
+    this.$historyItems.html('<p>Вы еще не играли.</p>');
+  }
 }
