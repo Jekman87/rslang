@@ -1,35 +1,50 @@
 export default function createResultsHTML() {
   return `
-  <!-- The Modal -->
-  <div class="modal" id="results">
-    <div class="modal-dialog modal-dialog-scrollable">
+  <dialog id="resultsDialog" class="p-0" style="max-width: 600px; min-width: 320px">
+    <div class="modal-dialog modal-dialog-scrollable m-0" role="document">
       <div class="modal-content">
-  
-        <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Results</h4>
+          <h5 class="modal-title">Результат</h5>
         </div>
-  
-        <!-- Modal body -->
         <div class="modal-body">
-          <p class="errors">Ошибок <span class="errors-num text-danger">3</span></p>
-          <div class="errors-item mb-3">
+          <p class="errors">Ошибок: <span class="errors-num text-danger">0</span></p>
+          <div class="error-items mb-3">
+
           </div>
-          <p class="succes">Знаю <span class="succes-num text-success">7</span></p>
-          <div class="succes-item mb-3">
+          <p class="success">Правильно: <span class="success-num text-success">0</span></p>
+          <div class="success-items mb-3">
+
           </div>
         </div>
-        <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" data-target="return">
-          <i class="fas fa-undo"></i> Return
-          </button>
-          <button type="button" class="btn btn-success" data-target="newgame">
-          <i class="fas fa-gamepad"></i> New Game
-          </button>
+        <button class="btn btn-outline-primary" data-target="resultsreturn">
+          <i class="fas fa-undo" data-target="resultsreturn"></i> Назад
+        </button>
+        <button class="btn btn-success" data-target="newgame">
+          <i class="fas fa-gamepad" data-target="newgame"></i> Новая игра
+        </button>
         </div>
-  
       </div>
     </div>
+  </dialog>
+  <dialog id="historyDialog" class="p-0" style="max-width: 600px; min-width: 320px">
+    <div class="modal-dialog modal-dialog-scrollable m-0" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">История игр</h5>
+        </div>
+        <div class="modal-body">
+          <div class="history-items mb-3">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+        <button class="btn btn-outline-primary" data-target="historyreturn">
+          <i class="fas fa-undo" data-target="historyreturn"></i> Назад
+        </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
   `;
 }

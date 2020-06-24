@@ -19,6 +19,12 @@ export default class Intro extends Component {
       round: 0,
       group: 0,
     };
+    this.dataForApp.words = null;
+    this.dataForApp.state = {
+      gameWords: [],
+      correct: 0,
+      successWords: [],
+    };
   }
 
   init() {

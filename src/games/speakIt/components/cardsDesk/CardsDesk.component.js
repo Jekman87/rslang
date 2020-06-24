@@ -25,22 +25,12 @@ export default class CardsDesk extends Component {
     });
     this.subscribe('header:speak', (speakMode) => {
       if (speakMode) {
-        this.$root.findAll('.card').forEach((el) => {
-          $$(el).removeClass('bg-success').addClass('bg-info');
-        });
-        this.$root.findAll('.card-body').forEach((el) => {
-          $$(el).removeClass('bg-success').addClass('bg-info');
-        });
+        unSelectCards.call(this);
       }
     });
     this.subscribe('header:restart', (speakMode) => {
       if (!speakMode) {
-        this.$root.findAll('.card').forEach((el) => {
-          $$(el).removeClass('bg-success').addClass('bg-info');
-        });
-        this.$root.findAll('.card-body').forEach((el) => {
-          $$(el).removeClass('bg-success').addClass('bg-info');
-        });
+        unSelectCards.call(this);
       }
     });
     this.subscribe('cardContainer:findWord', (id) => {
@@ -71,9 +61,15 @@ export default class CardsDesk extends Component {
       const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
       this.dataForApp.state.gameWords = wordsTen;
     });
+    this.subscribe('header:finishRound', () => {
+      unSelectCards.call(this);
+      prepareCardsDataHTML.call(this);
+    });
     this.subscribe('score:finishGame', async () => {
       await delay(1500);
       playAudio.apply(this, ['success.mp3', `${LOCAL_ASSETS_URL}voices/`]);
+      unSelectCards.call(this);
+      prepareCardsDataHTML.call(this);
       this.emit('cardsDesk:finishGame', '');
     });
   }
@@ -110,8 +106,7 @@ export default class CardsDesk extends Component {
 
 function prepareCardsDataHTML() {
   const { group } = this.dataForApp.gameLevel;
-  const wordsArr = this.dataForApp.words;
-  const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
+  const wordsTen = group ? this.dataForApp.words.slice(0, 10) : this.dataForApp.words.slice(10, 20);
   const cards = wordsTen.map((name) => {
     const {
       id, word: term, wordTranslate: translation, transcription,
@@ -122,6 +117,7 @@ function prepareCardsDataHTML() {
     return card;
   });
   this.dataForApp.state.gameWords = wordsTen;
+  this.dataForApp.state.successWords = [];
   return cards.join('');
 }
 
@@ -140,4 +136,13 @@ function toCardHTML() {
   const cardsData = prepareCardsDataHTML.apply(this);
   const cardsRow = this.$root.find('.row');
   cardsRow.html(cardsData);
+}
+
+function unSelectCards() {
+  this.$root.findAll('.card').forEach((el) => {
+    $$(el).removeClass('bg-success').addClass('bg-info');
+  });
+  this.$root.findAll('.card-body').forEach((el) => {
+    $$(el).removeClass('bg-success').addClass('bg-info');
+  });
 }

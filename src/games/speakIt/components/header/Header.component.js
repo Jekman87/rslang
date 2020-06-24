@@ -1,5 +1,6 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
+import { storage } from '../../../../core/utils';
 import createHeaderHTML from './header.template';
 import SpeechRecognition from '../../api/SpeechRecognition.api';
 import { getWords } from '../../api/words.api';
@@ -22,21 +23,8 @@ export default class Header extends Component {
     this.$round = this.$root.find('#gameRound');
     this.speakBtn = this.$root.find('[data-type="speak"');
     this.resultsBtn = this.$root.find('[data-type="results"');
+    this.finishBtn = this.$root.find('[data-type="finish"');
     this.faMicrophone = this.$root.find('.fa-microphone');
-    // const locModal = document.getElementById('results');
-    // const btnclose = document.getElementById('w-change-close');
-    // const btnShow = this.resultsBtn.$el;
-    // // show the modal
-    // btnShow.addEventListener('click', () => {
-    //   locModal.style.display = 'block';
-    //   locModal.style.paddingRight = '17px';
-    //   locModal.className = 'modal fade show';
-    // });
-    // // hide the modal
-    // btnclose.addEventListener('click', () => {
-    //   locModal.style.display = 'none';
-    //   locModal.className = 'modal fade';
-    // });
 
     this.subscribe('intro:start', () => {
       this.$root.removeClass('d-none');
@@ -51,12 +39,10 @@ export default class Header extends Component {
         }
       });
     });
-    // this.subscribe('score:finishGame', () => {
-    //   restart.call(this);
-    //   stopSpeak.call(this);
-    // });
     this.subscribe('cardsDesk:finishGame', () => {
-      // this.resultsBtn.$el.click();
+      this.finishBtn.addClass('d-none');
+      restart.call(this);
+      stopSpeak.call(this);
     });
   }
 
@@ -74,6 +60,7 @@ export default class Header extends Component {
         if (!(clickedElement.data.type === 'speak')) {
           clickedElement = $$(clickedElement.closest('.btn'));
         }
+        this.finishBtn.removeClass('d-none');
         startSpeak.call(this);
         this.emit('header:speak', this.dataForApp.state.speakMode);
       }
@@ -84,10 +71,53 @@ export default class Header extends Component {
       if (!(clickedElement.data.type === 'restart')) {
         clickedElement = $$(clickedElement.closest('.btn'));
       }
+      this.finishBtn.addClass('d-none');
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);
       this.emit('stopSpeak', '');
+    }
+    if (clickedElement.data.type
+      && (clickedElement.data.type === 'results'
+      || $$(clickedElement.closest('.btn')).data.type === 'results')) {
+      if (!(clickedElement.data.type === 'results')) {
+        clickedElement = $$(clickedElement.closest('.btn'));
+      }
+      this.emit('header:results', '');
+    }
+    if (clickedElement.data.type
+      && (clickedElement.data.type === 'history'
+      || $$(clickedElement.closest('.btn')).data.type === 'history')) {
+      if (!(clickedElement.data.type === 'history')) {
+        clickedElement = $$(clickedElement.closest('.btn'));
+      }
+      this.emit('header:history', '');
+    }
+    if (clickedElement.data.type
+      && (clickedElement.data.type === 'finish'
+      || $$(clickedElement.closest('.btn')).data.type === 'finish')) {
+      if (!(clickedElement.data.type === 'finish')) {
+        clickedElement = $$(clickedElement.closest('.btn'));
+      }
+      this.dataForApp.state.speakMode = false;
+      this.finishBtn.addClass('d-none');
+      stopSpeak.call(this);
+      // get statistic, set long statistic, post statistic to back
+      const right = this.dataForApp.state.successWords.length;
+      const date = Date.now();
+      const history = {
+        d: date, r: right,
+      };
+      let histories = [];
+      if (storage('speakit-history')) {
+        histories = storage('speakit-history');
+        histories.push(history);
+        storage('speakit-history', histories);
+      } else {
+        histories.push(history);
+        storage('speakit-history', histories);
+      }
+      this.emit('header:finishRound', '');
     }
   }
 
@@ -95,7 +125,7 @@ export default class Header extends Component {
     const clickedElement = $$(event.target);
     if (clickedElement.$el.id === 'gameLevel') {
       this.dataForApp.gameLevel.level = +clickedElement.text();
-      changeGameRound.call(this);
+      await changeGameRound.call(this);
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);
@@ -103,7 +133,7 @@ export default class Header extends Component {
     }
     if (clickedElement.$el.id === 'gameRound') {
       this.dataForApp.gameLevel.round = +clickedElement.text();
-      changeGameRound.call(this);
+      await changeGameRound.call(this);
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);

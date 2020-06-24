@@ -38,16 +38,8 @@ export default class CardContainer extends Component {
         this.$wordCardInput.text('');
       }
     });
-    this.subscribe('header:restart', (speakMode) => {
-      this.$wordCardImg.attr(
-        'src',
-        `${LOCAL_ASSETS_URL}img/blank.jpg`,
-      );
-      if (!speakMode) {
-        this.$wordCardFormGroup.addClass('d-none');
-        this.$wordCardTranslation.removeClass('d-none').clear();
-        this.$wordCardInput.text('');
-      }
+    this.subscribe('header:restart', () => {
+      resetCard.call(this);
     });
     this.subscribe('speech:recognition', (word) => {
       console.log(word);
@@ -62,8 +54,11 @@ export default class CardContainer extends Component {
         this.emit('cardContainer:notFindWord', '');
       }
     });
-    this.subscribe('score:finishGame', () => {
-
+    this.subscribe('header:finishRound', () => {
+      resetCard.call(this);
+    });
+    this.subscribe('cardsDesk:finishGame', () => {
+      resetCard.call(this);
     });
   }
 
@@ -91,5 +86,20 @@ function updateWordCard(data) {
 
 function changeStateGameWords(word) {
   this.dataForApp.state.gameWords = this.dataForApp.state.gameWords
-    .filter((el) => el.word !== word);
+    .filter((el) => {
+      if (el.word === word) {
+        this.dataForApp.state.successWords.push(el);
+      }
+      return el.word !== word;
+    });
+}
+
+function resetCard() {
+  this.$wordCardImg.attr(
+    'src',
+    `${LOCAL_ASSETS_URL}img/blank.jpg`,
+  );
+  this.$wordCardFormGroup.addClass('d-none');
+  this.$wordCardTranslation.removeClass('d-none').clear();
+  this.$wordCardInput.text('');
 }

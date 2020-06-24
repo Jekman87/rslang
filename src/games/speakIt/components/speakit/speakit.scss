@@ -6,6 +6,15 @@
     visibility: hidden;
     pointer-events: none;
   }
+
+  .cursor{
+    cursor: pointer;
+  }
+
+  dialog{
+    border: white;
+    border-radius: 6px;
+  }
 }
 
 .fa-anim-flash {

@@ -25,16 +25,20 @@ export default class Score extends Component {
       const content = this.$scoreContainer.html();
       this.$scoreContainer.html(`${content}${createScoreHTML()}`);
       increaseStateCorrect.call(this);
-      if (this.dataForApp.state.correct === 1) {
+      if (this.dataForApp.state.correct === 3) {
         this.emit('score:finishGame', '');
-        console.log('finish');
       }
-      console.log(this.dataForApp);
     });
     this.subscribe('header:restart', (speakMode) => {
       if (!speakMode) {
         this.$scoreContainer.clear();
       }
+    });
+    this.subscribe('header:finishRound', () => {
+      this.$scoreContainer.clear();
+    });
+    this.subscribe('cardsDesk:finishGame', () => {
+      this.$scoreContainer.clear();
     });
   }
 

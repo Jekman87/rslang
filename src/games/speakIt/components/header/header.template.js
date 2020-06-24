@@ -12,19 +12,19 @@ export default function createHeaderHTML() {
     <nav class="nav flex-column">
     <div class="row justify-content-center">
     <div class="form-group mr-2">
-      <h5><label for="gameLevel" class="text-primary"><i class="fas fa-layer-group"></i><strong> Level</strong></label></h5>
+      <h5><label for="gameLevel" class="text-primary"><i class="fas fa-layer-group"></i><strong> Уровень(1-6)</strong></label></h5>
       <select class="form-control" id="gameLevel">
         ${createOptions(6)}
       </select>
     </div>
     <div class="form-group mr-2">
-      <h5><label for="gameRound" class="text-primary"><i class="fas fa-object-group"></i><strong> Round</strong></label></h5>
+      <h5><label for="gameRound" class="text-primary"><i class="fas fa-object-group"></i><strong> Раунд(1-30)</strong></label></h5>
       <select class="form-control" id="gameRound">
       ${createOptions(30)}
       </select>
     </div>
     <div class="form-group">
-      <h5><label for="gameRoundGroup" class="text-primary"><i class="fas fa-object-ungroup"></i><strong> Group</strong></label></h5>
+      <h5><label for="gameRoundGroup" class="text-primary"><i class="fas fa-object-ungroup"></i><strong> Группа слов(1-2)</strong></label></h5>
       <select class="form-control" id="gameRoundGroup">
       ${createOptions(2)}
       </select>
@@ -33,17 +33,27 @@ export default function createHeaderHTML() {
     </nav>
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">
+        <button type="button" class="btn btn-secondary" data-type="results">
+          <i class="fas fa-poll-h" data-type="results"></i> Результат
+        </button>
+        <button type="button" class="btn btn-secondary" data-type="history">
+          <i class="fas fa-history" aria-hidden="true"></i> История игр
+        </button>
+        <button type="button" class="btn btn-secondary" data-type="exit">
+        <i class="fas fa-power-off"></i> Выход
+        </button>
+      </div>
+    </div>
+    <div class="buttons-container d-flex justify-content-center mt-3">
+      <div class="btn-group" role="group">
         <button type="button" class="btn btn-warning" data-type="restart">
-        <i class="fas fa-retweet"></i> Restart
+        <i class="fas fa-retweet"></i> Рестарт
         </button>
         <button type="button" class="btn btn-warning" data-type="speak">
-          <i class="fas fa-microphone" aria-hidden="true"></i> Speak please
+          <i class="fas fa-microphone" aria-hidden="true"></i> Говорить
         </button>
-        <button type="button" class="btn btn-warning" data-type="results">
-        <i class="fas fa-poll-h"></i> Results
-        </button>
-        <button type="button" class="btn btn-warning" data-type="exit">
-        <i class="fas fa-power-off"></i> Exit
+        <button type="button" class="btn btn-warning d-none" data-type="finish">
+         <i class="fas fa-ban" aria-hidden="true"></i> Завершить раунд
         </button>
       </div>
     </div>
