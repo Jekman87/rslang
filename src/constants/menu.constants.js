@@ -13,7 +13,7 @@ const gameMenuTitles = [
   { data: 'puzzle', title: 'English puzzle' },
   { data: 'savannah', title: 'Саванна' },
   { data: 'audiocall', title: 'Аудиовызов' },
-  { data: 'sprint', title: 'Спринт' },
+  { data: 'SprintGame', title: 'Спринт' },
   { data: 'ourgame', title: 'Своя игра' },
 ];
 

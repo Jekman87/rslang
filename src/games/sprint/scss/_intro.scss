@@ -13,9 +13,10 @@
   background-position: top center;
   z-index: 4;
 
+  // dev
   /* display: none; */
 
-  & h1 {
+  h1 {
     font-size: 3rem;
     margin: -100px auto 40px;
     color: #fff;
@@ -29,7 +30,7 @@
     }
   }
 
-  & p {
+  p {
     max-width: 600px;
     text-align: center;
     margin-bottom: 40px;
@@ -40,8 +41,9 @@
     font-size: 1.2rem;
   }
 
-  & button {
+  button {
     @include flexible();
+    @include activeShadow();
     min-width: 190px;
     padding: 10px 20px;
     font-size: 1.5rem;
@@ -51,10 +53,9 @@
     border-radius: 5px;
     transition: all 0.8s;
     border: 1px solid #ecf0f180;
-    @include activeShadow;
-    }
   }
+}
 
-  .hide-intro {
-    display: none !important;
-  }
+.hide-intro {
+  display: none !important;
+}

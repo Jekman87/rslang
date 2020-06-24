@@ -7,17 +7,8 @@
   background-color: #fffffff7;
   z-index: 3;
 
+  // dev
   /* display: none; */
-}
-
-@keyframes test {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .spinner {
@@ -27,7 +18,7 @@
   transform: translate(-50%, -50%);
 }
 
-.circle1 {
+.circle-1 {
   position: absolute;
   width: 150px;
   height: 150px;
@@ -37,10 +28,10 @@
   left: 10px;
   border-bottom-color: #922e2e;
   border-top-color: #922e2e;
-  animation: test 1.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0s infinite;
+  animation: spin 1.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0s infinite;
 }
 
-.circle2 {
+.circle-2 {
   position: absolute;
   width: 170px;
   height: 170px;
@@ -50,7 +41,7 @@
   left: 0;
   border-left-color: $fontColor;
   border-right-color: $fontColor;
-  animation: test 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s infinite;
+  animation: spin 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s infinite;
 }
 
 .countdown {
@@ -67,4 +58,14 @@
 
 .hide-spinner {
   display: none;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

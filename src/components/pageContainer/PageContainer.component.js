@@ -63,9 +63,10 @@ export default class PageContainer extends Component {
 
   renderGame(NewGame) {
     this.$root.clear();
-    // одинаковый интерфейс для всех игр
-    // this.component = new NewGame('.PageСontainer', this.options);
-    // this.component.render();
+
+    const game = new NewGame('.PageContainer', this.options);
+    game.render();
+
     console.log('Игра пока не готова: ', NewGame);
   }
 

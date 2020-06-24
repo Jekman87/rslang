@@ -1,5 +1,4 @@
 @media (max-width: 480px) {
-
   .intro h1 {
     font-size: 2rem;
   }
@@ -19,7 +18,8 @@
     padding: 5%;
   }
 
-  .language-eng, .language-rus {
+  .language-eng,
+  .language-rus {
     min-height: 40px;
   }
 
@@ -27,7 +27,8 @@
     width: 270px;
   }
 
-  .language-eng, .language-rus {
+  .language-eng,
+  .language-rus {
     font-size: 1.2rem;
   }
 
@@ -49,11 +50,9 @@
   .birds span {
     width: 90%;
   }
-
 }
 
 @media (hover:hover) {
-
   .intro button:hover {
     transform: scale(0.9);
     opacity: 0.8;
@@ -132,5 +131,4 @@
     transition: all 0.8s;
     cursor: pointer;
   }
-
 }

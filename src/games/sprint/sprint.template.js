@@ -8,14 +8,15 @@ export default function createGameField() {
 
     <div class="main-sp">
       <div class="spinner">
-        <div class="circle1"></div>
+        <div class="circle-1"></div>
         <div class="countdown"></div>
-        <div class="circle2"></div>
+        <div class="circle-2"></div>
       </div>
     </div>
 
-    <div class="main-container">
-      <header>
+    <div class="sprint-app">
+    <div class="sprint-main-container">
+      <header class="sprint-header">
         <div class="timer">Timer</div>
         <button class="btn btn-outline-danger button">
           <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="return"></i>
@@ -62,6 +63,7 @@ export default function createGameField() {
         </div>
 
       </div>
+    </div>
     </div>
 
     <div class="statistic-screen">

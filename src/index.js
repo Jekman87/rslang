@@ -1,22 +1,3 @@
-
-/* import './plugins/bootstrap/index';
-import './plugins/fontawesome/index';
-
-import './scss/_constants.scss';
-import './scss/_mixins.scss';
-import './core/Component';
-import './core/DomListener';
-import './core/domManipulation';
-import './core/Observer';
-import './core/utils';
-
-import SprintRender from './games/sprint/Sprint.render';
-import Sprint from './games/sprint/Sprint.component';
-
-const sprint = new SprintRender('#app', { components: [Sprint] });
-
-sprint.render(); */
-
 import './plugins/bootstrap';
 import './plugins/fontawesome';
 
@@ -31,6 +12,7 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import SprintGame from './games/sprint/Sprint.render';
 
 let startPage;
 if (checkTokenValidity()) {
@@ -39,7 +21,9 @@ if (checkTokenValidity()) {
   startPage = Authorization.className;
 }
 
-const pages = { Authorization, MainPage, MainGame };
+const pages = {
+  Authorization, MainPage, MainGame, SprintGame,
+};
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages, startPage });
 mainApp.render();

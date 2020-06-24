@@ -2,7 +2,6 @@ import './scss/sprint.scss';
 
 import Component from '../../core/Component';
 import createGameField from './sprint.template';
-/* import $$ from '../../core/domManipulation'; */
 import {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
   playWordAudio, playStatisticAudio, cleanLongTimeStatistic,
@@ -11,7 +10,6 @@ import {
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
   switchToLongTimeStatistic, switchToRoundStatistic,
 } from './sprint.functions';
-/* import DICTIONARY from './sprint.data'; */
 
 export default class Sprint extends Component {
   static className = 'sprint';
@@ -22,7 +20,6 @@ export default class Sprint extends Component {
       listeners: ['click', 'mousedown', 'mouseup', 'keyup', 'keydown'],
       ...options,
     });
-    this.time = 60;
   }
 
   init() {
@@ -32,105 +29,115 @@ export default class Sprint extends Component {
   }
 
   onClick(event) {
-    /* const clickedElement = $$(event.target); */
-    const currentTarget = event.target;
-
-    if (currentTarget.dataset.button === 'start') {
-      hideIntro(this.$root);
-      readySetGo();
+    switch (event.target.dataset.button) {
+      case 'start':
+        hideIntro(this.$root);
+        readySetGo();
+        break;
+      case 'Wrong':
+        writeUserAnswer(event.target.dataset.button);
+        compareAnswers();
+        rewriteStatistic();
+        break;
+      case 'Correct':
+        writeUserAnswer(event.target.dataset.button);
+        compareAnswers();
+        rewriteStatistic();
+        break;
+      default:
+        console.log();
     }
 
-    /* if (clickedElement.$el) {
-      console.log(event.target.dataset.click);
-    } */
-
-    if (event.target.dataset.click === 'mute') {
-      muteGameVoice();
-    }
-
-    if (event.target.dataset.click === 'unmute') {
-      onGameVoice();
-    }
-
-    if (event.target.dataset.click === 'audio') {
-      playWordAudio();
+    switch (event.target.dataset.click) {
+      case 'mute':
+        muteGameVoice();
+        break;
+      case 'unmute':
+        onGameVoice();
+        break;
+      case 'audio':
+        playWordAudio();
+        break;
+      case 'return':
+        location.reload();
+        break;
+      case 'destroy':
+        cleanLongTimeStatistic();
+        break;
+      case 'long-time-statistic':
+        switchToLongTimeStatistic();
+        break;
+      case 'round-statistic':
+        switchToRoundStatistic();
+        break;
+      default:
+        console.log();
     }
 
     if (event.target.dataset.statistic) {
       playStatisticAudio(event.target.dataset.statistic.split('-')[1]);
     }
-
-    if (currentTarget.dataset.button === 'Wrong') {
-      writeUserAnswer(currentTarget.dataset.button);
-      compareAnswers();
-      rewriteStatistic();
-    }
-
-    if (currentTarget.dataset.button === 'Correct') {
-      writeUserAnswer(currentTarget.dataset.button);
-      compareAnswers();
-      rewriteStatistic();
-    }
-
-    if (event.target.dataset.click === 'return') {
-      location.reload();
-    }
-
-    if (event.target.dataset.click === 'destroy') {
-      cleanLongTimeStatistic();
-    }
-    if (event.target.dataset.click === 'long-time-statistic') {
-      switchToLongTimeStatistic();
-    }
-
-    if (event.target.dataset.click === 'round-statistic') {
-      switchToRoundStatistic();
-    }
   }
 
   onMousedown(event) {
-    if (event.target.dataset.button === 'Wrong') {
-      markLeftKeys();
-    }
-
-    if (event.target.dataset.button === 'Correct') {
-      markRightKeys();
+    switch (event.target.dataset.button) {
+      case 'Wrong':
+        markLeftKeys();
+        break;
+      case 'Correct':
+        markRightKeys();
+        break;
+      default:
+        console.log();
     }
   }
 
   onMouseup(event) {
-    if (event.target.dataset.button === 'Wrong') {
-      unmarkLeftKeys();
-    }
-
-    if (event.target.dataset.button === 'Correct') {
-      unmarkRightKeys();
+    switch (event.target.dataset.button) {
+      case 'Wrong':
+        unmarkLeftKeys();
+        break;
+      case 'Correct':
+        unmarkRightKeys();
+        break;
+      default:
+        console.log();
     }
   }
 
   onKeyup(event) {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      writeUserAnswer(event.key);
-      compareAnswers();
-      rewriteStatistic();
-      unmarkLeftKeys();
-    }
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      writeUserAnswer(event.key);
-      compareAnswers();
-      rewriteStatistic();
-      unmarkRightKeys();
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        writeUserAnswer(event.key);
+        compareAnswers();
+        rewriteStatistic();
+        unmarkLeftKeys();
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        writeUserAnswer(event.key);
+        compareAnswers();
+        rewriteStatistic();
+        unmarkRightKeys();
+        break;
+      default:
+        console.log();
     }
   }
 
   onKeydown(event) {
-    if (event.key === 'ArrowLeft') {
-      markLeftKeys();
-    }
-    if (event.key === 'ArrowRight') {
-      markRightKeys();
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        markLeftKeys();
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        markRightKeys();
+        break;
+      default:
+        console.log();
     }
   }
 

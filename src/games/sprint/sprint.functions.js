@@ -1,7 +1,7 @@
 import DICTIONARY from './sprint.data';
 
 const state = {
-  currentTime: 3,
+  currentTime: 60,
   roundStatus: '',
   userAnswer: '',
   word: '',
@@ -288,7 +288,6 @@ function hideBestIndicator() {
 function pointsCount() {
   switch (state.comboAnswers) {
     case 4:
-      console.log('work4');
       playStartAudio();
       document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
       document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
@@ -301,7 +300,6 @@ function pointsCount() {
       document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
       break;
     case 8:
-      console.log('work7');
       playStartAudio();
       document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
       document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
@@ -314,7 +312,6 @@ function pointsCount() {
       document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
       break;
     case 12:
-      console.log('work7');
       playStartAudio();
       document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
       document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
@@ -330,7 +327,6 @@ function pointsCount() {
       break;
     default:
       console.log();
-      break;
   }
 }
 

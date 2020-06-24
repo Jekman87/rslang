@@ -73,14 +73,14 @@
   }
 }
 
-.progress-place  {
+.progress-place {
   width: 90%;
   @include flexible;
   position: relative;
   margin: auto;
   margin-bottom: 7%;
 
-  & div {
+    div {
     width: 25px;
     height: 25px;
     @include flexible;
@@ -129,7 +129,7 @@
 .birds {
   position: relative;
 
-  & span {
+  span {
     width: 80%;
     height: 5px;
     position: absolute;
@@ -138,7 +138,7 @@
     z-index: 2;
   }
 
-  & img {
+  img {
     z-index: 1;
   }
 
@@ -173,7 +173,6 @@
     top: 32%;
     left: 68%;
   }
-
 }
 
 
@@ -183,14 +182,14 @@
   @include flexibleSpace;
   margin: auto;
 
-  & button,
+  button,
   span {
     @include flexible;
     margin: 3%;
     width: 40%;
     min-height: 40px;
 
-    & i {
+    i {
       font-size: 2rem;
       color: $fontColor;
     }

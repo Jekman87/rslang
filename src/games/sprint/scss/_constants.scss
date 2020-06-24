@@ -20,7 +20,3 @@ $fontColor: #005e8d;
 @mixin activeShadow() {
   box-shadow: 6px 6px 10px black;
 }
-
-@mixin border() {
-  border: 1px solid black;
-}
