@@ -37,6 +37,11 @@ class Dom {
     return this;
   }
 
+  toggle(className) {
+    this.$el.classList.toggle(className);
+    return this;
+  }
+
   find(selector) {
     return $$(this.$el.querySelector(selector));
   }
