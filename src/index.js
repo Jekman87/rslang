@@ -19,7 +19,12 @@ import './plugins/fontawesome/index';
 //   authorization.render();
 // }
 
-import StartPage from './components/AudioCall/index';
+// import StartPage from './components/AudioCall/index';
 
-const startPage = new StartPage();
-startPage.render();
+// const startPage = new StartPage();
+// startPage.render();
+
+import { AudioCall } from './components/AudioCall/index';
+
+const audioCall = new AudioCall();
+audioCall.render();

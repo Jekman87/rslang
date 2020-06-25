@@ -24,7 +24,16 @@
       font-size: 0.7em;
       color: rgb(184, 184, 184);
     }
+
+    &:focus {
+      background: transparent;
+      color: white;
+    }
   }
+}
+
+.text-decoration {
+  text-decoration: line-through;
 }
 
 i {
@@ -39,16 +48,64 @@ i {
   &.fa-volume-up {
     font-size: 4.5em;
   }
+
+  &.fa-check-circle {
+    color: #8ac48a;
+  }
 }
 
 .btn-repeat {
   background-color: #ffffff2a;
   border-radius: 75px;
-  //   animation: pulse 3s infinite;
+
+  i {
+    padding: 27%;
+  }
+}
+
+.btn-repeat.on-answer {
+  padding: 3%;
+  height: 28%;
+  align-self: flex-end;
+
+  i {
+    font-size: 2em;
+  }
+}
+
+.btn-repeat-animation {
+  animation: pulse 3s infinite;
 }
 
 .group-list-row {
-  margin-top: 10%;
+  margin-top: 7%;
+}
+
+.btn-dont-know {
+  font-size: 1.6em;
+}
+
+.answer-col {
+  // height: 20em;
+  display: flex;
+}
+
+.question-col {
+  padding-top: 8%;
+  padding-bottom: 5%;
+}
+
+.answer-pic {
+  width: 100%;
+  height: 75%;
+  border-radius: 100px;
+  border: 2px solid white;
+}
+
+.answer-word {
+  width: fit-content;
+  margin: 0 auto;
+  font-size: 3.5em;
 }
 
 @-webkit-keyframes pulse {

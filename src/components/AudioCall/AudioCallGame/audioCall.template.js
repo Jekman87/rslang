@@ -30,12 +30,23 @@ export default function createAudioCall() {
       </button>
     </div>
   </div>
-  <div class="row" style="margin-top: 5%;">
+  <div class="row" style="">
     <div class="col"></div>
-    <div class="col">
-      <button class="btn btn-repeat d-block ml-auto mr-auto" type="button" data-event="repeat">
-        <i class="fas fa-volume-up p-4" data-event="repeat"></i>
+    <div class="col question-col">
+        <button class="btn btn-repeat d-block ml-auto mr-auto" type="button" data-event="repeat">
+          <i class="fas fa-volume-up" data-event="repeat"></i>
+        </button>
+    </div>
+    <div class="col d-none answer-col"> 
+      <button class="btn btn-repeat d-block ml-auto mr-auto on-answer" type="button" data-event="repeat">
+        <i class="fas fa-volume-up" data-event="repeat"></i>
       </button>
+
+      <div class ="answer">
+        <img class= "answer-pic" src="">
+        <p class="text-white answer-word"></p>
+      </div>
+      
     </div>
     <div class="col"></div>
   </div>
@@ -43,23 +54,49 @@ export default function createAudioCall() {
     <div class="col">
       <div class="btn-group w-100" role="group" aria-label="">
         <button type="button" class="btn btn-outline-light mr-5 ml-5">
-          <span class="mr-2">1</span> <span class="">коробка</span>
+          <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
         <button type="button" class="btn btn-outline-light mr-5">
-          <span class="mr-2">2</span> <span class="">коробка</span>
+          <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
         <button type="button" class="btn btn-outline-light mr-5">
-          <span class="mr-2">3</span> <span class="">коробка</span>
+          <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
         <button type="button" class="btn btn-outline-light mr-5">
-          <span class="mr-2">4</span> <span class="">коробка</span>
+          <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
         <button type="button" class="btn btn-outline-light mr-5">
-          <span class="mr-2">5</span> <span class="">коробка</span>
+          <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
       </div>
     </div>
   </div>
+  <div class="row my-5">
+        <div class="col-5"></div>
+        <div class="col">
+            <button type="button" 
+            class="btn btn-outline-light ml-auto mr-auto text-uppercase btn-dont-know"
+            data-event="dontKnow"
+            >
+            <span class="px-2" data-event="dontKnow">не знаю</span>
+            </button>
+            <button type="button" 
+            class="d-none btn btn-outline-light ml-auto mr-auto text-uppercase btn-next"
+            data-event="next"
+            >
+            <i class="fas fa-long-arrow-alt-right px-5" data-event="next"></i>
+            </button>
+        </div>
+        <div class="col"></div>
+    </div>
 </div>
     `;
 }
+
+/* <div class="answer-pic-wrap">
+          <div class="answer-pic"></div>
+        </div> */
+/* <div class="answer-pic-wrap ">
+          <div class="answer-pic"></div>
+        </div>
+        <p class="text-white align-self-center ml-4 answer-word ">already</p> */
