@@ -11,10 +11,10 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
-import speakitGame from './games/speakIt/index';
+import Speakit from './games/speakIt/index';
 
 const pages = {
-  Authorization, MainPage, MainGame, speakitGame,
+  Authorization, MainPage, MainGame, Speakit,
 };
 const userLog = Authorization.checkTokenValidity();
 let api;

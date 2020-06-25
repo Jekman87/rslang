@@ -41,7 +41,6 @@ export default class CardContainer extends Component {
       resetCard.call(this);
     });
     this.subscribe('speech:recognition', (word) => {
-      console.info(word);
       const wordObj = checkSpeechWord.call(this, word);
       if (wordObj) {
         const { id } = wordObj;

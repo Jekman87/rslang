@@ -139,6 +139,10 @@ export default class Header extends Component {
     if (clickedElement.data.type === 'results') {
       this.emit('header:results', '');
     }
+    if (clickedElement.data.type === 'exit') {
+      this.dataForApp.destroy();
+      this.dataForApp.mainApp.observer.emit('selectPage', 'MainPage');
+    }
     if (clickedElement.data.type === 'history') {
       this.emit('header:history', '');
     }

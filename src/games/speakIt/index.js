@@ -6,6 +6,22 @@ import Score from './components/score/index';
 import CardsDesk from './components/cardsDesk/index';
 import Results from './components/results/index';
 
-const speakitGame = new SpeakIt('#app', { components: [Intro, Header, CardContainer, Score, CardsDesk, Results] });
+class Speakit {
+  constructor(elem, options) {
+    this.app = elem;
+    this.options = options;
+  }
 
-export { speakitGame as default };
+  render() {
+    this.speakitGame = new SpeakIt(this.app, {
+      components: [Intro, Header, CardContainer, Score, CardsDesk, Results],
+      options: this.options,
+    });
+    this.speakitGame.render();
+  }
+
+  destroy() {
+    this.speakitGame.destroy();
+  }
+}
+export { Speakit as default };

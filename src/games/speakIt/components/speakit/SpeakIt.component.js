@@ -3,16 +3,24 @@ import Observer from '../../../../core/Observer';
 
 export default class SpeakIt {
   constructor(selector, options) {
+    // console.log(selector, typeof selector, $$(selector));
     this.$el = $$(selector);
     this.components = options.components || [];
     this.observer = new Observer();
-    this.dataForApp = { state: { speakMode: false, correct: 0 } };
+    this.dataForApp = {
+      state: { speakMode: false, correct: 0 },
+      mainApp: options.options,
+      destroy: this.destroy.bind(this),
+    };
   }
 
   getRoot() {
     const $root = $$.create('div', 'speakit');
     $root.addClass('container');
-    const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
+    const componentOptions = {
+      observer: this.observer,
+      dataForApp: this.dataForApp,
+    };
     this.components = this.components.map((Component) => {
       const element = $$.create('div', Component.className);
       if (['intro'].includes(Component.className)) {
@@ -39,12 +47,14 @@ export default class SpeakIt {
       rgba(148, 187, 233, 1) 100%
     )`,
     });
-    // $body.attr('style', ' ');
+    //
     this.$el.append(this.getRoot());
     this.components.forEach((component) => component.init());
   }
 
   destroy() {
+    const $body = $$(document).find('body');
+    $body.attr('style', ' ');
     this.components.forEach((component) => component.destroy());
   }
 }
