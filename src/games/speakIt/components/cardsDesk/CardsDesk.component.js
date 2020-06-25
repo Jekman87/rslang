@@ -61,6 +61,17 @@ export default class CardsDesk extends Component {
       const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
       this.dataForApp.state.gameWords = wordsTen;
     });
+    this.subscribe('results:playword', (wordId) => {
+      if (wordId) {
+        const data = this.dataForApp.words
+          .find((el) => el.id === wordId);
+        const { audio } = data;
+        playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
+      }
+    });
+    this.subscribe('results:continue', () => {
+      unSelectCards.call(this);
+    });
     this.subscribe('header:finishRound', () => {
       unSelectCards.call(this);
       prepareCardsDataHTML.call(this);

@@ -1,5 +1,4 @@
 import Component from '../../../../core/Component';
-// import $$ from '../../../../core/domManipulation';
 import createCardContainerHTML from './cardContainer.template';
 import { ASSETS_URL, LOCAL_ASSETS_URL } from '../../api/constants';
 
@@ -42,13 +41,13 @@ export default class CardContainer extends Component {
       resetCard.call(this);
     });
     this.subscribe('speech:recognition', (word) => {
-      console.log(word);
+      console.info(word);
       const wordObj = checkSpeechWord.call(this, word);
       if (wordObj) {
         const { id } = wordObj;
         // check image loading
         updateWordCard.call(this, wordObj);
-        changeStateGameWords.call(this, word);
+        changeStateWordsArrays.call(this, word);
         this.emit('cardContainer:findWord', id);
       } else {
         this.emit('cardContainer:notFindWord', '');
@@ -68,7 +67,7 @@ export default class CardContainer extends Component {
 }
 
 function checkSpeechWord(word) {
-  return this.dataForApp.state.gameWords.find((el) => el.word === word);
+  return this.dataForApp.state.gameWords.find((el) => el.word.toLowerCase() === word.toLowerCase());
 }
 
 function updateWordCard(data) {
@@ -84,7 +83,7 @@ function updateWordCard(data) {
   this.$wordCardInput.text(word);
 }
 
-function changeStateGameWords(word) {
+function changeStateWordsArrays(word) {
   this.dataForApp.state.gameWords = this.dataForApp.state.gameWords
     .filter((el) => {
       if (el.word === word) {

@@ -21,6 +21,7 @@ export default class Header extends Component {
     window.aa_1 = this.dataForApp;
     this.$level = this.$root.find('#gameLevel');
     this.$round = this.$root.find('#gameRound');
+    this.$group = this.$root.find('#gameRoundGroup');
     this.speakBtn = this.$root.find('[data-type="speak"');
     this.resultsBtn = this.$root.find('[data-type="results"');
     this.finishBtn = this.$root.find('[data-type="finish"');
@@ -28,16 +29,83 @@ export default class Header extends Component {
 
     this.subscribe('intro:start', () => {
       this.$root.removeClass('d-none');
-      Array.from(this.$level.$el.options).forEach((option) => {
+      Array.from(this.$level.$el.options).forEach((option, i) => {
         if (option.value === `${this.dataForApp.gameLevel.level}`) {
-          $$(option).attr('selected', true);
+          this.$level.$el.selectedIndex = i;
         }
       });
-      Array.from(this.$round.$el.options).forEach((option) => {
+      Array.from(this.$round.$el.options).forEach((option, i) => {
         if (option.value === `${this.dataForApp.gameLevel.round}`) {
-          $$(option).attr('selected', true);
+          this.$round.$el.selectedIndex = i;
         }
       });
+      Array.from(this.$group.$el.options).forEach((option, i) => {
+        if (option.value === `${this.dataForApp.gameLevel.group}`) {
+          this.$group.$el.selectedIndex = i;
+        }
+      });
+    });
+    this.subscribe('results:continue', async () => {
+      if (this.dataForApp.gameLevel.group === 0) {
+        this.dataForApp.gameLevel.group += 1;
+        this.$group.$el.options.value = this.dataForApp.gameLevel.group;
+        Array.from(this.$group.$el.options).forEach((option, i) => {
+          if (option.value === `${this.dataForApp.gameLevel.group}`) {
+            this.$group.$el.selectedIndex = i;
+          }
+        });
+      } else if (this.dataForApp.gameLevel.group === 1
+        // && this.dataForApp.gameLevel.level < 6
+        && this.dataForApp.gameLevel.round < 29) {
+        this.dataForApp.gameLevel.group = 0;
+        this.$group.$el.options.value = this.dataForApp.gameLevel.group;
+        Array.from(this.$group.$el.options).forEach((option, i) => {
+          if (option.value === `${this.dataForApp.gameLevel.group}`) {
+            this.$group.$el.selectedIndex = i;
+          }
+        });
+        this.dataForApp.gameLevel.round += 1;
+        this.$group.$el.options.value = this.dataForApp.gameLevel.round;
+        Array.from(this.$round.$el.options).forEach((option, i) => {
+          if (option.value === `${this.dataForApp.gameLevel.round}`) {
+            this.$round.$el.selectedIndex = i;
+          }
+        });
+        await changeGameRound.call(this);
+      } else if (this.dataForApp.gameLevel.group === 1
+        // && this.dataForApp.gameLevel.level < 6
+        && this.dataForApp.gameLevel.round === 29) {
+        this.dataForApp.gameLevel.group = 0;
+        this.$group.$el.options.value = this.dataForApp.gameLevel.group;
+        Array.from(this.$group.$el.options).forEach((option, i) => {
+          if (option.value === `${this.dataForApp.gameLevel.group}`) {
+            this.$group.$el.selectedIndex = i;
+          }
+        });
+        this.dataForApp.gameLevel.round = 0;
+        this.$group.$el.options.value = this.dataForApp.gameLevel.round;
+        Array.from(this.$round.$el.options).forEach((option, i) => {
+          if (option.value === `${this.dataForApp.gameLevel.round}`) {
+            this.$round.$el.selectedIndex = i;
+          }
+        });
+        if (this.dataForApp.gameLevel.level < 5) {
+          this.dataForApp.gameLevel.level += 1;
+        } else {
+          this.dataForApp.gameLevel.level = 0;
+        }
+        this.$level.$el.options.value = this.dataForApp.gameLevel.level;
+        Array.from(this.$level.$el.options).forEach((option, i) => {
+          if (option.value === `${this.dataForApp.gameLevel.level}`) {
+            this.$level.$el.selectedIndex = i;
+          }
+        });
+        await changeGameRound.call(this);
+      }
+      restart.call(this);
+      stopSpeak.call(this);
+      this.emit('header:restart', this.dataForApp.state.speakMode);
+      this.emit('header:changeGameRound', '');
     });
     this.subscribe('score:finishGame', () => {
       this.finishBtn.addClass('d-none');
@@ -48,60 +116,35 @@ export default class Header extends Component {
   }
 
   async onClick(event) {
-    let clickedElement = $$(event.target);
-    if (clickedElement.data.type && (clickedElement.data.type === 'speak'
-      || $$(clickedElement.closest('.btn')).data.type === 'speak')) {
+    const clickedElement = $$(event.target);
+    if (clickedElement.data.type === 'speak') {
       if (!this.dataForApp.state.speakMode) {
         this.dataForApp.state.speakMode = true;
       } else {
         this.dataForApp.state.speakMode = false;
       }
-
       if (this.dataForApp.state.speakMode) {
-        if (!(clickedElement.data.type === 'speak')) {
-          clickedElement = $$(clickedElement.closest('.btn'));
-        }
         this.finishBtn.removeClass('d-none');
         startSpeak.call(this);
         this.emit('header:speak', this.dataForApp.state.speakMode);
       }
     }
-    if (clickedElement.data.type
-      && (clickedElement.data.type === 'restart'
-      || $$(clickedElement.closest('.btn')).data.type === 'restart')) {
-      if (!(clickedElement.data.type === 'restart')) {
-        clickedElement = $$(clickedElement.closest('.btn'));
-      }
+    if (clickedElement.data.type === 'restart') {
       this.finishBtn.addClass('d-none');
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);
       this.emit('stopSpeak', '');
     }
-    if (clickedElement.data.type
-      && (clickedElement.data.type === 'results'
-      || $$(clickedElement.closest('.btn')).data.type === 'results')) {
-      if (!(clickedElement.data.type === 'results')) {
-        clickedElement = $$(clickedElement.closest('.btn'));
-      }
+    if (clickedElement.data.type === 'results') {
       this.emit('header:results', '');
     }
-    if (clickedElement.data.type
-      && (clickedElement.data.type === 'history'
-      || $$(clickedElement.closest('.btn')).data.type === 'history')) {
-      if (!(clickedElement.data.type === 'history')) {
-        clickedElement = $$(clickedElement.closest('.btn'));
-      }
+    if (clickedElement.data.type === 'history') {
       this.emit('header:history', '');
     }
-    if (clickedElement.data.type
-      && (clickedElement.data.type === 'finish'
-      || $$(clickedElement.closest('.btn')).data.type === 'finish')) {
-      if (!(clickedElement.data.type === 'finish')) {
-        clickedElement = $$(clickedElement.closest('.btn'));
-      }
-      this.dataForApp.state.speakMode = false;
+    if (clickedElement.data.type === 'finish') {
       this.finishBtn.addClass('d-none');
+      restart.call(this);
       stopSpeak.call(this);
       saveGameHistory.call(this);
       this.emit('header:finishRound', '');
@@ -172,7 +215,9 @@ function saveGameHistory() {
   const { level, round, group } = this.dataForApp.gameLevel;
   const date = Date.now();
   const history = {
-    d: date, c: correct, r: `${level + 1}-${round + 1}-${group + 1}`,
+    d: date,
+    c: correct,
+    r: `${level + 1}-${round + 1}-${group + 1}`,
   };
   let histories = [];
   if (storage('speakit-history')) {

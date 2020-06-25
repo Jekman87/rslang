@@ -15,6 +15,13 @@
     border: white;
     border-radius: 6px;
   }
+  dialog[open] {
+    animation: appear .15s cubic-bezier(0, 1.8, 1, 1.8);
+  }
+  
+  dialog::backdrop {
+    background: linear-gradient(45deg, rgba(0,143,104,.5), rgba(250,224,66,.5));
+  }
 }
 
 .fa-anim-flash {
@@ -31,5 +38,17 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

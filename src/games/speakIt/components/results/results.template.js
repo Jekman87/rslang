@@ -21,7 +21,7 @@ export default function createResultsHTML() {
           <i class="fas fa-undo" data-target="resultsreturn"></i> Назад
         </button>
         <button class="btn btn-success" data-target="continue">
-          <i class="fas fa-arrow-circle-right" data-target="continue"></i> Продолжить
+          <i class="fas fa-arrow-circle-right" data-target="continue"></i> Следующий раунд
         </button>
         </div>
       </div>

@@ -63,11 +63,16 @@ export default class Results extends Component {
   onClick(event) {
     const clickedElement = $$(event.target);
     if (Object.keys(clickedElement.data).length) {
+      if (clickedElement.data.type === 'playword') {
+        const wordId = $$(clickedElement.closest('div')).data.wordid;
+        this.emit('results:playword', (wordId));
+      }
       if (clickedElement.data.target === 'resultsreturn') {
         this.$resultsDialog.$el.close();
       }
       if (clickedElement.data.target === 'continue') {
         this.$resultsDialog.$el.close();
+        this.emit('results:continue', '');
       }
       if (clickedElement.data.target === 'historyreturn') {
         this.$historyDialog.$el.close();

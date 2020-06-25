@@ -34,26 +34,26 @@ export default function createHeaderHTML() {
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-secondary" data-type="results">
-          <i class="fas fa-poll-h" data-type="results"></i> Результат
+          <i class="fas fa-poll-h" data-type="results" data-type="results"></i> Результат
         </button>
         <button type="button" class="btn btn-secondary" data-type="history">
-          <i class="fas fa-history" aria-hidden="true"></i> История игр
+          <i class="fas fa-history" aria-hidden="true" data-type="history"></i> История игр
         </button>
         <button type="button" class="btn btn-secondary" data-type="exit">
-        <i class="fas fa-power-off"></i> Выход
+        <i class="fas fa-power-off" data-type="exit"></i> Выход
         </button>
       </div>
     </div>
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-warning" data-type="restart">
-        <i class="fas fa-retweet"></i> Рестарт
+        <i class="fas fa-retweet" data-type="restart"></i> Рестарт
         </button>
         <button type="button" class="btn btn-warning" data-type="speak">
-          <i class="fas fa-microphone" aria-hidden="true"></i> Говорить
+          <i class="fas fa-microphone" aria-hidden="true" data-type="speak"></i> Говорить
         </button>
         <button type="button" class="btn btn-warning d-none" data-type="finish">
-         <i class="fas fa-ban" aria-hidden="true"></i> Завершить раунд
+         <i class="fas fa-ban" aria-hidden="true" data-type="finish"></i> Завершить раунд
         </button>
       </div>
     </div>
