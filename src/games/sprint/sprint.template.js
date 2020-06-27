@@ -1,9 +1,9 @@
 export default function createGameField() {
   return `
     <div class="intro">
-      <h1>ENGLISH<br><i class="fas fa-running"></i>SPRINT<i class="fas fa-rabbit-fast rabbit"></i></h1>
-      <p>True or false?</p>
-      <button type="button" class="btn btn-outline-success" data-button="start">Let's start</button>
+      <h1><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
+      <p>Истинная гонка на проверку знаний.<br> Верно ли указан перевод слова?</p>
+      <button type="button" class="btn btn-outline-success" data-button="start">Начать забег</button>
     </div>
 
     <div class="main-sp">
@@ -17,9 +17,9 @@ export default function createGameField() {
     <div class="sprint-app">
     <div class="sprint-main-container">
       <header class="sprint-header">
-        <div class="timer">Timer</div>
+        <div class="timer">Время</div>
         <button class="btn btn-outline-danger button">
-          <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="return"></i>
+          <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="home"></i>
         </button>
       </header>
 
@@ -43,18 +43,18 @@ export default function createGameField() {
           <span class="audio-icon"><i class="fa fa-volume-down icon-parameters" aria-hidden="true" data-click="audio"></i></span>
         </div>
 
-        <span class="points-progress">+10 points for the correct answer</span>
+        <span class="points-progress">+10 очков за слово.</span>
 
         <div class="birds">
           <img class="bird-1" src="assets/img/bird-1.png" alt="bird" />
           <span></span>
         </div>
-        <div class="language-eng">ENGLISH</div>
-        <div class="language-rus">RUSSIAN</div>
+        <div class="language-eng"></div>
+        <div class="language-rus"></div>
 
         <div class="click-buttons">
-          <button class="btn btn-danger wrong" data-button="Wrong">Wrong</button>
-          <button class="btn btn-success correct" data-button="Correct">Correct</button>
+          <button class="btn btn-danger wrong" data-button="Wrong">Неверно</button>
+          <button class="btn btn-success correct" data-button="Correct">Верно</button>
         </div>
 
         <div class="press-buttons">
@@ -72,33 +72,33 @@ export default function createGameField() {
         <div class="points-result"></div>
 
         <div class="mistake-container">
-          <p>I don't know</p>
+          <span>Ошибся:</span>
           <span class='mistake-answer'>0</span>
         </div>
         <div class='mistake-block'></div>
 
         <div class="correct-container">
-          <p>I know</p>
+          <span>Ответил верно:</span>
           <span class='correct-answer'>0</span>
         </div>
         <div class='correct-block'></div>
 
         <div class='statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="return">New game</button>
-          <button class="btn btn-success statistic-button" data-click="long-time-statistic">Game history</button>
-          <button class="btn btn-success statistic-button" data-click="return">Home</button>
+          <button class="btn btn-success statistic-button" data-click="return">Новая игра</button>
+          <button class="btn btn-success statistic-button" data-click="long-time-statistic">История игр</button>
+          <button class="btn btn-success statistic-button" data-click="home">На главную</button>
         </div>
       </div>
 
       <div class="game-history">
 
-        <div class="history">History of games:</div>
+        <div class="history">История игр:</div>
 
         <div class='games'></div>
 
         <div class='statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="destroy">Clean statistic</button>
-          <button class="btn btn-success statistic-button" data-click="round-statistic">Back</button>
+          <button class="btn btn-success statistic-button" data-click="destroy">Очистить историю</button>
+          <button class="btn btn-success statistic-button" data-click="round-statistic">Вернуться</button>
         </div>
 
       </div>
@@ -106,9 +106,10 @@ export default function createGameField() {
     </div>
 
     <audio class="tick-voice" src="assets/voices/bip.mp3"></audio>
-    <audio class="start-voice" src="assets/voices/gong.mp3"></audio>
+    <audio class="gong-voice" src="assets/voices/gong.mp3"></audio>
     <audio class="click-voice" crossOrigin="anonymous" src="assets/voices/pew.mp3"></audio>
     <audio class="word-voice" src="assets/voices/pew.mp3"></audio>
     <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
+    <audio class="whistle-voice" src="assets/voices/whistle.mp3"></audio>
   `;
 }

@@ -66,8 +66,6 @@ export default class PageContainer extends Component {
 
     const game = new NewGame('.PageContainer', this.options);
     game.render();
-
-    console.log('Игра пока не готова: ', NewGame);
   }
 
   destroy() {

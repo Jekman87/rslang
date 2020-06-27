@@ -14,8 +14,49 @@ const state = {
   wordCount: 0,
 };
 
-function hideIntro(el) {
-  el.find('.intro').css({ display: 'none' });
+// hide components
+
+function hideIntro() {
+  document.querySelector('.intro').style.display = 'none';
+}
+
+function hideBestIndicator() {
+  document.querySelector('[data-score-place="2"]').style.display = 'flex';
+  document.querySelector('[data-score-place="3"]').style.display = 'flex';
+}
+
+function hideCountdown() {
+  document.querySelector('.main-sp').style.display = 'none';
+}
+
+function hideShortTimeStatistic() {
+  document.querySelector('.statistic-screen').style.display = 'none';
+}
+
+// show components
+
+function showCountdown() {
+  document.querySelector('.main-sp').style.display = 'flex';
+}
+
+function showLongTimeStatistic() {
+  const games = JSON.parse(localStorage.getItem('arrayWithGames'));
+
+  document.querySelector('.games').innerHTML = '';
+
+  games.forEach((el) => document.querySelector('.games').insertAdjacentHTML('beforeend', `${prepareLongTimeStatistic(el)}`));
+}
+
+function showBestIndicator() {
+  document.querySelector('[data-score-place="1"]').style.backgroundColor = '#008000ad';
+  document.querySelector('[data-score-place="1"]')
+    .insertAdjacentHTML('afterbegin', '<i class="fas fa-check"></i>');
+  document.querySelector('[data-score-place="2"]').style.display = 'none';
+  document.querySelector('[data-score-place="3"]').style.display = 'none';
+}
+
+function showShortTimeStatistic() {
+  document.querySelector('.statistic-screen').style.display = 'flex';
 }
 
 function opacityOn() {
@@ -27,19 +68,15 @@ function opacityOff() {
 }
 
 function Ready() {
-  document.querySelector('.countdown').innerHTML = 'Ready...';
+  document.querySelector('.countdown').innerHTML = 'На старт ...';
 }
 
 function Set() {
-  document.querySelector('.countdown').innerHTML = 'Set...';
+  document.querySelector('.countdown').innerHTML = 'Внимание ...';
 }
 
 function Go() {
-  document.querySelector('.countdown').innerHTML = 'Go!';
-}
-
-function hideCountdown() {
-  document.querySelector('.main-sp').style.display = 'none';
+  document.querySelector('.countdown').innerHTML = 'Марш!';
 }
 
 function markRightAnswer() {
@@ -48,6 +85,32 @@ function markRightAnswer() {
 
 function markWrongAnswer() {
   document.querySelector('.game-block').classList.toggle('wrong-color');
+}
+
+function restartTimer() {
+  state.currentTime = 60;
+}
+
+function removeShortTimeStatistic() {
+  state.points = 0;
+  state.pointsWeigth = 10;
+  document.querySelector('.score').innerHTML = 0;
+  document.querySelector('.mistake-block').innerHTML = '';
+  document.querySelector('.correct-block').innerHTML = '';
+  document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
+}
+
+function restartGame() {
+  restartTimer();
+  removeShortTimeStatistic();
+  hideBestIndicator();
+  resetProgress();
+  hideShortTimeStatistic();
+  showCountdown();
+  readySetGo();
+  callRandomFunction();
+  showWordsInThePage();
+  keyDownListener();
 }
 
 function countdown() {
@@ -61,8 +124,9 @@ function countdown() {
     rewritePointsResult();
     rewriteCorrectAndWrongAnswers();
     rewriteLongTimeStatistic();
+    showShortTimeStatistic();
     showLongTimeStatistic();
-    document.querySelector('.statistic-screen').style.display = 'flex';
+    removeListeners();
   } else {
     timer = setTimeout(countdown, 1000);
   }
@@ -91,11 +155,15 @@ function playTickAudio() {
 }
 
 function playStartAudio() {
-  document.querySelector('.start-voice').play();
+  document.querySelector('.whistle-voice').play().catch(() => true);
+}
+
+function playBonusAudio() {
+  document.querySelector('.gong-voice').play().catch(() => true);
 }
 
 function playClickAudio() {
-  document.querySelector('.click-voice').play().catch((err) => console.log(err));
+  document.querySelector('.click-voice').play().catch(() => true);
   return true;
 }
 
@@ -104,7 +172,7 @@ function playWordAudio() {
 }
 
 function playWrongAudio() {
-  document.querySelector('.wrong-voice').play().catch((err) => console.log(err));
+  document.querySelector('.wrong-voice').play().catch(() => true);
 }
 
 function playStatisticAudio(wordNumber) {
@@ -170,7 +238,7 @@ function addAnswerToStatistic(answer) {
 }
 
 function rewritePointsResult() {
-  document.querySelector('.points-result').innerHTML = `Round result: ${state.points} points.`;
+  document.querySelector('.points-result').innerHTML = `Результат раунда: ${state.points} очков.`;
 }
 
 function rewriteCorrectAndWrongAnswers() {
@@ -198,12 +266,12 @@ function getDate() {
 function rewriteLongTimeStatistic() {
   if (localStorage.getItem('arrayWithGames') === null) {
     const games = [];
-    const currentGame = [getDate(), `correct - ${state.correctAnswers};`, `mistakes - ${state.wrongAnswers}.`];
+    const currentGame = [getDate(), `результат игры - ${state.points};`, `правильных ответов - ${state.correctAnswers};`, `ошибок - ${state.wrongAnswers}.`];
     games.push(currentGame);
     localStorage.setItem('arrayWithGames', JSON.stringify(games));
   } else {
     const games = JSON.parse(localStorage.getItem('arrayWithGames'));
-    const currentGame = [getDate(), `correct - ${state.correctAnswers};`, `mistakes - ${state.wrongAnswers}.`];
+    const currentGame = [getDate(), `результат игры - ${state.points};`, `правильных ответов - ${state.correctAnswers};`, `ошибок - ${state.wrongAnswers}.`];
     games.push(currentGame);
     localStorage.setItem('arrayWithGames', JSON.stringify(games));
   }
@@ -213,24 +281,21 @@ function prepareLongTimeStatistic(arrayWithStatistic) {
   return `
     <div class="statistic-block long-time">
     <span><i class="fas fa-rabbit"></i></span>
-    <span>
-      ${arrayWithStatistic[0]}
-    </span>
-    <span>${arrayWithStatistic[1]}</span>
-    <span>${arrayWithStatistic[2]}</span>
+    <div class="information-block">
+      <span>
+        ${arrayWithStatistic[0]}
+      </span>
+      <span>${arrayWithStatistic[1]}</span>
+      <span>${arrayWithStatistic[2]}</span>
+      <span>${arrayWithStatistic[3]}</span>
+    </div>
   </div>
   `.trim();
 }
 
-function cleanLongTimeStatistic() {
+function resetLongTimeStatistic() {
   localStorage.removeItem('arrayWithGames');
   document.querySelector('.games').innerHTML = '';
-}
-
-function showLongTimeStatistic() {
-  const games = JSON.parse(localStorage.getItem('arrayWithGames'));
-  console.log(games);
-  games.forEach((el) => document.querySelector('.games').insertAdjacentHTML('beforeend', `${prepareLongTimeStatistic(el)}`));
 }
 
 function writeUserAnswer(answer) {
@@ -240,6 +305,15 @@ function writeUserAnswer(answer) {
   if (answer === 'Correct' || answer === 'ArrowRight') {
     state.userAnswer = true;
   }
+}
+
+function resetProgress() {
+  state.comboAnswers = 0;
+  state.colorCount = 0;
+  state.pointsWeigth = 10;
+  document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+  document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
+  document.querySelectorAll('.bird').forEach((el) => el.remove());
 }
 
 function compareAnswers() {
@@ -259,12 +333,7 @@ function compareAnswers() {
     setTimeout(markWrongAnswer, 0);
     setTimeout(markWrongAnswer, 200);
 
-    state.comboAnswers = 0;
-    state.colorCount = 0;
-    state.pointsWeigth = 10;
-    document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-    document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
-    document.querySelectorAll('.bird').forEach((el) => el.remove());
+    resetProgress();
 
     hideBestIndicator();
 
@@ -272,58 +341,44 @@ function compareAnswers() {
   }
 }
 
-function showBestIndicator() {
-  document.querySelector('[data-score-place="1"]').style.backgroundColor = '#008000ad';
-  document.querySelector('[data-score-place="1"]')
-    .insertAdjacentHTML('afterbegin', '<i class="fas fa-check"></i>');
-  document.querySelector('[data-score-place="2"]').style.display = 'none';
-  document.querySelector('[data-score-place="3"]').style.display = 'none';
+function resetBonusPlaces() {
+  document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
+  document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
+  state.colorCount = 0;
+  state.pointsWeigth += state.pointsWeigth;
 }
 
-function hideBestIndicator() {
-  document.querySelector('[data-score-place="2"]').style.display = 'flex';
-  document.querySelector('[data-score-place="3"]').style.display = 'flex';
+function addBirdsPicture(birdNumber) {
+  document.querySelector('.birds').insertAdjacentHTML('afterbegin',
+    `<img class="bird bird-${birdNumber}" src="assets/img/bird-${birdNumber}.png" alt="bird" />`);
+}
+
+function resetPointsPlaces() {
+  document.querySelector('.score').innerHTML = state.points;
+  document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
 }
 
 function pointsCount() {
   switch (state.comboAnswers) {
     case 4:
-      playStartAudio();
-      document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-      document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
-      state.colorCount = 0;
-      state.pointsWeigth += state.pointsWeigth;
-      document.querySelector('.birds').insertAdjacentHTML('afterbegin',
-        '<img class="bird bird-2" src="assets/img/bird-2.png" alt="bird" />');
+      playBonusAudio();
+      resetBonusPlaces();
+      addBirdsPicture(2);
+      resetPointsPlaces();
 
-      document.querySelector('.score').innerHTML = state.points;
-      document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
       break;
     case 8:
-      playStartAudio();
-      document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-      document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
-      state.colorCount = 0;
-      state.pointsWeigth += state.pointsWeigth;
-      document.querySelector('.birds').insertAdjacentHTML('afterbegin',
-        '<img class="bird bird-3" src="assets/img/bird-3.png" alt="bird" />');
-
-      document.querySelector('.score').innerHTML = state.points;
-      document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+      playBonusAudio();
+      resetBonusPlaces();
+      addBirdsPicture(3);
+      resetPointsPlaces();
       break;
     case 12:
-      playStartAudio();
-      document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-      document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
-      state.colorCount = 0;
-      state.pointsWeigth += state.pointsWeigth;
-      document.querySelector('.birds')
-        .insertAdjacentHTML('afterbegin', '<img class="bird bird-4" src="assets/img/bird-4.png" alt="bird" />');
-
+      playBonusAudio();
+      resetBonusPlaces();
+      addBirdsPicture(4);
       showBestIndicator();
-
-      document.querySelector('.score').innerHTML = state.points;
-      document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+      resetPointsPlaces();
       break;
     default:
       console.log();
@@ -332,7 +387,7 @@ function pointsCount() {
 
 function rewriteStatistic() {
   document.querySelector('.score').innerHTML = state.points;
-  document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} points for the correct answer`;
+  document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
   pointsCount();
   callRandomFunction();
   showWordsInThePage();
@@ -362,6 +417,7 @@ function muteGameVoice() {
   document.querySelector('.mute').style.display = 'none';
   document.querySelector('.click-voice').src = '';
   document.querySelector('.wrong-voice').src = '';
+  document.querySelector('.gong-voice').src = '';
 
   document.querySelector('.unmute').style.display = 'flex';
 }
@@ -370,6 +426,7 @@ function onGameVoice() {
   document.querySelector('.mute').style.display = 'flex';
   document.querySelector('.click-voice').src = 'assets/voices/pew.mp3';
   document.querySelector('.wrong-voice').src = 'assets/voices/wrong.mp3';
+  document.querySelector('.gong-voice').src = 'assets/voices/gong.mp3';
 
   document.querySelector('.unmute').style.display = 'none';
 }
@@ -404,11 +461,57 @@ function switchToRoundStatistic() {
   document.querySelector('.game-history').style.display = 'none';
 }
 
+function keyUp(event) {
+  switch (event.key) {
+    case 'ArrowLeft':
+      event.preventDefault();
+      writeUserAnswer(event.key);
+      compareAnswers();
+      rewriteStatistic();
+      unmarkLeftKeys();
+      break;
+    case 'ArrowRight':
+      event.preventDefault();
+      writeUserAnswer(event.key);
+      compareAnswers();
+      rewriteStatistic();
+      unmarkRightKeys();
+      break;
+    default:
+      console.log();
+  }
+}
+
+function keyDown(event) {
+  switch (event.key) {
+    case 'ArrowLeft':
+      event.preventDefault();
+      markLeftKeys();
+      break;
+    case 'ArrowRight':
+      event.preventDefault();
+      markRightKeys();
+      break;
+    default:
+      console.log();
+  }
+}
+
+function keyDownListener() {
+  document.addEventListener('keydown', keyDown);
+  document.addEventListener('keyup', keyUp);
+}
+
+function removeListeners() {
+  document.removeEventListener('keydown', keyDown);
+  document.removeEventListener('keyup', keyUp);
+}
+
 export {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
   playWordAudio, playStatisticAudio,
-  compareAnswers, rewriteStatistic, cleanLongTimeStatistic, pointsCount,
+  compareAnswers, rewriteStatistic, resetLongTimeStatistic,
   muteGameVoice, onGameVoice,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic,
+  switchToLongTimeStatistic, switchToRoundStatistic, keyDownListener, restartGame,
 };

@@ -4,11 +4,11 @@ import Component from '../../core/Component';
 import createGameField from './sprint.template';
 import {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playWordAudio, playStatisticAudio, cleanLongTimeStatistic,
+  playWordAudio, playStatisticAudio, resetLongTimeStatistic,
   compareAnswers, rewriteStatistic,
   muteGameVoice, onGameVoice,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic,
+  switchToLongTimeStatistic, switchToRoundStatistic, keyDownListener, restartGame,
 } from './sprint.functions';
 
 export default class Sprint extends Component {
@@ -17,7 +17,7 @@ export default class Sprint extends Component {
   constructor($root, options) {
     super($root, {
       name: 'Sprint',
-      listeners: ['click', 'mousedown', 'mouseup', 'keyup', 'keydown'],
+      listeners: ['click', 'mousedown', 'mouseup'],
       ...options,
     });
   }
@@ -26,12 +26,13 @@ export default class Sprint extends Component {
     super.init();
     callRandomFunction();
     showWordsInThePage();
+    keyDownListener();
   }
 
   onClick(event) {
     switch (event.target.dataset.button) {
       case 'start':
-        hideIntro(this.$root);
+        hideIntro();
         readySetGo();
         break;
       case 'Wrong':
@@ -58,17 +59,20 @@ export default class Sprint extends Component {
       case 'audio':
         playWordAudio();
         break;
-      case 'return':
-        location.reload();
+      case 'home':
+        location.reload(true);
         break;
       case 'destroy':
-        cleanLongTimeStatistic();
+        resetLongTimeStatistic();
         break;
       case 'long-time-statistic':
         switchToLongTimeStatistic();
         break;
       case 'round-statistic':
         switchToRoundStatistic();
+        break;
+      case 'return':
+        restartGame();
         break;
       default:
         console.log();
@@ -99,42 +103,6 @@ export default class Sprint extends Component {
         break;
       case 'Correct':
         unmarkRightKeys();
-        break;
-      default:
-        console.log();
-    }
-  }
-
-  onKeyup(event) {
-    switch (event.key) {
-      case 'ArrowLeft':
-        event.preventDefault();
-        writeUserAnswer(event.key);
-        compareAnswers();
-        rewriteStatistic();
-        unmarkLeftKeys();
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        writeUserAnswer(event.key);
-        compareAnswers();
-        rewriteStatistic();
-        unmarkRightKeys();
-        break;
-      default:
-        console.log();
-    }
-  }
-
-  onKeydown(event) {
-    switch (event.key) {
-      case 'ArrowLeft':
-        event.preventDefault();
-        markLeftKeys();
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        markRightKeys();
         break;
       default:
         console.log();
