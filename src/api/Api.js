@@ -1,4 +1,4 @@
-import { baseUrl } from '../constants/constants';
+import { BASE_URL } from '../constants/constants';
 
 export default class Api {
   constructor(userId, token) {
@@ -8,7 +8,7 @@ export default class Api {
 
   // Sign in
   async loginUser(userLog) {
-    const rawResponse = await fetch(`${baseUrl}/signin`, {
+    const rawResponse = await fetch(`${BASE_URL}/signin`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -31,7 +31,7 @@ export default class Api {
 
   // Words methods
   async getWords(page = 0, group = 0, wordsPerExampleSentenceLTE, wordsPerPage = 10) {
-    let url = `${baseUrl}/words?page=${page}&group=${group}`;
+    let url = `${BASE_URL}/words?page=${page}&group=${group}`;
 
     if (wordsPerExampleSentenceLTE !== undefined) {
       url += `&wordsPerExampleSentenceLTE=${wordsPerExampleSentenceLTE}&wordsPerPage=${wordsPerPage}`;
@@ -53,7 +53,7 @@ export default class Api {
   }
 
   async getWordsCount(page = 0, wordsPerExampleSentenceLTE, wordsPerPage = 10) {
-    let url = `${baseUrl}/words/count?page=${page}`;
+    let url = `${BASE_URL}/words/count?page=${page}`;
 
     if (wordsPerExampleSentenceLTE !== undefined) {
       url += `&wordsPerExampleSentenceLTE=${wordsPerExampleSentenceLTE}&wordsPerPage=${wordsPerPage}`;
@@ -75,7 +75,7 @@ export default class Api {
   }
 
   async getWordById(wordId) {
-    const rawResponse = await fetch(`${baseUrl}/words/${wordId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/words/${wordId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -92,7 +92,7 @@ export default class Api {
 
   // Users methods
   async createUser(user) {
-    const rawResponse = await fetch(`${baseUrl}/users`, {
+    const rawResponse = await fetch(`${BASE_URL}/users`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -110,7 +110,7 @@ export default class Api {
   }
 
   async getUser() {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.token}`,
@@ -127,7 +127,7 @@ export default class Api {
   }
 
   async updateUser(user) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${this.token}`,
@@ -150,7 +150,7 @@ export default class Api {
       return false;
     }
 
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${this.token}`,
@@ -163,7 +163,7 @@ export default class Api {
 
   // Users/Words methods
   async getAllUserWords() {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/words`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.token}`,
@@ -180,7 +180,7 @@ export default class Api {
   }
 
   async createUserWord(wordId, word) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/words/${wordId}`, {
       method: 'POST',
       withCredentials: true,
       headers: {
@@ -200,7 +200,7 @@ export default class Api {
   }
 
   async getUserWordById(wordId) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/words/${wordId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
@@ -218,7 +218,7 @@ export default class Api {
   }
 
   async updateUserWord(wordId, word) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/words/${wordId}`, {
       method: 'PUT',
       withCredentials: true,
       headers: {
@@ -238,7 +238,7 @@ export default class Api {
   }
 
   async deleteUserWord(wordId) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/words/${wordId}`, {
       method: 'DELETE',
       withCredentials: true,
       headers: {
@@ -255,7 +255,7 @@ export default class Api {
   // filter must be a string:
   // filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}';
   async getAllUserAggregatedWords(group, wordsPerPage, filter) {
-    let url = `${baseUrl}/users/${this.userId}/aggregatedWords?`;
+    let url = `${BASE_URL}/users/${this.userId}/aggregatedWords?`;
     const encodedFilter = encodeURIComponent(filter);
     url += `group=${group}&wordsPerPage=${wordsPerPage}&filter=${encodedFilter}`;
 
@@ -277,7 +277,7 @@ export default class Api {
   }
 
   async getUserAggregatedWordById(wordId) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/aggregatedWords/${wordId}`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/aggregatedWords/${wordId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
@@ -296,7 +296,7 @@ export default class Api {
 
   // Users/Statistic methods
   async getStatistics() {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/statistics`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/statistics`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.token}`,
@@ -313,7 +313,7 @@ export default class Api {
   }
 
   async updateStatistics(stats) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/statistics`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/statistics`, {
       method: 'PUT',
       withCredentials: true,
       headers: {
@@ -334,7 +334,7 @@ export default class Api {
 
   // Users/Settings methods
   async getSettings() {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/settings`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/settings`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.token}`,
@@ -351,7 +351,7 @@ export default class Api {
   }
 
   async updateSettings(settings) {
-    const rawResponse = await fetch(`${baseUrl}/users/${this.userId}/settings`, {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/settings`, {
       method: 'PUT',
       withCredentials: true,
       headers: {

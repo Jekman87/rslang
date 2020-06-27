@@ -1,6 +1,8 @@
 import './plugins/bootstrap';
 import './plugins/fontawesome';
 
+import './style.scss';
+
 // main components
 import Api from './api';
 import MainApp from './components/mainApp';
@@ -29,4 +31,4 @@ if (userLog) {
 const mainApp = new MainApp('#app', {
   components: [Header, PageContainer], pages, startPage, api,
 });
-mainApp.render();
+// mainApp.render();

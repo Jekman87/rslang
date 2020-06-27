@@ -1,7 +1,7 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import { storage } from '../../core/utils';
-import { authPageName } from '../../constants/menu.constants';
+import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -21,7 +21,7 @@ export default class PageContainer extends Component {
   }
 
   init() {
-    if (this.component === authPageName) {
+    if (this.component === AUTH_PAGE_NAME) {
       this.emit('hideHeader');
     }
 
@@ -53,7 +53,7 @@ export default class PageContainer extends Component {
       storage('tokenExpiresIn', null);
       storage('currentPage', null);
 
-      this.renderPage(this.pages[authPageName]);
+      this.renderPage(this.pages[AUTH_PAGE_NAME]);
     });
   }
 
