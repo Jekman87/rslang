@@ -68,9 +68,9 @@ const jsLoaders = () => {
     },
   ];
 
-  if (isDev) {
-    loaders.push('eslint-loader');
-  }
+  // if (isDev) {
+  //   loaders.push('eslint-loader');
+  // }
 
   return loaders;
 };
@@ -89,8 +89,8 @@ const plugins = () => {
         to: PATHS.dist,
       },
       {
-        from: `${PATHS.src}/assets/img`,
-        to: `${PATHS.assets}img`,
+        from: `${PATHS.src}/assets`,
+        to: `${PATHS.assets}`,
       },
     ]),
     new MiniCssExtractPlugin({ filename: filename('css') }),
