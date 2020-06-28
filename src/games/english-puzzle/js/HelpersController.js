@@ -1,8 +1,9 @@
 export default class HelpersController {
-  constructor() {
-    this.helpersBlock = document.querySelector('div.help-btn-group');
+  constructor(storage) {
+    this.storage = storage;
+    this.helpersBlock = document.querySelector('div.help-pzl-btn-group');
     this.helpers = [...this.helpersBlock.children];
-    this.playBtn = document.querySelector('button.play-btn');
+    this.playBtn = document.querySelector('button.play-pzl-btn');
   }
 
   init() {
@@ -11,14 +12,14 @@ export default class HelpersController {
   }
 
   changeHelperStatus(e) {
-    if (!e.target.classList.contains('btn')) return;
+    if (!e.target.classList.contains('pzl-btn')) return;
 
-    e.target.classList.toggle('btn_off');
+    e.target.classList.toggle('pzl-btn_off');
 
-    if (localStorage[e.target.dataset.type] === 'on') {
-      localStorage.setItem(`${e.target.dataset.type}`, 'off');
+    if (this.get(e.target.dataset.type) === 'on') {
+      this.set(`${e.target.dataset.type}`, 'off');
     } else {
-      localStorage.setItem(`${e.target.dataset.type}`, 'on');
+      this.set(`${e.target.dataset.type}`, 'on');
     }
 
     this.changePlayBtnStatus(e);
@@ -32,12 +33,12 @@ export default class HelpersController {
 
   displayHelpersStatus() {
     this.helpers.forEach((el) => {
-      if (localStorage[el.dataset.type] === 'off') el.classList.add('btn_off');
+      if (this.get(el.dataset.type) === 'off') el.classList.add('pzl-btn_off');
     });
   }
 
   dislayPlayBtnStatus() {
-    if (localStorage.pronounceHelp === 'off') {
+    if (this.get('pronounceHelp') === 'off') {
       this.playBtn.classList.add('disabled');
     }
   }
@@ -45,5 +46,13 @@ export default class HelpersController {
   changePlayBtnStatus(e) {
     if (e.target.dataset.type !== 'pronounceHelp') return;
     this.playBtn.classList.toggle('disabled');
+  }
+
+  get(prop) {
+    return this.storage.getProp(prop);
+  }
+
+  set(prop, value) {
+    this.storage.setProp(prop, value);
   }
 }

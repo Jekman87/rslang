@@ -11,8 +11,11 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import EnglishPuzzle from './games/english-puzzle/index';
 
-const pages = { Authorization, MainPage, MainGame };
+const pages = {
+  Authorization, MainPage, MainGame, EnglishPuzzle,
+};
 const userLog = Authorization.checkTokenValidity();
 let api;
 let startPage;

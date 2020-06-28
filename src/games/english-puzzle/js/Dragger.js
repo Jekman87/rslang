@@ -1,7 +1,7 @@
 export default class Dragger {
   constructor() {
-    this.sentenceConstructor = document.querySelector('p.sentence-constructor');
-    this.availableWords = document.querySelector('p.available-words');
+    this.sentenceConstructor = document.querySelector('div.sentence-constructor');
+    this.availableWords = document.querySelector('div.available-words');
     this.currentDroppable = null;
   }
 
@@ -14,8 +14,8 @@ export default class Dragger {
     this.target = e.target;
 
     this.savePositionParams(e);
-    this.raiseUpTarget();
-    this.moveAt(e.pageX, e.pageY);
+    // this.raiseUpTarget();
+    // this.moveAt(e.pageX, e.pageY);
 
     const handleMouseMoveBinded = this.handleMouseMove.bind(this);
     document.addEventListener('mousemove', handleMouseMoveBinded);
@@ -24,6 +24,7 @@ export default class Dragger {
   }
 
   handleMouseMove(e) {
+    this.raiseUpTarget();
     this.moveAt(e.pageX, e.pageY);
 
     const elemBelow = this.detectBelowEl(e);
@@ -54,7 +55,7 @@ export default class Dragger {
     this.prevEl = e.target.previousElementSibling;
     this.parentEl = e.target.parentElement;
 
-    this.shiftX = e.clientX - this.target.getBoundingClientRect().left;
+    this.shiftX = e.clientX - this.target.getBoundingClientRect().left - 22;
     this.shiftY = e.clientY - this.target.getBoundingClientRect().top;
   }
 
@@ -85,7 +86,7 @@ export default class Dragger {
   }
 
   detectDroppable(elemBelow) {
-    const droppableBelow = elemBelow.closest('p.sentence-constructor');
+    const droppableBelow = elemBelow.closest('div.sentence-constructor');
 
     if (this.currentDroppable !== droppableBelow) {
       if (this.currentDroppable) {

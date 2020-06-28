@@ -1,7 +1,9 @@
-import paintings from './paintingsInfo.js';
+/* eslint-disable no-param-reassign */
+import paintings from './paintingsInfo';
 
 export default class Loader {
-  constructor() {
+  constructor(storage) {
+    this.storage = storage;
     this.data = {};
     this.reportEl = document.querySelector('p.report-message');
   }
@@ -10,28 +12,25 @@ export default class Loader {
     document.addEventListener('dataRequired', this.handleDataRequest.bind(this));
   }
 
-  handleDataRequest(e) {
-    this.defineParams(e.detail);
-    this.getData();
+  handleDataRequest() {
+    const group = this.get('currentLevel') - 1;
+    const page = this.get('currentRound') - 1;
+    this.getData(group, page);
   }
 
-  defineParams(arr) {
-    const [round, level] = arr;
-    this.page = round - 1;
-    this.group = level - 1;
-  }
-
-  getData() {
-    if (!this.data[`${this.group}_${this.page}`]) {
-      this.loadData();
+  getData(group, page) {
+    if (!this.data[`${group}_${page}`]) {
+      this.loadData(group, page);
     } else {
-      document.dispatchEvent(new CustomEvent('newData', { detail: { data: this.data[`${this.group}_${this.page}`], position: [this.page + 1, this.group + 1] } }));
+      this.set('sentencesData', this.data[`${group}_${page}`].sentencesInfo);
+      this.set('paintingData', this.data[`${group}_${page}`].pictureInfo);
+      document.dispatchEvent(new CustomEvent('newData'));
     }
   }
 
-  async loadData() {
+  async loadData(group, page) {
     try {
-      const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${this.group}&page=${this.page}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`);
+      const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=${page}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`);
       const data = await response.json();
 
       const sentencesInfo = [];
@@ -60,12 +59,15 @@ export default class Loader {
         item.audio = audios[index];
       });
 
-      const pictureInfo = await this.loadPicture();
+      const pictureInfo = await this.loadPicture(group, page);
 
-      this.data[`${this.group}_${this.page}`] = { sentencesInfo, pictureInfo };
-      document.dispatchEvent(new CustomEvent('newData', { detail: { data: this.data[`${this.group}_${this.page}`], position: [this.page + 1, this.group + 1] } }));
+      this.data[`${group}_${page}`] = { sentencesInfo, pictureInfo };
+      this.set('sentencesData', sentencesInfo);
+      this.set('paintingData', pictureInfo);
+
+      document.dispatchEvent(new CustomEvent('newData'));
     } catch (e) {
-      this.report('Something went wrong!');
+      this.report('Something went wrong!', e.message);
     }
   }
 
@@ -76,14 +78,14 @@ export default class Loader {
     return result;
   }
 
-  async loadPicture() {
+  async loadPicture(group, page) {
     const infoObj = {
-      name: paintings[this.group][this.page].name,
-      author: paintings[this.group][this.page].author,
-      year: paintings[this.group][this.page].year,
+      name: paintings[group][page].name,
+      author: paintings[group][page].author,
+      year: paintings[group][page].year,
     };
 
-    const picPass = paintings[this.group][this.page].cutSrc;
+    const picPass = paintings[group][page].cutSrc;
     const picResponse = await fetch(`https://raw.githubusercontent.com/torchik-slava/rslang_data_paintings/master/${picPass}`);
     if (!picResponse.ok) {
       this.report('Picture upload failed!');
@@ -101,5 +103,13 @@ export default class Loader {
     setTimeout(() => {
       this.reportEl.classList.add('report-message_hidden');
     }, 2500);
+  }
+
+  get(prop) {
+    return this.storage.getProp(prop);
+  }
+
+  set(prop, value) {
+    this.storage.setProp(prop, value);
   }
 }

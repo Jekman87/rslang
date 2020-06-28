@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import puzzleSizeSettings from './puzzleSizeSettings';
 
 export default class PuzzleDrawer {
@@ -104,7 +105,8 @@ export default class PuzzleDrawer {
     if (j !== lastIndex) {
       ctx.lineTo(elem.width - 21, 1);
       ctx.lineTo(elem.width - 21, 13);
-      ctx.arc(elem.width - 13.5, 22.5, 12.5, (Math.PI / 180) * (-127), (Math.PI / 180) * 127, false);
+      ctx.arc(elem.width - 13.5, 22.5, 12.5, (Math.PI / 180) * (-127), (Math.PI / 180) * 127,
+        false);
       ctx.lineTo(elem.width - 21, 44);
     } else {
       ctx.lineTo(elem.width - 1, 1);

@@ -1,3 +1,4 @@
+import Storage from './Storage';
 import GameController from './GameController';
 import Dragger from './Dragger';
 import HelpersController from './HelpersController';
@@ -6,13 +7,14 @@ import Logger from './Logger';
 import LevelsController from './LevelsController';
 
 export default class App {
-  constructor() {
-    this.loader = new DataLoader();
-    this.gameController = new GameController();
+  constructor(api) {
+    this.storage = new Storage();
+    this.loader = new DataLoader(this.storage);
+    this.gameController = new GameController(this.storage);
     this.dragger = new Dragger();
-    this.helpController = new HelpersController();
-    this.logger = new Logger();
-    this.lvlController = new LevelsController();
+    this.helpController = new HelpersController(this.storage);
+    this.logger = new Logger(this.storage, api);
+    this.lvlController = new LevelsController(this.storage);
   }
 
   init() {

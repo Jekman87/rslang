@@ -10,7 +10,7 @@ const mainMenuTitles = [
 
 const gameMenuTitles = [
   { data: 'Speakit', title: 'SpeakIt' },
-  { data: 'Puzzle', title: 'English puzzle' },
+  { data: 'EnglishPuzzle', title: 'English puzzle' },
   { data: 'Savannah', title: 'Саванна' },
   { data: 'Audiocall', title: 'Аудиовызов' },
   { data: 'Sprint', title: 'Спринт' },

@@ -68,8 +68,8 @@ export default class PageContainer extends Component {
   renderGame(NewGame) {
     this.$root.clear();
     // одинаковый интерфейс для всех игр
-    // this.component = new NewGame('.PageСontainer', this.options);
-    // this.component.render();
+    this.component = new NewGame('.PageContainer', this.options);
+    this.component.render();
 
     // .PageСontainer - в этот контейнер рендерится ваша игра
     // в this.options содержатся observer и api
@@ -81,7 +81,7 @@ export default class PageContainer extends Component {
     // также в этом объекте есть все необходимые методы
     // чтобы раборало меню, поправьте название вашего класса в
     // /constants/menu.constants
-    console.log('Игра пока не готова: ', NewGame);
+    // console.log('Игра пока не готова: ', NewGame);
   }
 
   destroy() {

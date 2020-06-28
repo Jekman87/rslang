@@ -1,17 +1,19 @@
-import PuzzleDrawer from './PuzzleDrawer.js';
-import monthNames from './calendarMap.js';
+/* eslint-disable no-param-reassign */
+import PuzzleDrawer from './PuzzleDrawer';
+import monthNames from './calendarMap';
 
 export default class GameController {
-  constructor() {
+  constructor(storage) {
+    this.storage = storage;
     this.puzzleDrawer = new PuzzleDrawer();
     this.sentenceList = document.querySelectorAll('li.sentence');
-    this.sentenceConstructor = document.querySelector('p.sentence-constructor');
-    this.availableWords = document.querySelector('p.available-words');
+    this.sentenceConstructor = document.querySelector('div.sentence-constructor');
+    this.availableWords = document.querySelector('div.available-words');
     this.translateHelp = document.querySelector('p.sentence-translate');
     this.audioHelp = new Audio();
     this.imgHelp = document.querySelector('img.painting-pic');
     this.painting = document.querySelector('figure.painting-block');
-    this.playBtn = document.querySelector('button.play-btn');
+    this.playBtn = document.querySelector('button.play-pzl-btn');
     this.startBtn = document.querySelector('button.start-button');
     this.spinner = document.querySelector('div.spinner');
     this.popUp = document.querySelector('div.pop-up');
@@ -22,33 +24,31 @@ export default class GameController {
   init() {
     document.addEventListener('newData', this.handleNewData.bind(this));
 
-    document.querySelector('button.check-btn').addEventListener('click', this.handlePositiveAnswer.bind(this));
-    document.querySelector('button.give-up-btn').addEventListener('click', this.handleNegativeAnswer.bind(this));
+    document.querySelector('button.check-pzl-btn').addEventListener('click', this.handlePositiveAnswer.bind(this));
+    document.querySelector('button.give-up-pzl-btn').addEventListener('click', this.handleNegativeAnswer.bind(this));
 
-    document.querySelector('button.results-btn').addEventListener('click', this.showRoundResults.bind(this));
-    document.querySelector('button.statistics-btn').addEventListener('click', this.showStatistics.bind(this));
-    document.querySelector('button.close-btn').addEventListener('click', this.closePopUp.bind(this));
+    document.querySelector('button.results-pzl-btn').addEventListener('click', this.showRoundResults.bind(this));
+    document.querySelector('button.statistics-pzl-btn').addEventListener('click', this.showStatistics.bind(this));
+    document.querySelector('button.close-pzl-btn').addEventListener('click', this.closePopUp.bind(this));
     this.startBtn.addEventListener('click', this.startGame.bind(this));
     this.playBtn.addEventListener('click', this.playAudio.bind(this));
     this.resultsBlock.addEventListener('click', this.playByClick.bind(this));
 
     this.audioHelp.addEventListener('ended', this.removePlayEffect.bind(this));
-    this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
+    // this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
   }
 
   startGame() {
     this.spinner.classList.add('visible');
-    document.dispatchEvent(new CustomEvent('dataRequired', { detail: GameController.defineNextRound() }));
+    this.defineNextRound();
+    document.dispatchEvent(new CustomEvent('dataRequired'));
   }
 
-  async handleNewData(e) {
+  async handleNewData() {
     this.sentenceIndex = 0;
     this.correctCounter = 0;
     this.results = {};
-    this.sentencesData = e.detail.data.sentencesInfo;
-    this.pictureData = e.detail.data.pictureInfo;
-
-    this.setPosition(e);
+    console.log('state', this.storage);
     this.switchElementsVisibility(false);
     this.cleanSentenceConstructor();
     await this.createPuzzles();
@@ -56,12 +56,6 @@ export default class GameController {
     this.getAvailableWords();
     this.setPaintingInfo();
     this.removeLoadingEffect();
-  }
-
-  setPosition(e) {
-    const [round, level] = e.detail.position;
-    this.roundCurrent = round;
-    this.levelCurrent = level;
   }
 
   switchElementsVisibility(isEndOfRound) {
@@ -75,7 +69,7 @@ export default class GameController {
       this.painting.classList.remove('hidden');
       this.sentenceConstructor.classList.add('hidden');
       this.availableWords.classList.add('hidden');
-      document.querySelector('div.answer-btn-group').classList.add('hidden');
+      document.querySelector('div.answer-pzl-btn-group').classList.add('hidden');
       document.querySelector('div.next-round-block').classList.remove('hidden');
     } else {
       this.closePopUp();
@@ -83,10 +77,10 @@ export default class GameController {
       this.painting.classList.add('hidden');
       this.sentenceConstructor.classList.remove('hidden');
       this.availableWords.classList.remove('hidden');
-      document.querySelector('div.answer-btn-group').classList.remove('hidden');
+      document.querySelector('div.answer-pzl-btn-group').classList.remove('hidden');
       document.querySelector('div.next-round-block').classList.add('hidden');
-      document.querySelector('button.check-btn').textContent = 'Check';
-      document.querySelector('button.give-up-btn').classList.remove('disabled');
+      document.querySelector('button.check-pzl-btn').textContent = 'Проверить';
+      document.querySelector('button.give-up-pzl-btn').classList.remove('disabled');
     }
   }
 
@@ -98,10 +92,10 @@ export default class GameController {
   }
 
   async createPuzzles() {
-    this.imgHelp.src = this.pictureData.link;
+    this.imgHelp.src = this.get('paintingData').link;
     await new Promise((resolve) => {
       this.imgHelp.onload = () => {
-        this.puzzleDrawer.setData(this.sentencesData);
+        this.puzzleDrawer.setData(this.get('sentencesData'));
         this.puzzleDrawer.renderCanvases();
         this.puzzleDrawer.drawPuzzles();
         resolve();
@@ -110,26 +104,27 @@ export default class GameController {
   }
 
   fillHelpers() {
-    this.translateHelp.textContent = this.sentencesData[this.sentenceIndex].translate;
-    if (localStorage.translateHelp === 'on') {
+    const data = this.get('sentencesData');
+    this.translateHelp.textContent = data[this.sentenceIndex].translate;
+    if (this.get('translateHelp') === 'on') {
       this.translateHelp.classList.add('visible');
     } else {
       this.translateHelp.classList.remove('visible');
     }
 
-    this.audioHelp.src = this.sentencesData[this.sentenceIndex].audio;
-    if (localStorage.autoplayHelp === 'on') {
+    this.audioHelp.src = data[this.sentenceIndex].audio;
+    if (this.get('autoplayHelp') === 'on') {
       this.playAudio();
     }
   }
 
   playAudio() {
-    this.playBtn.classList.add('play-btn_active');
+    this.playBtn.classList.add('play-pzl-btn_active');
     this.audioHelp.play();
   }
 
   removePlayEffect() {
-    this.playBtn.classList.remove('play-btn_active');
+    this.playBtn.classList.remove('play-pzl-btn_active');
   }
 
   cleanSentenceConstructor() {
@@ -149,7 +144,7 @@ export default class GameController {
       return newWord;
     });
 
-    const withPic = localStorage.getItem('visualHelp') === 'on';
+    const withPic = this.get('visualHelp') === 'on';
     this.puzzleDrawer.drawSentence(newWords, this.sentenceIndex, withPic);
 
     GameController.shuffle(newWords);
@@ -160,11 +155,12 @@ export default class GameController {
   }
 
   setPaintingInfo() {
-    const info = `${this.pictureData.author} - ${this.pictureData.name} (${this.pictureData.year})`;
+    const data = this.get('paintingData');
+    const info = `${data.author} - ${data.name} (${data.year})`;
     document.querySelectorAll('figcaption').forEach((el) => {
       el.textContent = info;
     });
-    document.querySelector('img.painting-pic_small').src = this.pictureData.link;
+    document.querySelector('img.painting-pic_small').src = data.link;
   }
 
   static shuffle(arr) {
@@ -175,11 +171,11 @@ export default class GameController {
   }
 
   handlePositiveAnswer(e) {
-    if (e.target.textContent === 'Check') {
+    if (e.target.textContent === 'Проверить') {
       this.check(e);
-    } else if (e.target.textContent === 'Continue') {
+    } else if (e.target.textContent === 'Продолжить') {
       this.goNext(e);
-    } else if (e.target.textContent === 'Try again') {
+    } else if (e.target.textContent === 'Ещё раз') {
       this.goToStart(e);
     }
   }
@@ -187,11 +183,11 @@ export default class GameController {
   handleNegativeAnswer(e) {
     this.showCorrect();
     this.isCorrect = false;
-    if (localStorage.autoplayHelp === 'off') {
+    if (this.get('autoplayHelp') === 'off') {
       this.playAudio();
     }
     this.translateHelp.classList.add('visible');
-    e.target.previousElementSibling.textContent = 'Continue';
+    e.target.previousElementSibling.textContent = 'Продолжить';
     e.target.classList.add('disabled');
   }
 
@@ -211,7 +207,7 @@ export default class GameController {
     e.target.nextElementSibling.classList.remove('disabled');
 
     if (this.sentenceIndex === 9) {
-      this.saveRoundResult();
+      this.saveRound();
       this.switchElementsVisibility(true);
     } else {
       this.sentenceIndex += 1;
@@ -223,7 +219,7 @@ export default class GameController {
     this.fillHelpers();
     this.cleanSentenceConstructor();
     this.getAvailableWords();
-    e.target.textContent = 'Check';
+    e.target.textContent = 'Проверить';
   }
 
   showCorrect() {
@@ -234,7 +230,7 @@ export default class GameController {
       this.sentenceConstructor.append(PuzzleDrawer.cloneCanvas(word));
     });
 
-    const withPic = localStorage.getItem('visualHelp') === 'on';
+    const withPic = this.get('visualHelp') === 'on';
     this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic);
 
     this.availableWords.innerHTML = '';
@@ -259,14 +255,14 @@ export default class GameController {
 
     if (this.isCorrect) {
       this.correctCounter += 1;
-      if (localStorage.autoplayHelp === 'off') {
+      if (this.get('autoplayHelp') === 'off') {
         this.playAudio();
       }
       this.translateHelp.classList.add('visible');
-      e.target.textContent = 'Continue';
+      e.target.textContent = 'Продолжить';
       e.target.nextElementSibling.classList.add('disabled');
     } else {
-      e.target.textContent = 'Try again';
+      e.target.textContent = 'Ещё раз';
     }
   }
 
@@ -279,33 +275,47 @@ export default class GameController {
   }
 
   showResult() {
-    const withPic = localStorage.getItem('visualHelp') === 'on';
+    const withPic = this.get('visualHelp') === 'on';
     this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic, true);
   }
 
-  static defineNextRound() {
+  defineNextRound() {
     const roundsAmount = [null, '45', '40', '40', '25', '25', '25'];
-    let [level, round] = localStorage.getItem('lastRound').split('-');
+    const [level, round] = this.get('lastRound').split('-');
 
     if (round === roundsAmount[level]) {
-      round = 1;
-      level = Number(level) + 1;
+      this.set('currentRound', 1);
+      this.set('currentLevel', Number(level) + 1);
     } else {
-      round = Number(round) + 1;
+      this.set('currentRound', Number(round) + 1);
+      this.set('currentLevel', level);
     }
+  }
 
-    return [round, level];
+  saveRound() {
+    this.saveRoundResult();
+    this.savePassedRound();
+    document.dispatchEvent(new CustomEvent('userDataChange'));
   }
 
   saveRoundResult() {
-    const roundResult = `${this.levelCurrent}-${this.roundCurrent},${Date.now()},${this.correctCounter}`;
-    const oldStat = localStorage.getItem('statistics');
-    if (oldStat) {
-      localStorage.setItem('statistics', `${roundResult};${oldStat}`);
+    const roundResult = `${this.get('currentLevel')}-${this.get('currentRound')},${Date.now()},${this.correctCounter}`;
+    const oldStat = this.get('statistics');
+    if (oldStat !== 'empty') {
+      this.set('statistics', `${roundResult};${oldStat}`);
     } else {
-      localStorage.setItem('statistics', `${roundResult}`);
+      this.set('statistics', `${roundResult}`);
     }
-    document.dispatchEvent(new CustomEvent('userDataChange'));
+  }
+
+  savePassedRound() {
+    const data = this.get('passedRounds');
+    const roundsData = data.split('-').map((level) => level.split(''));
+    roundsData[this.get('currentLevel')][this.get('currentRound')] = '1';
+    const formattedData = roundsData.map((level) => level.join('')).join('-');
+
+    this.set('passedRounds', formattedData);
+    this.set('lastRound', `${this.get('currentLevel')}-${this.get('currentRound')}`);
   }
 
   closePopUp() {
@@ -321,7 +331,7 @@ export default class GameController {
   }
 
   showStatistics() {
-    GameController.fillStatistics();
+    this.fillStatistics();
     this.statTable.classList.remove('hidden');
     this.popUp.classList.remove('hidden');
   }
@@ -333,9 +343,10 @@ export default class GameController {
     const incorrectCounter = document.querySelector('span.counter_incorrect');
     const correctSentences = [];
     const incorrectSentences = [];
+    const data = this.get('sentencesData');
 
-    this.sentencesData.forEach((item, i) => {
-      const sentenceItem = `<li class="answer-list__item"><button class="btn play-btn play-btn_small" data-src="${item.audio}" title="play"></button>${item.text.join(' ')}</li>`;
+    data.forEach((item, i) => {
+      const sentenceItem = `<li class="answer-list__item"><button class="pzl-btn play-pzl-btn play-pzl-btn_small" data-src="${item.audio}" title="play"></button>${item.text.join(' ')}</li>`;
       if (this.results[i] === true) {
         correctSentences.push(sentenceItem);
       } else {
@@ -350,10 +361,10 @@ export default class GameController {
     incorrectList.innerHTML = incorrectSentences.join('');
   }
 
-  static fillStatistics() {
+  fillStatistics() {
     document.querySelector('table.statistics-table').innerHTML = '';
     const rows = ['<caption class="table-caption">Ваши ранее сыгранные игры:</caption><tr class="tr"><th class="th">Уровень</th><th class="th">Раунд</th><th class="th">Дата</th><th class="th">Время</th><th class="th">Счет</th></tr>'];
-    let statistics = localStorage.getItem('statistics');
+    let statistics = this.get('statistics');
     statistics = statistics.split(';');
     statistics = statistics.map((item) => item.split(','));
     statistics.forEach((result) => {
@@ -365,7 +376,7 @@ export default class GameController {
         <td class="td">${level}</td>
         <td class="td">${round}</td>
         <td class="td">${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}</td>
-        <td class="td">${date.getHours()}:${date.getMinutes()}</td>
+        <td class="td">${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
         <td class="td">${score} / 10</td>
       </tr>`;
       rows.push(tr);
@@ -375,16 +386,24 @@ export default class GameController {
   }
 
   playByClick(e) {
-    if (e.target.classList.contains('play-btn_small')) {
+    if (e.target.classList.contains('play-pzl-btn_small')) {
       this.audioHelp.onplay = () => {
-        document.querySelectorAll('button.play-btn_small').forEach((btn) => {
-          btn.classList.remove('play-btn_active');
+        document.querySelectorAll('button.play-pzl-btn_small').forEach((btn) => {
+          btn.classList.remove('play-pzl-btn_active');
         });
-        e.target.classList.add('play-btn_active');
+        e.target.classList.add('play-pzl-btn_active');
       };
       this.audioHelp.src = e.target.dataset.src;
       this.audioHelp.play();
-      this.audioHelp.onended = () => e.target.classList.remove('play-btn_active');
+      this.audioHelp.onended = () => e.target.classList.remove('play-pzl-btn_active');
     }
+  }
+
+  get(prop) {
+    return this.storage.getProp(prop);
+  }
+
+  set(prop, value) {
+    this.storage.setProp(prop, value);
   }
 }
