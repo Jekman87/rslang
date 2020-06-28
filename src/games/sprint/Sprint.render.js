@@ -7,7 +7,8 @@ export default class SprintGame {
   constructor(selector, options) {
     this.$el = $$(selector);
     this.components = [Sprint];
-    this.observer = new Observer();
+    /* this.observer = new Observer(); */
+    this.observer = options.observer;
     this.dataForApp = {};
   }
 

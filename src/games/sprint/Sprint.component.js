@@ -20,6 +20,7 @@ export default class Sprint extends Component {
       listeners: ['click', 'mousedown', 'mouseup'],
       ...options,
     });
+    this.options = options;
   }
 
   init() {
@@ -60,7 +61,7 @@ export default class Sprint extends Component {
         playWordAudio();
         break;
       case 'home':
-        location.reload(true);
+        this.options.observer.emit('selectPage', 'MainPage');
         break;
       case 'destroy':
         resetLongTimeStatistic();

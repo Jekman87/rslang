@@ -64,8 +64,8 @@ export default class PageContainer extends Component {
   renderGame(NewGame) {
     this.$root.clear();
 
-    const game = new NewGame('.PageContainer', this.options);
-    game.render();
+    this.component = new NewGame('.PageContainer', this.options);
+    this.component.render();
   }
 
   destroy() {
