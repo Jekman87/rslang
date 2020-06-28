@@ -11,6 +11,8 @@ export default class MainGame extends Component {
       listeners: ['click'],
       ...options,
     });
+
+    this.options = options;
   }
 
   onClick(event) {
@@ -19,6 +21,6 @@ export default class MainGame extends Component {
   }
 
   toHTML() {
-    return createMainGameHTML().trim();
+    return createMainGameHTML(this.options.settings).trim();
   }
 }

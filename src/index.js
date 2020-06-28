@@ -28,7 +28,9 @@ if (userLog) {
   startPage = Authorization.className;
 }
 
+startPage = 'MainGame';
+
 const mainApp = new MainApp('#app', {
   components: [Header, PageContainer], pages, startPage, api,
 });
-// mainApp.render();
+mainApp.render();

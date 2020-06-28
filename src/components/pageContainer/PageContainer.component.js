@@ -68,10 +68,10 @@ export default class PageContainer extends Component {
   renderGame(NewGame) {
     this.$root.clear();
     // одинаковый интерфейс для всех игр
-    // this.component = new NewGame('.PageСontainer', this.options);
+    // this.component = new NewGame('.PageContainer', this.options);
     // this.component.render();
 
-    // .PageСontainer - в этот контейнер рендерится ваша игра
+    // .PageContainer - в этот контейнер рендерится ваша игра
     // в this.options содержатся observer и api
     // чтобы вернуться в главное приложение вы можете вызвать событие
     // this.options.observer.emit('selectPage', 'MainPage');
