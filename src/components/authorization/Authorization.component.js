@@ -2,7 +2,8 @@ import $$ from '../../core/domManipulation';
 import Component from '../../core/Component';
 import { clearRegister, clearLogin } from './clearAuthorization';
 import createAuthorizationForm from './authorization.template';
-import { storage } from '../../core/utils';
+import createUser from './asyncCreateUser';
+import loginUser from './asyncLoginUser';
 
 export default class Authorization extends Component {
   static className = 'Authorization';
@@ -13,8 +14,6 @@ export default class Authorization extends Component {
       listeners: ['click'],
       ...options,
     });
-
-    this.api = options.api;
 
     this.onSubmitLoginForm = this.onSubmitLoginForm.bind(this);
     this.onSubmitRegisterForm = this.onSubmitRegisterForm.bind(this);
@@ -41,17 +40,18 @@ export default class Authorization extends Component {
     const password = document.getElementById('registerPassword').value;
 
     try {
-      const userData = { email: `${user}`, password: `${password}` };
+      await createUser({
+        email: `${user}`,
+        password: `${password}`,
+      });
 
-      await this.api.createUser(userData);
-      const loginUserResponse = await this.api.loginUser(userData);
+      const loginUserResponse = await loginUser({
+        email: `${user}`,
+        password: `${password}`,
+      });
 
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('currentToken', loginUserResponse.token);
-      storage('userId', loginUserResponse.userId);
-      storage('tokenExpiresIn', tokenExpiresIn);
+      localStorage.setItem('currentToken', loginUserResponse.token);
+      localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -70,17 +70,13 @@ export default class Authorization extends Component {
     const password = document.getElementById('loginPassword').value;
 
     try {
-      const loginUserResponse = await this.api.loginUser({
+      const loginUserResponse = await loginUser({
         email: `${user}`,
         password: `${password}`,
       });
 
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('currentToken', loginUserResponse.token);
-      storage('userId', loginUserResponse.userId);
-      storage('tokenExpiresIn', tokenExpiresIn);
+      localStorage.setItem('currentToken', loginUserResponse.token);
+      localStorage.setItem('tokenExpiresIn', loginUserResponse.tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -114,18 +110,5 @@ export default class Authorization extends Component {
 
   toHTML() {
     return createAuthorizationForm().trim();
-  }
-
-  static checkTokenValidity() {
-    const userId = storage('userId');
-    const currentToken = storage('currentToken');
-    const currentPage = storage('currentPage');
-    const tokenExpiresIn = Number(storage('tokenExpiresIn'));
-
-    if (!currentToken || (new Date().getTime() - tokenExpiresIn > 0)) {
-      return false;
-    }
-
-    return { userId, currentToken, currentPage };
   }
 }

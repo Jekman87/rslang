@@ -1,5 +1,3 @@
-import { mainMenuTitles } from '../../constants/menu.constants';
-
 export default function createMainPageHTML() {
   return `
     <div class="container mt-3">
@@ -13,7 +11,7 @@ export default function createMainPageHTML() {
                 <h5 class="card-title">Статистика за сегодня</h5>
                 <p class="card-text">Слов на сегодня: 15 из 30</p>
                 <p class="card-text">Карточек на сегодня: 30 из 50</p>
-                <a href="#" class="btn btn-primary" data-name="${mainMenuTitles[4].data}">Подробнее</a>
+                <a href="#" class="btn btn-primary" data-name="statistics">Подробнее</a>
               </div>
             </div>
           </div>
@@ -23,7 +21,7 @@ export default function createMainPageHTML() {
                 <h5 class="card-title">Общая статистика</h5>
                 <p class="card-text">Всего выучено слов: 550 из 3600</p>
                 <p class="card-text">Всего карточек пройдено: 1256</p>
-                <a href="#" class="btn btn-primary" data-name="${mainMenuTitles[4].data}">Подробнее</a>
+                <a href="#" class="btn btn-primary" data-name="statistics">Подробнее</a>
               </div>
             </div>
           </div>
@@ -34,7 +32,7 @@ export default function createMainPageHTML() {
         <hr class="my-4">
         <p>Тренировка слов - это отличная возможность потренировать слова!)</p>
         <p class="lead">
-          <a class="btn btn-primary btn-lg" href="#" role="button" data-name="${mainMenuTitles[1].data}">Тренировка <i class="fas fa-long-arrow-alt-right"></i></a>
+          <a class="btn btn-primary btn-lg" href="#" role="button" data-name="MainGame">Тренировка <i class="fas fa-long-arrow-alt-right"></i></a>
         </p>
       </div>
     </div>

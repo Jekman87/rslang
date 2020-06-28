@@ -89,8 +89,12 @@ const plugins = () => {
         to: PATHS.dist,
       },
       {
-        from: `${PATHS.src}/assets`,
-        to: `${PATHS.assets}`,
+        from: `${PATHS.src}/assets/img`,
+        to: `${PATHS.assets}img`,
+      },
+      {
+        from: `${PATHS.src}/assets/voices`,
+        to: `${PATHS.assets}voices`,
       },
     ]),
     new MiniCssExtractPlugin({ filename: filename('css') }),

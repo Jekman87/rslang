@@ -7,16 +7,16 @@ const capitalize = (string) => {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 
-function storage(key, data) {
-  if (arguments.length === 1) {
+const storage = (key, data = null) => {
+  if (!data) {
     return JSON.parse(localStorage.getItem(key));
-  }
-  if (data === null) {
-    localStorage.removeItem(key);
-    return true;
   }
   localStorage.setItem(key, JSON.stringify(data));
   return true;
-}
+};
+
+storage.remove = (key) => {
+  localStorage.removeItem(key);
+};
 
 export { capitalize, delay, storage };
