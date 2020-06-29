@@ -14,16 +14,17 @@ export default class Intro extends Component {
       listeners: ['click'],
       ...options,
     });
-    this.dataForApp.gameLevel = {
-      level: 0,
-      round: 0,
-      group: 0,
-    };
-    this.dataForApp.words = null;
+    this.dataForApp.state.words = null;
     this.dataForApp.state = {
+      gameLevel: {
+        level: 0,
+        round: 0,
+        group: 0,
+      },
       gameWords: [],
       correct: 0,
       successWords: [],
+      words: [],
     };
   }
 
@@ -38,8 +39,8 @@ export default class Intro extends Component {
       await delay(1500);
       // check game level
       // get words - from dictionary or from user level or from page 1 group 1
-      const { level: group, round: page } = this.dataForApp.gameLevel;
-      this.dataForApp.words = await getWords({ group, page });
+      const { level: group, round: page } = this.dataForApp.state.gameLevel;
+      this.dataForApp.state.words = await getWords({ group, page });
       hide.call(this);
       this.emit('intro:start', '');
     }

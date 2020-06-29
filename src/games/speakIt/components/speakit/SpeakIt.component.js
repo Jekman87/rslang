@@ -8,7 +8,14 @@ export default class SpeakIt {
     this.components = options.components || [];
     this.observer = new Observer();
     this.dataForApp = {
-      state: { speakMode: false, correct: 0 },
+      state: {
+        gameLevel: null,
+        speakMode: false,
+        correct: 0,
+        gameWords: null,
+        successWords: null,
+        words: null,
+      },
       mainApp: options.options,
       destroy: this.destroy.bind(this),
     };

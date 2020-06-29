@@ -30,73 +30,73 @@ export default class Header extends Component {
     this.subscribe('intro:start', () => {
       this.$root.removeClass('d-none');
       Array.from(this.$level.$el.options).forEach((option, i) => {
-        if (option.value === `${this.dataForApp.gameLevel.level}`) {
+        if (option.value === `${this.dataForApp.state.gameLevel.level}`) {
           this.$level.$el.selectedIndex = i;
         }
       });
       Array.from(this.$round.$el.options).forEach((option, i) => {
-        if (option.value === `${this.dataForApp.gameLevel.round}`) {
+        if (option.value === `${this.dataForApp.state.gameLevel.round}`) {
           this.$round.$el.selectedIndex = i;
         }
       });
       Array.from(this.$group.$el.options).forEach((option, i) => {
-        if (option.value === `${this.dataForApp.gameLevel.group}`) {
+        if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
           this.$group.$el.selectedIndex = i;
         }
       });
     });
     this.subscribe('results:continue', async () => {
-      if (this.dataForApp.gameLevel.group === 0) {
-        this.dataForApp.gameLevel.group += 1;
-        this.$group.$el.options.value = this.dataForApp.gameLevel.group;
+      if (this.dataForApp.state.gameLevel.group === 0) {
+        this.dataForApp.state.gameLevel.group += 1;
+        this.$group.$el.options.value = this.dataForApp.state.gameLevel.group;
         Array.from(this.$group.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.gameLevel.group}`) {
+          if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
             this.$group.$el.selectedIndex = i;
           }
         });
-      } else if (this.dataForApp.gameLevel.group === 1
-        // && this.dataForApp.gameLevel.level < 6
-        && this.dataForApp.gameLevel.round < 29) {
-        this.dataForApp.gameLevel.group = 0;
-        this.$group.$el.options.value = this.dataForApp.gameLevel.group;
+      } else if (this.dataForApp.state.gameLevel.group === 1
+        // && this.dataForApp.state.gameLevel.level < 6
+        && this.dataForApp.state.gameLevel.round < 29) {
+        this.dataForApp.state.gameLevel.group = 0;
+        this.$group.$el.options.value = this.dataForApp.state.gameLevel.group;
         Array.from(this.$group.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.gameLevel.group}`) {
+          if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
             this.$group.$el.selectedIndex = i;
           }
         });
-        this.dataForApp.gameLevel.round += 1;
-        this.$group.$el.options.value = this.dataForApp.gameLevel.round;
+        this.dataForApp.state.gameLevel.round += 1;
+        this.$group.$el.options.value = this.dataForApp.state.gameLevel.round;
         Array.from(this.$round.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.gameLevel.round}`) {
+          if (option.value === `${this.dataForApp.state.gameLevel.round}`) {
             this.$round.$el.selectedIndex = i;
           }
         });
         await changeGameRound.call(this);
-      } else if (this.dataForApp.gameLevel.group === 1
-        // && this.dataForApp.gameLevel.level < 6
-        && this.dataForApp.gameLevel.round === 29) {
-        this.dataForApp.gameLevel.group = 0;
-        this.$group.$el.options.value = this.dataForApp.gameLevel.group;
+      } else if (this.dataForApp.state.gameLevel.group === 1
+        // && this.dataForApp.state.gameLevel.level < 6
+        && this.dataForApp.state.gameLevel.round === 29) {
+        this.dataForApp.state.gameLevel.group = 0;
+        this.$group.$el.options.value = this.dataForApp.state.gameLevel.group;
         Array.from(this.$group.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.gameLevel.group}`) {
+          if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
             this.$group.$el.selectedIndex = i;
           }
         });
-        this.dataForApp.gameLevel.round = 0;
-        this.$group.$el.options.value = this.dataForApp.gameLevel.round;
+        this.dataForApp.state.gameLevel.round = 0;
+        this.$group.$el.options.value = this.dataForApp.state.gameLevel.round;
         Array.from(this.$round.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.gameLevel.round}`) {
+          if (option.value === `${this.dataForApp.state.gameLevel.round}`) {
             this.$round.$el.selectedIndex = i;
           }
         });
-        if (this.dataForApp.gameLevel.level < 5) {
-          this.dataForApp.gameLevel.level += 1;
+        if (this.dataForApp.state.gameLevel.level < 5) {
+          this.dataForApp.state.gameLevel.level += 1;
         } else {
-          this.dataForApp.gameLevel.level = 0;
+          this.dataForApp.state.gameLevel.level = 0;
         }
-        this.$level.$el.options.value = this.dataForApp.gameLevel.level;
+        this.$level.$el.options.value = this.dataForApp.state.gameLevel.level;
         Array.from(this.$level.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.gameLevel.level}`) {
+          if (option.value === `${this.dataForApp.state.gameLevel.level}`) {
             this.$level.$el.selectedIndex = i;
           }
         });
@@ -158,7 +158,7 @@ export default class Header extends Component {
   async onChange(event) {
     const clickedElement = $$(event.target);
     if (clickedElement.$el.id === 'gameLevel') {
-      this.dataForApp.gameLevel.level = +clickedElement.text();
+      this.dataForApp.state.gameLevel.level = +clickedElement.text();
       await changeGameRound.call(this);
       restart.call(this);
       stopSpeak.call(this);
@@ -166,7 +166,7 @@ export default class Header extends Component {
       this.emit('header:changeGameRound', '');
     }
     if (clickedElement.$el.id === 'gameRound') {
-      this.dataForApp.gameLevel.round = +clickedElement.text();
+      this.dataForApp.state.gameLevel.round = +clickedElement.text();
       await changeGameRound.call(this);
       restart.call(this);
       stopSpeak.call(this);
@@ -174,7 +174,7 @@ export default class Header extends Component {
       this.emit('header:changeGameRound', '');
     }
     if (clickedElement.$el.id === 'gameRoundGroup') {
-      this.dataForApp.gameLevel.group = +clickedElement.text();
+      this.dataForApp.state.gameLevel.group = +clickedElement.text();
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);
@@ -205,8 +205,8 @@ function stopSpeak() {
 }
 
 async function changeGameRound() {
-  const { level: group, round: page } = this.dataForApp.gameLevel;
-  this.dataForApp.words = await getWords({ group, page });
+  const { level: group, round: page } = this.dataForApp.state.gameLevel;
+  this.dataForApp.state.words = await getWords({ group, page });
 }
 
 function restart() {
@@ -216,7 +216,7 @@ function restart() {
 
 function saveGameHistory() {
   const correct = this.dataForApp.state.successWords.length;
-  const { level, round, group } = this.dataForApp.gameLevel;
+  const { level, round, group } = this.dataForApp.state.gameLevel;
   const date = Date.now();
   const history = {
     d: date,

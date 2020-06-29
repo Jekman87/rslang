@@ -19,9 +19,5 @@ class Speakit {
     });
     this.speakitGame.render();
   }
-
-  destroy() {
-    this.speakitGame.destroy();
-  }
 }
 export { Speakit as default };

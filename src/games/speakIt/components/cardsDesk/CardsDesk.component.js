@@ -56,14 +56,14 @@ export default class CardsDesk extends Component {
       cardsRow.html(cardsData);
     });
     this.subscribe('stopSpeak', () => {
-      const { group } = this.dataForApp.gameLevel;
-      const wordsArr = this.dataForApp.words;
+      const { group } = this.dataForApp.state.gameLevel;
+      const wordsArr = this.dataForApp.state.words;
       const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
       this.dataForApp.state.gameWords = wordsTen;
     });
     this.subscribe('results:playword', (wordId) => {
       if (wordId) {
-        const data = this.dataForApp.words
+        const data = this.dataForApp.state.words
           .find((el) => el.id === wordId);
         const { audio } = data;
         playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
@@ -116,8 +116,9 @@ export default class CardsDesk extends Component {
 }
 
 function prepareCardsDataHTML() {
-  const { group } = this.dataForApp.gameLevel;
-  const wordsTen = group ? this.dataForApp.words.slice(0, 10) : this.dataForApp.words.slice(10, 20);
+  const { group } = this.dataForApp.state.gameLevel;
+  const wordsTen = group ? this.dataForApp.state.words.slice(0, 10)
+    : this.dataForApp.state.words.slice(10, 20);
   const cards = wordsTen.map((name) => {
     const {
       id, word: term, wordTranslate: translation, transcription,
