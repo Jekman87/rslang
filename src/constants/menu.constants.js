@@ -4,6 +4,7 @@ const mainMenuTitles = [
   { data: 'games', title: 'Игры' },
   { data: 'Vocabulary', title: 'Словарь' },
   { data: 'Statistics', title: 'Статистика' },
+  { data: 'Settings', title: 'Настройки' },
   { data: 'Promo', title: 'Промо' },
   { data: 'Team', title: 'О команде' },
 ];
