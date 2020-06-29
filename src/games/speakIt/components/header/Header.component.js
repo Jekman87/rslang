@@ -3,7 +3,7 @@ import $$ from '../../../../core/domManipulation';
 import { storage } from '../../../../core/utils';
 import createHeaderHTML from './header.template';
 import SpeechRecognition from '../../api/SpeechRecognition.api';
-import { getWords } from '../../api/words.api';
+// import { getWords } from '../../api/words.api';
 
 export default class Header extends Component {
   static className = 'header';
@@ -29,77 +29,39 @@ export default class Header extends Component {
 
     this.subscribe('intro:start', () => {
       this.$root.removeClass('d-none');
-      Array.from(this.$level.$el.options).forEach((option, i) => {
-        if (option.value === `${this.dataForApp.state.gameLevel.level}`) {
-          this.$level.$el.selectedIndex = i;
-        }
-      });
-      Array.from(this.$round.$el.options).forEach((option, i) => {
-        if (option.value === `${this.dataForApp.state.gameLevel.round}`) {
-          this.$round.$el.selectedIndex = i;
-        }
-      });
-      Array.from(this.$group.$el.options).forEach((option, i) => {
-        if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
-          this.$group.$el.selectedIndex = i;
-        }
-      });
+      changeSelector.call(this, 'level');
+      changeSelector.call(this, 'round');
+      changeSelector.call(this, 'group');
     });
     this.subscribe('results:continue', async () => {
       if (this.dataForApp.state.gameLevel.group === 0) {
         this.dataForApp.state.gameLevel.group += 1;
         this.$group.$el.options.value = this.dataForApp.state.gameLevel.group;
-        Array.from(this.$group.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
-            this.$group.$el.selectedIndex = i;
-          }
-        });
+        changeSelector.call(this, 'group');
       } else if (this.dataForApp.state.gameLevel.group === 1
-        // && this.dataForApp.state.gameLevel.level < 6
         && this.dataForApp.state.gameLevel.round < 29) {
         this.dataForApp.state.gameLevel.group = 0;
         this.$group.$el.options.value = this.dataForApp.state.gameLevel.group;
-        Array.from(this.$group.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
-            this.$group.$el.selectedIndex = i;
-          }
-        });
+        changeSelector.call(this, 'group');
         this.dataForApp.state.gameLevel.round += 1;
         this.$group.$el.options.value = this.dataForApp.state.gameLevel.round;
-        Array.from(this.$round.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.state.gameLevel.round}`) {
-            this.$round.$el.selectedIndex = i;
-          }
-        });
+        changeSelector.call(this, 'round');
         await changeGameRound.call(this);
       } else if (this.dataForApp.state.gameLevel.group === 1
-        // && this.dataForApp.state.gameLevel.level < 6
         && this.dataForApp.state.gameLevel.round === 29) {
         this.dataForApp.state.gameLevel.group = 0;
         this.$group.$el.options.value = this.dataForApp.state.gameLevel.group;
-        Array.from(this.$group.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.state.gameLevel.group}`) {
-            this.$group.$el.selectedIndex = i;
-          }
-        });
+        changeSelector.call(this, 'group');
         this.dataForApp.state.gameLevel.round = 0;
         this.$group.$el.options.value = this.dataForApp.state.gameLevel.round;
-        Array.from(this.$round.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.state.gameLevel.round}`) {
-            this.$round.$el.selectedIndex = i;
-          }
-        });
+        changeSelector.call(this, 'round');
         if (this.dataForApp.state.gameLevel.level < 5) {
           this.dataForApp.state.gameLevel.level += 1;
         } else {
           this.dataForApp.state.gameLevel.level = 0;
         }
         this.$level.$el.options.value = this.dataForApp.state.gameLevel.level;
-        Array.from(this.$level.$el.options).forEach((option, i) => {
-          if (option.value === `${this.dataForApp.state.gameLevel.level}`) {
-            this.$level.$el.selectedIndex = i;
-          }
-        });
+        changeSelector.call(this, 'level');
         await changeGameRound.call(this);
       }
       restart.call(this);
@@ -205,8 +167,18 @@ function stopSpeak() {
 }
 
 async function changeGameRound() {
-  const { level: group, round: page } = this.dataForApp.state.gameLevel;
-  this.dataForApp.state.words = await getWords({ group, page });
+  const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
+  // this.dataForApp.state.words = await getWords({ group, page });
+  try {
+    this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(gr, pg);
+  } catch (e) {
+    if (e.message === '401') {
+      console.log(e.message);
+      // logout
+    } else {
+      console.log(`${e.message}: something went wrong`);
+    }
+  }
 }
 
 function restart() {
@@ -235,4 +207,12 @@ function saveGameHistory() {
     histories.push(history);
     storage('speakit-history', histories);
   }
+}
+
+function changeSelector(key) {
+  Array.from(this[`$${key}`].$el.options).forEach((option, i) => {
+    if (option.value === `${this.dataForApp.state.gameLevel[key]}`) {
+      this[`$${key}`].$el.selectedIndex = i;
+    }
+  });
 }
