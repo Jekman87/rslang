@@ -1,0 +1,239 @@
+// @import "base/base";
+// @import "base/header";
+// @import "base/footer";
+// @import "base/main";
+// @import "base/modal";
+.audioSource,
+.savanna-display-none {
+  display:none!important;
+}
+
+.savanna-start-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  &__close-button {
+    display: flex;
+    width: 2rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(206, 206, 206);
+    color: rgb(66, 66, 66);
+    font-size: 1.8rem;
+  }
+}
+
+.savanna-game-page {
+  display: flex;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.balasned_element {
+  opacity: 0;
+}
+
+.savanna-main-container {
+  background-image: url(../assets/img/background.svg);
+  background-position: bottom 0vh center;
+}
+
+@keyframes myAnimation {
+  0% {
+    top: 0px;
+    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 0%);
+  }
+  50% {
+    top:-20px;
+    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 75%);
+  }
+  100% {
+    top: 0px;
+    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 0%);
+  }
+}
+
+.crystall {
+  position: relative;
+  border-radius: 65% 65% 55% 55% / 95% 95% 55% 55%;
+  box-shadow: inset 0 0 10px 4px #18bc9c;
+  top:0px;
+  width: 50px;
+  height: 80px;
+  background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 75%);
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: myAnimation 5.25s cubic-bezier(0.5, 0.5, 0.5, 0.5) 0s infinite;
+}
+
+@keyframes piu {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes piupiu {
+  0% {
+    top: 0;
+  }
+
+  100% {
+    top: 50%;
+  }
+}
+
+@keyframes piupiupiu {
+
+  100% {
+    top: 95%;
+  }
+}
+
+.word-container{
+  position: absolute;
+  top: 100px;
+  left: 50% ;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, -100%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  transition: 0.25s;
+
+}
+
+.word-container-piupiu {
+  animation: piupiu 6s cubic-bezier(0.5, 0.5, 0.5, 0.5) 0s 1;
+}
+
+.word-container-piupiupiu{
+  animation: piupiupiu 1s cubic-bezier(0.5, 0.5, 0.5, 0.5) 0s 1;
+}
+
+.word-rotate {
+  width: 40px;
+  height: 40px;
+  background-image: url(../assets/img/energy.png), radial-gradient(#9100ff, #00a9b500 25%);
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 3;
+  animation: piu 0.25s cubic-bezier(0.5, 0.5, 0.5, 0.5) 0s infinite;
+  display:none;
+
+}
+
+.gaming-word-guess{
+  display:flex;
+  border-radius: 4px;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+  // display:none;
+}
+
+
+$fontColor: #005e8d;
+
+.savanna-main-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fffffff7;
+  z-index: 3;
+}
+
+@keyframes savanna-preload {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.savanna-preloader {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+
+.savanna-preloader-internal {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  // border-radius: 45% 55% 45% 55% / 45% 55% 45% 55%;
+  border: 4px solid transparent;
+  top: 10px;
+  left: 10px;
+  border-bottom-color: #e8e4d5;
+  border-top-color: #cecece;
+  border-radius: 50%;
+  animation: savanna-preload 1s cubic-bezier(0.76, 0.13, 0.14, 0.87) 0s infinite;
+}
+
+.savanna-preloader-external {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  // border-radius: 45% 55% 45% 55% / 45% 55% 45% 55%;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  top: 0px;
+  left: 0px;
+  border-bottom-color: #cecece;
+  border-top-color: #e8e4d5;
+  animation: savanna-preload 1.5s cubic-bezier(0.76, 0.13, 0.14, 0.87) 0s infinite;
+}
+
+.savanna-preloader-countdown {
+  width: 170px;
+  height: 170px;
+  font-size: 2rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.5s;
+}
+
+.hide-spinner {
+  display: none;
+}
+
+
+
+
+.savanna-game-statistic {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  &__close-button {
+    display: flex;
+    width: 2rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(206, 206, 206);
+    color: rgb(66, 66, 66);
+    font-size: 1.8rem;
+  }
+}
