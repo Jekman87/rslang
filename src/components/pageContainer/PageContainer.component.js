@@ -1,7 +1,10 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import { storage } from '../../core/utils';
+
 import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
+import BASE_SETTINGS from '../../constants/settings.constants';
+import BASE_STATS from '../../constants/stats.constants';
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -15,9 +18,16 @@ export default class PageContainer extends Component {
     });
 
     this.$root = $root;
-    this.options = options;
     this.pages = options.pages;
     this.component = options.startPage;
+    this.options = {
+      settings: null,
+      stats: null,
+      dataForApp: {
+        userWords: null,
+      },
+      ...options,
+    };
   }
 
   init() {
@@ -38,10 +48,14 @@ export default class PageContainer extends Component {
     });
 
     this.subscribe('playGame', (NewGame) => {
-      this.component.destroy();
-      storage('currentPage', NewGame);
-      this.emit('hideHeader');
-      this.renderGame(this.pages[NewGame]);
+      if (this.pages[NewGame]) {
+        this.component.destroy();
+        storage('currentPage', NewGame);
+        this.emit('hideHeader');
+        this.renderGame(this.pages[NewGame]);
+      } else {
+        console.log('Игра пока не готова: ', NewGame);
+      }
     });
 
     this.subscribe('mainLogout', () => {
@@ -57,7 +71,14 @@ export default class PageContainer extends Component {
     });
   }
 
-  renderPage(NewPage) {
+  async renderPage(NewPage) {
+    if (this.component !== AUTH_PAGE_NAME && (!this.options.settings || !this.options.stats)) {
+      // add loader?
+      await this.initSettingsAndStats();
+      await this.initWords();
+      // remove loader?
+    }
+
     const element = $$.create(NewPage.tagName || 'div', NewPage.className);
     this.component = new NewPage(element, this.options);
     element.html(this.component.toHTML());
@@ -67,10 +88,12 @@ export default class PageContainer extends Component {
 
   renderGame(NewGame) {
     this.$root.clear();
+    this.component = new NewGame('.PageContainer', this.options);
+    this.component.render();
+
     // одинаковый интерфейс для всех игр
     // this.component = new NewGame('.PageContainer', this.options);
     // this.component.render();
-
     // .PageContainer - в этот контейнер рендерится ваша игра
     // в this.options содержатся observer и api
     // чтобы вернуться в главное приложение вы можете вызвать событие
@@ -81,7 +104,47 @@ export default class PageContainer extends Component {
     // также в этом объекте есть все необходимые методы
     // чтобы раборало меню, поправьте название вашего класса в
     // /constants/menu.constants
-    console.log('Игра пока не готова: ', NewGame);
+  }
+
+  async initSettingsAndStats() {
+    try {
+      // переделать в promise.all
+      this.options.settings = await this.options.api.getSettings();
+      this.options.stats = await this.options.api.getStatistics();
+      console.log('Загрузка', this.options.settings, this.options.stats);
+    } catch (error) {
+      if (error.message === '401') {
+        console.log('Логаут ', error.message);
+        // this.observer.emit('mainLogout');
+      } else if (error.message === '404') {
+        // если настроек и статистики нету - устанавливаем стандартные
+        // переделать в promise.all
+        this.options.settings = await this.options.api.updateSettings(BASE_SETTINGS);
+        this.options.stats = await this.options.api.updateStatistics(BASE_STATS);
+        console.log('Создаем настройки и статистику:', this.options.settings, this.options.stats);
+      } else {
+        console.log('Ошибка соединения: ', error.message);
+      }
+    }
+  }
+
+  async initWords() {
+    try {
+      // подгрузка слов в зависимости от статистики и алгоритма
+      // преобразуем порядок слов? Составляем карточки? AggregatedWords
+      const page = 0;
+      const group = 0;
+      this.options.dataForApp.userWords = await this.options.api.getWords(page, group);
+
+      console.log('words', this.options.dataForApp.userWords);
+    } catch (error) {
+      if (error.message === '401') {
+        console.log('Логаут ', error.message);
+        // this.observer.emit('mainLogout');
+      } else {
+        console.log('Другая ошибка: ', error.message);
+      }
+    }
   }
 
   destroy() {

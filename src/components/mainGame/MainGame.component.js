@@ -14,6 +14,7 @@ export default class MainGame extends Component {
 
     this.options = options;
     this.elements = null;
+    console.log('MainGame this.options', this.options);
   }
 
   init() {
@@ -58,7 +59,6 @@ export default class MainGame extends Component {
     if (!buttonName) {
       return false;
     }
-    console.log('buttonName', buttonName);
 
     switch (buttonName) {
       case 'prev-btn':

@@ -3,7 +3,7 @@ import { FILE_URL } from '../../constants/constants';
 export default function createMainGameHTML(data) {
   const cardOptions = data.settings.optional;
   const word = data.dataForApp.userWords[0];
-  console.log('word', word);
+
   return `
     <div class="container mt-3">
       <div class="row justify-content-center no-gutters mt-5">
