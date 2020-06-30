@@ -14,13 +14,13 @@ export default function createSettingsHTML() {
             <div class="form-group">
               <div class="d-flex flex-column-reverse flex-lg-row align-items-start  align-items-xl-baseline mb-2 mb-lg-1">
                 <p class="d-flex justify-content-start align-items-baseline mb-lg-1">
-              <input type="text" class="form-control" id="wordsPerDay" style="width: 4rem" value="20">шт</p>
+              <input type="text" class="form-control mr-1" id="wordsPerDay" style="width: 4rem" value="20">шт</p>
                 <label class="col-form-label col-12 col-lg-9" for="wordsPerDay">Количество новых слов в день</label>
 
               </div>
               <div class="d-flex flex-column-reverse flex-lg-row align-items-start align-items-lg-end  align-items-xl-baseline mb-2">
               <p class="d-flex justify-content-start align-items-baseline">
-                <input type="text" class="form-control" id="cardsPerDay" style="width: 4rem" value="50">шт</p>
+                <input type="text" class="form-control mr-1" id="cardsPerDay" style="width: 4rem" value="50">шт</p>
                 <label class="col-form-label col-12 col-lg-9" for="cardsPerDay">Максимальное количество карточек в день</label>
 
               </div>
