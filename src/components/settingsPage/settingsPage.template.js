@@ -1,7 +1,7 @@
 export default function createSettingsHTML() {
   return `
   <div class="container mt-3">
-  <div class="jumbotron">
+  <div class="jumbotron mb-0">
     <h1 class="display-4 text-primary h2"><i class="fas fa-cog mr-3"></i>Мои настройки</h1>
     <div class="d-flex mb-3" style="height: 38rem">
       <div class="col-6 d-flex flex-column justify-content-between p-0 pr-2" style="height: 38rem">
@@ -13,12 +13,12 @@ export default function createSettingsHTML() {
             <!-- <h4 class="card-title">Обучение</h4> -->
             <div class="form-group">
               <div class="d-flex align-items-center mb-2">
-                <input type="text" class="form-control" id="wordsPerDay" style="width: 4rem">шт
+                <input type="text" class="form-control" id="wordsPerDay" style="width: 4rem" value="20">шт
                 <label class="col-form-label col-6" for="wordsPerDay">Количество новых слов в день</label>
 
               </div>
               <div class="d-flex align-items-center mb-2">
-                <input type="text" class="form-control" id="cardsPerDay" style="width: 4rem">шт
+                <input type="text" class="form-control" id="cardsPerDay" style="width: 4rem" value="50">шт
                 <label class="col-form-label col-6" for="cardsPerDay">Максимальное количество карточек в день</label>
 
               </div>
@@ -146,6 +146,7 @@ export default function createSettingsHTML() {
       </div>
     </div>
     <button class="btn btn-primary btn-lg" href="#" role="button">Применить</button>
+    <button class="btn btn-outline-primary btn-lg" href="#" role="button">Сбросить до стандартных настроек</button>
 
   </div>
     `;
