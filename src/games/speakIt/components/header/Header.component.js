@@ -64,6 +64,9 @@ export default class Header extends Component {
         changeSelector.call(this, 'level');
         await changeGameRound.call(this);
       }
+      if (this.dataForApp.state.speakMode) {
+        saveGameHistory.call(this);
+      }
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);
