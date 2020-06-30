@@ -1,6 +1,9 @@
 import $$ from '../../core/domManipulation';
 import Observer from '../../core/Observer';
 
+import BASE_SETTINGS from '../../constants/settings.constants';
+import BASE_STATS from '../../constants/stats.constants';
+
 export default class MainApp {
   constructor(selector, options) {
     this.$el = $$(selector);
@@ -9,13 +12,20 @@ export default class MainApp {
     this.options = options;
     this.settings = null;
     this.stats = null;
+    this.dataForApp = {
+      userWords: null,
+    };
   }
 
   getRoot() {
     const $root = $$.create('div', 'main-app');
 
     const componentOptions = {
-      observer: this.observer, settings: this.settings, stats: this.stats, ...this.options
+      observer: this.observer,
+      settings: this.settings,
+      stats: this.stats,
+      dataForApp: this.dataForApp,
+      ...this.options,
     };
     this.components = this.components.map((Component) => {
       const element = $$.create(Component.tagName || 'div', Component.className);
@@ -30,71 +40,54 @@ export default class MainApp {
   }
 
   async render() {
-    await this.initStatsAndSettings();
+    await this.initSettingsAndStats();
+    await this.initWords();
     this.$el.append(this.getRoot());
     this.components.forEach((component) => component.init());
   }
 
-  async initStatsAndSettings() {
-    // пробуем забрать с бекенда
-    // если не получилось - стандартные настройки
+  async initSettingsAndStats() {
     try {
       // переделать в promise.all
       this.settings = await this.options.api.getSettings();
       this.stats = await this.options.api.getStatistics();
-      console.log('settings', this.settings);
-      console.log('stats', this.stats);
+      // пробуем забрать с бекенда
+      // если не получилось - стандартные настройки
+      // const newStats = await this.options.api.updateSettings(BASE_SETTINGS);
+      // const newStats = await this.options.api.updateStatistics(BASE_STATS);
+      // console.log('settings', this.settings);
+      // console.log('stats', this.stats);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
         // this.observer.emit('mainLogout');
-        this.observer.emit('mainLogout');
       } else {
         console.log('Другая ошибка: ', error.message);
       }
     }
 
-    // шаблон настроек
-    const settingsAll = {
-      wordsPerDay: 20,
-      optional: {
-        CardsPerDay: 50,
-        mixedCards: 0,
-        isCardTranslation: true,
-        isCardExplanation: true,
-        isCardExample: true,
-        isCardTranscription: true,
-        isCardImage: true,
-        isCardTranslationAfterSuccess: true,
-        cardExplanationTranslation: true,
-        cardExampleTranslation: true,
-        isAutoSound: true,
-        isAnswerButton: true,
-        isDeleteButton: true,
-        isDifficultWordsButton: true,
-        areFeedbackButtons: true,
-        isVocabularyExplanation: true,
-        isVocabularyExample: true,
-        isVocabularyTranscription: true,
-        isVocabularyImage: true,
-      },
-    };
-    // const newStats = await this.options.api.updateSettings(settingsAll);
+    // подгрузка слов в зависимости от статистики
+    // загружаем партию слов с бекенда в зависимости от алгоритма
+  }
 
-    // шаблон статистики
-    const stats = {
-      learnedWords: 18,
-      optional: {
-        lastAppearance: 123,
-        counter: 12,
-        success: 5,
-        isGameSuccess: true,
-        status: 'goodStatus',
-        progress: 33,
-        difficulty: 'veryGood',
-      },
-    };
-    // const newStats = await this.options.api.updateStatistics(stats);
+  async initWords() {
+    try {
+      // подгрузка слов в зависимости от статистики и алгоритма
+      // преобразуем порядок слов? Составляем карточки? AggregatedWords
+
+      const page = 0;
+      const group = 0;
+      this.dataForApp.userWords = await this.options.api.getWords(page, group);
+
+      console.log('words', this.dataForApp.userWords);
+    } catch (error) {
+      if (error.message === '401') {
+        console.log('Логаут ', error.message);
+        // this.observer.emit('mainLogout');
+      } else {
+        console.log('Другая ошибка: ', error.message);
+      }
+    }
   }
 
   destroy() {
