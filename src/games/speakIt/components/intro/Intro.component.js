@@ -2,7 +2,6 @@ import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createIntroHTML from './intro.template';
 import createButtonSpinnerHTML from './button-spinner.template';
-// import { getWords } from '../../api/words.api';
 import { delay } from '../../../../core/utils';
 
 export default class Intro extends Component {
@@ -40,7 +39,6 @@ export default class Intro extends Component {
       // check game level
       // get words - from dictionary or from user level or from page 1 group 1
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
-      // this.dataForApp.state.words = await getWords({ group, page });
       try {
         this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(gr, pg);
       } catch (e) {
