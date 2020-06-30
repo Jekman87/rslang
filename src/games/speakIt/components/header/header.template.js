@@ -33,13 +33,13 @@ export default function createHeaderHTML() {
     </nav>
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">
-        <button type="button" class="btn btn-secondary" data-type="results">
+        <button type="button" class="btn btn-secondary main-btn" data-type="results">
           <i class="fas fa-poll-h" data-type="results" data-type="results"></i> Результат
         </button>
-        <button type="button" class="btn btn-secondary" data-type="history">
+        <button type="button" class="btn btn-secondary main-btn" data-type="history">
           <i class="fas fa-history" aria-hidden="true" data-type="history"></i> История игр
         </button>
-        <button type="button" class="btn btn-secondary" data-type="exit">
+        <button type="button" class="btn btn-secondary main-btn" data-type="exit">
         <i class="fas fa-power-off" data-type="exit"></i> Выход
         </button>
       </div>

@@ -33,7 +33,7 @@ export default function createResultsHTML() {
         <div class="modal-header">
           <h5 class="modal-title">История игр</h5>
         </div>
-        <div class="modal-body">
+        <div class="modal-body p-1">
           <div class="history-items mb-3">
 
           </div>
