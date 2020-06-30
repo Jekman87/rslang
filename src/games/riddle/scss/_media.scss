@@ -97,6 +97,11 @@
     transition: all 0.8s;
   }
 
+  .riddle-prompts button:hover {
+    box-shadow: 1px 1px 10px #7b8a8b;
+    transition: all 0.8s;
+  }
+
   header button:hover i {
     color: white;
     transition: all 0.8s;

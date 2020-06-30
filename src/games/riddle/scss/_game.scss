@@ -1,3 +1,79 @@
+.riddle-container {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto;
+  padding: 20px;
+  border: 2px solid #2d303a;
+  border-radius: 10px;
+}
+
+.riddle-block,
+.translate-block {
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  margin: 5px;
+  padding: 20px;
+  text-align: center;
+  background-color: #ebebeba8;
+  border: 1px solid #2d303a;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.hide-prompt {
+  display: none !important;
+}
+
+.riddle-prompts {
+  @include flexibleSpace;
+  padding: 2%;
+  width: 100%;
+  margin-bottom: 60px;
+  border-radius: 5px;
+
+  i {
+    font-size: 1.5rem;
+  }
+}
+
+.answer-form {
+  @include flexible;
+  width: 70%;
+}
+
+.answer-input {
+  width: 100%;
+  min-height: 40px;
+  margin: 10px;
+  padding: 5px;
+  text-align: center;
+  background-color: #ebebeba8;
+  border: 1px solid #2d303a;
+  border-radius: 5px;
+}
+
+.answer-blocks {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto;
+  padding: 10px;
+}
+
+.answer-block {
+  @include flexible;
+  width: 40%;
+  min-height: 30px;
+  margin: 10px;
+  background-color: #ebebeba8;
+  border: 1px solid #2d303a;
+  border-radius: 5px;
+}
+
 .game-block {
   width: 400px;
   display: flex;
@@ -204,10 +280,13 @@
 
 .button {
   @include flexible;
-  width: 40px;
-  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  color: $fontColor;
+  transition: all 0.8s;
   background-color: #ffffff5c;
   border: 1px solid #005e8d;
+  box-shadow: 6px 6px 10px #7b8a8b;
 }
 
 .icon-parameters {

@@ -1,4 +1,4 @@
-.sprint-header {
+.riddle-header {
   @include flexibleSpace;
   padding: 2%;
   width: 100%;
@@ -6,20 +6,30 @@
   button {
     box-shadow: 6px 6px 10px #7b8a8b;
     transition: all 0.8s;
-  }
-
-  button i {
-    transition: all 0.8s;
-  }
-
-  .timer {
-    @include flexible;
-    width: 80px;
-    min-height: 80px;
-    border-radius: 50%;
-    background-color: #ffffff5c;
-    border: 1px solid #005e8d;
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: $fontColor;
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: $fontColor;
+  }
+
+  input::-webkit-inner-spin-button {
+    display: none;
+  }
+}
+
+.difficulty-level,
+.difficulty-page {
+  @include flexible;
+
+  span {
+    color: $fontColor;
+    margin-right: 10px;
   }
 }

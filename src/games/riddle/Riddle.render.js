@@ -1,5 +1,4 @@
 import $$ from '../../core/domManipulation';
-import Observer from '../../core/Observer';
 
 import Riddle from './Riddle.component';
 
@@ -7,7 +6,6 @@ export default class RiddleGame {
   constructor(selector, options) {
     this.$el = $$(selector);
     this.components = [Riddle];
-    /* this.observer = new Observer(); */
     this.observer = options.observer;
     this.dataForApp = {};
   }
