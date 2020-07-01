@@ -19,8 +19,6 @@ function storage(key, data) {
   return true;
 }
 
-const getRandomNum = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
 export {
-  capitalize, delay, storage, getRandomNum,
+  capitalize, delay, storage,
 };

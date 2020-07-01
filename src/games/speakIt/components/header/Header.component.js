@@ -3,7 +3,6 @@ import $$ from '../../../../core/domManipulation';
 import { storage } from '../../../../core/utils';
 import createHeaderHTML from './header.template';
 import SpeechRecognition from '../../api/SpeechRecognition.api';
-// import { getWords } from '../../api/words.api';
 
 export default class Header extends Component {
   static className = 'header';
@@ -18,7 +17,6 @@ export default class Header extends Component {
 
   init() {
     super.init();
-    window.aa_1 = this.dataForApp;
     this.$level = this.$root.find('#gameLevel');
     this.$round = this.$root.find('#gameRound');
     this.$group = this.$root.find('#gameRoundGroup');
@@ -171,7 +169,6 @@ function stopSpeak() {
 
 async function changeGameRound() {
   const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
-  // this.dataForApp.state.words = await getWords({ group, page });
   try {
     this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(gr, pg);
   } catch (e) {
