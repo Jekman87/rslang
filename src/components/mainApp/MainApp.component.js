@@ -11,11 +11,11 @@ export default class MainApp {
 
   getRoot() {
     const $root = $$.create('div', 'main-app');
-
     const componentOptions = {
       observer: this.observer,
       ...this.options,
     };
+
     this.components = this.components.map((Component) => {
       const element = $$.create(Component.tagName || 'div', Component.className);
       const component = new Component(element, componentOptions);

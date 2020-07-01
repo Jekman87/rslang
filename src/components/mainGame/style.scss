@@ -6,6 +6,7 @@
   justify-content: center;
   i {
     font-size: 40px;
+    cursor: pointer;
   }
 }
 
@@ -15,4 +16,17 @@
     height: 100%;
     object-fit: cover;
   }
+}
+
+.btn  {
+  min-width: 50px;
+  i {
+    pointer-events: none;
+  }
+}
+
+.none {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }

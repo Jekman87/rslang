@@ -24,7 +24,7 @@ export default class PageContainer extends Component {
       settings: null,
       stats: null,
       dataForApp: {
-        userWords: null,
+        userCards: null,
       },
       ...options,
     };
@@ -111,7 +111,6 @@ export default class PageContainer extends Component {
       // переделать в promise.all
       this.options.settings = await this.options.api.getSettings();
       this.options.stats = await this.options.api.getStatistics();
-      console.log('Загрузка', this.options.settings, this.options.stats);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -121,7 +120,6 @@ export default class PageContainer extends Component {
         // переделать в promise.all
         this.options.settings = await this.options.api.updateSettings(BASE_SETTINGS);
         this.options.stats = await this.options.api.updateStatistics(BASE_STATS);
-        console.log('Создаем настройки и статистику:', this.options.settings, this.options.stats);
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
@@ -134,9 +132,7 @@ export default class PageContainer extends Component {
       // преобразуем порядок слов? Составляем карточки? AggregatedWords
       const page = 0;
       const group = 0;
-      this.options.dataForApp.userWords = await this.options.api.getWords(page, group);
-
-      console.log('words', this.options.dataForApp.userWords);
+      this.options.dataForApp.userCards = await this.options.api.getWords(page, group);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
