@@ -3,8 +3,10 @@ import './scss/sprint.scss';
 import Component from '../../core/Component';
 import createGameField from './riddle.template';
 import {
-  hideIntroScreen, changeLevelAndPage, chooseRiddleInformation, fillGameFields, click,
+  hideIntroScreen, hideTwoWrongAnswers,
+  changeLevelAndPage, chooseRiddleInformation, fillGameFields, click,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
+  compareAnswers, moveAnswerIntoInput,
 } from './riddle.functions';
 
 export default class Riddle extends Component {
@@ -51,16 +53,27 @@ export default class Riddle extends Component {
       case 'show-translate':
         showOrHideTranslatePrompt();
         break;
+      case 'check':
+        compareAnswers();
+        break;
       case 'remove-wrong':
-        console.log(15);
+        hideTwoWrongAnswers();
+        break;
+      case 'home':
+        location.reload(true);
         break;
       default:
         console.log();
+    }
+
+    if (event.target.classList.contains('answer-block')) {
+      moveAnswerIntoInput(event.target, event.target.textContent);
     }
   }
 
   onSubmit(event) {
     event.preventDefault();
+    compareAnswers();
   }
 
   toHTML() {

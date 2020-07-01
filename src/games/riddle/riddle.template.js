@@ -18,20 +18,24 @@ export default function createGameField() {
         <header class="riddle-header">
 
           <div class="difficulty-level">
-            <span>Level</span>
-            <button type="button" class="btn btn-outline-success button" data-click="minus-level">-</button>
-              <input type="number" min="1" max="6" value="1" readonly class="input-level">
-            <button type="button" class="btn btn-outline-success button" data-click="plus-level">+</button>
+            <span>Уровень</span>
+            <div>
+              <button type="button" class="btn btn-outline-success button" data-click="minus-level">-</button>
+                <input type="number" min="1" max="6" value="1" readonly class="input-level">
+              <button type="button" class="btn btn-outline-success button" data-click="plus-level">+</button>
+            </div>
           </div>
 
           <div class="difficulty-page">
-            <span>Page</span>
-            <button type="button" class="btn btn-outline-success button" data-click="minus-page">-</button>
-              <input type="number" min="1" max="15" value="1" readonly class="input-page">
-            <button type="button" class="btn btn-outline-success button" data-click="plus-page">+</button>
+            <span>Раунд</span>
+            <div>
+              <button type="button" class="btn btn-outline-success button" data-click="minus-page">-</button>
+                <input type="number" min="1" max="15" value="1" readonly class="input-page">
+              <button type="button" class="btn btn-outline-success button" data-click="plus-page">+</button>
+            </div>
           </div>
 
-          <button type="button" class="btn btn-outline-success button" data-click="start-game">Start</button>
+          <button type="button" class="btn btn-outline-success button" data-click="start-game">Запустить игру</button>
 
           <button class="btn btn-outline-danger button">
             <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="home"></i>
@@ -39,23 +43,27 @@ export default function createGameField() {
         </header>
 
         <div class="riddle-prompts">
-          <button type="button" class="btn btn-outline-success button" data-click="show-options">
-            <i class="fas fa-eye" data-click="show-options"></i>
-          </button>
-          <button type="button" class="btn btn-outline-success button" data-click="remove-wrong">50/50</button>
-          <button type="button" class="btn btn-outline-success button" data-click="show-translate">
-            <i class="fas fa-language" data-click="show-translate"></i>
-          </button>
+          <div>
+            <button type="button" class="btn btn-outline-success button" data-click="show-options">
+              <i class="fas fa-eye" data-click="show-options"></i>
+            </button>
+            <button type="button" class="btn btn-outline-success button" data-click="remove-wrong">50/50</button>
+            <button type="button" class="btn btn-outline-success button" data-click="show-translate">
+              <i class="fas fa-language" data-click="show-translate"></i>
+            </button>
+          </div>
+          <button type="button" class="btn btn-outline-success button" data-click="statistic">Статистика</button>
         </div>
 
         <div class="riddle-container">
-          <div class="riddle-block"></div>
+          <div class="riddle-block">Выберите уровень/раунд игры и нажмите кнопку "Запустить игру"</div>
           <div class="translate-block hide-prompt"></div>
 
           <form class="answer-form">
-            <input class="answer-input" type="text" placeholder="Enter your answer here..." name="search-area"
+            <input class="answer-input" type="text" placeholder="Введите ваш вариант ответа здесь..." name="search-area"
               autocomplete="off">
-            <button type="button" class="btn btn-outline-success button" data-click="...">Check</button>
+            <button type="button" class="btn btn-outline-success button" data-click="check">Проверить ответ</button>
+            <button type="button" class="btn btn-outline-success button" data-click="check">Не знаю</button>
           </form>
 
           <div class="answer-blocks hide-prompt">
@@ -70,5 +78,7 @@ export default function createGameField() {
       </div>
     </div>
 
+    <audio class="correct-voice" src="assets/voices/pew.mp3"></audio>
+    <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
   `;
 }

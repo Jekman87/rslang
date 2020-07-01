@@ -1,5 +1,6 @@
 .riddle-header {
   @include flexibleSpace;
+  flex-wrap: wrap;
   padding: 2%;
   width: 100%;
 
@@ -26,10 +27,16 @@
 
 .difficulty-level,
 .difficulty-page {
-  @include flexible;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
 
+  div {
+    display: flex;
+  }
   span {
+    text-align: center;
     color: $fontColor;
-    margin-right: 10px;
+    margin: 10px auto;
   }
 }

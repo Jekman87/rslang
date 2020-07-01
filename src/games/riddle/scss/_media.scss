@@ -63,6 +63,16 @@
     cursor: pointer;
   }
 
+  .answer-form button:hover {
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+  }
+
+  .answer-blocks button:hover {
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+  }
+
   .audio-icon:hover i {
     color: #339a198f;
     transform: scale(1.2);
