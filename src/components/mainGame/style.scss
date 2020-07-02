@@ -35,3 +35,19 @@
   cursor: default !important;
   opacity: 0.2;
 }
+
+#word-meaning i,
+#word-example b {
+  color: #0000ff00;
+  font-weight: bold;
+  background: #e2e2e2;
+  border-radius: 5px;
+  padding: 3px;
+  user-select: none;
+}
+
+#word-meaning.show-word i,
+#word-example.show-word b {
+  color: #0000ff;
+  user-select: unset;
+}

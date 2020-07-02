@@ -14,13 +14,12 @@ export default class MainGame extends Component {
       ...options,
     });
 
-    this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
     this.userCards = this.dataForApp.userCards;
     this.state = this.dataForApp.state;
     this.elements = null;
-    console.log('MainGame this.options', this.options);
+    console.log('MainGame this.options', options);
   }
 
   init() {
@@ -49,8 +48,6 @@ export default class MainGame extends Component {
       $studiedСardNum: this.$root.find('#studied-card-num'),
       $progressBar: this.$root.find('.progress-bar'),
     };
-
-    // учесть прогрессбар
   }
 
   onClick(event) {
@@ -59,81 +56,78 @@ export default class MainGame extends Component {
     if (!buttonName) {
       return;
     }
+    console.log(buttonName);
 
     switch (buttonName) {
       case 'prev-btn':
-        console.log(buttonName);
-        // загрузка предыдушего слова cangeCardElements(word)
         this.changeCard(-1);
         break;
 
       case 'next-btn':
-        console.log(buttonName);
         this.checkWord();
         break;
 
       case 'again-btn':
-        console.log(buttonName);
         // ручное уплавление алгоритмом - again
         // пометка - слово повторить скоро - 1 мин?
+        // переход на след карту
         this.changeCard();
         break;
 
       case 'hard-btn':
-        console.log(buttonName);
         // ручное уплавление алгоритмом - hard
         // пометка - слово повторить скоро - 10 мин?
+        // переход на след карту
         this.changeCard();
         break;
 
       case 'good-btn':
-        console.log(buttonName);
         // ручное уплавление алгоритмом - good
         // пометка - слово повторить скоро - 1 день?
+        // переход на след карту
         this.changeCard();
         break;
 
       case 'easy-btn':
-        console.log(buttonName);
         // ручное уплавление алгоритмом - easy
         // пометка - слово повторить скоро - 2 дня?
+        // переход на след карту
         this.changeCard();
         break;
 
       case 'delete-btn':
-        console.log(buttonName);
         // перенос слова в удаленные
         // убираем из карточек
         // айди слова - сохраняем персональную? статистику - в удаленные
+        // переход на след карту
         this.changeCard();
         break;
 
       case 'difficult-btn':
-        console.log(buttonName);
         // перенос слова в сложные
         // убираем из карточек ?
-        // айди слова - сохраняем персональную? статистику - в удаленные
+        // айди слова - сохраняем персональную? статистику - в сложные
+        // переход на след карту
         this.changeCard();
         break;
 
       case 'show-answer-btn':
-        console.log(buttonName);
         // заполняем инпут? или просто показываем скрытый спан
         // открываем скрытые слова в предложениях с примером и определением
         // showWordInSentence();
         // аудио
         // переходим автоматом или пользователю нужно ввести слово?
+        // переход на след карту
+        this.changeCard();
         break;
 
       case 'volume-btn':
-        console.log(buttonName);
         this.settingsOptional.autoSound = !this.settingsOptional.autoSound;
         this.elements.$volumeUp.toggle('d-none');
         this.elements.$volumeMute.toggle('d-none');
         break;
 
       default:
-        console.log('default', buttonName);
         break;
     }
   }
@@ -155,8 +149,10 @@ export default class MainGame extends Component {
     if (inputText === currentWord) {
       // отметка ок в статистике
 
-      // открываем скрытые слова в предложениях с примером и определением -
+      // открываем скрытые слова в предложениях с примером и определением +
       // showWordInSentence();
+      this.elements.$wordExample.addClass('show-word');
+      this.elements.$wordMeaning.addClass('show-word');
 
       // повялвение кнопок сложности (если настроены) +
       if (this.settingsOptional.feedbackButtons) {
@@ -164,7 +160,7 @@ export default class MainGame extends Component {
       }
       // воспроизведение аудио в зависимости от настроек +
       if (this.settingsOptional.autoSound) {
-        // await this.speakText();
+        await this.speakText();
       }
 
       // после аудио либо автоматом на след слово
@@ -231,6 +227,8 @@ export default class MainGame extends Component {
       this.elements.$nextBtn.removeClass('arrow-disabled');
     }
 
+    this.elements.$wordExample.removeClass('show-word');
+    this.elements.$wordMeaning.removeClass('show-word');
     this.elements.$cardFooter.addClass('invisible');
 
     this.state.currentCardNum = nextCandNum;
