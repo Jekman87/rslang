@@ -15,22 +15,21 @@ export default class MainGame extends Component {
     });
 
     this.options = options;
-    this.settingsOptional = options.settings.optional;
-    this.userCards = options.dataForApp.userCards;
+    this.dataForApp = options.dataForApp;
+    this.settingsOptional = this.dataForApp.settings.optional;
+    this.userCards = this.dataForApp.userCards;
+    this.state = this.dataForApp.state;
     this.elements = null;
-    this.state = {
-      currentCard: 0,
-    };
     console.log('MainGame this.options', this.options);
   }
 
   init() {
     super.init();
-    this.getWordElements();
+    this.getCardElements();
     // subscribes
   }
 
-  getWordElements() {
+  getCardElements() {
     this.elements = {
       $wordDifficult: this.$root.find('#word-difficult'),
       $wordImage: this.$root.find('#word-image'),
@@ -42,37 +41,30 @@ export default class MainGame extends Component {
       $wordExampleTranslate: this.$root.find('#word-example-translate'),
       $wordMeaning: this.$root.find('#word-meaning'),
       $wordMeaningTranslate: this.$root.find('#word-meaning-translate'),
+      $cardFooter: this.$root.find('.card-footer'),
+      $volumeUp: this.$root.find('.fa-volume-up'),
+      $volumeMute: this.$root.find('.fa-volume-mute'),
+      $prevBtn: this.$root.find('.navigate-button.prev i'),
+      $nextBtn: this.$root.find('.navigate-button.next i'),
+      $studiedСardNum: this.$root.find('#studied-card-num'),
+      $progressBar: this.$root.find('.progress-bar'),
     };
-    // + buttons ?
-  }
 
-  // cangeWordElements() {
-  //   передаем след слово
-  //   this.elements = {
-  //     $wordDifficult: this.$root.find('#word-difficult'),
-  //     $wordImage: this.options.dataForApp.userCards[1],
-  //     $wordEn: this.$root.find('#word-en'),
-  //     $wordInput: this.$root.find('#word-input'),
-  //     $wordTranslate: this.$root.find('#word-translate'),
-  //     $wordTranscription: this.$root.find('#word-transcription'),
-  //     $wordExample: this.$root.find('#word-example'),
-  //     $wordExampleTranslate: this.$root.find('#word-example-translate'),
-  //     $wordMeaning: this.$root.find('#word-meaning'),
-  //     $wordMeaningTranslate: this.$root.find('#word-meaning-translate'),
-  //   };
-  // }
+    // учесть прогрессбар
+  }
 
   onClick(event) {
     const buttonName = $$(event.target).data.name;
 
     if (!buttonName) {
-      return false;
+      return;
     }
 
     switch (buttonName) {
       case 'prev-btn':
         console.log(buttonName);
-        // загрузка предыдушего слова cangeWordElements(word)
+        // загрузка предыдушего слова cangeCardElements(word)
+        this.changeCard(-1);
         break;
 
       case 'next-btn':
@@ -83,49 +75,61 @@ export default class MainGame extends Component {
       case 'again-btn':
         console.log(buttonName);
         // ручное уплавление алгоритмом - again
+        // пометка - слово повторить скоро - 1 мин?
+        this.changeCard();
         break;
 
       case 'hard-btn':
         console.log(buttonName);
         // ручное уплавление алгоритмом - hard
+        // пометка - слово повторить скоро - 10 мин?
+        this.changeCard();
         break;
 
       case 'good-btn':
         console.log(buttonName);
         // ручное уплавление алгоритмом - good
+        // пометка - слово повторить скоро - 1 день?
+        this.changeCard();
         break;
 
       case 'easy-btn':
         console.log(buttonName);
         // ручное уплавление алгоритмом - easy
+        // пометка - слово повторить скоро - 2 дня?
+        this.changeCard();
         break;
 
       case 'delete-btn':
         console.log(buttonName);
         // перенос слова в удаленные
-        // переход на след слово nextWord()
-        // айди слова - сохраняем персональную статистику
+        // убираем из карточек
+        // айди слова - сохраняем персональную? статистику - в удаленные
+        this.changeCard();
         break;
 
       case 'difficult-btn':
         console.log(buttonName);
         // перенос слова в сложные
-        // переход на след слово nextWord()
+        // убираем из карточек ?
+        // айди слова - сохраняем персональную? статистику - в удаленные
+        this.changeCard();
         break;
 
       case 'show-answer-btn':
         console.log(buttonName);
-        // заполняем инпут? или просто показываем
+        // заполняем инпут? или просто показываем скрытый спан
         // открываем скрытые слова в предложениях с примером и определением
         // showWordInSentence();
         // аудио
+        // переходим автоматом или пользователю нужно ввести слово?
         break;
 
       case 'volume-btn':
         console.log(buttonName);
         this.settingsOptional.autoSound = !this.settingsOptional.autoSound;
-        this.$root.find('.fa-volume-up').toggle('d-none');
-        this.$root.find('.fa-volume-mute').toggle('d-none');
+        this.elements.$volumeUp.toggle('d-none');
+        this.elements.$volumeMute.toggle('d-none');
         break;
 
       default:
@@ -138,7 +142,6 @@ export default class MainGame extends Component {
     const keyEnter = 'Enter';
 
     if (event.key === keyEnter) {
-      console.log('Enter');
       this.checkWord();
     }
   }
@@ -148,32 +151,42 @@ export default class MainGame extends Component {
     const currentWord = this.elements.$wordEn.text();
 
     // проверяем инпут на соответствие
+    // проверка на текущее изучаемое слово для листания
     if (inputText === currentWord) {
-      // если все ок - переход к след слову?
-      // открываем скрытые слова в предложениях с примером и определением
+      // отметка ок в статистике
+
+      // открываем скрытые слова в предложениях с примером и определением -
       // showWordInSentence();
-      // воспроизведение аудио в зависимости от настроек
+
+      // повялвение кнопок сложности (если настроены) +
+      if (this.settingsOptional.feedbackButtons) {
+        this.elements.$cardFooter.removeClass('invisible');
+      }
+      // воспроизведение аудио в зависимости от настроек +
       if (this.settingsOptional.autoSound) {
-        await this.speakText();
+        // await this.speakText();
       }
 
       // после аудио либо автоматом на след слово
-      // либо повялвение кнопок сложности (если настроены)
-      if (this.settingsOptional.feedbackButtons) {
-        this.$root.find('.card-footer').removeClass('none');
-      } else {
+      // либо ждем реакции через кнопки фидбэка, если они включены
+      if (this.settingsOptional.feedbackButtons) { // добавить !
         // переход на след карту
+        this.changeCard();
       }
+
       // через кнопки сложности переход на след слово
     } else {
+      // отметка не ок в статистике
       // если не соответствует - показываем ошибки
       // алгоритм показа ошибок
+      // показываем ответ как по кнопке "показать ответ"?
+      // или просто на время показываем слово в инпуте?
       console.log('не верно');
     }
   }
 
   async speakText() {
-    const currentCard = this.userCards[this.state.currentCard];
+    const currentCard = this.userCards[this.state.currentCardNum];
 
     await this.playAudio(currentCard.audio);
 
@@ -201,7 +214,53 @@ export default class MainGame extends Component {
     });
   }
 
+  changeCard(step = 1) {
+    console.log('change card');
+    const nextCandNum = this.state.currentCardNum + step;
+
+    if (nextCandNum < 0 || nextCandNum + 1 > this.settingsOptional.cardsPerDay) {
+      return;
+    }
+
+    if (nextCandNum === 0) {
+      this.elements.$prevBtn.addClass('arrow-disabled');
+    } else if (nextCandNum + 1 === this.settingsOptional.cardsPerDay) {
+      this.elements.$nextBtn.addClass('arrow-disabled');
+    } else {
+      this.elements.$prevBtn.removeClass('arrow-disabled');
+      this.elements.$nextBtn.removeClass('arrow-disabled');
+    }
+
+    this.elements.$cardFooter.addClass('invisible');
+
+    this.state.currentCardNum = nextCandNum;
+
+    if (nextCandNum > this.state.studiedСardNum) {
+      this.state.studiedСardNum = nextCandNum;
+      this.elements.$studiedСardNum.text(nextCandNum + 1);
+      const progressPercent = ((nextCandNum + 1) / this.settingsOptional.cardsPerDay) * 100;
+      this.elements.$progressBar.css({ width: `${progressPercent}%` });
+      // статистика?
+    }
+
+    const word = this.userCards[nextCandNum];
+    // из статистики берем
+    const wordDifficult = 0;
+
+    this.elements.$wordDifficult.text(wordDifficult);
+    this.elements.$wordImage.$el.src = `${FILE_URL}/${word.image}`;
+    // предзагрузка картинки следующей карты?
+    this.elements.$wordEn.text(word.word);
+    this.elements.$wordInput.text((nextCandNum === this.state.studiedСardNum ? '' : word.word));
+    this.elements.$wordTranslate.html(word.wordTranslate);
+    this.elements.$wordTranscription.html(word.transcription);
+    this.elements.$wordExample.html(word.textExample);
+    this.elements.$wordExampleTranslate.html(word.textExampleTranslate);
+    this.elements.$wordMeaning.html(word.textMeaning);
+    this.elements.$wordMeaningTranslate.html(word.textMeaningTranslate);
+  }
+
   toHTML() {
-    return createMainGameHTML(this.options).trim();
+    return createMainGameHTML(this.dataForApp).trim();
   }
 }

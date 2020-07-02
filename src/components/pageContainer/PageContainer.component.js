@@ -20,12 +20,18 @@ export default class PageContainer extends Component {
     this.$root = $root;
     this.pages = options.pages;
     this.component = options.startPage;
-    this.options = {
+    this.dataForApp = {
       settings: null,
       stats: null,
-      dataForApp: {
-        userCards: null,
+      userCards: null,
+      state: {
+        currentCardNum: 0,
+        studiedСardNum: 0,
       },
+    };
+
+    this.options = {
+      dataForApp: this.dataForApp,
       ...options,
     };
   }
@@ -109,8 +115,8 @@ export default class PageContainer extends Component {
   async initSettingsAndStats() {
     try {
       // переделать в promise.all
-      this.options.settings = await this.options.api.getSettings();
-      this.options.stats = await this.options.api.getStatistics();
+      this.dataForApp.settings = await this.options.api.getSettings();
+      this.dataForApp.stats = await this.options.api.getStatistics();
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -118,8 +124,8 @@ export default class PageContainer extends Component {
       } else if (error.message === '404') {
         // если настроек и статистики нету - устанавливаем стандартные
         // переделать в promise.all
-        this.options.settings = await this.options.api.updateSettings(BASE_SETTINGS);
-        this.options.stats = await this.options.api.updateStatistics(BASE_STATS);
+        this.dataForApp.settings = await this.options.api.updateSettings(BASE_SETTINGS);
+        this.dataForApp.stats = await this.options.api.updateStatistics(BASE_STATS);
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
@@ -132,7 +138,7 @@ export default class PageContainer extends Component {
       // преобразуем порядок слов? Составляем карточки? AggregatedWords
       const page = 0;
       const group = 0;
-      this.options.dataForApp.userCards = await this.options.api.getWords(page, group);
+      this.dataForApp.userCards = await this.options.api.getWords(page, group);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);

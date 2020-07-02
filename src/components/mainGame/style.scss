@@ -30,3 +30,8 @@
   visibility: hidden;
   pointer-events: none;
 }
+
+.arrow-disabled {
+  cursor: default !important;
+  opacity: 0.2;
+}
