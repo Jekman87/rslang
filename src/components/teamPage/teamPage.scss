@@ -1,0 +1,53 @@
+
+  .AboutTeam{
+    .card{
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
+    }
+    .team-img-avatar{
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
+    }
+    .team-img-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 0;
+      border: 10px solid rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 255, 255, 0.90);
+      opacity: 0;
+      transition: all 0.3s;
+      &:hover{
+        opacity: 1;
+      }
+    }
+  }
+
+  @media (min-width: 320px) {
+    .AboutTeam{
+      .display-4 {
+        font-size: 2rem;
+      }
+    } 
+  }
+  @media (min-width: 375px) {
+    .AboutTeam{
+      .display-4 {
+        font-size: 2.4rem;
+      }
+    } 
+  }
+  @media (min-width: 411px) {
+    .AboutTeam{
+      .display-4 {
+        font-size: 2.7rem;
+      }
+    } 
+  }
+  @media (min-width: 576px) {
+    .AboutTeam{
+      .display-4 {
+        font-size: 3.5rem;
+      }
+    } 
+  }
