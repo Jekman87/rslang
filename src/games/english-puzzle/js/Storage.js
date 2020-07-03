@@ -25,8 +25,8 @@ export default class Storage {
   }
 
   setUserData(data) {
-    this.pronounceHelp = data.pzlAutoplayHelp;
-    this.autoplayHelp = data.pzlPronounceHelp;
+    this.pronounceHelp = data.pzlPronounceHelp;
+    this.autoplayHelp = data.pzlAutoplayHelp;
     this.translateHelp = data.pzlTranslateHelp;
     this.visualHelp = data.pzlVisualHelp;
     this.lastRound = data.pzlLastRound;

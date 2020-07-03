@@ -18,11 +18,13 @@ export default class GameController {
     this.spinner = document.querySelector('div.spinner');
     this.popUp = document.querySelector('div.pop-up');
     this.resultsBlock = document.querySelector('div.results-block');
-    this.statTable = document.querySelector('table.statistics-table');
+    this.statBlock = document.querySelector('div.statistics-block');
   }
 
   init() {
+    window.addEventListener('resize', this.handleWindowResize.bind(this));
     document.addEventListener('newData', this.handleNewData.bind(this));
+    document.addEventListener('helperStatusChange', this.handleHelperStatusChange.bind(this));
 
     document.querySelector('button.check-pzl-btn').addEventListener('click', this.handlePositiveAnswer.bind(this));
     document.querySelector('button.give-up-pzl-btn').addEventListener('click', this.handleNegativeAnswer.bind(this));
@@ -50,7 +52,7 @@ export default class GameController {
     this.results = {};
     console.log('state', this.storage);
     this.switchElementsVisibility(false);
-    this.cleanSentenceConstructor();
+    this.cleanConstructionArea();
     await this.createPuzzles();
     this.fillHelpers();
     this.getAvailableWords();
@@ -71,6 +73,7 @@ export default class GameController {
       this.availableWords.classList.add('hidden');
       document.querySelector('div.answer-pzl-btn-group').classList.add('hidden');
       document.querySelector('div.next-round-block').classList.remove('hidden');
+      document.querySelector('div.sentences-list-wrapper').classList.add('sentences-list-wrapper_cut');
     } else {
       this.closePopUp();
       this.playBtn.classList.remove('invisible');
@@ -81,6 +84,7 @@ export default class GameController {
       document.querySelector('div.next-round-block').classList.add('hidden');
       document.querySelector('button.check-pzl-btn').textContent = 'Проверить';
       document.querySelector('button.give-up-pzl-btn').classList.remove('disabled');
+      document.querySelector('div.sentences-list-wrapper').classList.remove('sentences-list-wrapper_cut');
     }
   }
 
@@ -112,9 +116,32 @@ export default class GameController {
       this.translateHelp.classList.remove('visible');
     }
 
+    if (this.get('pronounceHelp') === 'off') {
+      this.playBtn.classList.add('disabled');
+    }
+
     this.audioHelp.src = data[this.sentenceIndex].audio;
     if (this.get('autoplayHelp') === 'on') {
       this.playAudio();
+    }
+
+    const words = [...this.sentenceList[this.sentenceIndex].children];
+    const isColored = this.get('visualHelp') === 'on';
+    this.currentWords = words.map((word) => {
+      const newWord = this.puzzleDrawer.cloneCanvas(word);
+      if (!isColored) newWord.classList.remove('word_colored');
+      return newWord;
+    });
+  }
+
+  handleHelperStatusChange(e) {
+    if (e.detail === 'pronounceHelp') {
+      this.playBtn.classList.toggle('disabled');
+    }
+    if (e.detail === 'visualHelp') {
+      this.currentWords.forEach((word) => word.classList.toggle('word_colored'));
+      [...this.sentenceConstructor.children].forEach((word) => word.classList.toggle('word_colored'));
+      [...this.availableWords.children].forEach((word) => word.classList.toggle('word_colored'));
     }
   }
 
@@ -127,25 +154,15 @@ export default class GameController {
     this.playBtn.classList.remove('play-pzl-btn_active');
   }
 
-  cleanSentenceConstructor() {
+  cleanConstructionArea() {
     this.sentenceConstructor.innerHTML = '';
+    this.availableWords.innerHTML = '';
   }
 
   getAvailableWords() {
-    const words = [...this.sentenceList[this.sentenceIndex].children];
+    const newWords = this.currentWords.map((word) => this.puzzleDrawer.cloneCanvas(word));
 
-    const newWords = words.map((word, i, arr) => {
-      const newWord = PuzzleDrawer.cloneCanvas(word);
-
-      if (i === arr.length - 1) {
-        newWord.classList.add('word_last');
-      }
-
-      return newWord;
-    });
-
-    const withPic = this.get('visualHelp') === 'on';
-    this.puzzleDrawer.drawSentence(newWords, this.sentenceIndex, withPic);
+    this.puzzleDrawer.drawSentence(newWords, this.sentenceIndex);
 
     GameController.shuffle(newWords);
 
@@ -217,23 +234,19 @@ export default class GameController {
 
   goToStart(e) {
     this.fillHelpers();
-    this.cleanSentenceConstructor();
+    this.cleanConstructionArea();
     this.getAvailableWords();
     e.target.textContent = 'Проверить';
   }
 
   showCorrect() {
-    this.cleanSentenceConstructor();
-    const words = [...this.sentenceList[this.sentenceIndex].children];
+    this.cleanConstructionArea();
 
-    words.forEach((word) => {
-      this.sentenceConstructor.append(PuzzleDrawer.cloneCanvas(word));
+    this.currentWords.forEach((word) => {
+      this.sentenceConstructor.append(this.puzzleDrawer.cloneCanvas(word));
     });
 
-    const withPic = this.get('visualHelp') === 'on';
-    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic);
-
-    this.availableWords.innerHTML = '';
+    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
   }
 
   static toggleHighLigth(list) {
@@ -247,6 +260,9 @@ export default class GameController {
     answers.forEach((word, i) => {
       if (Number(word.dataset.idx) !== i) {
         this.isCorrect = false;
+        word.classList.add('incorrect');
+      } else {
+        word.classList.add('correct');
       }
     });
 
@@ -275,8 +291,7 @@ export default class GameController {
   }
 
   showResult() {
-    const withPic = this.get('visualHelp') === 'on';
-    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex, withPic, true);
+    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
   }
 
   defineNextRound() {
@@ -321,7 +336,7 @@ export default class GameController {
   closePopUp() {
     this.popUp.classList.add('hidden');
     this.resultsBlock.classList.add('hidden');
-    this.statTable.classList.add('hidden');
+    this.statBlock.classList.add('hidden');
   }
 
   showRoundResults() {
@@ -332,7 +347,7 @@ export default class GameController {
 
   showStatistics() {
     this.fillStatistics();
-    this.statTable.classList.remove('hidden');
+    this.statBlock.classList.remove('hidden');
     this.popUp.classList.remove('hidden');
   }
 
@@ -380,7 +395,7 @@ export default class GameController {
         <td class="td">${score} / 10</td>
       </tr>`;
       rows.push(tr);
-      if (rows.length > 16) rows.length = 16;
+      if (rows.length > 26) rows.length = 26;
     });
     document.querySelector('table.statistics-table').innerHTML = rows.join('');
   }
@@ -397,6 +412,11 @@ export default class GameController {
       this.audioHelp.play();
       this.audioHelp.onended = () => e.target.classList.remove('play-pzl-btn_active');
     }
+  }
+
+  handleWindowResize() {
+    const restPuzzles = [this.sentenceConstructor, this.availableWords];
+    this.puzzleDrawer.resizePuzzles(this.sentenceIndex, this.currentWords, restPuzzles);
   }
 
   get(prop) {

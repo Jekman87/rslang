@@ -16,12 +16,17 @@ const template = `
             <span class="label">Уровень</span>
             <span class="select level-select select_closed">1</span>
             <ul class="levels"></ul>
+            <span class="select__control select__control_down">-</span>
+            <span class="select__control select__control_up">+</span>
           </div>
           <div class="rounds-block">
             <span class="label">Раунд</span>
             <span class="select round-select select_closed">1</span>
             <ul class="rounds"></ul>
+            <span class="select__control select__control_down">-</span>
+            <span class="select__control select__control_up">+</span>
           </div>
+          <button class="pzl-btn level-pzl-btn">Перейти</button>
         </div>
         <button class="pzl-btn logout-pzl-btn" title="logout"></button>
         <div class="help-pzl-btn-group">
@@ -33,18 +38,20 @@ const template = `
       </section>
       <section class="game-area">
         <button class="pzl-btn play-pzl-btn" title="play"></button>
-        <ul class="sentences-list">
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-          <li class="sentence"></li>
-        </ul>
+        <div class="sentences-list-wrapper">
+          <ul class="sentences-list">
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+            <li class="sentence"></li>
+          </ul>
+        </div>
         <p class="sentence-translate"></p>
         <div class="sentence-constructor"></div>
         <div class="available-words"></div>
@@ -67,13 +74,17 @@ const template = `
               <img class="painting-pic_small" src="start_page.jpg" alt="default picture">
               <figcaption class="painting-info_small">Default Picture</figcaption>
             </figure>
-            <p class="answers-label answers-label_incorrect">Я не знаю<span class="counter counter_incorrect"></span></p>
-            <ul class="answers-list answers-list_incorrect"></ul>
-            <p class="answers-label answers-label_correct">Я знаю<span class="counter counter_correct"></span></p>
-            <ul class="answers-list answers-list_correct"></ul>
+            <div class="scrolled-wrapper">
+              <p class="answers-label answers-label_incorrect">Я не знаю<span class="counter counter_incorrect"></span></p>
+              <ul class="answers-list answers-list_incorrect"></ul>
+              <p class="answers-label answers-label_correct">Я знаю<span class="counter counter_correct"></span></p>
+              <ul class="answers-list answers-list_correct"></ul>
+            </div>
           </div>
-          <table class="statistics-table hidden">
-          </table>
+          <div class="statistics-block hidden">
+            <table class="statistics-table">
+            </table>
+          </div>
           <button class="pzl-btn close-pzl-btn">Закрыть</button>
         </div>
       </section>

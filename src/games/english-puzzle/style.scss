@@ -1,15 +1,33 @@
 #pzl {
+  $font20: 1.25rem;
+  $font18: 1.125rem;
+  $font16: 1rem;
+  $font14: 0.875rem;
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     user-select: none;
+    font-size: $font20;
     font-family: "Montserrat", "Tahoma", sans-serif;
+    @media (max-width: 1023px) {
+      font-size: $font16;
+    }
   }
 
   .wrapper {
     margin: 0 auto;
     width: 80%;
+    @media (max-width: 1200px) {
+      width: 85%;
+    }
+    @media (max-width: 1023px) {
+      width: 90%;
+    }
+    @media (max-width: 767px) {
+      width: 100%;
+    }
   }
 
   .main {
@@ -25,6 +43,7 @@
     bottom: 0;
     right: 0;
     background: url(img/start_page.jpg) center no-repeat;
+    background-size: cover;
     z-index: 10;
   }
 
@@ -52,14 +71,27 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    @media (max-width: 767px) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 
   .selection-group {
     display: flex;
+    @media (max-width: 767px) {
+      flex-wrap: wrap;
+      width: 100%;
+      order: 1;
+    }
   }
 
   .label {
-    font-size: 1.25rem;
+    font-size: $font20;
+    @media (max-width: 767px) {
+      font-size: $font18;
+      width: 80px;
+    }
   }
 
   .levels-block,
@@ -67,6 +99,11 @@
     position: relative;
     display: flex;
     align-items: center;
+    @media (max-width: 767px) {
+      width: 100%;
+      justify-content: center;
+    }
+
   }
 
   .select {
@@ -75,8 +112,8 @@
     padding: 5px 15px 5px 8px;
     min-width: 40px;
     height: 40px;
-    font-size: 1.25rem;
-    line-height: 1.5rem;
+    font-size: $font20;
+    line-height: 26px;
     border: 2px solid lightblue;
     transition: all 0.3s linear;
     cursor: pointer;
@@ -104,6 +141,35 @@
         height: 0px;
       }
     }
+    @media (max-width: 767px) {
+      margin: 5px 15px;
+      padding: 0px;
+      min-width: 35px;
+      height: 35px;
+      font-size: $font18;
+      line-height: 33px;
+      text-align: center;
+      pointer-events: none;
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .select__control {
+    display: none;
+    @media (max-width: 767px) {
+      display: inline-block;
+      margin: 5px;
+      width: 35px;
+      height: 35px;
+      font-size: 1.8rem;
+      line-height: 29px;
+      text-align: center;
+      color: lightblue;
+      border: 2px solid lightblue;
+      cursor: pointer;
+    }
   }
 
   .levels,
@@ -121,6 +187,9 @@
     overflow: hidden;
     transition: all 0.5s linear;
     z-index: 5;
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
 
   .levels {
@@ -133,7 +202,7 @@
     width: 38px;
     height: 38px;
     line-height: 34px;
-    font-size: 1.25rem;
+    font-size: $font20;
     color: lightblue;
     text-align: center;
     border: 1px solid lightblue;
@@ -157,8 +226,7 @@
 
   .pzl-btn {
     margin: 15px;
-    height: 40px;
-    font-size: 1.25rem;
+    min-height: 40px;
     border: 2px solid lightblue;
     background: none;
     outline: none;
@@ -170,12 +238,26 @@
     &_off {
       opacity: 0.3;
     }
+    @media (max-width: 767px) {
+      margin: 10px;
+      min-height: 35px;
+    }
   }
+
+  @media (pointer:coarse) {
+    .pzl-btn:hover {
+      box-shadow: none;
+    }
+  }
+
 
   .help-pzl-btn {
     width: 40px;
     border: 2px solid black;
     border-radius: 4px;
+    @media (max-width: 767px) {
+      width: 35px;
+    }
   }
 
   .autoplay-pzl-btn {
@@ -204,6 +286,19 @@
     border-radius: 50%;
     background: url(img/logout.svg) center no-repeat;
     background-size: 120%;
+    @media (max-width: 767px) {
+      margin: 15px calc(50% - 20px) 5px;
+      width: 35px;
+      order: -1;
+    }
+  }
+
+  .level-pzl-btn {
+    display: none;
+    @media (max-width: 767px) {
+      display: inline-block;
+      margin-left: calc(50% - 75px);
+    }
   }
 
   // GAME
@@ -229,6 +324,10 @@
     &_active {
       background-image: url(img/music.svg);
       animation: play 0.6s linear infinite;
+    }
+    @media (max-width: 767px) {
+      width: 33px;
+      height: 33px;
     }
   }
 
@@ -262,7 +361,23 @@
   .sentences-list {
     width: 801px;
     font-size: 0;
+    @media (max-width: 1023px) {
+      width: 623px;
+    }
+  }
+
+  .sentences-list-wrapper {
     outline: 1px solid black;
+    @media (max-width: 767px) {
+      max-width: 95%;
+      overflow-y: auto;
+    }
+  }
+
+  .sentences-list-wrapper_cut {
+    @media (max-width: 640px) {
+      height: calc(95vw / 1.78);
+    }
   }
 
   .sentence {
@@ -301,11 +416,21 @@
     width: 30px;
     height: 30px;
     text-align: center;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
+    font-size: $font18;
+    line-height: 28px;
     background-color: rgba(255, 127, 80, 0.5);
     border: 1px solid black;
     border-radius: 50%;
+    @media (max-width: 1023px) {
+      left: -30px;
+      width: 25px;
+      height: 25px;
+      font-size: $font14;
+      line-height: 25px;
+    }
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
 
   .sentence__num_correct,
@@ -345,8 +470,8 @@
   }
 
   .sentence-translate {
-    width: 100%;
-    font-size: 1.25rem;
+    width: 95%;
+    text-align: center;
     opacity: 0;
     animation: none;
   }
@@ -358,6 +483,15 @@
     border: 2px solid black;
     background-color: #90ccf4;
     border-radius: 5px;
+    @media (max-width: 1023px) {
+      min-height: 40px;
+    }
+    @media (max-width: 767px) {
+      flex-wrap: nowrap;
+      justify-content: start;
+      max-width: 95%;
+      overflow-y: auto;
+    }
   }
 
 
@@ -379,12 +513,12 @@
   }
 
   .available-words {
-    width: 100%;
-    height: 40px;
+    width: 95%;
+    min-height: 40px;
   }
 
   .next-round-block {
-    margin-top: 90px;
+    margin: 50px 0 40px;
     width: 100%;
   }
 
@@ -399,15 +533,19 @@
 
   .answer-pzl-btn-group {
     justify-content: space-around;
-    margin-top: 50px;
+    margin-top: 20px;
     width: 45%;
+    @media (max-width: 1023px) {
+      width: 60%;
+    }
   }
 
+  .level-pzl-btn,
   .answer-pzl-btn,
   .next__pzl-btn,
   .close-pzl-btn {
     width: 150px;
-    font-size: 1.25rem;
+    color: lightblue;
   }
 
   .check-pzl-btn {
@@ -429,24 +567,40 @@
 
   .painting-block,
   .pop-up {
-    display: flex;
     position: absolute;
     top: 74px;
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    width: 801px;
+    height: 441px;
     animation: show 1s linear;
+    @media (max-width: 1023px) {
+      width: 623px;
+      height: 341px;
+    }
+    @media (max-width: 767px) {
+      top: 65px;
+      max-width: 95%;
+    }
+  }
+
+  .painting-block {
+    @media (max-width: 640px) {
+      max-width: 95%;
+      height: calc(95vw / 1.78);
+    }
   }
 
   .painting-pic {
-    width: 801px;
-    height: 441px;
+    width: 100%;
+    height: 100%;
   }
 
   .painting-info,
   .painting-info_small {
     margin: 20px 0;
     width: 100%;
-    font-size: 1.25rem;
     text-align: center;
   }
 
@@ -459,10 +613,17 @@
     align-items: center;
     padding: 20px 10%;
     width: calc(800px + 5%);
-    min-height: 720px;
+    height: 680px;
     background-color: #fff;
     border: 1px solid black;
     box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.7);
+    @media (max-width: 1023px) {
+      width: calc(623px + 5%);
+      min-height: 630px;
+    }
+    @media (max-width: 767px) {
+      max-width: 95%;
+    }
   }
 
   .painting-pic_small {
@@ -471,22 +632,40 @@
   }
 
   .painting-info_small {
-    font-size: 1.125rem;
+    font-size: $font18;
+    @media (max-width: 1023px) {
+      font-size: $font14;
+    }
   }
 
-  .results-block {
+  .results-block,
+  .statistics-block {
     width: 100%;
+  }
+
+  .statistics-block {
+    overflow: auto;
+  }
+
+  .scrolled-wrapper {
+    overflow-y: scroll;
+    height: 380px;
+    @media (max-width: 1023px) {
+      height: 340px;
+    }
   }
 
   .answers-label {
     margin: 15px;
-    font-size: 1.25rem;
   }
 
   .counter {
     position: static;
     display: inline-block;
     margin-left: 5px;
+    @media (max-width: 767px) {
+      display: inline-block;
+    }
   }
 
   .answers-list {
@@ -496,7 +675,10 @@
   .answer-list__item {
     position: relative;
     padding: 5px 0px 5px 40px;
-    font-size: 1.125rem;
+    font-size: $font18;
+    @media (max-width: 1023px) {
+      font-size: $font14;
+    }
   }
 
   .play-pzl-btn_small {
@@ -511,7 +693,7 @@
 
   .statistics-table {
     width: 100%;
-    font-size: 1.25rem;
+    min-width: 420px;
   }
 
   .table-caption{
@@ -521,6 +703,9 @@
     color: black;
     caption-side: top;
     text-align: center;
+    @media (max-width: 1023px) {
+      font-size: $font20;
+    }
   }
 
   .th, .td {
@@ -544,7 +729,6 @@
     padding: 5px;
     width: 300px;
     color: #e94348;
-    font-size: 1.25rem;
     font-weight: 400;
     text-transform: none;
     text-align: center;

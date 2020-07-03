@@ -55,7 +55,7 @@ export default class Dragger {
     this.prevEl = e.target.previousElementSibling;
     this.parentEl = e.target.parentElement;
 
-    this.shiftX = e.clientX - this.target.getBoundingClientRect().left - 22;
+    this.shiftX = e.clientX - this.target.getBoundingClientRect().left;
     this.shiftY = e.clientY - this.target.getBoundingClientRect().top;
   }
 

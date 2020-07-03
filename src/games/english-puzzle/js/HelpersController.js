@@ -3,12 +3,11 @@ export default class HelpersController {
     this.storage = storage;
     this.helpersBlock = document.querySelector('div.help-pzl-btn-group');
     this.helpers = [...this.helpersBlock.children];
-    this.playBtn = document.querySelector('button.play-pzl-btn');
   }
 
   init() {
     this.helpersBlock.addEventListener('click', this.changeHelperStatus.bind(this));
-    document.addEventListener('newData', this.showHelpersStatus.bind(this));
+    document.addEventListener('newData', this.displayHelpersStatus.bind(this));
   }
 
   changeHelperStatus(e) {
@@ -22,30 +21,14 @@ export default class HelpersController {
       this.set(`${e.target.dataset.type}`, 'on');
     }
 
-    this.changePlayBtnStatus(e);
     document.dispatchEvent(new CustomEvent('userDataChange'));
-  }
-
-  showHelpersStatus() {
-    this.displayHelpersStatus();
-    this.dislayPlayBtnStatus();
+    document.dispatchEvent(new CustomEvent('helperStatusChange', { detail: e.target.dataset.type }));
   }
 
   displayHelpersStatus() {
     this.helpers.forEach((el) => {
       if (this.get(el.dataset.type) === 'off') el.classList.add('pzl-btn_off');
     });
-  }
-
-  dislayPlayBtnStatus() {
-    if (this.get('pronounceHelp') === 'off') {
-      this.playBtn.classList.add('disabled');
-    }
-  }
-
-  changePlayBtnStatus(e) {
-    if (e.target.dataset.type !== 'pronounceHelp') return;
-    this.playBtn.classList.toggle('disabled');
   }
 
   get(prop) {
