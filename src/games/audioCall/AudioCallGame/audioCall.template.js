@@ -53,19 +53,19 @@ export default function createAudioCall() {
   <div class="row group-list-row">
     <div class="col">
       <div class="btn-group w-100" role="group" aria-label="">
-        <button type="button" class="btn btn-outline-light mr-5 ml-5">
+        <button type="button" class="btn btn-outline-light mr-5 ml-5 btn-word">
           <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
-        <button type="button" class="btn btn-outline-light mr-5">
+        <button type="button" class="btn btn-outline-light mr-5 btn-word">
           <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
-        <button type="button" class="btn btn-outline-light mr-5">
+        <button type="button" class="btn btn-outline-light mr-5 btn-word">
           <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
-        <button type="button" class="btn btn-outline-light mr-5">
+        <button type="button" class="btn btn-outline-light mr-5 btn-word">
           <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
-        <button type="button" class="btn btn-outline-light mr-5">
+        <button type="button" class="btn btn-outline-light mr-5 btn-word">
           <span class="mr-2 round-word-number"></span> <span class="round-word"></span>
         </button>
       </div>

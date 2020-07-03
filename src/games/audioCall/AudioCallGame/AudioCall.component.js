@@ -1,14 +1,17 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable max-len */
 import $$ from '../../../core/domManipulation';
 import createAudioCall from './audioCall.template';
 import getRoundWords from './asyncGetRoundWords';
-import { setRoundWord, setAnswerAttribute, crossTheWord } from './utils';
-
-// ПЕРЕНЕСТИ В ПАПКУ ИГРЫ
+import { setRoundWord, setAnswerAttribute, crossTheWord, onArrows } from './utils';
 
 export default class AudioCall {
   constructor() {
     this.audioCallWrapper = $$.create('div', 'container-fluid').$el;
     this.audioCallWrapper.classList.add('audio-call-wrapper');
+
+    document.body.setAttribute('tabindex', '0');
+
     this.audioCallWrapper.insertAdjacentHTML('afterbegin', createAudioCall());
 
     this.app = document.getElementById('app');
@@ -16,6 +19,7 @@ export default class AudioCall {
     this.gameSound = true;
 
     this.onClick = this.onClick.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
     // this.render = this.render.bind(this);
   }
 
@@ -23,6 +27,7 @@ export default class AudioCall {
     const roundWordsArr = await getRoundWords();
     this.spanRoundWords = document.querySelectorAll('.round-word');
     this.spanRoundWordsNumbers = document.querySelectorAll('.round-word-number');
+    this.btnsRoundWords = document.querySelectorAll('.btn-word');
 
     this.questionCol.classList.remove('d-none');
     this.answerCol.classList.add('d-none');
@@ -59,24 +64,26 @@ export default class AudioCall {
   }
 
   playWinSound() {
-    const audio = new Audio();
-    audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/pew.mp3';
-    audio.play().catch((err) => console.log(err));
+    // const audio = new Audio();
+    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/pew.mp3';
+    // audio.play().catch((err) => console.log(err));
   }
 
   playWrongSound() {
-    const audio = new Audio();
-    audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/wrong.mp3';
-    audio.play().catch((err) => console.log(err));
+    // const audio = new Audio();
+    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/wrong.mp3';
+    // audio.play().catch((err) => console.log(err));
   }
 
   onRightAnswer() {
-    // ИЗМЕНЕНИЕ ФОНА
     this.questionCol.classList.add('d-none');
     this.answerCol.classList.remove('d-none');
 
     this.progressBar.setAttribute('aria-valuenow', this.progress);
     this.progressBar.style.width = `${this.progress}0%`;
+
+    this.audioCallWrapper.style.backgroundImage = `linear-gradient(90deg, rgba(111, 108, 157, 0.7) 0%, rgba(79, 138, 185, 0.7) ${this.progress}0%, rgb(164, 207, 216) 100%)`;
+
     this.btnDontKnow.classList.add('d-none');
     this.btnNext.classList.remove('d-none');
 
@@ -143,9 +150,55 @@ export default class AudioCall {
     }
   }
 
+  onKeyUp(event) {
+    const { code } = event;
+
+    switch (code) {
+      case 'Enter':
+        if (document.activeElement.getAttribute('data-answer') === 'false') {
+          if (this.gameSound) {
+            this.playWrongSound();
+          }
+          console.log(document.activeElement);
+          crossTheWord(document.activeElement);
+          this.onRightAnswer();
+          document.activeElement.blur();
+        } else if (document.activeElement.getAttribute('data-answer') === 'true') {
+          if (this.gameSound) {
+            this.playWinSound();
+          }
+          this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
+          this.onRightAnswer();
+          document.activeElement.blur();
+        } else if (!this.btnNext.classList.contains('d-none')) {
+          if (this.progress < 10) {
+            this.fillRoundWords();
+          } else alert('the end');
+        }
+        break;
+      case 'ArrowUp':
+      case 'ArrowDown':
+        this.btnsRoundWords[0].focus();
+        break;
+      case 'ArrowLeft':
+        if (document.activeElement.tagName === 'BODY') {
+          this.btnsRoundWords[0].focus();
+        } else onArrows('left');
+        break;
+      case 'ArrowRight':
+        if (document.activeElement.tagName === 'BODY') {
+          this.btnsRoundWords[0].focus();
+        } else onArrows('right');
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     this.app.append(this.audioCallWrapper);
     this.audioCallWrapper.addEventListener('click', this.onClick);
+    document.body.addEventListener('keyup', this.onKeyUp);
 
     this.progressBar = document.querySelector('.progress-bar');
     this.btnRepeat = document.querySelectorAll('.btn-repeat');
@@ -162,5 +215,6 @@ export default class AudioCall {
   destroy() {
     document.getElementById('app').innerHTML = '';
     this.audioCallWrapper.removeEventListener('click', this.onClick);
+    document.body.removeEventListener('keyup', this.onKeyUp);
   }
 }

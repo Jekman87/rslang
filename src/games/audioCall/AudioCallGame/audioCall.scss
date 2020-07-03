@@ -1,10 +1,12 @@
 .audio-call-wrapper {
-  height: 100vh;
-  background-image: linear-gradient(to top, #a7a6cb 0%, #8989ba 100%);
+  height: 100%;
+  // background-image: linear-gradient(to top, #a7a6cb 0%, #8989ba 100%);
+  background: rgb(111, 108, 157);
+  background: linear-gradient(90deg, rgba(111, 108, 157, 0.7) 0%, rgba(79, 138, 185, 0.7) 0%, rgb(164, 207, 216) 100%);
 
   .btn:active,
   .btn:focus {
-    box-shadow: none;
+    // box-shadow: none;
   }
 
   .progress-bar {
@@ -29,6 +31,10 @@
       background: transparent;
       color: white;
     }
+  }
+
+  .btn-group button:focus {
+    // background: #ffffff2a;
   }
 }
 
@@ -57,9 +63,10 @@ i {
 .btn-repeat {
   background-color: #ffffff2a;
   border-radius: 75px;
+  padding: 10%;
 
   i {
-    padding: 27%;
+    // padding: 20%;
   }
 }
 

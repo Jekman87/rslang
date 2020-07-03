@@ -9,22 +9,21 @@ import './plugins/fontawesome/index';
 // import './core/Observer';
 // import './core/utils';
 
-// import { Authorization, checkTokenValidity }
-//  from './components/Authorization/authorization.index';
+// import { Authorization } from './components/Authorization/authorization.index';
 
 // console.log('Help me!');
 
 // if (!checkTokenValidity()) {
-//   const authorization = new Authorization();
-//   authorization.render();
+// const authorization = new Authorization();
+// authorization.render();
 // }
 
-// import StartPage from './components/AudioCall/index';
+import { StartPage } from './games/audioCall/index';
 
-// const startPage = new StartPage();
-// startPage.render();
+const startPage = new StartPage();
+startPage.render();
 
-import { AudioCall } from './components/AudioCall/index';
+// import { AudioCall } from './components/AudioCall/index';
 
-const audioCall = new AudioCall();
-audioCall.render();
+// const audioCall = new AudioCall();
+// audioCall.render();
