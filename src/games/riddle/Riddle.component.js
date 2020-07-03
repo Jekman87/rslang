@@ -6,7 +6,7 @@ import {
   hideIntroScreen, hideTwoWrongAnswers,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields, click,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput,
+  compareAnswers, moveAnswerIntoInput, passHandler,
 } from './riddle.functions';
 
 export default class Riddle extends Component {
@@ -56,8 +56,17 @@ export default class Riddle extends Component {
       case 'check':
         compareAnswers();
         break;
+      case 'pass':
+        passHandler();
+        break;
       case 'remove-wrong':
         hideTwoWrongAnswers();
+        break;
+      case 'statistic':
+        document.querySelector('.statistic-screen').style.display = 'flex';
+        break;
+      case 'return':
+        document.querySelector('.statistic-screen').style.display = 'none';
         break;
       case 'home':
         location.reload(true);

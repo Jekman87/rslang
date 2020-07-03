@@ -5,7 +5,51 @@ const state = {
   riddleText: '',
   riddleTranslate: '',
   riddleOptions: '',
+  levelStatistic: [0, 0, 0, 0, 0, 0],
 };
+
+function rememberLevelStatistic() {
+  const level = +document.querySelector('.input-level').value - 1;
+  console.log(level);
+  console.log(state.levelStatistic);
+  state.levelStatistic[level] += 1;
+  console.log(state.levelStatistic);
+}
+
+function rewriteLevelStatistic() {
+  /* document.querySelector('.lvl-1').style.width = `${((state.levelStatistic[0] / 90) * 100)}%`;
+  document.querySelector('.lvl-2').style.width = `${((state.levelStatistic[1] / 90) * 100)}%`;
+  document.querySelector('.lvl-3').style.width = `${((state.levelStatistic[2] / 90) * 100)}%`;
+  document.querySelector('.lvl-4').style.width = `${((state.levelStatistic[3] / 90) * 100)}%`;
+  document.querySelector('.lvl-5').style.width = `${((state.levelStatistic[4] / 90) * 100)}%`;
+  document.querySelector('.lvl-6').style.width = `${((state.levelStatistic[5] / 90) * 100)}%`;
+
+  document.querySelector('.points-1').textContent = `${state.levelStatistic[0]}/15`;
+  document.querySelector('.points-2').textContent = `${state.levelStatistic[1]}/15`;
+  document.querySelector('.points-3').textContent = `${state.levelStatistic[2]}/15`;
+  document.querySelector('.points-4').textContent = `${state.levelStatistic[3]}/15`;
+  document.querySelector('.points-5').textContent = `${state.levelStatistic[4]}/15`;
+  document.querySelector('.points-6').textContent = `${state.levelStatistic[5]}/15`;
+
+  document.querySelector('.percent-1').textContent =
+  `${Math.floor((state.levelStatistic[0] / 15) * 10000) / 100}%`;
+  document.querySelector('.percent-2').textContent =
+  `${Math.floor((state.levelStatistic[1] / 15) * 10000) / 100}%`;
+  document.querySelector('.percent-3').textContent =
+  `${Math.floor((state.levelStatistic[2] / 15) * 10000) / 100}%`;
+  document.querySelector('.percent-4').textContent =
+  `${Math.floor((state.levelStatistic[3] / 15) * 10000) / 100}%`;
+  document.querySelector('.percent-5').textContent =
+  `${Math.floor((state.levelStatistic[4] / 15) * 10000) / 100}%`;
+  document.querySelector('.percent-6').textContent =
+  `${Math.floor((state.levelStatistic[5] / 15) * 10000) / 100}%`; */
+
+  for (let i = 0; i < 6; i += 1) {
+    document.querySelector(`.lvl-${i + 1}`).style.width = `${((state.levelStatistic[i] / 90) * 100)}%`;
+    document.querySelector(`.points-${i + 1}`).textContent = `${state.levelStatistic[i]}/15`;
+    document.querySelector(`.percent-${i + 1}`).textContent = `${Math.floor((state.levelStatistic[i] / 15) * 10000) / 100}%`;
+  }
+}
 
 function hideIntro() {
   document.querySelector('.riddle__intro').style.display = 'none';
@@ -140,6 +184,8 @@ function compareAnswers() {
     playCorrectAudio();
     markAnswer(true);
     upLevel();
+    rememberLevelStatistic();
+    rewriteLevelStatistic();
   } else {
     playWrongAudio();
     markAnswer(false);
@@ -176,9 +222,15 @@ function showOrHideOptionsPrompt() {
   document.querySelector('.answer-blocks').classList.toggle('hide-prompt');
 }
 
+function passHandler() {
+  document.querySelector('.pass-voice').play().catch(() => true);
+  markAnswer();
+  upLevel();
+}
+
 export {
   hideIntroScreen, hideTwoWrongAnswers,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields, click,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput,
+  compareAnswers, moveAnswerIntoInput, passHandler,
 };

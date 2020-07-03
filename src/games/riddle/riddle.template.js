@@ -63,7 +63,7 @@ export default function createGameField() {
             <input class="answer-input" type="text" placeholder="Введите ваш вариант ответа здесь..." name="search-area"
               autocomplete="off">
             <button type="button" class="btn btn-outline-success button" data-click="check">Проверить ответ</button>
-            <button type="button" class="btn btn-outline-success button" data-click="check">Не знаю</button>
+            <button type="button" class="btn btn-outline-success button" data-click="pass">Не знаю</button>
           </form>
 
           <div class="answer-blocks hide-prompt">
@@ -78,7 +78,67 @@ export default function createGameField() {
       </div>
     </div>
 
+    <div class="statistic-screen">
+      <div class="statistic-blocks">
+
+        <div class="points-result">Общая статистика</div>
+
+        <div class="progress">
+        <div class="progress-bar lvl-1" role="progressbar"></div>
+        <div class="progress-bar lvl-2" role="progressbar"></div>
+        <div class="progress-bar lvl-3" role="progressbar"></div>
+        <div class="progress-bar lvl-4" role="progressbar"></div>
+        <div class="progress-bar lvl-5" role="progressbar"></div>
+        <div class="progress-bar lvl-6" role="progressbar"></div>
+      </div>
+
+        <div class="level-info level-1">
+          <span>Уровень - 1:</span>
+          <span class="answers-progress points-1">0/15</span>
+          <span class="answers-progress percent-1">(0%)</span>
+        </div>
+
+        <div class="level-info level-2">
+          <span>Уровень - 2:</span>
+          <span class="answers-progress points-2">0/15</span>
+          <span class="answers-progress percent-2">(0%)</span>
+        </div>
+
+        <div class="level-info level-3">
+          <span>Уровень - 3:</span>
+          <span class="answers-progress points-3">0/15</span>
+          <span class="answers-progress percent-3">(0%)</span>
+        </div>
+
+        <div class="level-info level-4">
+          <span>Уровень - 4:</span>
+          <span class="answers-progress points-4">0/15</span>
+          <span class="answers-progress percent-4">(0%)</span>
+        </div>
+
+        <div class="level-info level-5">
+          <span>Уровень - 5:</span>
+          <span class="answers-progress points-5">0/15</span>
+          <span class="answers-progress percent-5">(0%)</span>
+        </div>
+
+        <div class="level-info level-6">
+          <span>Уровень - 6:</span>
+          <span class="answers-progress points-6">0/15</span>
+          <span class="answers-progress percent-6">(0%)</span>
+        </div>
+
+        <div class='statistic-buttons'>
+          <button class="btn btn-success statistic-button" data-click="return">Вернуться к игре</button>
+          <button class="btn btn-success statistic-button" data-click="correct-answers">Отгадано</button>
+          <button class="btn btn-success statistic-button" data-click="wrong-answers">Не отгадано</button>
+          <button class="btn btn-danger statistic-button" data-click="wrong-answers">Очистить статистику</button>
+        </div>
+      </div>
+    </div>
+
     <audio class="correct-voice" src="assets/voices/pew.mp3"></audio>
     <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
+    <audio class="pass-voice" src="assets/voices/pass.mp3"></audio>
   `;
 }
