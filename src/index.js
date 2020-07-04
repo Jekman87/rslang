@@ -18,8 +18,11 @@ let api;
 let startPage;
 
 if (userLog) {
-  const { userId, currentToken } = userLog;
-  api = new Api(userId, currentToken);
+  const {
+    userId, userName, currentToken, refreshToken,
+  } = userLog;
+
+  api = new Api(userId, userName, currentToken, refreshToken);
   startPage = MainPage.className;
 } else {
   api = new Api();

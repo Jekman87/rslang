@@ -69,7 +69,9 @@ export default class PageContainer extends Component {
       this.emit('hideHeader');
 
       storage('userId', null);
+      storage('userName', null);
       storage('currentToken', null);
+      storage('refreshToken', null);
       storage('tokenExpiresIn', null);
       storage('currentPage', null);
 
@@ -145,6 +147,11 @@ export default class PageContainer extends Component {
       const page = 0;
       const group = 0;
       this.dataForApp.userCards = await this.options.api.getWords(page, group);
+      console.log(this.dataForApp.userCards);
+
+      const filter = '{"$and":[{"userWord.difficulty":"hard"},{"userWord":{"$exists":true}}]}';
+      const test = await this.options.api.getAllUserAggregatedWords(null, 1);
+      console.log(test);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);

@@ -1,9 +1,11 @@
 import { BASE_URL } from '../constants/constants';
 
 export default class Api {
-  constructor(userId, token) {
+  constructor(userId, userName, token, refreshToken) {
     this.userId = userId;
+    this.userName = userName;
     this.token = token;
+    this.refreshToken = refreshToken;
   }
 
   // Sign in
@@ -24,7 +26,9 @@ export default class Api {
     const content = await rawResponse.json();
 
     this.userId = content.userId;
+    this.userName = content.name;
     this.token = content.token;
+    this.refreshToken = content.refreshToken;
 
     return content;
   }
@@ -74,8 +78,14 @@ export default class Api {
     return content;
   }
 
-  async getWordById(wordId) {
-    const rawResponse = await fetch(`${BASE_URL}/words/${wordId}`, {
+  async getWordById(wordId, noAssets = true) {
+    let url = `${BASE_URL}/words/${wordId}`;
+
+    if (noAssets !== null) {
+      url += `?noAssets=${noAssets}`;
+    }
+
+    const rawResponse = await fetch(url, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -159,6 +169,27 @@ export default class Api {
     });
 
     return rawResponse.status;
+  }
+
+  async getNewTokens() {
+    const rawResponse = await fetch(`${BASE_URL}/users/${this.userId}/tokens`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.refreshToken}`,
+        Accept: 'application/json',
+      },
+    });
+
+    if (rawResponse.status !== 200) {
+      throw new Error(rawResponse.status);
+    }
+
+    const content = await rawResponse.json();
+
+    this.token = content.token;
+    this.refreshToken = content.refreshToken;
+
+    return content;
   }
 
   // Users/Words methods
@@ -256,8 +287,14 @@ export default class Api {
   // filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}';
   async getAllUserAggregatedWords(group, wordsPerPage, filter) {
     let url = `${BASE_URL}/users/${this.userId}/aggregatedWords?`;
-    const encodedFilter = encodeURIComponent(filter);
-    url += `group=${group}&wordsPerPage=${wordsPerPage}&filter=${encodedFilter}`;
+
+    if (group) url += `group=${group}`;
+    if (wordsPerPage) url += `&wordsPerPage=${wordsPerPage}`;
+
+    if (filter) {
+      const encodedFilter = encodeURIComponent(filter);
+      url += `&filter=${encodedFilter}`;
+    }
 
     const rawResponse = await fetch(url, {
       method: 'GET',

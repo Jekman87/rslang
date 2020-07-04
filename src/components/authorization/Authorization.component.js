@@ -35,13 +35,14 @@ export default class Authorization extends Component {
 
   async onSubmitRegisterForm(event) {
     event.preventDefault();
-    clearLogin();
 
-    const user = document.getElementById('registerName').value;
+    // взять из поля юзернейм
+    const userName = 'Julia\'s cat';
+    const userEmail = document.getElementById('registerName').value;
     const password = document.getElementById('registerPassword').value;
 
     try {
-      const userData = { email: `${user}`, password: `${password}` };
+      const userData = { name: `${userName}`, email: `${userEmail}`, password: `${password}` };
 
       await this.api.createUser(userData);
       const loginUserResponse = await this.api.loginUser(userData);
@@ -49,8 +50,10 @@ export default class Authorization extends Component {
       const now = new Date();
       const tokenExpiresIn = now.setHours(now.getHours() + 4);
 
-      storage('currentToken', loginUserResponse.token);
       storage('userId', loginUserResponse.userId);
+      storage('userName', loginUserResponse.name);
+      storage('currentToken', loginUserResponse.token);
+      storage('refreshToken', loginUserResponse.refreshToken);
       storage('tokenExpiresIn', tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
@@ -62,7 +65,6 @@ export default class Authorization extends Component {
 
   async onSubmitLoginForm(event) {
     event.preventDefault();
-    clearRegister();
 
     document.querySelector('.alert-error-login').classList.add('d-none');
 
@@ -78,8 +80,10 @@ export default class Authorization extends Component {
       const now = new Date();
       const tokenExpiresIn = now.setHours(now.getHours() + 4);
 
-      storage('currentToken', loginUserResponse.token);
       storage('userId', loginUserResponse.userId);
+      storage('userName', loginUserResponse.name);
+      storage('currentToken', loginUserResponse.token);
+      storage('refreshToken', loginUserResponse.refreshToken);
       storage('tokenExpiresIn', tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
@@ -118,7 +122,9 @@ export default class Authorization extends Component {
 
   static checkTokenValidity() {
     const userId = storage('userId');
+    const userName = storage('userName');
     const currentToken = storage('currentToken');
+    const refreshToken = storage('refreshToken');
     const currentPage = storage('currentPage');
     const tokenExpiresIn = Number(storage('tokenExpiresIn'));
 
@@ -126,6 +132,8 @@ export default class Authorization extends Component {
       return false;
     }
 
-    return { userId, currentToken, currentPage };
+    return {
+      userId, userName, currentToken, refreshToken, currentPage,
+    };
   }
 }
