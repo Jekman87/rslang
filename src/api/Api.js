@@ -152,6 +152,8 @@ export default class Api {
     }
 
     const content = await rawResponse.json();
+    this.userName = content.name;
+
     return content;
   }
 
@@ -188,7 +190,6 @@ export default class Api {
 
     this.token = content.token;
     this.refreshToken = content.refreshToken;
-
     return content;
   }
 

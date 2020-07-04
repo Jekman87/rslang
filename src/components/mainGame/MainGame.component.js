@@ -16,18 +16,20 @@ export default class MainGame extends Component {
       ...options,
     });
 
+    this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
     this.userCards = this.dataForApp.userCards;
     this.state = this.dataForApp.state;
     this.elements = null;
-    console.log('MainGame this.options', options);
     this.audio = new Audio();
+    console.log('MainGame this.options', options);
   }
 
   init() {
     super.init();
     this.getCardElements();
+    this.elements.$wordInput.$el.focus();
     // subscribes
   }
 
@@ -53,7 +55,7 @@ export default class MainGame extends Component {
     };
   }
 
-  onClick(event) {
+  async onClick(event) {
     const buttonName = $$(event.target).data.name;
 
     if (!buttonName) {
@@ -109,7 +111,10 @@ export default class MainGame extends Component {
         // убираем из карточек
         // айди слова - сохраняем персональную? статистику - в удаленные
         // переход на след карту
-        this.changeCard(1);
+
+        this.options.pages.Authorization.clearStorage();
+        console.log('clearStorage');
+        // this.changeCard(1);
         break;
 
       case 'difficult-btn':
@@ -117,7 +122,10 @@ export default class MainGame extends Component {
         // убираем из карточек ?
         // айди слова - сохраняем персональную? статистику - в сложные
         // переход на след карту
-        this.changeCard(1);
+        const userData = { name: 'Super Vasia36', email: 'vasia13@mail.ru', password: 'Puzzle123!' };
+        const loginUserResponse = await this.options.api.updateUser(userData);
+        this.options.pages.Authorization.updateStorage(userData);
+        // this.changeCard(1);
         break;
 
       case 'show-answer-btn':

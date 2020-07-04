@@ -29,7 +29,7 @@ if (userLog) {
   startPage = Authorization.className;
 }
 
-startPage = 'MainGame';
+// startPage = 'MainGame';
 
 const mainApp = new MainApp('#app', {
   components: [Header, PageContainer], pages, startPage, api,

@@ -1,6 +1,5 @@
 import $$ from '../../core/domManipulation';
 import Component from '../../core/Component';
-import { clearRegister, clearLogin } from './clearAuthorization';
 import createAuthorizationForm from './authorization.template';
 import { storage } from '../../core/utils';
 
@@ -47,19 +46,11 @@ export default class Authorization extends Component {
       await this.api.createUser(userData);
       const loginUserResponse = await this.api.loginUser(userData);
 
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('userId', loginUserResponse.userId);
-      storage('userName', loginUserResponse.name);
-      storage('currentToken', loginUserResponse.token);
-      storage('refreshToken', loginUserResponse.refreshToken);
-      storage('tokenExpiresIn', tokenExpiresIn);
+      Authorization.updateStorage(loginUserResponse);
 
       this.emit('selectPage', 'MainPage');
     } catch {
       document.querySelector('.alert-error-register').classList.remove('d-none');
-      setTimeout(clearRegister, 2000);
     }
   }
 
@@ -77,14 +68,7 @@ export default class Authorization extends Component {
         password: `${password}`,
       });
 
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('userId', loginUserResponse.userId);
-      storage('userName', loginUserResponse.name);
-      storage('currentToken', loginUserResponse.token);
-      storage('refreshToken', loginUserResponse.refreshToken);
-      storage('tokenExpiresIn', tokenExpiresIn);
+      Authorization.updateStorage(loginUserResponse);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -135,5 +119,32 @@ export default class Authorization extends Component {
     return {
       userId, userName, currentToken, refreshToken, currentPage,
     };
+  }
+
+  static updateStorage(data) {
+    const {
+      userId, name, token, refreshToken,
+    } = data;
+
+    if (token) {
+      const now = new Date();
+      const tokenExpiresIn = now.setHours(now.getHours() + 4);
+
+      storage('userId', userId);
+      storage('currentToken', token);
+      storage('refreshToken', refreshToken);
+      storage('tokenExpiresIn', tokenExpiresIn);
+    }
+
+    storage('userName', name);
+  }
+
+  static clearStorage() {
+    storage('userId', null);
+    storage('userName', null);
+    storage('currentToken', null);
+    storage('refreshToken', null);
+    storage('tokenExpiresIn', null);
+    storage('currentPage', null);
   }
 }
