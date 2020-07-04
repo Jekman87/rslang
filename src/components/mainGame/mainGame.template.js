@@ -70,10 +70,10 @@ export default function createMainGameHTML(dataForApp) {
         </div>
       </div>
       <div class="row justify-content-center align-items-center no-gutters mt-3">
-        <div class="col-1 text-center" id="studied-card-num">${studiedСardNum + 1}</div>
+        <div class="col-1 text-center" id="studied-card-num">${studiedСardNum}</div>
         <div class="col-10">
           <div class="progress bg-secondary">
-            <div class="progress-bar bg-info" role="progressbar" style="width: ${((studiedСardNum + 1) / settingsOptional.cardsPerDay) * 100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-info" role="progressbar" style="width: ${((studiedСardNum) / settingsOptional.cardsPerDay) * 100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <div class="col-1 text-center">${settingsOptional.cardsPerDay}</div>
