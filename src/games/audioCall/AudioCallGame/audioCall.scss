@@ -140,3 +140,11 @@ i {
     box-shadow: 0 0 0 0 rgba(216, 191, 216, 0);
   }
 }
+
+@media only screen and (max-width: 576px) {
+  i {
+    &.fa-volume-up {
+      font-size: 3em;
+    }
+  }
+}

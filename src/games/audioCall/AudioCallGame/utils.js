@@ -15,11 +15,9 @@ function setAnswerAttribute(span, boolean) {
 }
 
 function crossTheWord(target) {
-  console.log(target);
   if (target.tagName === 'SPAN') {
     target.classList.toggle('text-decoration');
   } else if (target.tagName === 'BUTTON') {
-    console.log(target.children[1]);
     target.children[1].classList.add('text-decoration');
   }
 }
