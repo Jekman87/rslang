@@ -84,13 +84,13 @@ export default function createGameField() {
         <div class="points-result">Общая статистика</div>
 
         <div class="progress">
-        <div class="progress-bar lvl-1" role="progressbar"></div>
-        <div class="progress-bar lvl-2" role="progressbar"></div>
-        <div class="progress-bar lvl-3" role="progressbar"></div>
-        <div class="progress-bar lvl-4" role="progressbar"></div>
-        <div class="progress-bar lvl-5" role="progressbar"></div>
-        <div class="progress-bar lvl-6" role="progressbar"></div>
-      </div>
+          <div class="progress-bar lvl-1" role="progressbar"></div>
+          <div class="progress-bar lvl-2" role="progressbar"></div>
+          <div class="progress-bar lvl-3" role="progressbar"></div>
+          <div class="progress-bar lvl-4" role="progressbar"></div>
+          <div class="progress-bar lvl-5" role="progressbar"></div>
+          <div class="progress-bar lvl-6" role="progressbar"></div>
+        </div>
 
         <div class="level-info level-1">
           <span>Уровень - 1:</span>
@@ -132,9 +132,105 @@ export default function createGameField() {
           <button class="btn btn-success statistic-button" data-click="return">Вернуться к игре</button>
           <button class="btn btn-success statistic-button" data-click="correct-answers">Отгадано</button>
           <button class="btn btn-success statistic-button" data-click="wrong-answers">Не отгадано</button>
-          <button class="btn btn-danger statistic-button" data-click="wrong-answers">Очистить статистику</button>
+          <button class="btn btn-danger statistic-button" data-click="remove-statistic">Очистить статистику</button>
         </div>
       </div>
+
+      <div class="statistic-blocks-correct">
+        <div class="correct-container">
+          <span>Уровень - 1:</span>
+          <span class='correct-answer correct-a-1'>0</span>
+        </div>
+        <div class='correct-block correct-1'>
+          <div class="statistic-block correct">
+            <span>I've whiskers, I'm frisky. Whisk, little mice, lest I should catch you! Please stroke my back, Ill purr and won't scratch you.</span>
+            <span>- Cat</span>
+          </div>
+        </div>
+
+        <div class="correct-container">
+          <span>Уровень - 2:</span>
+          <span class='correct-answer correct-a-2'>0</span>
+        </div>
+        <div class='correct-block correct-2'></div>
+
+        <div class="correct-container">
+          <span>Уровень - 3:</span>
+          <span class='correct-answer correct-a-3'>0</span>
+        </div>
+        <div class='correct-block correct-3'></div>
+
+        <div class="correct-container">
+          <span>Уровень - 4:</span>
+          <span class='correct-answer correct-a-4'>0</span>
+        </div>
+        <div class='correct-block correct-4'></div>
+
+        <div class="correct-container">
+          <span>Уровень - 5:</span>
+          <span class='correct-answer correct-a-5'>0</span>
+        </div>
+        <div class='correct-block correct-5'></div>
+
+        <div class="correct-container">
+          <span>Уровень - 6:</span>
+          <span class='correct-answer correct-a-6'>0</span>
+        </div>
+        <div class='correct-block correct-6'></div>
+
+        <div class='statistic-buttons'>
+          <button class="btn btn-success statistic-button" data-click="return-statistic">Вернуться к статистике</button>
+        </div>
+      </div>
+
+      <div class="statistic-blocks-wrong">
+        <div class="mistake-container">
+          <span>Уровень - 1:</span>
+          <span class='mistake-answer mistake-a-1'>0</span>
+        </div>
+        <div class='mistake-block mistake-1'>
+          <div class="statistic-block wrong">
+            <span>I've whiskers, I'm frisky. Whisk, little mice, lest I should catch you! Please stroke my back, Ill purr and won't scratch you.</span>
+            <span>- Cat</span>
+          </div>
+        </div>
+
+        <div class="mistake-container">
+          <span>Уровень - 2:</span>
+          <span class='mistake-answer mistake-a-2'>0</span>
+        </div>
+        <div class='mistake-block mistake-2'></div>
+
+        <div class="mistake-container">
+          <span>Уровень - 3:</span>
+          <span class='mistake-answer mistake-a-3'>0</span>
+        </div>
+        <div class='mistake-block mistake-3'></div>
+
+        <div class="mistake-container">
+          <span>Уровень - 4:</span>
+          <span class='mistake-answer mistake-a-4'>0</span>
+        </div>
+        <div class='mistake-block mistake-4'></div>
+
+        <div class="mistake-container">
+          <span>Уровень - 5:</span>
+          <span class='mistake-answer mistake-a-5'>0</span>
+        </div>
+        <div class='mistake-block mistake-5'></div>
+
+        <div class="mistake-container">
+          <span>Уровень - 6:</span>
+          <span class='mistake-answer mistake-a-6'>0</span>
+        </div>
+        <div class='mistake-block mistake-6'></div>
+
+        <div class='statistic-buttons'>
+          <button class="btn btn-success statistic-button" data-click="return-statistic">Вернуться к статистике</button>
+        </div>
+
+      </div>
+
     </div>
 
     <audio class="correct-voice" src="assets/voices/pew.mp3"></audio>

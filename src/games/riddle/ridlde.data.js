@@ -148,6 +148,14 @@ const RIDDLES_2 = {
     explain: 'shadow',
     id: 18,
   },
+  'Riddle-19': {
+    riddle: 'If you look at the number on my face you won\'t find thirteen anyplace.',
+    translate: 'Если вы посмотрите на число на моем лице, вы нигде не найдете тринадцать.',
+    answer: 'clock',
+    options: ['youth', 'ground', 'clock', 'mirrow'],
+    explain: 'clock',
+    id: 19,
+  },
   'Riddle-20': {
     riddle: 'There is an ancient invention, still used in some parts of the world today, that allows people to see through walls. What is it?',
     translate: 'Древнее изобретение, которое позволяет людям видеть сквозь стены. Используется в некоторых частях мира до сих пор. Что это?',
@@ -267,7 +275,7 @@ const RIDDLES_3 = {
     riddle: 'What word in the English language does the following: The first two letters signify a male, the first three letters signify a female, the first four letters signify a great, while the entire world signifies a great woman. What is the word?',
     translate: 'Какое слово в английском языке означает следующее: первые две буквы обозначают мужчину, первые три буквы обозначают женщину, первые четыре буквы означают великое, а весь мир обозначает великую женщину. Что за слово?',
     answer: 'heroine',
-    options: ['heroine', 'heroes', 'hermes', 'heroin'],
+    options: ['heroine', 'heroes', 'hermes', 'hero'],
     explain: 'heroine',
     id: 34,
   },
@@ -624,7 +632,7 @@ const RIDDLES_6 = {
   },
   'Riddle-77': {
     riddle: 'Without a tongue, without an ear, I can speak, and sing, and hear.',
-    translate: 'Без языка, без уха я могу говорить, петь и слышать.',
+    translate: 'Без языка и без уха, но могу говорить, петь и слышать.',
     answer: 'recorder',
     options: ['recorder', 'men', 'parrot', 'wind'],
     explain: 'recorder',

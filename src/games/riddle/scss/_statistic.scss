@@ -15,7 +15,9 @@
   display: none;
 }
 
-.statistic-blocks {
+.statistic-blocks,
+.statistic-blocks-correct,
+.statistic-blocks-wrong {
   width: 90%;
   max-width: 700px;
   max-height: 80vh;
@@ -30,6 +32,11 @@
   border-radius: 10px;
   overflow: auto;
   z-index: 5;
+}
+
+.statistic-blocks-correct,
+.statistic-blocks-wrong {
+  display: none;
 }
 
 .progress {
@@ -78,6 +85,13 @@
 
 .level-6 span {
   color: #e42e1b;
+}
+
+.mistake-container,
+.correct-container {
+  display: flex;
+  text-align: left;
+  margin: 20px 0 20px;
 }
 
 .game-history {
@@ -135,28 +149,37 @@
   margin-left: 5px;
 }
 
-.statistic-block,
-.games {
+.mistake-answer {
+  @include flexible();
+  background-color: #da5b4c;
+  color: #fff;
+  padding: 0 14px;
+  border-radius: 21px;
+  margin-left: 5px;
+}
+
+.statistic-block {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  align-items: left;
   width: 100%;
   min-height: 40px;
   border: 0;
   box-shadow: none;
+  margin-bottom: 10px;
+  padding: 0 0 0 20px;
 }
 
-.statistic-block {
-  padding: 0 0 0 20px;
+.correct {
+  border-left: 2px solid #01af61;
+}
+
+.wrong {
+  border-left: 2px solid #da5b4c;
 }
 
 .games {
   padding: 0 0 0 10px;
-}
-
-.statistic-block p {
-  margin-left: 15px;
-  margin-bottom: 10px;
 }
 
 .hide-statistic {

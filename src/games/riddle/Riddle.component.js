@@ -4,9 +4,12 @@ import Component from '../../core/Component';
 import createGameField from './riddle.template';
 import {
   hideIntroScreen, hideTwoWrongAnswers,
-  changeLevelAndPage, chooseRiddleInformation, fillGameFields, click,
+  changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
   compareAnswers, moveAnswerIntoInput, passHandler,
+  showStatistic, recountStatistic, removeStatistic,
+  showCorrectPartOfStatistic, showWrongPartOfStatistic,
+  backToStatisticScreen, backToGameFromStatistic,
 } from './riddle.functions';
 
 export default class Riddle extends Component {
@@ -23,7 +26,6 @@ export default class Riddle extends Component {
 
   init() {
     super.init();
-    click();
   }
 
   onClick() {
@@ -63,10 +65,24 @@ export default class Riddle extends Component {
         hideTwoWrongAnswers();
         break;
       case 'statistic':
-        document.querySelector('.statistic-screen').style.display = 'flex';
+        recountStatistic();
+        showStatistic();
+        break;
+      case 'correct-answers':
+        showCorrectPartOfStatistic();
+        break;
+      case 'wrong-answers':
+        showWrongPartOfStatistic();
+        break;
+      case 'return-statistic':
+        backToStatisticScreen();
+        break;
+      case 'remove-statistic':
+        removeStatistic();
+        recountStatistic();
         break;
       case 'return':
-        document.querySelector('.statistic-screen').style.display = 'none';
+        backToGameFromStatistic();
         break;
       case 'home':
         location.reload(true);

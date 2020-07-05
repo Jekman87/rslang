@@ -5,50 +5,90 @@ const state = {
   riddleText: '',
   riddleTranslate: '',
   riddleOptions: '',
-  levelStatistic: [0, 0, 0, 0, 0, 0],
+  lvlStatistic: [],
 };
+
+function restartStatistic() {
+  state.lvlStatistic = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+}
+restartStatistic();
 
 function rememberLevelStatistic() {
   const level = +document.querySelector('.input-level').value - 1;
-  console.log(level);
-  console.log(state.levelStatistic);
-  state.levelStatistic[level] += 1;
-  console.log(state.levelStatistic);
+  const page = +document.querySelector('.input-page').value - 1;
+  state.lvlStatistic[level][page] = 1;
 }
 
 function rewriteLevelStatistic() {
-  /* document.querySelector('.lvl-1').style.width = `${((state.levelStatistic[0] / 90) * 100)}%`;
-  document.querySelector('.lvl-2').style.width = `${((state.levelStatistic[1] / 90) * 100)}%`;
-  document.querySelector('.lvl-3').style.width = `${((state.levelStatistic[2] / 90) * 100)}%`;
-  document.querySelector('.lvl-4').style.width = `${((state.levelStatistic[3] / 90) * 100)}%`;
-  document.querySelector('.lvl-5').style.width = `${((state.levelStatistic[4] / 90) * 100)}%`;
-  document.querySelector('.lvl-6').style.width = `${((state.levelStatistic[5] / 90) * 100)}%`;
+  for (let i = 0; i < 6; i += 1) {
+    document.querySelector(`.lvl-${i + 1}`).style.width = `${((state.lvlStatistic[i].filter((el) => el === 1).length / 90) * 100)}%`;
+    document.querySelector(`.points-${i + 1}`).textContent = `${state.lvlStatistic[i].filter((el) => el === 1).length}/15`;
+    document.querySelector(`.percent-${i + 1}`).textContent = `${Math.floor((state.lvlStatistic[i].filter((el) => el === 1).length / 15) * 10000) / 100}%`;
+  }
+}
 
-  document.querySelector('.points-1').textContent = `${state.levelStatistic[0]}/15`;
-  document.querySelector('.points-2').textContent = `${state.levelStatistic[1]}/15`;
-  document.querySelector('.points-3').textContent = `${state.levelStatistic[2]}/15`;
-  document.querySelector('.points-4').textContent = `${state.levelStatistic[3]}/15`;
-  document.querySelector('.points-5').textContent = `${state.levelStatistic[4]}/15`;
-  document.querySelector('.points-6').textContent = `${state.levelStatistic[5]}/15`;
+function removeOldSentences() {
+  for (let i = 1; i < 7; i += 1) {
+    document.querySelector(`.correct-${i}`).innerHTML = '';
+    document.querySelector(`.mistake-${i}`).innerHTML = '';
+  }
+}
 
-  document.querySelector('.percent-1').textContent =
-  `${Math.floor((state.levelStatistic[0] / 15) * 10000) / 100}%`;
-  document.querySelector('.percent-2').textContent =
-  `${Math.floor((state.levelStatistic[1] / 15) * 10000) / 100}%`;
-  document.querySelector('.percent-3').textContent =
-  `${Math.floor((state.levelStatistic[2] / 15) * 10000) / 100}%`;
-  document.querySelector('.percent-4').textContent =
-  `${Math.floor((state.levelStatistic[3] / 15) * 10000) / 100}%`;
-  document.querySelector('.percent-5').textContent =
-  `${Math.floor((state.levelStatistic[4] / 15) * 10000) / 100}%`;
-  document.querySelector('.percent-6').textContent =
-  `${Math.floor((state.levelStatistic[5] / 15) * 10000) / 100}%`; */
+function removeStatistic() {
+  removeOldSentences();
+  restartStatistic();
+  for (let i = 1; i < 7; i += 1) {
+    document.querySelector(`.lvl-${i}`).style.width = '0%';
+    document.querySelector(`.points-${i}`).textContent = '0/15';
+    document.querySelector(`.percent-${i}`).textContent = '(0%)';
+    document.querySelector(`.correct-a-${i}`).textContent = '0';
+    document.querySelector(`.mistake-a-${i}`).textContent = '0';
+  }
+}
+
+function recountNumberOfAnswers() {
+  for (let i = 1; i < 7; i += 1) {
+    document.querySelector(`.correct-a-${i}`).textContent = document.querySelector(`.correct-${i}`).children.length;
+    document.querySelector(`.mistake-a-${i}`).textContent = document.querySelector(`.mistake-${i}`).children.length;
+  }
+}
+
+function recountStatistic() {
+  removeOldSentences();
 
   for (let i = 0; i < 6; i += 1) {
-    document.querySelector(`.lvl-${i + 1}`).style.width = `${((state.levelStatistic[i] / 90) * 100)}%`;
-    document.querySelector(`.points-${i + 1}`).textContent = `${state.levelStatistic[i]}/15`;
-    document.querySelector(`.percent-${i + 1}`).textContent = `${Math.floor((state.levelStatistic[i] / 15) * 10000) / 100}%`;
+    const keys = Object.keys(ALL_RIDDLES[i]);
+    for (let j = 0; j < 15; j += 1) {
+      const riddleText = ALL_RIDDLES[i][keys[j]].riddle;
+      const riddleAnswer = ALL_RIDDLES[i][keys[j]].answer;
+
+      const correctAnswer = `
+      <div class="statistic-block correct">
+        <span>${riddleText}</span>
+        <span>- ${riddleAnswer}</span>
+      </div>
+      `;
+      const wrongAnswer = `
+      <div class="statistic-block wrong">
+        <span>${riddleText}</span>
+      </div>
+      `;
+
+      if (state.lvlStatistic[i][j] === 1) {
+        document.querySelector(`.correct-${i + 1}`).insertAdjacentHTML('beforeend', correctAnswer);
+      } else {
+        document.querySelector(`.mistake-${i + 1}`).insertAdjacentHTML('beforeend', wrongAnswer);
+      }
+    }
   }
+
+  recountNumberOfAnswers();
 }
 
 function hideIntro() {
@@ -118,6 +158,7 @@ function rewriteRiddleOptions() {
     }
     document.querySelector('.answer-blocks').insertAdjacentHTML('beforeend',
       `<button type="button" class="btn btn-outline-success button answer-block wa">${el}</button>`);
+    return true;
   });
 }
 
@@ -164,12 +205,13 @@ function upLevel() {
   const page = document.querySelector('.input-page');
   const userInput = document.querySelector('.answer-input');
   const restartGame = document.querySelector('[data-click="start-game"]');
+
   if (+page.value !== 15) {
     document.querySelector('.answer-blocks').childNodes.forEach((el) => el.style.opacity = '100');
     page.stepUp();
     restartGame.click();
     userInput.value = '';
-  } else {
+  } else if (+level.value !== 6) {
     document.querySelector('.answer-blocks').childNodes.forEach((el) => el.style.opacity = '100');
     level.stepUp();
     page.value = 1;
@@ -182,9 +224,9 @@ function compareAnswers() {
   const currentAnswer = document.querySelector('.answer-input').value.toLowerCase();
   if (state.riddleAnswer.toLowerCase() === currentAnswer) {
     playCorrectAudio();
+    rememberLevelStatistic();
     markAnswer(true);
     upLevel();
-    rememberLevelStatistic();
     rewriteLevelStatistic();
   } else {
     playWrongAudio();
@@ -205,12 +247,7 @@ function hideTwoWrongAnswers() {
     }
     el.style.display = 'none';
     el.style.pointerEvents = 'none';
-  });
-}
-
-function click() {
-  document.addEventListener('click', (event) => {
-    console.log(event.target.dataset);
+    return true;
   });
 }
 
@@ -228,9 +265,36 @@ function passHandler() {
   upLevel();
 }
 
+function showStatistic() {
+  document.querySelector('.statistic-screen').style.display = 'flex';
+}
+
+function showCorrectPartOfStatistic() {
+  document.querySelector('.statistic-blocks').style.display = 'none';
+  document.querySelector('.statistic-blocks-correct').style.display = 'block';
+}
+
+function showWrongPartOfStatistic() {
+  document.querySelector('.statistic-blocks').style.display = 'none';
+  document.querySelector('.statistic-blocks-wrong').style.display = 'block';
+}
+
+function backToStatisticScreen() {
+  document.querySelector('.statistic-blocks-correct').style.display = 'none';
+  document.querySelector('.statistic-blocks-wrong').style.display = 'none';
+  document.querySelector('.statistic-blocks').style.display = 'block';
+}
+
+function backToGameFromStatistic() {
+  document.querySelector('.statistic-screen').style.display = 'none';
+}
+
 export {
   hideIntroScreen, hideTwoWrongAnswers,
-  changeLevelAndPage, chooseRiddleInformation, fillGameFields, click,
+  changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
   compareAnswers, moveAnswerIntoInput, passHandler,
+  showStatistic, recountStatistic, removeStatistic,
+  showCorrectPartOfStatistic, showWrongPartOfStatistic,
+  backToStatisticScreen, backToGameFromStatistic,
 };
