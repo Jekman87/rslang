@@ -1,56 +1,113 @@
-@media (max-width: 480px) {
-  .intro h1 {
-    font-size: 2rem;
+@media (max-width: 800px) {
+  .riddle-container {
+    max-height: 50vh;
   }
 
-  .intro button {
-    min-width: 150px;
-    padding: 10px 20px;
-    font-size: 1.4rem;
+  .riddle-header {
+    justify-content: center;
+
+    > button {
+      margin: 10px;
+    }
   }
 
-  .intro p {
-    font-size: 1.3rem;
+  .difficulty-level, .difficulty-page {
+    width: 40%;
   }
 
-  .game-block {
-    width: 280px;
-    padding: 5%;
+  .answer-form {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .language-eng,
-  .language-rus {
+  .answer-form button {
+    min-width: 110px;
     min-height: 40px;
+    margin: 0 5px;
   }
 
-  .sprint-score {
-    width: 270px;
-  }
-
-  .language-eng,
-  .language-rus {
-    font-size: 1.2rem;
-  }
-
-  .birds .bird-1 {
-    top: 26%;
-    left: 1%;
-  }
-
-  .birds .bird-2 {
-    top: 40%;
-    left: 24%;
-  }
-
-  .birds .bird-3 {
-    top: 33%;
-    left: 47%;
-  }
-
-  .birds span {
-    width: 90%;
+  .answer-input {
+    margin: 5px;
   }
 }
+
+@media (max-width: 600px) {
+  .spinner {
+    left: 40%;
+    top: 40%;
+  }
+
+  .answer-blocks button {
+    min-width: 60%;
+  }
+}
+
+@media (max-width: 480px) {
+  .riddle__intro .riddle__name h2 {
+    font-size: 1rem;
+  }
+
+  .riddle__intro p {
+    font-size: 0.8rem;
+  }
+
+  .riddle__intro button {
+    min-width: 150px;
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .riddle-container {
+    padding: 10px;
+  }
+
+  .riddle-block {
+    margin: 0;
+  }
+
+  .answer-form input::placeholder {
+    font-size: 0.7rem;
+  }
+
+  .riddle-prompts {
+    margin-bottom: 10px;
+  }
+
+  .answer-form button {
+    margin: 5px;
+  }
+
+  .riddle-block {
+    margin: 0px 0px 5px 0;
+  }
+}
+
+@media (max-width: 450px) {
+  .spinner {
+    left: 30%;
+    top: 35%;
+  }
+
+  .riddle-block,
+  .translate-block {
+    font-size: 0.9rem;
+  }
+
+  .difficulty-level span, .difficulty-page span {
+    margin: 5px auto;
+  }
+}
+
+@media (max-width: 350px) {
+  .spinner {
+    left: 25%;
+  }
+
+  .riddle-prompts div button {
+    font-size: 0.8rem;
+  }
+}
+
 
 @media (hover:hover) {
   .riddle__intro button:hover {

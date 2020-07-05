@@ -29,10 +29,11 @@
 .difficulty-page {
   display: flex;
   flex-direction: column;
-  margin: 10px;
+  margin: 0 10px 10px 10px;
 
   div {
     display: flex;
+    justify-content: center;
   }
   span {
     text-align: center;
