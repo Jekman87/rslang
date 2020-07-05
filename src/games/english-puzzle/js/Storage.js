@@ -11,6 +11,7 @@ export default class Storage {
     this.statistics = null;
     this.passedRounds = null;
     this.lastRound = null;
+    this.gallery = null;
 
     this.sentencesData = null;
     this.paintingData = null;
@@ -32,6 +33,7 @@ export default class Storage {
     this.lastRound = data.pzlLastRound;
     this.passedRounds = data.pzlPassedRounds;
     this.statistics = data.pzlStatistics;
+    this.gallery = data.pzlGallery || 'empty';
   }
 
   collectUserData() {
@@ -45,6 +47,7 @@ export default class Storage {
         pzlLastRound: this.lastRound,
         pzlPassedRounds: this.passedRounds,
         pzlStatistics: this.statistics,
+        pzlGallery: this.gallery,
       },
     };
 

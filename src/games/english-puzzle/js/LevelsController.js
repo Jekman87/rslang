@@ -110,9 +110,9 @@ export default class LevelsController {
 
     if (logicalContainer.classList.contains('levels-block')) {
       this.set('currentRound', 1);
-      this.set('currentLevel', e.target.textContent);
+      this.set('currentLevel', Number(e.target.textContent));
     } else {
-      this.set('currentRound', e.target.textContent);
+      this.set('currentRound', Number(e.target.textContent));
     }
 
     document.dispatchEvent(new CustomEvent('dataRequired'));

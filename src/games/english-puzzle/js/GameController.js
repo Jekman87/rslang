@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import PuzzleDrawer from './PuzzleDrawer';
 import monthNames from './calendarMap';
+import paintings from './paintingsInfo';
 
 export default class GameController {
   constructor(storage) {
@@ -31,6 +32,7 @@ export default class GameController {
 
     document.querySelector('button.results-pzl-btn').addEventListener('click', this.showRoundResults.bind(this));
     document.querySelector('button.statistics-pzl-btn').addEventListener('click', this.showStatistics.bind(this));
+    document.querySelector('button.gallery-pzl-btn').addEventListener('click', this.showGallery.bind(this));
     document.querySelector('button.close-pzl-btn').addEventListener('click', this.closePopUp.bind(this));
     this.startBtn.addEventListener('click', this.startGame.bind(this));
     this.playBtn.addEventListener('click', this.playAudio.bind(this));
@@ -49,7 +51,7 @@ export default class GameController {
   async handleNewData() {
     this.sentenceIndex = 0;
     this.correctCounter = 0;
-    this.results = {};
+    this.results = [];
     console.log('state', this.storage);
     this.switchElementsVisibility(false);
     this.cleanConstructionArea();
@@ -174,7 +176,7 @@ export default class GameController {
   setPaintingInfo() {
     const data = this.get('paintingData');
     const info = `${data.author} - ${data.name} (${data.year})`;
-    document.querySelectorAll('figcaption').forEach((el) => {
+    document.querySelectorAll('figcaption:not(.art-name)').forEach((el) => {
       el.textContent = info;
     });
     document.querySelector('img.painting-pic_small').src = data.link;
@@ -267,7 +269,7 @@ export default class GameController {
     });
 
     this.showResult();
-    this.results[this.sentenceIndex] = this.isCorrect;
+    this.results.push(this.isCorrect);
 
     if (this.isCorrect) {
       this.correctCounter += 1;
@@ -310,6 +312,7 @@ export default class GameController {
   saveRound() {
     this.saveRoundResult();
     this.savePassedRound();
+    this.saveGallery();
     document.dispatchEvent(new CustomEvent('userDataChange'));
   }
 
@@ -333,6 +336,21 @@ export default class GameController {
     this.set('lastRound', `${this.get('currentLevel')}-${this.get('currentRound')}`);
   }
 
+  saveGallery() {
+    const allGallery = this.get('gallery');
+    const currentArt = this.get('lastRound');
+    const isAllGuessed = this.results.filter((result) => result === true).length === 10;
+    const alreadyInGallery = allGallery.includes(currentArt);
+
+    if (isAllGuessed && !alreadyInGallery) {
+      if (allGallery !== 'empty') {
+        this.set('gallery', `${allGallery};${currentArt}`);
+      } else {
+        this.set('gallery', `${currentArt}`);
+      }
+    }
+  }
+
   closePopUp() {
     this.popUp.classList.add('hidden');
     this.resultsBlock.classList.add('hidden');
@@ -349,6 +367,26 @@ export default class GameController {
     this.fillStatistics();
     this.statBlock.classList.remove('hidden');
     this.popUp.classList.remove('hidden');
+  }
+
+  showGallery() {
+    this.fillGallery();
+    document.querySelector('div.pzl-slider').classList.remove('hidden');
+    this.addCloseListener('div.pzl-slider');
+  }
+
+  addCloseListener(selector) {
+    setTimeout(() => {
+      this.bindedFn = this.handleOutsideClick.bind(this, selector);
+      document.addEventListener('click', this.bindedFn);
+    }, 0);
+  }
+
+  handleOutsideClick(selector, e) {
+    if (!e.target.closest(selector)) {
+      document.querySelector(selector).classList.add('hidden');
+      document.removeEventListener('click', this.bindedFn);
+    }
   }
 
   fillRoundResults() {
@@ -398,6 +436,27 @@ export default class GameController {
       if (rows.length > 26) rows.length = 26;
     });
     document.querySelector('table.statistics-table').innerHTML = rows.join('');
+  }
+
+  fillGallery() {
+    document.querySelector('div.carousel-inner').innerHTML = '';
+    const slides = ['<div class="carousel-item"><figure class="gallery-item"><div class="frame"><p class="empty-pic-message">Еще есть свободное место! Собирай паззлы на 10 из 10 и пополняй свою личную галерею!</p></div><figcaption class="art-name"></figcaption></figure></div>'];
+    const artItems = this.get('gallery');
+
+    if (artItems !== 'empty') {
+      artItems.split(';').forEach((artLocation) => {
+        const [level, round] = artLocation.split('-');
+        const basicPath = 'https://raw.githubusercontent.com/torchik-slava/rslang_data_paintings/master/';
+        const artInfo = paintings[level - 1][round - 1];
+        slides.push(`<div class="carousel-item"><figure class="gallery-item"><div class="frame">
+        <img class="picture" src="${basicPath}${artInfo.cutSrc}" alt="picture art"></div>
+        <figcaption class="art-name">${artInfo.name}</figcaption></figure></div>`);
+      });
+    }
+
+    slides[slides.length - 1] = slides[slides.length - 1].replace('carousel-item', 'carousel-item active');
+
+    document.querySelector('div.carousel-inner').innerHTML = slides.reverse().join('');
   }
 
   playByClick(e) {

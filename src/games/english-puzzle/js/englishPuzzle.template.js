@@ -63,6 +63,7 @@ const template = `
           <button class="pzl-btn next__pzl-btn next-round__pzl-btn">Далее</button>
           <button class="pzl-btn next__pzl-btn results-pzl-btn">Результаты</button>
           <button class="pzl-btn next__pzl-btn statistics-pzl-btn">Статистика</button>
+          <button class="pzl-btn next__pzl-btn gallery-pzl-btn">Галерея</button>
         </div>
         <figure class="painting-block hidden">
           <img class="painting-pic" src="start_page.jpg" alt="default picture">
@@ -86,6 +87,18 @@ const template = `
             </table>
           </div>
           <button class="pzl-btn close-pzl-btn">Закрыть</button>
+        </div>
+        <div id="carouselExampleControls" class="carousel slide pzl-slider hidden" data-interval="false" data-wrap="false">
+          <div class="carousel-inner">
+          </div>
+          <a class="carousel-control-prev pzl-slider-arrow" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next pzl-slider-arrow" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
         </div>
       </section>
     </main>
