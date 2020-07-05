@@ -85,9 +85,6 @@ export default class Authorization extends Component {
 
   init() {
     super.init();
-    // если кроме click нет других событий и нет никаких слушателей
-    // метод init можно удалить
-
     this.registerForm = document.querySelector('.register-form');
     this.registerForm.onsubmit = this.onSubmitRegisterForm;
 
@@ -127,8 +124,13 @@ export default class Authorization extends Component {
     } = data;
 
     if (token) {
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
+      const tokenArr = token.split('.');
+      const payloadString = atob(tokenArr[1]);
+      const payloadObj = JSON.parse(payloadString);
+      const tokenExpiresIn = payloadObj.exp * 1000;
+
+      // const now = new Date();
+      // const tokenExpiresIn = now.setHours(now.getHours() + 4);
 
       storage('userId', userId);
       storage('currentToken', token);

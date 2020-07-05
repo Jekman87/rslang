@@ -70,7 +70,7 @@ export default class MainGame extends Component {
 
       case 'next-btn':
         // доработать повторное нажатие
-        if (this.state.currentCardNum === this.state.studiedСardNum) {
+        if (this.state.currentCardNum >= this.state.studiedСardNum) {
           this.checkWord();
         } else {
           this.changeCard(1);
@@ -79,6 +79,7 @@ export default class MainGame extends Component {
         break;
 
       case 'again-btn':
+        // над кнопками ставить время
         // ручное уплавление алгоритмом - again
         // пометка - слово повторить скоро - 1 мин?
         // переход на след карту
@@ -111,10 +112,7 @@ export default class MainGame extends Component {
         // убираем из карточек
         // айди слова - сохраняем персональную? статистику - в удаленные
         // переход на след карту
-
-        this.options.pages.Authorization.clearStorage();
-        console.log('clearStorage');
-        // this.changeCard(1);
+        this.changeCard(1);
         break;
 
       case 'difficult-btn':
@@ -122,10 +120,7 @@ export default class MainGame extends Component {
         // убираем из карточек ?
         // айди слова - сохраняем персональную? статистику - в сложные
         // переход на след карту
-        const userData = { name: 'Super Vasia36', email: 'vasia13@mail.ru', password: 'Puzzle123!' };
-        const loginUserResponse = await this.options.api.updateUser(userData);
-        this.options.pages.Authorization.updateStorage(userData);
-        // this.changeCard(1);
+        this.changeCard(1);
         break;
 
       case 'show-answer-btn':
@@ -154,7 +149,7 @@ export default class MainGame extends Component {
     const keyEnter = 'Enter';
 
     if (event.key === keyEnter) {
-      if (this.state.currentCardNum === this.state.studiedСardNum) {
+      if (this.state.currentCardNum >= this.state.studiedСardNum) {
         this.checkWord();
       } else {
         this.changeCard(1);
@@ -296,12 +291,24 @@ export default class MainGame extends Component {
   }
 
   intervalRepetitionAlgorithm() {
-    // первым делом идут карты на повторение, затем новые слова
-    // нет на повторении - начинаем с новых
-    // сейчас 20 карточек, нужно добить до 50
-    // изначальные 20 - новые слова - лучше увеличивать при  хорошем прогрессе
-    // при угадывании/неугадывании - идет пометка в статистику слова
-    // в зависимости от этой статистики
+    /*
+    первым делом идут карты на повторение, затем новые слова
+    нет на повторении - начинаем с новых
+    сейчас 20 карточек, нужно добить до 50
+    изначальные 20 - новые слова - лучше увеличивать при  хорошем прогрессе
+    при угадывании/неугадывании - идет пометка в статистику слова
+
+    вначале 10 новых слов - 10 повторений
+    10 новых, 10 повторений - итого 40
+    еще 10 заполнить теми, где были ошибки/нажата кнопка "снова", из 1й партии
+    или сделать меньше карт? На сегодня карт больше нет...
+    динамическая смена количества карт??!
+    несколько прогрессбаров
+    новые слова, изучаемые на повторении
+
+    далее (след день) начать с повтора 20 карт? или части из них, которые сложные
+
+    */
   }
 
   destroy() {

@@ -56,10 +56,10 @@ export default function createMainGameHTML(dataForApp) {
               <p class="card-text font-weight-light ${settingsOptional.cardExplanationTranslation ? '' : 'd-none'}" id="word-meaning-translate">${word.textMeaningTranslate}</p>
             </div>
             <div class="card-footer d-flex justify-content-center invisible">
-              <button type="button" class="btn btn-secondary m-2" data-name="again-btn">Снова</button>
-              <button type="button" class="btn btn-success m-2" data-name="hard-btn">Трудно</button>
-              <button type="button" class="btn btn-info m-2" data-name="good-btn">Хорошо</button>
-              <button type="button" class="btn btn-warning m-2" data-name="easy-btn">Легко</button>
+              <button type="button" class="btn btn-secondary m-2" data-name="again-btn">Снова (1 мин)</button>
+              <button type="button" class="btn btn-success m-2" data-name="hard-btn">Трудно (10 мин)</button>
+              <button type="button" class="btn btn-info m-2" data-name="good-btn">Хорошо (1 день)</button>
+              <button type="button" class="btn btn-warning m-2" data-name="easy-btn">Легко (4 дня)</button>
             </div>
           </div>
         </div>

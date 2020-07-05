@@ -68,14 +68,7 @@ export default class PageContainer extends Component {
       this.component.destroy();
       this.emit('hideHeader');
 
-      this.pages.Authorization.clearStorage();
-
-      // storage('userId', null);
-      // storage('userName', null);
-      // storage('currentToken', null);
-      // storage('refreshToken', null);
-      // storage('tokenExpiresIn', null);
-      // storage('currentPage', null);
+      this.pages[AUTH_PAGE_NAME].clearStorage();
 
       this.renderPage(this.pages[AUTH_PAGE_NAME]);
     });
