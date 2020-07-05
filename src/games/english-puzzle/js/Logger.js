@@ -1,4 +1,4 @@
-import userBasicSettings from './userBacicSettings';
+import { statisticsPattern } from './variables';
 
 export default class Logger {
   constructor(storage, api) {
@@ -11,9 +11,9 @@ export default class Logger {
 
   async init() {
     document.addEventListener('userDataChange', this.sendUserData.bind(this));
-    this.logoutBtn.addEventListener('click', Logger.logOut);
+    this.logoutBtn.addEventListener('click', this.logOut.bind(this));
 
-    await this.handleUserData(this.isNewUser);
+    await this.handleUserData();
 
     this.startBtn.classList.add('visible');
   }
@@ -31,21 +31,18 @@ export default class Logger {
   }
 
   async handleUserData() {
-    const userData = await this.getUserData();
-    this.storage.setUserData(userData);
-  }
-
-  static logOut() {
-    document.location.reload(true);
-  }
-
-  async getUserData() {
     try {
-      const content = await this.api.getStatistics();
-      return content.optional;
+      const userData = await this.api.getStatistics();
+      this.storage.setUserData(userData);
     } catch (e) {
-      return userBasicSettings.optional;
+      if (e.message === '404') {
+        this.storage.setUserData(statisticsPattern);
+      }
     }
+  }
+
+  logOut() {
+    document.location.reload(true);
   }
 
   sendUserData() {

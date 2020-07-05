@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import PuzzleDrawer from './PuzzleDrawer';
-import monthNames from './calendarMap';
+import { monthNames } from './variables';
 import paintings from './paintingsInfo';
 
 export default class GameController {

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import puzzleSizeSettings from './puzzleSizeSettings';
+import { puzzleSizeSettings } from './variables';
 
 export default class PuzzleDrawer {
   constructor() {

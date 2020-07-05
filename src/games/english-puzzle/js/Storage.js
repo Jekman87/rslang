@@ -1,3 +1,5 @@
+import { roundsStructure } from './variables';
+
 export default class Storage {
   constructor() {
     this.currentLevel = null;
@@ -26,31 +28,32 @@ export default class Storage {
   }
 
   setUserData(data) {
-    this.pronounceHelp = data.pzlPronounceHelp;
-    this.autoplayHelp = data.pzlAutoplayHelp;
-    this.translateHelp = data.pzlTranslateHelp;
-    this.visualHelp = data.pzlVisualHelp;
-    this.lastRound = data.pzlLastRound;
-    this.passedRounds = data.pzlPassedRounds;
-    this.statistics = data.pzlStatistics;
-    this.gallery = data.pzlGallery || 'empty';
+    this.userData = data;
+    delete this.userData.id;
+    const { optional } = data;
+
+    const helpers = optional.pzlHelpers || 'on-on-on-on';
+    [this.autoplayHelp, this.pronounceHelp, this.translateHelp, this.visualHelp] = helpers.split('-');
+
+    this.lastRound = optional.pzlLastRound || '1-0';
+    this.passedRounds = optional.pzlPassedRounds || roundsStructure;
+    this.statistics = optional.pzlStatistics || 'empty';
+    this.gallery = optional.pzlGallery || 'empty';
   }
 
   collectUserData() {
-    const data = {
-      learnedWords: 0,
-      optional: {
-        pzlAutoplayHelp: this.autoplayHelp,
-        pzlPronounceHelp: this.pronounceHelp,
-        pzlTranslateHelp: this.translateHelp,
-        pzlVisualHelp: this.visualHelp,
-        pzlLastRound: this.lastRound,
-        pzlPassedRounds: this.passedRounds,
-        pzlStatistics: this.statistics,
-        pzlGallery: this.gallery,
-      },
-    };
+    this.userData.optional.pzlHelpers = [
+      this.autoplayHelp,
+      this.pronounceHelp,
+      this.translateHelp,
+      this.visualHelp,
+    ].join('-');
 
-    return data;
+    this.userData.optional.pzlLastRound = this.lastRound;
+    this.userData.optional.pzlPassedRounds = this.passedRounds;
+    this.userData.optional.pzlStatistics = this.statistics;
+    this.userData.optional.pzlGallery = this.gallery;
+
+    return this.userData;
   }
 }
