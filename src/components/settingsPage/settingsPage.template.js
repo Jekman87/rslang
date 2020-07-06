@@ -122,7 +122,7 @@ export default function createSettingsHTML() {
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
                   <input type="checkbox" class="custom-control-input" id="settingsPageCardAnswerButton">
-                  <label class="custom-control-label" for="customsettingsPageCardAnswerButton">Показывать кнопку "Показать ответ"</label>
+                  <label class="custom-control-label" for="settingsPageCardAnswerButton">Показывать кнопку "Показать ответ"</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
                   <input type="checkbox" class="custom-control-input" id="settingsPageCardDeleteButton">
