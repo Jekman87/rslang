@@ -39,7 +39,7 @@ export default class GameController {
     this.resultsBlock.addEventListener('click', this.playByClick.bind(this));
 
     this.audioHelp.addEventListener('ended', this.removePlayEffect.bind(this));
-    // this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
+    this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
   }
 
   startGame() {
@@ -63,20 +63,22 @@ export default class GameController {
   }
 
   switchElementsVisibility(isEndOfRound) {
-    this.sentenceList.forEach((sentence) => {
-      sentence.classList.remove('sentence_guessed');
-    });
     this.translateHelp.classList.remove('visible');
 
     if (isEndOfRound) {
+      if (this.correctCounter === 10) {
+        this.painting.classList.remove('hidden');
+        document.querySelector('div.sentences-list-wrapper').classList.add('sentences-list-wrapper_cut');
+      }
       this.playBtn.classList.add('invisible');
-      this.painting.classList.remove('hidden');
       this.sentenceConstructor.classList.add('hidden');
       this.availableWords.classList.add('hidden');
       document.querySelector('div.answer-pzl-btn-group').classList.add('hidden');
       document.querySelector('div.next-round-block').classList.remove('hidden');
-      document.querySelector('div.sentences-list-wrapper').classList.add('sentences-list-wrapper_cut');
     } else {
+      this.sentenceList.forEach((sentence) => {
+        sentence.classList.remove('sentence_guessed');
+      });
       this.closePopUp();
       this.playBtn.classList.remove('invisible');
       this.painting.classList.add('hidden');
@@ -111,6 +113,7 @@ export default class GameController {
 
   fillHelpers() {
     const data = this.get('sentencesData');
+
     this.translateHelp.textContent = data[this.sentenceIndex].translate;
     if (this.get('translateHelp') === 'on') {
       this.translateHelp.classList.add('visible');
@@ -118,11 +121,10 @@ export default class GameController {
       this.translateHelp.classList.remove('visible');
     }
 
+    this.audioHelp.src = data[this.sentenceIndex].audio;
     if (this.get('pronounceHelp') === 'off') {
       this.playBtn.classList.add('disabled');
     }
-
-    this.audioHelp.src = data[this.sentenceIndex].audio;
     if (this.get('autoplayHelp') === 'on') {
       this.playAudio();
     }
@@ -137,19 +139,39 @@ export default class GameController {
   }
 
   handleHelperStatusChange(e) {
+    const isCollectedSentence = document.querySelector('button.check-pzl-btn').textContent === 'Продолжить';
+    if (isCollectedSentence) return;
+
     if (e.detail === 'pronounceHelp') {
       this.playBtn.classList.toggle('disabled');
     }
+
+    if (e.detail === 'translateHelp') {
+      this.translateHelp.classList.toggle('visible');
+    }
+
     if (e.detail === 'visualHelp') {
       this.currentWords.forEach((word) => word.classList.toggle('word_colored'));
       [...this.sentenceConstructor.children].forEach((word) => word.classList.toggle('word_colored'));
       [...this.availableWords.children].forEach((word) => word.classList.toggle('word_colored'));
+
+      this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
+      this.puzzleDrawer.drawSentence(this.availableWords, this.sentenceIndex);
     }
   }
 
+  showHelpers() {
+    if (this.get('autoplayHelp') === 'off') {
+      this.playAudio();
+    }
+
+    this.translateHelp.classList.add('visible');
+    this.playBtn.classList.remove('disabled');
+  }
+
   playAudio() {
-    this.playBtn.classList.add('play-pzl-btn_active');
     this.audioHelp.play();
+    setTimeout(() => this.playBtn.classList.add('play-pzl-btn_active'), 0);
   }
 
   removePlayEffect() {
@@ -200,12 +222,11 @@ export default class GameController {
   }
 
   handleNegativeAnswer(e) {
-    this.showCorrect();
     this.isCorrect = false;
-    if (this.get('autoplayHelp') === 'off') {
-      this.playAudio();
-    }
-    this.translateHelp.classList.add('visible');
+
+    this.showHelpers();
+    this.showCorrect();
+
     e.target.previousElementSibling.textContent = 'Продолжить';
     e.target.classList.add('disabled');
   }
@@ -245,6 +266,7 @@ export default class GameController {
     this.cleanConstructionArea();
 
     this.currentWords.forEach((word) => {
+      word.classList.add('word_colored');
       this.sentenceConstructor.append(this.puzzleDrawer.cloneCanvas(word));
     });
 
@@ -268,15 +290,12 @@ export default class GameController {
       }
     });
 
-    this.showResult();
+    this.showResult(this.isCorrect);
     this.results.push(this.isCorrect);
 
     if (this.isCorrect) {
       this.correctCounter += 1;
-      if (this.get('autoplayHelp') === 'off') {
-        this.playAudio();
-      }
-      this.translateHelp.classList.add('visible');
+      this.showHelpers();
       e.target.textContent = 'Продолжить';
       e.target.nextElementSibling.classList.add('disabled');
     } else {
@@ -285,14 +304,14 @@ export default class GameController {
   }
 
   markSentence() {
-    const num = document.createElement('span');
-    num.classList.add('sentence__num');
-    if (this.isCorrect) num.classList.add('sentence__num_correct');
-    num.textContent = this.sentenceIndex + 1;
-    this.sentenceList[this.sentenceIndex].prepend(num);
+    const mark = `<span class="sentence__num ${this.isCorrect ? 'sentence__num_correct' : ''}">${this.sentenceIndex + 1}</span>`;
+    this.sentenceList[this.sentenceIndex].insertAdjacentHTML('afterbegin', mark);
   }
 
-  showResult() {
+  showResult(isCollectedCorectly) {
+    if (isCollectedCorectly) {
+      [...this.sentenceConstructor.children].forEach((word) => word.classList.add('word_colored'));
+    }
     this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
   }
 
@@ -339,7 +358,7 @@ export default class GameController {
   saveGallery() {
     const allGallery = this.get('gallery');
     const currentArt = this.get('lastRound');
-    const isAllGuessed = this.results.filter((result) => result === true).length === 10;
+    const isAllGuessed = this.correctCounter === 10;
     const alreadyInGallery = allGallery.includes(currentArt);
 
     if (isAllGuessed && !alreadyInGallery) {

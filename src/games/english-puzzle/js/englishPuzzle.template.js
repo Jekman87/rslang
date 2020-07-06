@@ -28,12 +28,12 @@ const template = `
           </div>
           <button class="pzl-btn level-pzl-btn">Перейти</button>
         </div>
-        <button class="pzl-btn logout-pzl-btn" title="logout"></button>
+        <button class="pzl-btn logout-pzl-btn" title="Выйти в главное приложение"></button>
         <div class="help-pzl-btn-group">
-          <button class="pzl-btn help-pzl-btn autoplay-pzl-btn" data-type="autoplayHelp" title="autoplay helper"></button>
-          <button class="pzl-btn help-pzl-btn pronounce-pzl-btn" data-type="pronounceHelp" title="play-by-click helper"></button>
-          <button class="pzl-btn help-pzl-btn translate-pzl-btn" data-type="translateHelp" title="translate helper"></button>
-          <button class="pzl-btn help-pzl-btn background-pzl-btn" data-type="visualHelp" title="image helper"></button>
+          <button class="pzl-btn help-pzl-btn autoplay-pzl-btn" data-type="autoplayHelp" title="Подсказка: Предварительное произношение"></button>
+          <button class="pzl-btn help-pzl-btn pronounce-pzl-btn" data-type="pronounceHelp" title="Подсказка: Произношение по клику"></button>
+          <button class="pzl-btn help-pzl-btn translate-pzl-btn" data-type="translateHelp" title="Подсказка: Перевод"></button>
+          <button class="pzl-btn help-pzl-btn background-pzl-btn" data-type="visualHelp" title="Подсказка: Фон"></button>
         </div>
       </section>
       <section class="game-area">
