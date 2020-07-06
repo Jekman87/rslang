@@ -10,11 +10,11 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
-import Speakit from './games/speakIt/index';
 import Team from './components/teamPage';
+import SpeakIt from './games/speakIt/index';
 
 const pages = {
-  Authorization, MainPage, MainGame, Team, Speakit,
+  Authorization, MainPage, MainGame, Team, SpeakIt,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
