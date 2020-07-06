@@ -13,18 +13,18 @@ export default function createSettingsHTML() {
             <div class="form-group">
               <div class="d-flex flex-column-reverse flex-lg-row align-items-start  align-items-xl-baseline mb-2 mb-lg-1">
                 <p class="d-flex justify-content-start align-items-baseline mb-lg-1">
-              <input type="text" class="form-control mr-1" id="settingsPageWordsPerDay" style="width: 4rem" value="20">шт</p>
+              <input type="text" class="form-control mr-1" id="settingsPageWordsPerDay" style="width: 4rem" value="">шт</p>
                 <label class="col-form-label col-12 col-lg-9" for="settingsPageWordsPerDay">Количество новых слов в день</label>
 
               </div>
               <div class="d-flex flex-column-reverse flex-lg-row align-items-start align-items-lg-end  align-items-xl-baseline mb-2">
               <p class="d-flex justify-content-start align-items-baseline">
-                <input type="text" class="form-control mr-1" id="settingsPageCardsPerDay" style="width: 4rem" value="50">шт</p>
+                <input type="text" class="form-control mr-1" id="settingsPageCardsPerDay" style="width: 4rem" value="">шт</p>
                 <label class="col-form-label col-12 col-lg-9" for="settingsPageCardsPerDay">Максимальное количество карточек в день</label>
 
               </div>
               <div class="custom-control custom-radio mb-2 mb-md-3 mb-xl-2">
-                <input type="radio" id="settingsPageMixedTraining" name="customRadio" class="custom-control-input" checked="">
+                <input type="radio" id="settingsPageMixedTraining" name="customRadio" class="custom-control-input">
                 <label class="custom-control-label" for="settingsPageMixedTraining">Изучать слова вперемешку</label>
               </div>
               <div class="custom-control custom-radio mb-2 mb-md-3 mb-xl-2">
@@ -48,19 +48,19 @@ export default function createSettingsHTML() {
           </div>
           <div class="card-body">
             <div class="custom-control custom-checkbox mb-2 mb-md-3 mb-xl-2">
-              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyExplanation" checked="">
+              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyExplanation">
               <label class="custom-control-label" for="settingsPageVocabularyExplanation">Показывать пояснение слова</label>
             </div>
             <div class="custom-control custom-checkbox mb-2 mb-md-3 mb-xl-2">
-              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyExample" checked="">
+              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyExample">
               <label class="custom-control-label" for="settingsPageVocabularyExample">Показывать пример</label>
             </div>
             <div class="custom-control custom-checkbox mb-2 mb-md-3 mb-xl-2">
-              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyTranscription" checked="">
+              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyTranscription">
               <label class="custom-control-label" for="settingsPageVocabularyTranscription">Показывать транскрипцию</label>
             </div>
             <div class="custom-control custom-checkbox mb-2 mb-md-3 mb-xl-2">
-              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyImage" checked="">
+              <input type="checkbox" class="custom-control-input" id="settingsPageVocabularyImage">
               <label class="custom-control-label" for="settingsPageVocabularyImage">Показывать картинку-ассоциацию</label>
             </div>
           </div>
@@ -74,43 +74,43 @@ export default function createSettingsHTML() {
           <div class="card-body">
             <div class="form-group">
               <fieldset>
-                <legend><h4><small class="text-muted">Выберите хотя бы 1 из 3 пунктов:</small></h4></legend>
+                <legend><h4><small class="text-muted" id="warning-heading">Выберите хотя бы 1 из 3 пунктов:</small></h4></legend>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardTranslation" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardTranslation">
                   <label class="custom-control-label" for="settingsPageCardTranslation">Показывать перевод слова</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExplanation" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExplanation">
                   <label class="custom-control-label" for="settingsPageCardExplanation">Показывать предложение с объяснением
                     слова</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExample" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExample">
                   <label class="custom-control-label" for="settingsPageCardExample">Показывать предложение с примером</label>
                 </div>
               </fieldset>
               <hr>
               <fieldset class="p-1">
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardTranscription" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardTranscription">
                   <label class="custom-control-label" for="settingsPageCardTranscription">Показывать транскрипцию</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardImage" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardImage">
                   <label class="custom-control-label" for="settingsPageCardImage">Показывать картинку-ассоциацию</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardTranslationAfterSuccess" disabled="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardTranslationAfterSuccess">
                   <label class="custom-control-label" for="settingsPageCardTranslationAfterSuccess">Показывать перевод слова после
                     ответа</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExplanationTranslation" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExplanationTranslation">
                   <label class="custom-control-label" for="settingsPageCardExplanationTranslation">Показывать перевод предложения с
                     объяснением</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExampleTranslation" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardExampleTranslation">
                   <label class="custom-control-label" for="settingsPageCardExampleTranslation">Показывать перевод предложения с
                     примером</label>
                 </div>
@@ -121,20 +121,20 @@ export default function createSettingsHTML() {
                     ответа</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardAnswerButton" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardAnswerButton">
                   <label class="custom-control-label" for="customsettingsPageCardAnswerButton">Показывать кнопку "Показать ответ"</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardDeleteButton" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardDeleteButton">
                   <label class="custom-control-label" for="settingsPageCardDeleteButton">Показывать кнопку "Удалить"</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardDifficultWordsButton" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardDifficultWordsButton">
                   <label class="custom-control-label" for="settingsPageCardDifficultWordsButton">Показывать кнопку "Добавить в
                     сложные"</label>
                 </div>
                 <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="settingsPageCardFeedbackButtons" checked="">
+                  <input type="checkbox" class="custom-control-input" id="settingsPageCardFeedbackButtons">
                   <label class="custom-control-label" for="settingsPageCardFeedbackButtons">Показывать кнопки оценки сложности
                     карточки</label>
                 </div>
@@ -146,8 +146,8 @@ export default function createSettingsHTML() {
     </div>
     <div class="d-lg-flex justify-content-lg-between">
 
-    <button class="col-12 col-lg-3 btn btn-primary btn-lg mb-3 mb-lg-0" href="#" role="button">Применить</button>
-    <button class="col-12 col-lg-8 btn btn-danger btn-lg" href="#" role="button">Сбросить до стандартных настроек</button>
+    <button class="col-12 col-lg-3 btn btn-primary btn-lg mb-3 mb-lg-0" href="#" role="button" id="settingsPageApplyButton">Применить</button>
+    <button class="col-12 col-lg-8 btn btn-danger btn-lg" href="#" role="button" id="settingsPageResetButton">Сбросить до стандартных настроек</button>
     </div>
   </div>
     `;
