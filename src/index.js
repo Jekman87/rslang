@@ -10,8 +10,11 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import Team from './components/teamPage';
 
-const pages = { Authorization, MainPage, MainGame };
+const pages = {
+  Authorization, MainPage, MainGame, Team,
+};
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
 mainApp.render();
