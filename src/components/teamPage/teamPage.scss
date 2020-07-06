@@ -1,5 +1,5 @@
 
-  .AboutTeam{
+  .Team{
     .card{
       box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
     }
@@ -24,28 +24,28 @@
   }
 
   @media (min-width: 320px) {
-    .AboutTeam{
+    .Team{
       .display-4 {
         font-size: 2rem;
       }
     } 
   }
   @media (min-width: 375px) {
-    .AboutTeam{
+    .Team{
       .display-4 {
         font-size: 2.4rem;
       }
     } 
   }
   @media (min-width: 411px) {
-    .AboutTeam{
+    .Team{
       .display-4 {
         font-size: 2.7rem;
       }
     } 
   }
   @media (min-width: 576px) {
-    .AboutTeam{
+    .Team{
       .display-4 {
         font-size: 3.5rem;
       }

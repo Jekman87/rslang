@@ -2,11 +2,11 @@ import Component from '../../core/Component';
 import createAboutTeamHTML from './teamPage.template';
 
 export default class Team extends Component {
-  static className = 'AboutTeam';
+  static className = 'Team';
 
   constructor($root, options) {
     super($root, {
-      name: 'AboutTeam',
+      name: 'Team',
       listeners: [],
       ...options,
     });
