@@ -14,7 +14,7 @@ const gameMenuTitles = [
   { data: 'savannah', title: 'Саванна' },
   { data: 'audiocall', title: 'Аудиовызов' },
   { data: 'SprintGame', title: 'Спринт' },
-  { data: 'RiddleGame', title: 'Своя игра' },
+  { data: 'Riddle', title: 'Своя игра' },
 ];
 
 const authPageName = 'Authorization';

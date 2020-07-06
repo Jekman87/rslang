@@ -12,7 +12,7 @@ import {
   backToStatisticScreen, backToGameFromStatistic,
 } from './riddle.functions';
 
-export default class Riddle extends Component {
+export default class RiddleGame extends Component {
   static className = 'riddle';
 
   constructor($root, options) {

@@ -1,11 +1,11 @@
 import $$ from '../../core/domManipulation';
 
-import Riddle from './Riddle.component';
+import RiddleGame from './Riddle.component';
 
-export default class RiddleGame {
+export default class Riddle {
   constructor(selector, options) {
     this.$el = $$(selector);
-    this.components = [Riddle];
+    this.components = [RiddleGame];
     this.observer = options.observer;
     this.dataForApp = {};
   }

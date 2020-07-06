@@ -12,7 +12,7 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
-import RiddleGame from './games/riddle/Riddle.render';
+import Riddle from './games/riddle/Riddle.render';
 
 let startPage;
 if (checkTokenValidity()) {
@@ -22,7 +22,7 @@ if (checkTokenValidity()) {
 }
 
 const pages = {
-  Authorization, MainPage, MainGame, RiddleGame,
+  Authorization, MainPage, MainGame, Riddle,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages, startPage });
