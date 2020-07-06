@@ -22,17 +22,17 @@ function createMembersHTML(data) {
               <div class="col-md-9 bg-white">
                 <div class="p-1">
                   <h4 class="card-title text-success mb-1">${name}<span class="font-weight-light font-italic text-primary text-muted">, ${title}</span></h4>              
-                  <small class="text-muted"><cite title="${location.city},${location.country}">${location.city}, ${location.country}<a href="http://maps.google.com/?q=${location.city}" target="_blank"><i class="fas fa-map-marker-alt"></i></a></cite></small>
+                  <small class="text-muted"><cite title="${location.city},${location.country}"><a href="http://maps.google.com/?q=${location.city}" target="_blank"><i class="fas fa-map-marker-alt"></i></a> ${location.city}, ${location.country}</cite></small>
                   <p class="mt-2">
                     <i class="fas fa-envelope"></i> <a href="mailto:${email}">${email}</a>
                     <br />
-                    <i class="fab fa-telegram"></i> <a href="tg://resolve?domain=${telegram}">@${telegram}</a>
+                    <i class="fab fa-telegram"></i> <a href="tg://resolve?domain=${telegram}">${telegram}</a>
                     <br />
                     <i class="fab fa-github"></i> <a href="https://github.com/${github}" target="_blank">github</a>
                 </div>
                 <div class="p-1">
                   <p class="m-0 text-info">Вклад в разработку:</p>
-                  <p class="m-0">${about}</p>
+                  <p class="m-0 text-justify">${about}</p>
                 </div>
               </div>
             </div>

@@ -1,5 +1,4 @@
 import Component from '../../core/Component';
-import $$ from '../../core/domManipulation';
 import createAboutTeamHTML from './teamPage.template';
 
 export default class Team extends Component {
@@ -7,15 +6,10 @@ export default class Team extends Component {
 
   constructor($root, options) {
     super($root, {
-      name: 'Settings',
-      listeners: ['click'],
+      name: 'AboutTeam',
+      listeners: [],
       ...options,
     });
-  }
-
-  onClick(event) {
-    const clickedElement = $$(event.target);
-    console.log('AboutTeamPage onClick', clickedElement);
   }
 
   toHTML() {
