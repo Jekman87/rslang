@@ -41,7 +41,7 @@ function insertStats(word, translate, audio) {
   return `
   <div class="container word-container pl-0">
     <p class="">
-      <i class="fas fa-play text-dark"></i>
+      <i class="fas fa-play text-dark" data-event="stat-sound"></i>
       <audio src="https://raw.githubusercontent.com/Jekman87/rslang-data/master/${audio}"></audio>
       <span class="ml-2">${word}</span>
       <span class="text-muted ml-1">- ${translate}</span>
@@ -50,4 +50,29 @@ function insertStats(word, translate, audio) {
   `;
 }
 
-export { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats };
+function insertLongStats(data, result) {
+  const [correct, wrong] = result.split('-');
+  const Data = new Date(data);
+  const Year = Data.getFullYear();
+  const Month = Data.getMonth() + 1 < 10 ? `0${Data.getMonth() + 1}` : Data.getMonth();
+  const Day = Data.getDate() < 10 ? `0${Data.getDate()}` : Data.getDate();
+  const Hours = Data.getHours();
+  const Minutes = Data.getMinutes() < 10 ? `0${Data.getMinutes()}` : Data.getMinutes();
+  const Seconds = Data.getSeconds();
+  const time = `${Day}/${Month}/${Year} - ${Hours}:${Minutes}:${Seconds} (UTC +3:00);`;
+
+  return `
+  <div class="row">
+    <div class="col-2 d-flex justify-content-center icon-col">
+      <i class="fas fa-music"></i>
+    </div>
+    <div class="col-8">
+      <p>${time}</p>
+      <p>правильных ответов - ${correct}</p>
+      <p>ошибок - ${wrong}</p>
+    </div>
+  </div>
+  `;
+}
+
+export { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats, insertLongStats };

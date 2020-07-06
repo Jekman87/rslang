@@ -136,7 +136,8 @@ i {
   display: flex;
   align-items: center;
 
-  .stat-container {
+  .stat-container,
+  .long-stat-container {
     width: 40%;
     height: 50%;
     overflow: scroll;
@@ -144,6 +145,32 @@ i {
 
   .mistake-container {
     border-bottom: 0.2px solid gray;
+  }
+
+  .long-stat-container {
+    i {
+      color: rebeccapurple;
+      align-self: center;
+    }
+
+    .icon-col {
+      border-right: 0.2px solid rebeccapurple;
+    }
+
+    p {
+      line-height: inherit;
+      margin-bottom: 0;
+      font-size: 1.1em;
+    }
+
+    p:first-child {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    p:nth-child(2) {
+      margin-bottom: 0;
+    }
   }
 }
 

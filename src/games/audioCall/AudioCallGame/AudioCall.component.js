@@ -5,13 +5,14 @@ import $$ from '../../../core/domManipulation';
 import createAudioCall from './audioCall.template';
 import createAudioCallStats from './stats.template';
 import getRoundWords from './asyncGetRoundWords';
-import { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats } from './utils';
+import { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats, insertLongStats } from './utils';
 
 export default class AudioCall {
   constructor() {
     this.app = document.getElementById('app');
     this.gameSound = true;
     this.statistics = [];
+    this.gamesStatistic = [];
 
     this.onClick = this.onClick.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
@@ -118,6 +119,13 @@ export default class AudioCall {
         if (this.progress < 10) {
           this.fillRoundWords();
         } else {
+          const gameResult = {
+            data: Date.now(),
+            result: `${10 - this.mistakesCounter}-${this.mistakesCounter}`,
+          };
+          this.gamesStatistic.push(gameResult);
+
+          this.longStatResults.insertAdjacentHTML('afterbegin', insertLongStats(gameResult.data, gameResult.result));
           this.appendStats();
         }
         break;
@@ -136,6 +144,17 @@ export default class AudioCall {
       case 'new-game':
         this.destroy();
         this.render();
+        break;
+      case 'stat-sound':
+        target.parentNode.children[1].play();
+        break;
+      case 'long-time-statistic':
+        this.statContainer.classList.add('d-none');
+        this.longStatContainer.classList.remove('d-none');
+        break;
+      case 'back-to-short-stat':
+        this.longStatContainer.classList.add('d-none');
+        this.statContainer.classList.remove('d-none');
         break;
       default:
         break;
@@ -205,6 +224,13 @@ export default class AudioCall {
           if (this.progress < 10) {
             this.fillRoundWords();
           } else {
+            const gameResult = {
+              data: Date.now(),
+              result: `${10 - this.mistakesCounter}-${this.mistakesCounter}`,
+            };
+            this.gamesStatistic.push(gameResult);
+
+            this.longStatResults.insertAdjacentHTML('afterbegin', insertLongStats(gameResult.data, gameResult.result));
             this.appendStats();
           }
         }
@@ -253,8 +279,11 @@ export default class AudioCall {
     this.answerPic = document.querySelector('.answer-pic');
     this.answerWord = document.querySelector('.answer-word');
 
+    this.statContainer = document.querySelector('.stat-container');
+    this.longStatContainer = document.querySelector('.long-stat-container');
     this.mistakeContainer = document.querySelector('.mistake-container');
     this.correctContainer = document.querySelector('.correct-container');
+    this.longStatResults = document.querySelector('.long-stat-results');
 
     this.progress = 0;
     this.mistakesCounter = 0;
