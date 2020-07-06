@@ -1,12 +1,12 @@
 import $$ from '../../core/domManipulation';
 import Observer from '../../core/Observer';
 
-import Sprint from './Sprint.component';
+import SprintGame from './Sprint.component';
 
-export default class SprintGame {
+export default class Sprint {
   constructor(selector, options) {
     this.$el = $$(selector);
-    this.components = [Sprint];
+    this.components = [SprintGame];
     /* this.observer = new Observer(); */
     this.observer = options.observer;
     this.dataForApp = {};

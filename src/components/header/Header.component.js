@@ -1,7 +1,7 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createHeaderHTML from './header.template';
-import { mainMenuTitles, gameMenuTitles } from '../../constants/menu.constants';
+import { MAIN_MENU_TITLES, GAME_MENU_TITLES } from '../../constants/menu.constants';
 
 export default class Header extends Component {
   static tagName = 'header';
@@ -37,12 +37,12 @@ export default class Header extends Component {
 
     if (clickedTag === 'a') {
       const pageName = clickedElement.data.name;
-      const isMainMenuEl = mainMenuTitles.some((title) => title.data === pageName);
+      const isMainMenuEl = MAIN_MENU_TITLES.some((title) => title.data === pageName);
 
       if (isMainMenuEl && pageName !== 'games') {
         this.emit('selectPage', pageName);
       } else {
-        const isGameMenuEl = gameMenuTitles.some((title) => title.data === pageName);
+        const isGameMenuEl = GAME_MENU_TITLES.some((title) => title.data === pageName);
 
         if (isGameMenuEl) {
           this.emit('playGame', pageName);

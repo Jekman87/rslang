@@ -11,7 +11,7 @@ import {
   switchToLongTimeStatistic, switchToRoundStatistic, keyDownListener, restartGame,
 } from './sprint.functions';
 
-export default class Sprint extends Component {
+export default class SprintGame extends Component {
   static className = 'sprint';
 
   constructor($root, options) {

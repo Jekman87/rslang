@@ -1,11 +1,11 @@
-import { mainMenuTitles, gameMenuTitles, authPageName } from '../../constants/menu.constants';
+import { MAIN_MENU_TITLES, GAME_MENU_TITLES, AUTH_PAGE_NAME } from '../../constants/menu.constants';
 
 export default function createHeaderHTML() {
-  const gameMenu = gameMenuTitles.map((item) => `
+  const gameMenu = GAME_MENU_TITLES.map((item) => `
     <a class="dropdown-item" href="#" data-name="${item.data}">${item.title}</a>
   `).join('');
 
-  const menu = mainMenuTitles.map((item, index) => {
+  const menu = MAIN_MENU_TITLES.map((item, index) => {
     let navItem;
 
     if (item.data !== 'games') {
@@ -41,7 +41,7 @@ export default function createHeaderHTML() {
           <ul class="navbar-nav mr-auto">
             ${menu}
           </ul>
-          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout" data-name="${authPageName}">
+          <button class="btn btn-secondary mt-5 my-lg-0" type="button" id="logout" data-name="${AUTH_PAGE_NAME}">
             Выход <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>

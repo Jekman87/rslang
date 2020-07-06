@@ -1,7 +1,11 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import { storage } from '../../core/utils';
-import { authPageName } from '../../constants/menu.constants';
+
+import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
+import BASE_SETTINGS from '../../constants/settings.constants';
+import BASE_STATS from '../../constants/stats.constants';
+import BASE_DATA_FOR_APP from '../../constants/data-for-app.constants';
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -18,10 +22,11 @@ export default class PageContainer extends Component {
     this.options = options;
     this.pages = options.pages;
     this.component = options.startPage;
+    this.dataForApp = { ...BASE_DATA_FOR_APP };
   }
 
   init() {
-    if (this.component === authPageName) {
+    if (this.component === AUTH_PAGE_NAME) {
       this.emit('hideHeader');
     }
 
@@ -30,6 +35,7 @@ export default class PageContainer extends Component {
     this.subscribe('changePage', (pageName) => {
       if (this.pages[pageName]) {
         this.component.destroy();
+        storage('currentPage', pageName);
         this.renderPage(this.pages[pageName]);
       } else {
         console.log('Страница пока не готова: ', pageName);
@@ -37,35 +43,109 @@ export default class PageContainer extends Component {
     });
 
     this.subscribe('playGame', (NewGame) => {
-      this.component.destroy();
-      this.emit('hideHeader');
-      this.renderGame(this.pages[NewGame]);
+      if (this.pages[NewGame]) {
+        this.component.destroy();
+        storage('currentPage', NewGame);
+        this.emit('hideHeader');
+        this.renderGame(this.pages[NewGame]);
+      } else {
+        console.log('Игра пока не готова: ', NewGame);
+      }
     });
 
     this.subscribe('mainLogout', () => {
       this.component.destroy();
+      this.dataForApp = { ...BASE_DATA_FOR_APP };
+      this.options.dataForApp = this.dataForApp;
+      this.options.api.clearUserLog();
+
       this.emit('hideHeader');
-
-      storage.remove('currentToken');
-      storage.remove('tokenExpiresIn');
-
-      this.renderPage(this.pages[authPageName]);
+      this.renderPage(this.pages[AUTH_PAGE_NAME]);
     });
   }
 
-  renderPage(NewPage) {
+  async renderPage(NewPage) {
+    if (NewPage.className !== AUTH_PAGE_NAME
+      && (!this.dataForApp.settings || !this.dataForApp.statistics)) {
+      // add loader?
+      await this.initSettingsAndStats();
+      await this.initWords();
+      // remove loader?
+    }
+
+    const componentOptions = { ...this.options, dataForApp: this.dataForApp };
     const element = $$.create(NewPage.tagName || 'div', NewPage.className);
-    this.component = new NewPage(element, this.options);
+    this.component = new NewPage(element, componentOptions);
     element.html(this.component.toHTML());
     this.$root.clear().append(element.$el);
     this.component.init();
   }
 
   renderGame(NewGame) {
+    const componentOptions = { ...this.options, dataForApp: this.dataForApp };
     this.$root.clear();
-
-    this.component = new NewGame('.PageContainer', this.options);
+    this.component = new NewGame('.PageContainer', componentOptions);
     this.component.render();
+
+    // одинаковый интерфейс для всех игр
+    // this.component = new NewGame('.PageContainer', this.options);
+    // this.component.render();
+    // .PageContainer - в этот контейнер рендерится ваша игра
+    // в this.options содержатся observer и api
+    // чтобы вернуться в главное приложение вы можете вызвать событие
+    // this.options.observer.emit('selectPage', 'MainPage');
+    // чтобы выйти на страницу авторизации используйте
+    // this.options.observer.emit('mainLogout');
+    // в this.options.api уже содержатся token and userId
+    // также в этом объекте есть все необходимые методы
+    // чтобы раборало меню, поправьте название вашего класса в
+    // /constants/menu.constants
+  }
+
+  async initSettingsAndStats() {
+    try {
+      // переделать в promise.all
+      this.dataForApp.settings = await this.options.api.getSettings();
+      this.dataForApp.statistics = await this.options.api.getStatistics();
+    } catch (error) {
+      if (error.message === '401') {
+        console.log('Логаут ', error.message);
+        this.emit('mainLogout');
+      } else if (error.message === '404') {
+        // если настроек и статистики нету - устанавливаем стандартные
+        // переделать в promise.all
+        this.dataForApp.settings = await this.options.api.updateSettings(BASE_SETTINGS);
+        this.dataForApp.statistics = await this.options.api.updateStatistics(BASE_STATS);
+      } else {
+        console.log('Ошибка соединения: ', error.message);
+      }
+    }
+  }
+
+  async initWords() {
+    try {
+      // загружать все слова пользователя?
+      // по ним смотреть что нужно повторить
+      // 10-20 повторений, затем новых 20, затем повторения новых
+
+      // подгрузка слов в зависимости от статистики и алгоритма
+      // первым делом идут карты на повторение, затем новые слова
+      // нет на повторении - начинаем с новых
+      // преобразуем порядок слов? Составляем карточки? AggregatedWords
+      const page = 0;
+      const group = 0;
+      this.dataForApp.userCards = await this.options.api.getWords(page, group);
+      this.dataForApp.userWords = await this.options.api.getAllUserWords();
+      console.log('userCards', this.dataForApp.userCards);
+      console.log('userWords', this.dataForApp.userWords);
+    } catch (error) {
+      if (error.message === '401') {
+        console.log('Логаут ', error.message);
+        this.emit('mainLogout');
+      } else {
+        console.log('Другая ошибка: ', error.message);
+      }
+    }
   }
 
   destroy() {
