@@ -26,7 +26,7 @@ export default function showTemplate() {
         <p class="card-text">
         <div class="form-group">
           <div class="d-flex align-items-center">
-            <select class="form-control col-3 mr-3 mb-3" id="game-lvl">
+            <select class="form-control col-3 mr-3 mb-3" id="savannaGameLevel">
               <option>1</option>
               <option>2</option>
               <option>3</option>
@@ -34,23 +34,23 @@ export default function showTemplate() {
               <option>5</option>
               <option>6</option>
             </select>
-            <label for="game-lvl col-8">Сложность игры</label>
+            <label for="savanna-game-lvl">Сложность игры</label>
           </div>
           <div class="custom-control custom-radio mb-2">
-            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked="">
-            <label class="custom-control-label" for="customRadio1">Играть с изучаемыми словами</label>
+            <input type="radio" id="savannaisLearnedWords1" name="savannaisLearnedWords" class="custom-control-input" checked="">
+            <label class="custom-control-label" for="savannaisLearnedWords1">Играть с изучаемыми словами</label>
           </div>
           <div class="custom-control custom-radio mb-3">
-            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-            <label class="custom-control-label" for="customRadio2">Играть с новыми словами</label>
+            <input type="radio" id="savannaisLearnedWords2" name="savannaisLearnedWords" class="custom-control-input">
+            <label class="custom-control-label" for="savannaisLearnedWords2">Играть с новыми словами</label>
           </div>
           <div class="custom-control custom-checkbox mb-3">
-            <input type="checkbox" class="custom-control-input" id="game1">
-            <label class="custom-control-label" for="game1">Игра наоборот</label>
+            <input type="checkbox" class="custom-control-input" id="savannaSettingsGameInvert">
+            <label class="custom-control-label" for="savannaSettingsGameInvert">Игра наоборот</label>
           </div>
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="game2" disabled="">
-            <label class="custom-control-label" for="game2">Тренировка неправильных глаголов (доступно с премиум аккаунтом)</label>
+            <input type="checkbox" class="custom-control-input" id="savannaSettingsGameIrregularVerbs" disabled="">
+            <label class="custom-control-label" for="savannaSettingsGameIrregularVerbs">Тренировка неправильных глаголов (доступно с премиум аккаунтом)</label>
           </div>
         </div>
         </p>
@@ -114,12 +114,8 @@ export default function showTemplate() {
         <div class="savanna-abort-game p-1 ml-3">
           <span class="fas fa-times"></span>
         </div>
-
-
-
         </div>
       </div>
-
     </div>
     <div class="container main-game">
       <div class="row text-xs-left text-sm-center">
@@ -146,15 +142,167 @@ export default function showTemplate() {
   </div>
 
   <div class="savanna-game-statistic savanna-display-none" id="savanna-game-statistic">
-    <div class="btn btn-secondary align-self-end" data-dismiss="modal">Close</div>
-    <div class="jumbotron d-flex flex-column justify-content-center align-items-center">
-      <h1 class="display-3">Статистика</h1>
-      <p class="lead">Пока не понятно, что и как тут отображать</p>
+    <div class="jumbotron mb-0 container d-flex flex-column justify-content-center align-items-center"
+      style="max-width: 900px;">
+      <h1 class="statistics-heading" id="savannaStatisticHeadingElement">В этот раз не получилось, но продолжай тренироваться!</h1>
+      <div class="statistics-content" id="savannaStatisticContent">
+        <ul class="word-list">
+          <p class="h5 mb-3">Верно:<span class="badge badge-success  ml-2">10</span></p>
+          <li class="statistics-word">
+            <div class="text-secondary fas fa-volume-up sound-button h5 mr-2"></div>
+            <div>
+              <span class="word h5 text-info">agree</span>
+              <span>—</span>
+              <span>согласна</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">alcohol</span>
+              <span>—</span>
+              <span>алкоголь</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">arrive</span>
+              <span>—</span>
+              <span>прибыть</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">August</span>
+              <span>—</span>
+              <span>август</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">boat</span>
+              <span>—</span>
+              <span>лодка</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">breakfast</span>
+              <span>—</span>
+              <span>завтрак</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">camera</span>
+              <span>—</span>
+              <span>камера</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">capital</span>
+              <span>—</span>
+              <span>столица</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">catch</span>
+              <span>—</span>
+              <span>поймать</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">duck</span>
+              <span>—</span>
+              <span>утка</span>
+            </div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <div>
+              <span class="word h5 text-info">enjoy</span>
+              <span>—</span>
+              <span>наслаждаться</span>
+            </div>
+          </li>
+        </ul>
+        <hr>
+        <ul class="word-list">
+          <p class="h5">Неверно:<span class="badge badge-danger  ml-2">10</span></p>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">invite</span>
+            <span>—</span>
+            <span>пригласить</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">love</span>
+            <span>—</span>
+            <span>любовь</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">month</span>
+            <span>—</span>
+            <span>месяц</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">travel</span>
+            <span>—</span>
+            <span>путешествовать</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">typical</span>
+            <span>—</span>
+            <span>типичный</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">visit</span>
+            <span>—</span>
+            <span>посещение</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">weather</span>
+            <span>—</span>
+            <span>погода</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">week</span>
+            <span>—</span>
+            <span>неделя</span></li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">wine</span>
+            <span>—</span>
+            <span>вино</span></li>
+          <li class="statistics-word">
+            <div class="text-secondary fas fa-volume-up sound-button h5 mr-2"></div>
+            <div>
+              <span class="word h5 text-info">adventure</span>
+              <span>—</span>
+              <span>приключение</span>
+              <div>
+          </li>
+          <li class="statistics-word">
+            <span class="text-secondary fas fa-volume-up sound-button h5 mr-2"></span>
+            <span class="word h5 text-info">approach</span>
+            <span>—</span>
+            <span>подходить</span></li>
+        </ul>
+      </div>
       <div class="btn btn-primary btn-lg" id="savanna-to-game-start-page">В начало</div>
     </div>
-    <div class="balasned_element"></div>
   </div>
-
 
   <audio class="savanna-audioSource" id="SavannaAudioBip" src="./assets/savanna/voices/bip.mp3"></audio>
   <audio class="savanna-audioSource" id="SavannaAudioGong"  src=./assets/savanna/voices/gong.mp3></audio>
