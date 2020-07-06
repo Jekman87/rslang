@@ -18,12 +18,12 @@ import './plugins/fontawesome/index';
 // authorization.render();
 // }
 
-import { StartPage } from './games/audioCall/index';
+// import { StartPage } from './games/audioCall/index';
 
-const startPage = new StartPage();
-startPage.render();
+// const startPage = new StartPage();
+// startPage.render();
 
-// import { AudioCall } from './components/AudioCall/index';
+import { AudioCall } from './games/audioCall/index';
 
-// const audioCall = new AudioCall();
-// audioCall.render();
+const audioCall = new AudioCall();
+audioCall.render();

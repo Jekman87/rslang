@@ -75,7 +75,7 @@ export default function createAudioCall() {
         <div class="col-4 col-sm-4 col-lg-4"></div>
         <div class="col-sm-4 col-md">
             <button type="button" 
-            class="btn btn-outline-light ml-auto mr-auto text-uppercase btn-dont-know d-block"
+            class="btn btn-outline-light ml-auto mr-auto text-uppercase btn-dont-know"
             data-event="dontKnow"
             >
             <span class="px-2" data-event="dontKnow">не знаю</span>

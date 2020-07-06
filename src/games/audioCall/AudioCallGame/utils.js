@@ -37,4 +37,17 @@ function onArrows(direction) {
   }
 }
 
-export { setRoundWord, setAnswerAttribute, crossTheWord, onArrows };
+function insertStats(word, translate, audio) {
+  return `
+  <div class="container word-container pl-0">
+    <p class="">
+      <i class="fas fa-play text-dark"></i>
+      <audio src="https://raw.githubusercontent.com/Jekman87/rslang-data/master/${audio}"></audio>
+      <span class="ml-2">${word}</span>
+      <span class="text-muted ml-1">- ${translate}</span>
+    </p>
+  </div>
+  `;
+}
+
+export { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats };

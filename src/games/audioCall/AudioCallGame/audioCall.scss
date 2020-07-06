@@ -58,6 +58,10 @@ i {
   &.fa-check-circle {
     color: #8ac48a;
   }
+
+  &.fa-play {
+    font-size: 1em;
+  }
 }
 
 .btn-repeat {
@@ -90,6 +94,11 @@ i {
 
 .btn-dont-know {
   font-size: 1.6em;
+  display: block;
+}
+
+.btn-next {
+  display: block;
 }
 
 .answer-col {
@@ -113,6 +122,29 @@ i {
   width: fit-content;
   margin: 0 auto;
   font-size: 3.5em;
+}
+
+.audio-call-stats-wrapper {
+  height: 100vh;
+  background: rgb(111, 108, 157);
+  background: linear-gradient(
+    90deg,
+    rgba(111, 108, 157, 0.7) 0%,
+    rgba(79, 138, 185, 0.7) 100%,
+    rgb(164, 207, 216) 100%
+  );
+  display: flex;
+  align-items: center;
+
+  .stat-container {
+    width: 40%;
+    height: 50%;
+    overflow: scroll;
+  }
+
+  .mistake-container {
+    border-bottom: 0.2px solid gray;
+  }
 }
 
 @-webkit-keyframes pulse {

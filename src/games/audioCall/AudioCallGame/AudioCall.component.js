@@ -1,26 +1,22 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 /* eslint-disable max-len */
 import $$ from '../../../core/domManipulation';
 import createAudioCall from './audioCall.template';
+import createAudioCallStats from './stats.template';
 import getRoundWords from './asyncGetRoundWords';
-import { setRoundWord, setAnswerAttribute, crossTheWord, onArrows } from './utils';
+import { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats } from './utils';
 
 export default class AudioCall {
   constructor() {
-    // this.audioCallWrapper = $$.create('div', 'container-fluid').$el;
-    // this.audioCallWrapper.classList.add('audio-call-wrapper');
-
-    // this.audioCallWrapper.setAttribute('tabindex', '0');
-
-    // this.audioCallWrapper.insertAdjacentHTML('afterbegin', createAudioCall());
-
     this.app = document.getElementById('app');
-    this.progress = 0;
     this.gameSound = true;
     this.statistics = [];
 
     this.onClick = this.onClick.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
+    this.destroy = this.destroy.bind(this);
+    this.appendStats = this.appendStats.bind(this);
   }
 
   async fillRoundWords() {
@@ -121,14 +117,25 @@ export default class AudioCall {
       case 'next':
         if (this.progress < 10) {
           this.fillRoundWords();
-        } else alert('the end');
+        } else {
+          this.appendStats();
+        }
         break;
       case 'dontKnow':
         if (this.gameSound) {
           this.playWrongSound();
         }
         this.statistics[this.progress - 1].push('failure');
+        this.mistakesCounter += 1;
         this.onRightAnswer();
+        this.mistakeContainer.insertAdjacentHTML(
+          'beforeend',
+          insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+        );
+        break;
+      case 'new-game':
+        this.destroy();
+        this.render();
         break;
       default:
         break;
@@ -142,6 +149,10 @@ export default class AudioCall {
         this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
         this.onRightAnswer();
         this.statistics[this.progress - 1].push('success');
+        this.correctContainer.insertAdjacentHTML(
+          'beforeend',
+          insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+        );
         break;
       case 'false':
         if (this.gameSound) {
@@ -150,6 +161,11 @@ export default class AudioCall {
         crossTheWord(target);
         this.onRightAnswer();
         this.statistics[this.progress - 1].push('failure');
+        this.mistakesCounter += 1;
+        this.mistakeContainer.insertAdjacentHTML(
+          'beforeend',
+          insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+        );
         break;
       default:
         break;
@@ -168,6 +184,10 @@ export default class AudioCall {
           crossTheWord(document.activeElement);
           this.onRightAnswer();
           this.statistics[this.progress - 1].push('failure');
+          // this.mistakeContainer.insertAdjacentHTML(
+          //   'beforeend',
+          //   insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+          // );
           document.activeElement.blur();
         } else if (document.activeElement.getAttribute('data-answer') === 'true') {
           if (this.gameSound) {
@@ -176,11 +196,17 @@ export default class AudioCall {
           this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
           this.onRightAnswer();
           this.statistics[this.progress - 1].push('success');
+          // this.correctContainer.insertAdjacentHTML(
+          //   'beforeend',
+          //   insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+          // );
           document.activeElement.blur();
         } else if (!this.btnNext.classList.contains('d-none')) {
           if (this.progress < 10) {
             this.fillRoundWords();
-          } else alert('the end');
+          } else {
+            this.appendStats();
+          }
         }
         break;
       case 'ArrowUp':
@@ -208,8 +234,14 @@ export default class AudioCall {
     this.audioCallWrapper.setAttribute('tabindex', '0');
     this.audioCallWrapper.insertAdjacentHTML('afterbegin', createAudioCall());
 
+    this.statsWrapper = $$.create('div', 'container-fluid').$el;
+    this.statsWrapper.classList.add('audio-call-stats-wrapper', 'd-none');
+    this.statsWrapper.insertAdjacentHTML('afterbegin', createAudioCallStats());
+
     this.app.append(this.audioCallWrapper);
+    this.app.append(this.statsWrapper);
     this.audioCallWrapper.addEventListener('click', this.onClick);
+    this.statsWrapper.addEventListener('click', this.onClick);
     document.body.addEventListener('keyup', this.onKeyUp);
 
     this.progressBar = document.querySelector('.progress-bar');
@@ -221,7 +253,19 @@ export default class AudioCall {
     this.answerPic = document.querySelector('.answer-pic');
     this.answerWord = document.querySelector('.answer-word');
 
+    this.mistakeContainer = document.querySelector('.mistake-container');
+    this.correctContainer = document.querySelector('.correct-container');
+
+    this.progress = 0;
+    this.mistakesCounter = 0;
     this.fillRoundWords();
+  }
+
+  appendStats() {
+    this.app.removeChild(this.app.firstChild);
+    document.querySelector('.span-mistakes').innerText = this.mistakesCounter;
+    document.querySelector('.span-correct').innerText = 10 - this.mistakesCounter;
+    this.statsWrapper.classList.remove('d-none');
   }
 
   destroy() {
