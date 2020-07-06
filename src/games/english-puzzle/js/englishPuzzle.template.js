@@ -2,7 +2,7 @@ const template = `
  <div id="pzl">
   <div class="start-page">
     <h1 class="h1">Puzzle English</h1>
-    <button class="btn btn-primary start-button">Старт</button>
+    <button class="btn btn-primary start-button visible">Старт</button>
     <div class="spinner">
       <div class="lds-hourglass"></div>
     </div>

@@ -1,7 +1,10 @@
-import { roundsStructure } from './variables';
+import { userBasicSettings } from './variables';
 
 export default class Storage {
-  constructor() {
+  constructor(api, statistics) {
+    this.api = api;
+    this.sharedStatObj = statistics;
+
     this.currentLevel = null;
     this.currentRound = null;
 
@@ -19,6 +22,19 @@ export default class Storage {
     this.paintingData = null;
   }
 
+  init() {
+    document.addEventListener('userDataChange', this.updateUserData.bind(this));
+
+    if (!this.sharedStatObj.optional.PuzzleLong) {
+      this.sharedStatObj.optional.PuzzleLong = JSON.stringify([]);
+    }
+    if (!this.sharedStatObj.optional.PuzzleMain) {
+      this.sharedStatObj.optional.PuzzleMain = JSON.stringify(userBasicSettings);
+    }
+
+    this.setUserData();
+  }
+
   setProp(propName, value) {
     this[propName] = value;
   }
@@ -27,33 +43,36 @@ export default class Storage {
     return this[propName];
   }
 
-  setUserData(data) {
-    this.userData = data;
-    delete this.userData.id;
-    const { optional } = data;
+  setUserData() {
+    this.mainData = JSON.parse(this.sharedStatObj.optional.PuzzleMain);
+    this.statistics = JSON.parse(this.sharedStatObj.optional.PuzzleLong);
 
-    const helpers = optional.pzlHelpers || 'on-on-on-on';
+    const helpers = this.mainData.pzlHelpers;
     [this.autoplayHelp, this.pronounceHelp, this.translateHelp, this.visualHelp] = helpers.split('-');
 
-    this.lastRound = optional.pzlLastRound || '1-0';
-    this.passedRounds = optional.pzlPassedRounds || roundsStructure;
-    this.statistics = optional.pzlStatistics || 'empty';
-    this.gallery = optional.pzlGallery || 'empty';
+    this.lastRound = this.mainData.pzlLastRound;
+    this.passedRounds = this.mainData.pzlPassedRounds;
+    this.gallery = this.mainData.pzlGallery;
   }
 
   collectUserData() {
-    this.userData.optional.pzlHelpers = [
+    this.mainData.pzlHelpers = [
       this.autoplayHelp,
       this.pronounceHelp,
       this.translateHelp,
       this.visualHelp,
     ].join('-');
 
-    this.userData.optional.pzlLastRound = this.lastRound;
-    this.userData.optional.pzlPassedRounds = this.passedRounds;
-    this.userData.optional.pzlStatistics = this.statistics;
-    this.userData.optional.pzlGallery = this.gallery;
+    this.mainData.pzlLastRound = this.lastRound;
+    this.mainData.pzlPassedRounds = this.passedRounds;
+    this.mainData.pzlGallery = this.gallery;
 
-    return this.userData;
+    this.sharedStatObj.optional.PuzzleMain = JSON.stringify(this.mainData);
+    this.sharedStatObj.optional.PuzzleLong = JSON.stringify(this.statistics);
+  }
+
+  updateUserData() {
+    this.collectUserData();
+    this.api.updateStatistics(this.sharedStatObj);
   }
 }

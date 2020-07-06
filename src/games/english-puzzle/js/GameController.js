@@ -17,6 +17,7 @@ export default class GameController {
     this.painting = document.querySelector('figure.painting-block');
     this.playBtn = document.querySelector('button.play-pzl-btn');
     this.startBtn = document.querySelector('button.start-button');
+    this.logoutBtn = document.querySelector('button.logout-pzl-btn');
     this.spinner = document.querySelector('div.spinner');
     this.popUp = document.querySelector('div.pop-up');
     this.resultsBlock = document.querySelector('div.results-block');
@@ -35,7 +36,10 @@ export default class GameController {
     document.querySelector('button.statistics-pzl-btn').addEventListener('click', this.showStatistics.bind(this));
     document.querySelector('button.gallery-pzl-btn').addEventListener('click', this.showGallery.bind(this));
     document.querySelector('button.close-pzl-btn').addEventListener('click', this.closePopUp.bind(this));
+
     this.startBtn.addEventListener('click', this.startGame.bind(this));
+    this.logoutBtn.addEventListener('click', this.logOut.bind(this));
+
     this.playBtn.addEventListener('click', this.playAudio.bind(this));
     this.resultsBlock.addEventListener('click', this.playByClick.bind(this));
 
@@ -346,13 +350,19 @@ export default class GameController {
   }
 
   saveRoundResult() {
-    const roundResult = `${this.get('currentLevel')}-${this.get('currentRound')},${Date.now()},${this.correctCounter}`;
-    const oldStat = this.get('statistics');
-    if (oldStat !== 'empty') {
-      this.set('statistics', `${roundResult};${oldStat}`);
-    } else {
-      this.set('statistics', `${roundResult}`);
+    const roundResult = {
+      date: Date.now(),
+      round: `${this.get('currentLevel')}-${this.get('currentRound')}`,
+      result: `${this.correctCounter} / 10`,
+    };
+    const statistics = this.get('statistics');
+
+    statistics.unshift(roundResult);
+    if (statistics.length > 25) {
+      statistics.length = 25;
     }
+
+    this.set('statistics', statistics);
   }
 
   savePassedRound() {
@@ -446,23 +456,20 @@ export default class GameController {
   fillStatistics() {
     document.querySelector('table.statistics-table').innerHTML = '';
     const rows = ['<caption class="table-caption">Ваши ранее сыгранные игры:</caption><tr class="tr"><th class="th">Уровень</th><th class="th">Раунд</th><th class="th">Дата</th><th class="th">Время</th><th class="th">Счет</th></tr>'];
-    let statistics = this.get('statistics');
-    statistics = statistics.split(';');
-    statistics = statistics.map((item) => item.split(','));
-    statistics.forEach((result) => {
-      const [level, round] = result[0].split('-');
-      const date = new Date(Number(result[1]));
-      const score = result[2];
+    const statistics = this.get('statistics');
+    statistics.forEach((mark) => {
+      const [level, round] = mark.round.split('-');
+      const date = new Date(mark.date);
+      const score = mark.result;
       const tr = `
       <tr class="tr">
         <td class="td">${level}</td>
         <td class="td">${round}</td>
         <td class="td">${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}</td>
         <td class="td">${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
-        <td class="td">${score} / 10</td>
+        <td class="td">${score}</td>
       </tr>`;
       rows.push(tr);
-      if (rows.length > 26) rows.length = 26;
     });
     document.querySelector('table.statistics-table').innerHTML = rows.join('');
   }
@@ -505,6 +512,10 @@ export default class GameController {
   handleWindowResize() {
     const restPuzzles = [this.sentenceConstructor, this.availableWords];
     this.puzzleDrawer.resizePuzzles(this.sentenceIndex, this.currentWords, restPuzzles);
+  }
+
+  logOut() {
+    document.location.reload(true);
   }
 
   get(prop) {
