@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
 import Component from '../../core/Component';
-// import $$ from '../../core/domManipulation';
 import createSettingsHTML from './settingsPage.template';
 import BASE_SETTINGS from '../../constants/settings.constants';
 
