@@ -1,8 +1,6 @@
 import $$ from '../../core/domManipulation';
 import Component from '../../core/Component';
-import { clearRegister, clearLogin } from './clearAuthorization';
 import createAuthorizationForm from './authorization.template';
-import { storage } from '../../core/utils';
 
 export default class Authorization extends Component {
   static className = 'Authorization';
@@ -29,40 +27,36 @@ export default class Authorization extends Component {
     // this.submitForm например
 
     if (clickedElement.hasClass('btn')) {
-      console.log(clickedElement);
+      // console.log(clickedElement);
     }
   }
 
   async onSubmitRegisterForm(event) {
     event.preventDefault();
-    clearLogin();
 
-    const user = document.getElementById('registerName').value;
+    // взять из поля юзернейм
+    const userName = 'Julia\'s cat';
+    const userEmail = document.getElementById('registerName').value;
     const password = document.getElementById('registerPassword').value;
 
     try {
-      const userData = { email: `${user}`, password: `${password}` };
+      const userData = {
+        name: `${userName}`,
+        email: `${userEmail}`,
+        password,
+      };
 
       await this.api.createUser(userData);
-      const loginUserResponse = await this.api.loginUser(userData);
-
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('currentToken', loginUserResponse.token);
-      storage('userId', loginUserResponse.userId);
-      storage('tokenExpiresIn', tokenExpiresIn);
+      await this.api.loginUser(userData);
 
       this.emit('selectPage', 'MainPage');
     } catch {
       document.querySelector('.alert-error-register').classList.remove('d-none');
-      setTimeout(clearRegister, 2000);
     }
   }
 
   async onSubmitLoginForm(event) {
     event.preventDefault();
-    clearRegister();
 
     document.querySelector('.alert-error-login').classList.add('d-none');
 
@@ -70,17 +64,10 @@ export default class Authorization extends Component {
     const password = document.getElementById('loginPassword').value;
 
     try {
-      const loginUserResponse = await this.api.loginUser({
+      await this.api.loginUser({
         email: `${user}`,
         password: `${password}`,
       });
-
-      const now = new Date();
-      const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('currentToken', loginUserResponse.token);
-      storage('userId', loginUserResponse.userId);
-      storage('tokenExpiresIn', tokenExpiresIn);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -97,9 +84,6 @@ export default class Authorization extends Component {
 
   init() {
     super.init();
-    // если кроме click нет других событий и нет никаких слушателей
-    // метод init можно удалить
-
     this.registerForm = document.querySelector('.register-form');
     this.registerForm.onsubmit = this.onSubmitRegisterForm;
 
@@ -114,18 +98,5 @@ export default class Authorization extends Component {
 
   toHTML() {
     return createAuthorizationForm().trim();
-  }
-
-  static checkTokenValidity() {
-    const userId = storage('userId');
-    const currentToken = storage('currentToken');
-    const currentPage = storage('currentPage');
-    const tokenExpiresIn = Number(storage('tokenExpiresIn'));
-
-    if (!currentToken || (new Date().getTime() - tokenExpiresIn > 0)) {
-      return false;
-    }
-
-    return { userId, currentToken, currentPage };
   }
 }
