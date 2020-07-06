@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
 import Component from '../../core/Component';
-import $$ from '../../core/domManipulation';
+// import $$ from '../../core/domManipulation';
 import createSettingsHTML from './settingsPage.template';
 import BASE_SETTINGS from '../../constants/settings.constants';
 
@@ -14,32 +14,7 @@ export default class Settings extends Component {
       listeners: ['click', 'change'],
       ...options,
     });
-    // this.defaultSetting = {
-    //   wordsPerDay: 20,
-    //   optional: {
-    //     cardsPerDay: 50,
-    //     mixedCards: 0,
-    //     cardTranslation: true,
-    //     cardExplanation: true,
-    //     cardExample: true,
-    //     cardTranscription: true,
-    //     cardImage: true,
-    //     cardTranslationAfterSuccess: false,
-    //     cardExplanationTranslation: true,
-    //     cardExampleTranslation: true,
-    //     autoSound: true,
-    //     answerButton: true,
-    //     deleteButton: true,
-    //     difficultWordsButton: true,
-    //     feedbackButtons: true,
-    //     vocabularyExplanation: true,
-    //     vocabularyExample: true,
-    //     vocabularyTranscription: true,
-    //     vocabularyImage: true,
-    //   },
-    // };
     this.options = options;
-    console.log('настройки приходят', this.options);
   }
 
   getSettingsElements() {
@@ -71,7 +46,6 @@ export default class Settings extends Component {
   }
 
   // расставляет галочки от полей объекта
-
   setCheckboxFields() {
     this.elements.$wordsPerDay.$el.value = this.options.dataForApp.settings.wordsPerDay;
     this.elements.$cardsPerDay.$el.value = this.options.dataForApp.settings.optional.cardsPerDay;
@@ -123,8 +97,8 @@ export default class Settings extends Component {
     this.options.dataForApp.settings.optional.deleteButton = this.elements.$cardDeleteButton.$el.checked === true;
     this.options.dataForApp.settings.optional.feedbackButtons = this.elements.$cardFeedbackButtons.$el.checked === true;
   }
-  // отслеживать изменение 3 полей
 
+  // отслеживать изменение 3 полей
   watchDependenceOfThreeMainCardsField() {
     if (this.elements.$cardTranslation.$el.checked === true) {
       this.elements.$cardTranslationAfterSuccess.$el.checked = false;
@@ -188,21 +162,14 @@ export default class Settings extends Component {
     this.getSettingsElements();
     this.setCheckboxFields();
     this.watchDependenceOfThreeMainCardsField();
-    console.log('myinit');
   }
 
   destroy() {
-    console.log('destroy');
   }
 
   onClick(event) {
-    const clickedElement = $$(event.target);
-    console.log('Settings onClick', clickedElement);
-    console.log('myconsolelog', event);
     if (event.target.id === 'settingsPageApplyButton') {
       this.setObjectFields();
-      console.log('настройки изменены', this.options);
-      // после установки полей объекта нужно их отправить на бэкэнд?
       this.options.api.updateSettings(this.options.dataForApp.settings);
     }
     if (event.target.id === 'settingsPageResetButton') {
@@ -213,7 +180,6 @@ export default class Settings extends Component {
   }
 
   onChange(event) {
-    console.log('OnChange event', event);
     if (event.target.id === 'settingsPageCardTranslation' || event.target.id === 'settingsPageCardExplanation' || event.target.id === 'settingsPageCardExample') {
       this.watchDependenceOfThreeMainCardsField();
       this.watchThreeMainCardsField();
@@ -221,15 +187,6 @@ export default class Settings extends Component {
   }
 
   toHTML() {
-    // setTimeout(() => {
-    //   this.afterRender();
-    // }, 2);
     return createSettingsHTML().trim();
   }
-
-  // afterRender() {
-  //   console.log('afterRender');
-  //   this.wordsPerDay = document.getElementById('wordsPerDay');
-  //   console.log(this.wordsPerDay);
-  // }
 }
