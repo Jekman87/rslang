@@ -1,13 +1,13 @@
 const BASE_USER_WORD = {
-  difficulty: 'normal',
+  difficulty: 'new',
   optional: {
-    lastAppearance: 123,
-    counter: 12,
-    success: 5,
-    isGameSuccess: true,
-    status: 'goodStatus',
-    progress: 33,
-    userDifficulty: 'veryGood',
+    lastRepeat: 0,
+    nextRepeat: 0,
+    counter: 0,
+    success: 0,
+    progress: 1,
+    status: 'new',
+    gameError: false,
   },
 };
 

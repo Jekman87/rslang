@@ -1,7 +1,6 @@
 import $$ from '../../core/domManipulation';
 import Component from '../../core/Component';
 import createAuthorizationForm from './authorization.template';
-import { storage } from '../../core/utils';
 
 export default class Authorization extends Component {
   static className = 'Authorization';
@@ -28,7 +27,7 @@ export default class Authorization extends Component {
     // this.submitForm например
 
     if (clickedElement.hasClass('btn')) {
-      console.log(clickedElement);
+      // console.log(clickedElement);
     }
   }
 
@@ -44,9 +43,7 @@ export default class Authorization extends Component {
       const userData = { name: `${userName}`, email: `${userEmail}`, password: `${password}` };
 
       await this.api.createUser(userData);
-      const loginUserResponse = await this.api.loginUser(userData);
-
-      Authorization.updateStorage(loginUserResponse);
+      await this.api.loginUser(userData);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -63,12 +60,10 @@ export default class Authorization extends Component {
     const password = document.getElementById('loginPassword').value;
 
     try {
-      const loginUserResponse = await this.api.loginUser({
+      await this.api.loginUser({
         email: `${user}`,
         password: `${password}`,
       });
-
-      Authorization.updateStorage(loginUserResponse);
 
       this.emit('selectPage', 'MainPage');
     } catch {
@@ -99,54 +94,5 @@ export default class Authorization extends Component {
 
   toHTML() {
     return createAuthorizationForm().trim();
-  }
-
-  static checkTokenValidity() {
-    const userId = storage('userId');
-    const userName = storage('userName');
-    const currentToken = storage('currentToken');
-    const refreshToken = storage('refreshToken');
-    const currentPage = storage('currentPage');
-    const tokenExpiresIn = Number(storage('tokenExpiresIn'));
-
-    if (!currentToken || (new Date().getTime() - tokenExpiresIn > 0)) {
-      return false;
-    }
-
-    return {
-      userId, userName, currentToken, refreshToken, currentPage,
-    };
-  }
-
-  static updateStorage(data) {
-    const {
-      userId, name, token, refreshToken,
-    } = data;
-
-    if (token) {
-      const tokenArr = token.split('.');
-      const payloadString = atob(tokenArr[1]);
-      const payloadObj = JSON.parse(payloadString);
-      const tokenExpiresIn = payloadObj.exp * 1000;
-
-      // const now = new Date();
-      // const tokenExpiresIn = now.setHours(now.getHours() + 4);
-
-      storage('userId', userId);
-      storage('currentToken', token);
-      storage('refreshToken', refreshToken);
-      storage('tokenExpiresIn', tokenExpiresIn);
-    }
-
-    storage('userName', name);
-  }
-
-  static clearStorage() {
-    storage('userId', null);
-    storage('userName', null);
-    storage('currentToken', null);
-    storage('refreshToken', null);
-    storage('tokenExpiresIn', null);
-    storage('currentPage', null);
   }
 }

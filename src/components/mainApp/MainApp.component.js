@@ -4,49 +4,56 @@ import Api from '../../api';
 
 import { AUTH_PAGE_NAME, MAIN_MENU_TITLES } from '../../constants/menu.constants';
 
+const timeToRefresh = 20 * 60 * 1000;
+const tokenLifeTime = 4 * 60 * 60 * 1000;
+
 export default class MainApp {
   constructor(selector, options) {
     this.$el = $$(selector);
+    this.options = options;
     this.components = options.components || [];
+    this.pages = options.pages;
+    this.startPage = null;
     this.observer = null;
     this.api = null;
     this.refreshAuthTimer = null;
-    this.options = options;
-    this.pages = this.options.pages;
-    this.startPage = this.pages[AUTH_PAGE_NAME].className;
   }
 
-  init() {
+  async init() {
     this.observer = new Observer();
+    this.api = new Api();
 
-    const userLog = this.pages[AUTH_PAGE_NAME].checkTokenValidity();
-    // let time = new Date().getTime();
+    const isAuth = this.api.checkTokenValidity();
+    let expTime;
 
-    if (userLog) {
-      const {
-        userId, userName, currentToken, refreshToken,
-      } = userLog;
-
-      this.api = new Api(userId, userName, currentToken, refreshToken);
+    if (isAuth) {
       // переделать на currentPage из LS?
       // this.startPage = this.pages[currentPage];
       this.startPage = this.pages[MAIN_MENU_TITLES[0].data].className;
-      // time = tokenExpiresIn;
+      expTime = this.api.tokenExpiresIn;
     } else {
-      this.api = new Api();
+      this.startPage = this.pages[AUTH_PAGE_NAME].className;
+      expTime = new Date().getTime() + tokenLifeTime;
     }
 
-    // this.startPage = 'MainGame';
-    // console.log('time', time);
+    if (expTime - new Date().getTime() < timeToRefresh) {
+      // обработка ошибок
+      await this.api.getNewTokens();
+      this.createRefreshTokenTimer(this.api.tokenExpiresIn);
+    } else {
+      this.createRefreshTokenTimer(expTime);
+    }
+  }
 
-    // если время истечения tokenExpiresIn менее 20 мин - обновить токены и займер
-    // если более - засекаем таймен на за 20 мин до окончания
+  createRefreshTokenTimer(expTime) {
+    const refreshTime = expTime - new Date().getTime() - timeToRefresh;
 
-    // this.authRefreshTimer = setTimeout(() => {
-    //   // очистить прошлый таймер
-    //   clearTimeout(this.refreshAuthTimer);
-    //   console.log('timer');
-    // }, 2000);
+    this.authRefreshTimer = setTimeout(async () => {
+      clearTimeout(this.refreshAuthTimer);
+      // обработка ошибок
+      await this.api.getNewTokens();
+      this.createRefreshTokenTimer(this.api.tokenExpiresIn);
+    }, refreshTime);
   }
 
   getRoot() {
@@ -77,6 +84,7 @@ export default class MainApp {
   }
 
   destroy() {
+    clearTimeout(this.refreshAuthTimer);
     this.components.forEach((component) => component.destroy());
   }
 }

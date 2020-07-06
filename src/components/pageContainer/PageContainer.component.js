@@ -22,7 +22,7 @@ export default class PageContainer extends Component {
     this.component = options.startPage;
     this.dataForApp = {
       settings: null,
-      stats: null,
+      statistics: null,
       userCards: null,
       state: {
         currentCardNum: 0,
@@ -68,14 +68,15 @@ export default class PageContainer extends Component {
       this.component.destroy();
       this.emit('hideHeader');
 
-      this.pages[AUTH_PAGE_NAME].clearStorage();
+      this.options.api.clearStorage();
 
       this.renderPage(this.pages[AUTH_PAGE_NAME]);
     });
   }
 
   async renderPage(NewPage) {
-    if (this.component !== AUTH_PAGE_NAME && (!this.options.settings || !this.options.stats)) {
+    if (this.component !== AUTH_PAGE_NAME
+      && (!this.dataForApp.settings || !this.dataForApp.statistics)) {
       // add loader?
       await this.initSettingsAndStats();
       await this.initWords();
@@ -113,16 +114,16 @@ export default class PageContainer extends Component {
     try {
       // переделать в promise.all
       this.dataForApp.settings = await this.options.api.getSettings();
-      this.dataForApp.stats = await this.options.api.getStatistics();
+      this.dataForApp.statistics = await this.options.api.getStatistics();
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
-        // this.observer.emit('mainLogout');
+        this.emit('mainLogout');
       } else if (error.message === '404') {
         // если настроек и статистики нету - устанавливаем стандартные
         // переделать в promise.all
         this.dataForApp.settings = await this.options.api.updateSettings(BASE_SETTINGS);
-        this.dataForApp.stats = await this.options.api.updateStatistics(BASE_STATS);
+        this.dataForApp.statistics = await this.options.api.updateStatistics(BASE_STATS);
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
@@ -146,7 +147,7 @@ export default class PageContainer extends Component {
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
-        // this.observer.emit('mainLogout');
+        this.emit('mainLogout');
       } else {
         console.log('Другая ошибка: ', error.message);
       }

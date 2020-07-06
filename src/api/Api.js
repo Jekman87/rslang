@@ -1,11 +1,13 @@
 import { BASE_URL } from '../constants/constants';
+import { storage } from '../core/utils';
 
 export default class Api {
-  constructor(userId, userName, token, refreshToken) {
-    this.userId = userId;
-    this.userName = userName;
-    this.token = token;
-    this.refreshToken = refreshToken;
+  constructor() {
+    this.userId = null;
+    this.userName = null;
+    this.token = null;
+    this.refreshToken = null;
+    this.tokenExpiresIn = null;
   }
 
   // Sign in
@@ -29,6 +31,7 @@ export default class Api {
     this.userName = content.name;
     this.token = content.token;
     this.refreshToken = content.refreshToken;
+    this.updateStorage();
 
     return content;
   }
@@ -190,6 +193,8 @@ export default class Api {
 
     this.token = content.token;
     this.refreshToken = content.refreshToken;
+    this.updateStorage();
+
     return content;
   }
 
@@ -347,6 +352,8 @@ export default class Api {
     }
 
     const content = await rawResponse.json();
+    delete content.id;
+
     return content;
   }
 
@@ -385,6 +392,8 @@ export default class Api {
     }
 
     const content = await rawResponse.json();
+    delete content.id;
+
     return content;
   }
 
@@ -406,5 +415,42 @@ export default class Api {
 
     const content = await rawResponse.json();
     return content;
+  }
+
+  // Storage methods
+  checkTokenValidity() {
+    this.userId = storage('userId');
+    this.userName = storage('userName');
+    this.token = storage('token');
+    this.refreshToken = storage('refreshToken');
+    this.tokenExpiresIn = Number(storage('tokenExpiresIn'));
+
+    if (!this.token || (new Date().getTime() - this.tokenExpiresIn > 0)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  updateStorage() {
+    const tokenArr = this.token.split('.');
+    const payloadString = atob(tokenArr[1]);
+    const payloadObj = JSON.parse(payloadString);
+    this.tokenExpiresIn = payloadObj.exp * 1000;
+
+    storage('userId', this.userId);
+    storage('userName', this.userName);
+    storage('token', this.token);
+    storage('refreshToken', this.refreshToken);
+    storage('tokenExpiresIn', this.tokenExpiresIn);
+  }
+
+  clearStorage() {
+    storage('userId', null);
+    storage('userName', null);
+    storage('token', null);
+    storage('refreshToken', null);
+    storage('tokenExpiresIn', null);
+    storage('currentPage', null);
   }
 }

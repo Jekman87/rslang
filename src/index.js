@@ -2,7 +2,6 @@ import './plugins/bootstrap';
 import './plugins/fontawesome';
 
 // main components
-// import Api from './api';
 import MainApp from './components/mainApp';
 import Header from './components/header';
 import PageContainer from './components/pageContainer';
@@ -13,26 +12,6 @@ import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 
 const pages = { Authorization, MainPage, MainGame };
-// const userLog = Authorization.checkTokenValidity();
-// let api;
-// let startPage;
 
-// if (userLog) {
-//   const {
-//     userId, userName, currentToken, refreshToken,
-//   } = userLog;
-
-//   api = new Api(userId, userName, currentToken, refreshToken);
-//   startPage = MainPage.className;
-// } else {
-//   api = new Api();
-//   startPage = Authorization.className;
-// }
-
-// startPage = 'MainGame';
-
-// const mainApp = new MainApp('#app', {
-//   components: [Header, PageContainer], pages, startPage, api,
-// });
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
 mainApp.render();

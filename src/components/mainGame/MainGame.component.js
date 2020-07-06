@@ -15,7 +15,7 @@ export default class MainGame extends Component {
       listeners: ['click', 'keydown'],
       ...options,
     });
-
+    console.log('MainGame this.options', options);
     this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
@@ -23,7 +23,6 @@ export default class MainGame extends Component {
     this.state = this.dataForApp.state;
     this.elements = null;
     this.audio = new Audio();
-    console.log('MainGame this.options', options);
   }
 
   init() {
@@ -182,12 +181,15 @@ export default class MainGame extends Component {
       // воспроизведение аудио в зависимости от настроек +
       if (this.settingsOptional.autoSound) {
         await this.speakText();
-      } else if (this.settingsOptional.feedbackButtons) { // добавить !
+      } else if (this.settingsOptional.feedbackButtons) { // добавить '!'
         // небольшая задержка если звук отключен
         // чтобы пользователь увидел слово
         // возможно анимация правильного ответа?
         await delay(1500);
       }
+
+      // статистика слова
+      // статистика пользователя
 
       this.state.studiedСardNum += 1;
       this.elements.$studiedСardNum.text(this.state.studiedСardNum);
@@ -196,7 +198,7 @@ export default class MainGame extends Component {
 
       // после аудио либо автоматом на след слово
       // либо ждем реакции через кнопки фидбэка, если они включены
-      if (this.settingsOptional.feedbackButtons) { // добавить !
+      if (this.settingsOptional.feedbackButtons) { // добавить '!'
         // переход на след карту
         this.changeCard(1);
       }

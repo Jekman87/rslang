@@ -1,13 +1,8 @@
 const BASE_STATS = {
-  learnedWords: 18,
+  learnedWords: 0,
   optional: {
-    lastAppearance: 123,
-    counter: 12,
-    success: 5,
-    isGameSuccess: true,
-    status: 'goodStatus',
-    progress: 33,
-    difficulty: 'veryGood',
+    MainGameShort: false,
+    MainGameLong: false,
   },
 };
 
