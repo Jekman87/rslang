@@ -1,29 +1,17 @@
-import './plugins/bootstrap/index';
-import './plugins/fontawesome/index';
+import './plugins/bootstrap';
+import './plugins/fontawesome';
 
-// import './scss/_constants.scss';
-// import './scss/_mixins.scss';
-// import './core/Component';
-// import './core/DomListener';
-// import './core/domManipulation';
-// import './core/Observer';
-// import './core/utils';
+// main components
+import MainApp from './components/mainApp';
+import Header from './components/header';
+import PageContainer from './components/pageContainer';
 
-// import { Authorization } from './components/Authorization/authorization.index';
+// pages and games
+import Authorization from './components/authorization';
+import MainPage from './components/mainPage';
+import MainGame from './components/mainGame';
 
-// console.log('Help me!');
+const pages = { Authorization, MainPage, MainGame };
 
-// if (!checkTokenValidity()) {
-// const authorization = new Authorization();
-// authorization.render();
-// }
-
-// import { StartPage } from './games/audioCall/index';
-
-// const startPage = new StartPage();
-// startPage.render();
-
-import { AudioCall } from './games/audioCall/index';
-
-const audioCall = new AudioCall();
-audioCall.render();
+const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
+mainApp.render();
