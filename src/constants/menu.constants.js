@@ -1,4 +1,4 @@
-const mainMenuTitles = [
+const MAIN_MENU_TITLES = [
   { data: 'MainPage', title: 'Главная' },
   { data: 'MainGame', title: 'Тренировка' },
   { data: 'games', title: 'Игры' },
@@ -9,8 +9,8 @@ const mainMenuTitles = [
   { data: 'Team', title: 'О команде' },
 ];
 
-const gameMenuTitles = [
-  { data: 'Speakit', title: 'SpeakIt' },
+const GAME_MENU_TITLES = [
+  { data: 'SpeakIt', title: 'SpeakIt' },
   { data: 'Puzzle', title: 'English puzzle' },
   { data: 'Savannah', title: 'Саванна' },
   { data: 'Audiocall', title: 'Аудиовызов' },
@@ -18,6 +18,6 @@ const gameMenuTitles = [
   { data: 'Ourgame', title: 'Своя игра' },
 ];
 
-const authPageName = 'Authorization';
+const AUTH_PAGE_NAME = 'Authorization';
 
-export { mainMenuTitles, gameMenuTitles, authPageName };
+export { MAIN_MENU_TITLES, GAME_MENU_TITLES, AUTH_PAGE_NAME };
