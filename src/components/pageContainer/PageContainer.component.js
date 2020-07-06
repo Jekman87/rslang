@@ -5,6 +5,7 @@ import { storage } from '../../core/utils';
 import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 import BASE_SETTINGS from '../../constants/settings.constants';
 import BASE_STATS from '../../constants/stats.constants';
+import BASE_DATA_FOR_APP from '../../constants/data-for-app.constants';
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -18,22 +19,10 @@ export default class PageContainer extends Component {
     });
 
     this.$root = $root;
+    this.options = options;
     this.pages = options.pages;
     this.component = options.startPage;
-    this.dataForApp = {
-      settings: null,
-      statistics: null,
-      userCards: null,
-      state: {
-        currentCardNum: 0,
-        studiedСardNum: 0,
-      },
-    };
-
-    this.options = {
-      dataForApp: this.dataForApp,
-      ...options,
-    };
+    this.dataForApp = { ...BASE_DATA_FOR_APP };
   }
 
   init() {
@@ -66,16 +55,17 @@ export default class PageContainer extends Component {
 
     this.subscribe('mainLogout', () => {
       this.component.destroy();
+      this.dataForApp = { ...BASE_DATA_FOR_APP };
+      this.options.dataForApp = this.dataForApp;
+      this.options.api.clearUserLog();
+
       this.emit('hideHeader');
-
-      this.options.api.clearStorage();
-
       this.renderPage(this.pages[AUTH_PAGE_NAME]);
     });
   }
 
   async renderPage(NewPage) {
-    if (this.component !== AUTH_PAGE_NAME
+    if (NewPage.className !== AUTH_PAGE_NAME
       && (!this.dataForApp.settings || !this.dataForApp.statistics)) {
       // add loader?
       await this.initSettingsAndStats();
@@ -83,16 +73,18 @@ export default class PageContainer extends Component {
       // remove loader?
     }
 
+    const componentOptions = { ...this.options, dataForApp: this.dataForApp };
     const element = $$.create(NewPage.tagName || 'div', NewPage.className);
-    this.component = new NewPage(element, this.options);
+    this.component = new NewPage(element, componentOptions);
     element.html(this.component.toHTML());
     this.$root.clear().append(element.$el);
     this.component.init();
   }
 
   renderGame(NewGame) {
+    const componentOptions = { ...this.options, dataForApp: this.dataForApp };
     this.$root.clear();
-    this.component = new NewGame('.PageContainer', this.options);
+    this.component = new NewGame('.PageContainer', componentOptions);
     this.component.render();
 
     // одинаковый интерфейс для всех игр
@@ -143,7 +135,9 @@ export default class PageContainer extends Component {
       const page = 0;
       const group = 0;
       this.dataForApp.userCards = await this.options.api.getWords(page, group);
-      console.log(this.dataForApp.userCards);
+      this.dataForApp.userWords = await this.options.api.getAllUserWords();
+      console.log('userCards', this.dataForApp.userCards);
+      console.log('userWords', this.dataForApp.userWords);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);

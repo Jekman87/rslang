@@ -23,10 +23,10 @@ export default class MainApp {
     this.observer = new Observer();
     this.api = new Api();
 
-    const isAuth = this.api.checkTokenValidity();
+    const isAuthorized = this.api.checkTokenValidity();
     let expTime;
 
-    if (isAuth) {
+    if (isAuthorized) {
       // переделать на currentPage из LS?
       // this.startPage = this.pages[currentPage];
       this.startPage = this.pages[MAIN_MENU_TITLES[0].data].className;

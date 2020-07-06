@@ -374,6 +374,8 @@ export default class Api {
     }
 
     const content = await rawResponse.json();
+    delete content.id;
+
     return content;
   }
 
@@ -414,6 +416,8 @@ export default class Api {
     }
 
     const content = await rawResponse.json();
+    delete content.id;
+
     return content;
   }
 
@@ -445,7 +449,13 @@ export default class Api {
     storage('tokenExpiresIn', this.tokenExpiresIn);
   }
 
-  clearStorage() {
+  clearUserLog() {
+    this.userId = null;
+    this.userName = null;
+    this.token = null;
+    this.refreshToken = null;
+    this.tokenExpiresIn = null;
+
     storage('userId', null);
     storage('userName', null);
     storage('token', null);

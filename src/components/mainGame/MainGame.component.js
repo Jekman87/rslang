@@ -20,7 +20,13 @@ export default class MainGame extends Component {
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
     this.userCards = this.dataForApp.userCards;
-    this.state = this.dataForApp.state;
+    this.userWords = this.dataForApp.userWords;
+    this.state = {
+      currentCardNum: 0,
+      studiedСardNum: 0,
+      isChecking: false,
+    };
+    this.dataForApp.state = this.state;
     this.elements = null;
     this.audio = new Audio();
   }

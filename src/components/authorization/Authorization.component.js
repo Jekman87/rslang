@@ -40,7 +40,11 @@ export default class Authorization extends Component {
     const password = document.getElementById('registerPassword').value;
 
     try {
-      const userData = { name: `${userName}`, email: `${userEmail}`, password: `${password}` };
+      const userData = {
+        name: `${userName}`,
+        email: `${userEmail}`,
+        password,
+      };
 
       await this.api.createUser(userData);
       await this.api.loginUser(userData);
