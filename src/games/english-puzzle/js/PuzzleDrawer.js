@@ -180,7 +180,9 @@ export default class PuzzleDrawer {
   resizePuzzles(sentenceIdx, currentWords, restContainers) {
     if (document.querySelector('ul.sentences-list').offsetWidth === this.containerWidth) return;
 
-    this.resetParams();
+    const isSuccefullyReseted = this.resetParams();
+
+    if (!isSuccefullyReseted) return;
 
     this.sentenceEls.forEach((sentence, i) => {
       sentence.querySelectorAll('canvas').forEach((canvas, j) => {
@@ -211,6 +213,11 @@ export default class PuzzleDrawer {
     this.containerWidth = document.querySelector('ul.sentences-list').offsetWidth;
     this.containerHeight = this.containerWidth / 1.78;
     this.sizes = puzzleSizeSettings[this.containerWidth];
+
+    if (document.querySelector('canvas') === null) {
+      return false;
+    }
     this.calculateParams();
+    return true;
   }
 }

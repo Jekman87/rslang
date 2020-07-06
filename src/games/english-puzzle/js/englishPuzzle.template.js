@@ -1,7 +1,8 @@
 const template = `
  <div id="pzl">
   <div class="start-page">
-    <h1 class="h1">Puzzle English</h1>
+    <h1 class="h1">English Puzzle</h1>
+    <p class="preview">Изучай английский и живопись вместе! Собери паззл правильно и получи произведение искусства в личную коллекцию!</p>
     <button class="btn btn-primary start-button visible">Старт</button>
     <div class="spinner">
       <div class="lds-hourglass"></div>
@@ -66,13 +67,13 @@ const template = `
           <button class="pzl-btn next__pzl-btn gallery-pzl-btn">Галерея</button>
         </div>
         <figure class="painting-block hidden">
-          <img class="painting-pic" src="start_page.jpg" alt="default picture">
+          <img class="painting-pic" src="start-page.jpg" alt="default picture">
           <figcaption class="painting-info"></figcaption>
         </figure>
         <div class="pop-up hidden">
           <div class="results-block hidden">
             <figure class="painting-block_small">
-              <img class="painting-pic_small" src="start_page.jpg" alt="default picture">
+              <img class="painting-pic_small" src="start-page.jpg" alt="default picture">
               <figcaption class="painting-info_small">Default Picture</figcaption>
             </figure>
             <div class="scrolled-wrapper">
