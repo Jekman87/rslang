@@ -6,6 +6,17 @@ function createOptions(count) {
   return container;
 }
 
+function createOptionsRound(count) {
+  let container = '';
+  for (let i = 0; i < count; i += 1) {
+    container += `
+    <option value="${i}-0">${i + i + 1}</option>
+    <option value="${i}-1">${i + i + 2}</option>
+    `;
+  }
+  return container.trim();
+}
+
 export default function createHeaderHTML() {
   return `
   <div class="header-content d-flex flex-column justify-content-center align-items-center mt-3">
@@ -18,15 +29,9 @@ export default function createHeaderHTML() {
       </select>
     </div>
     <div class="form-group mr-2">
-      <h5><label for="gameRound" class="text-primary"><i class="fas fa-object-group"></i><strong> Раунд(1-30)</strong></label></h5>
+      <h5><label for="gameRound" class="text-primary"><i class="fas fa-object-group"></i><strong> Раунд(1-60)</strong></label></h5>
       <select class="form-control" id="gameRound">
-      ${createOptions(30)}
-      </select>
-    </div>
-    <div class="form-group">
-      <h5><label for="gameRoundGroup" class="text-primary"><i class="fas fa-object-ungroup"></i><strong> Группа слов(1-2)</strong></label></h5>
-      <select class="form-control" id="gameRoundGroup">
-      ${createOptions(2)}
+      ${createOptionsRound(30)}
       </select>
     </div>
     </div> 

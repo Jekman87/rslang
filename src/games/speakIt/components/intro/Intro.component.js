@@ -40,7 +40,7 @@ export default class Intro extends Component {
       // get words - from dictionary or from user level or from page 1 group 1
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       try {
-        this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(gr, pg);
+        this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(pg, gr);
       } catch (e) {
         if (e.message === '401') {
           console.log(e.message);
