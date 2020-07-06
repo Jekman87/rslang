@@ -92,6 +92,10 @@ const plugins = () => {
         from: `${PATHS.src}/assets`,
         to: `${PATHS.assets}`,
       },
+      {
+        from: `${PATHS.src}/games/savanna/assets`,
+        to: `${PATHS.assets}savanna`,
+      },
     ]),
     new MiniCssExtractPlugin({ filename: filename('css') }),
   ];
