@@ -4,8 +4,9 @@ import { monthNames } from './variables';
 import paintings from './paintingsInfo';
 
 export default class GameController {
-  constructor(storage) {
+  constructor(storage, reporter) {
     this.storage = storage;
+    this.repoter = reporter;
     this.puzzleDrawer = new PuzzleDrawer();
     this.sentenceList = document.querySelectorAll('li.sentence');
     this.sentenceConstructor = document.querySelector('div.sentence-constructor');
@@ -249,6 +250,7 @@ export default class GameController {
     if (this.sentenceIndex === 9) {
       this.saveRound();
       this.switchElementsVisibility(true);
+      this.reportResult();
     } else {
       this.sentenceIndex += 1;
       this.goToStart(e);
@@ -325,6 +327,14 @@ export default class GameController {
     } else {
       this.set('currentRound', Number(round) + 1);
       this.set('currentLevel', level);
+    }
+  }
+
+  reportResult() {
+    if (this.correctCounter === 10) {
+      this.repoter.report('Поздравляем, картина Ваша! Её всегда можно найти в Вашей галерее.', true);
+    } else {
+      this.repoter.report(`Ваш результат ${this.correctCounter} из 10. К сожалению Вам не удалось заполучить картину.`, false);
     }
   }
 

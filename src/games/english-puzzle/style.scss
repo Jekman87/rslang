@@ -728,9 +728,9 @@
   .report-message {
     position: fixed;
     top: 20px;
-    left: calc((100% - 300px) / 2);
+    left: calc(50% - 225px);
     padding: 5px;
-    width: 300px;
+    width: 450px;
     color: #e94348;
     font-weight: 400;
     text-transform: none;
@@ -746,6 +746,16 @@
     }
     &_hidden {
       top: -200px;
+    }
+    @media (max-width: 1023px) {
+      left: calc(50% - 175px);
+      width: 350px;
+      font-size: $font16;
+    }
+    @media (max-width: 375px) {
+      left: calc(50% - 150px);
+      width: 300px;
+      font-size: $font14;
     }
   }
 

@@ -2,10 +2,10 @@
 import paintings from './paintingsInfo';
 
 export default class Loader {
-  constructor(storage) {
+  constructor(storage, reporter) {
     this.storage = storage;
+    this.reporter = reporter;
     this.data = {};
-    this.reportEl = document.querySelector('p.report-message');
   }
 
   init() {
@@ -31,6 +31,9 @@ export default class Loader {
   async loadData(group, page) {
     try {
       const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=${page}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`);
+      if (!response.ok) {
+        throw new Error('Загрузка данных не удалась!');
+      }
       const data = await response.json();
 
       const sentencesInfo = [];
@@ -47,8 +50,7 @@ export default class Loader {
         sentencesInfo.map(async (item) => {
           const audioResponse = await fetch(`https://raw.githubusercontent.com/torchik-slava/rslang-data/master/${item.audio}`);
           if (!audioResponse.ok) {
-            this.report('Audio upload failed!');
-            throw new Error();
+            throw new Error('Загрузка аудио не удалась!');
           }
           const audio = await audioResponse.blob();
           return URL.createObjectURL(audio);
@@ -67,7 +69,7 @@ export default class Loader {
 
       document.dispatchEvent(new CustomEvent('newData'));
     } catch (e) {
-      this.report('Something went wrong!', e.message);
+      this.report(e.message, false);
     }
   }
 
@@ -88,21 +90,12 @@ export default class Loader {
     const picPass = paintings[group][page].cutSrc;
     const picResponse = await fetch(`https://raw.githubusercontent.com/torchik-slava/rslang_data_paintings/master/${picPass}`);
     if (!picResponse.ok) {
-      this.report('Picture upload failed!');
-      throw new Error();
+      throw new Error('Загрузка изображения не удалась!');
     }
     const pic = await picResponse.blob();
     infoObj.link = URL.createObjectURL(pic);
 
     return infoObj;
-  }
-
-  report(message) {
-    this.reportEl.textContent = message;
-    this.reportEl.classList.remove('report-message_hidden');
-    setTimeout(() => {
-      this.reportEl.classList.add('report-message_hidden');
-    }, 2500);
   }
 
   get(prop) {
@@ -111,5 +104,9 @@ export default class Loader {
 
   set(prop, value) {
     this.storage.setProp(prop, value);
+  }
+
+  report(message, isSucces) {
+    this.reporter.report(message, isSucces);
   }
 }
