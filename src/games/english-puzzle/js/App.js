@@ -30,6 +30,6 @@ export default class App {
   start() {
     const startPageBg = new Image();
     startPageBg.onload = () => document.querySelector('div.start-page').classList.remove('invisible');
-    startPageBg.src = 'start-page.jpg';
+    startPageBg.src = '/assets/puzzle/img/start-page.jpg';
   }
 }

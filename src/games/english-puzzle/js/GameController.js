@@ -2,6 +2,7 @@
 import PuzzleDrawer from './PuzzleDrawer';
 import { monthNames } from './variables';
 import paintings from './paintingsInfo';
+import { defaultSlide, tableHeader } from './templates';
 
 export default class GameController {
   constructor(storage, reporter) {
@@ -460,7 +461,7 @@ export default class GameController {
 
   fillStatistics() {
     document.querySelector('table.statistics-table').innerHTML = '';
-    const rows = ['<caption class="table-caption">Ваши ранее сыгранные игры:</caption><tr class="tr"><th class="th">Уровень</th><th class="th">Раунд</th><th class="th">Дата</th><th class="th">Время</th><th class="th">Счет</th></tr>'];
+    const rows = [tableHeader];
     const statistics = this.get('statistics');
     statistics.forEach((mark) => {
       const [level, round] = mark.round.split('-');
@@ -481,7 +482,7 @@ export default class GameController {
 
   fillGallery() {
     document.querySelector('div.carousel-inner').innerHTML = '';
-    const slides = ['<div class="carousel-item"><figure class="gallery-item"><div class="frame"><p class="empty-pic-message">Еще есть свободное место! Собирай паззлы на 10 из 10 и пополняй свою личную галерею!</p></div><figcaption class="art-name"></figcaption></figure></div>'];
+    const slides = [defaultSlide];
     const artItems = this.get('gallery');
 
     if (artItems !== 'empty') {

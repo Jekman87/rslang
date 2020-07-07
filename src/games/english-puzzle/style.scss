@@ -42,7 +42,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    background: url(img/start-page.jpg) center bottom no-repeat;
+    background: url(/assets/puzzle/img/start-page.jpg) center bottom no-repeat;
     background-size: cover;
     z-index: 10;
     transition: opacity 0.3s linear;
@@ -297,22 +297,22 @@
   }
 
   .autoplay-pzl-btn {
-    background: url(img/audio.svg) center no-repeat;
+    background: url(/assets/puzzle/img/audio.svg) center no-repeat;
     background-size: 85%;
   }
 
   .pronounce-pzl-btn {
-    background: url(img/play.svg) center no-repeat;
+    background: url(/assets/puzzle/img/play.svg) center no-repeat;
     background-size: 80%;
   }
 
   .translate-pzl-btn {
-    background: url(img/subject.svg) center no-repeat;
+    background: url(/assets/puzzle/img/subject.svg) center no-repeat;
     background-size: 115%;
   }
 
   .background-pzl-btn {
-    background: url(img/image.svg) center no-repeat;
+    background: url(/assets/puzzle/img/image.svg) center no-repeat;
     background-size: 85%;
   }
 
@@ -320,7 +320,7 @@
     width: 40px;
     border: none;
     border-radius: 50%;
-    background: url(img/exit.svg) center no-repeat;
+    background: url(/assets/puzzle/img/exit.svg) center no-repeat;
     background-size: 120%;
     @media (max-width: 767px) {
       margin: 15px calc(50% - 20px) 5px;
@@ -352,13 +352,13 @@
     width: 44px;
     height: 44px;
     border: none;
-    background: url(img/music.svg) center no-repeat;
+    background: url(/assets/puzzle/img/music.svg) center no-repeat;
     background-size: 90%;
     &:hover {
       box-shadow: none;
     }
     &_active {
-      background-image: url(img/music.svg);
+      background-image: url(/assets/puzzle/img/music.svg);
       animation: play 0.6s linear infinite;
     }
     @media (max-width: 767px) {
@@ -879,7 +879,7 @@
     padding: 41px 38px 41px 38px;
     width: 880px;
     height: 530px;
-    background: url(img/frame.png) center no-repeat;
+    background: url(/assets/puzzle/img/frame.png) center no-repeat;
     background-size: 100% 100%;
     @media (max-width: 1200px) {
       margin: 0 calc(50% - 350px);
@@ -918,7 +918,7 @@
     color: #222;
     text-align: center;
     text-shadow: 3px 3px 5px #2c2c2c;
-    background: url(img/caption.png) center no-repeat;
+    background: url(/assets/puzzle/img/caption.png) center no-repeat;
     background-size: cover;
     @media (max-width: 1200px) {
       min-width: 250px;
@@ -987,7 +987,7 @@
 @font-face {
   font-family: "Montserrat";
   src: local("Montserrat"),
-       url(fonts/montserrat-v14-latin-ext_latin_cyrillic-ext_cyrillic-regular.woff2) format("woff2");
+       url(/assets/puzzle/fonts/montserrat-v14-latin-ext_latin_cyrillic-ext_cyrillic-regular.woff2) format("woff2");
   font-weight: 400;
   font-style: normal;
 }
@@ -995,7 +995,7 @@
 @font-face {
   font-family: "Montserrat";
   src: local("Montserrat"),
-       url(fonts/montserrat-v14-latin-ext_latin_cyrillic-ext_cyrillic-700.woff2) format("woff2");
+       url(/assets/puzzle/fonts/montserrat-v14-latin-ext_latin_cyrillic-ext_cyrillic-700.woff2) format("woff2");
   font-weight: 700;
   font-style: normal;
 }
@@ -1003,7 +1003,7 @@
 @font-face {
   font-family: "Galada";
   src: local("Galada"),
-       url(fonts/Galada-Regular.woff2) format("woff2");
+       url(/assets/puzzle/fonts/Galada-Regular.woff2) format("woff2");
   font-weight: 400;
   font-style: normal;
 }

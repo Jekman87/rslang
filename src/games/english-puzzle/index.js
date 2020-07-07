@@ -1,5 +1,5 @@
 import './style.scss';
-import template from './js/englishPuzzle.template';
+import { puzzleGame } from './js/templates';
 import App from './js/App';
 
 export default class Puzzle {
@@ -9,7 +9,7 @@ export default class Puzzle {
   }
 
   render() {
-    this.container.innerHTML = template;
+    this.container.innerHTML = puzzleGame;
     const app = new App(this.options.api, this.options.dataForApp.statistics);
     app.init();
   }

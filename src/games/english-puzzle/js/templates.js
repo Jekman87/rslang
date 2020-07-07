@@ -1,4 +1,4 @@
-const template = `
+const puzzleGame = `
  <div id="pzl">
   <div class="start-page invisible">
     <h1 class="h1">English Puzzle</h1>
@@ -67,13 +67,13 @@ const template = `
           <button class="pzl-btn next__pzl-btn gallery-pzl-btn">Галерея</button>
         </div>
         <figure class="painting-block hidden">
-          <img class="painting-pic" src="start-page.jpg" alt="default picture">
+          <img class="painting-pic" src="/assets/puzzle/img/start-page.jpg" alt="default picture">
           <figcaption class="painting-info"></figcaption>
         </figure>
         <div class="pop-up hidden">
           <div class="results-block hidden">
             <figure class="painting-block_small">
-              <img class="painting-pic_small" src="start-page.jpg" alt="default picture">
+              <img class="painting-pic_small" src="/assets/puzzle/img/start-page.jpg" alt="default picture">
               <figcaption class="painting-info_small">Default Picture</figcaption>
             </figure>
             <div class="scrolled-wrapper">
@@ -107,4 +107,26 @@ const template = `
  </div>
 `;
 
-export default template;
+const defaultSlide = `
+  <div class="carousel-item">
+    <figure class="gallery-item">
+      <div class="frame">
+        <p class="empty-pic-message">Еще есть свободное место! Собирай паззлы на 10 из 10 и пополняй свою личную галерею!</p>
+      </div>
+      <figcaption class="art-name"></figcaption>
+    </figure>
+  </div>
+`;
+
+const tableHeader = `
+  <caption class="table-caption">Ваши ранее сыгранные игры:</caption>
+  <tr class="tr">
+    <th class="th">Уровень</th>
+    <th class="th">Раунд</th>
+    <th class="th">Дата</th>
+    <th class="th">Время</th>
+    <th class="th">Счет</th>
+  </tr>
+`;
+
+export { puzzleGame, defaultSlide, tableHeader };
