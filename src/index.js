@@ -11,9 +11,10 @@ import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 import Team from './components/teamPage';
+import Savannah from './games/savanna/savanna';
 
 const pages = {
-  Authorization, MainPage, MainGame, Team,
+  Authorization, MainPage, MainGame, Team, Savannah,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });

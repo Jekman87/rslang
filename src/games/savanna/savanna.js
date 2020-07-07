@@ -20,7 +20,7 @@ import { setSettingsToStorage, getSettingsFromStorage } from './js/myStorage';
 import { storage } from '../../core/utils';
 import showTemplate from './js/template';
 import './sass/style.scss';
-
+import BASE_USER_WORD from '../../constants/user-word.constants';
 import $$ from '../../core/domManipulation';
 import Observer from '../../core/Observer';
 
@@ -38,6 +38,87 @@ export default class Savannah {
     this.options = options;
     console.log(options);
 
+    const { statistics, settings } = this.options.dataForApp;
+    const gameNameLongStats = [
+      { data: 123, round: '2-18', result: '16-4' },
+      // ... всего 10 раундов-объектов, если нужно больше - делаем больше
+    ];
+    console.log(statistics, settings);
+
+    //   const newStats = {
+    //     ...stats,
+    //     gameNameLong: JSON.stringify(gameNameLongStats),
+    //     gameNameMain: JSON.stringify(gameNameMainStats),
+    // };
+
+
+    // otladka
+    // window.savanna = {};
+    // window.savanna.options = options;
+    // window.savanna.word = BASE_USER_WORD;
+
+
+    if (settings.optional.savannaSettings) {
+      const savannaSettings = JSON.parse(settings.optional.savannaSettings);
+      console.log('savanna settings from API', savannaSettings);
+      window.savannaSettings = savannaSettings;
+      this.localSettings = {};
+      // mod variant of this.localSettings.gameLevel = savannaSettings.gameLevel || 1;
+      if ((savannaSettings.gameLevel !== null)
+        && ((typeof savannaSettings.gameLevel) === 'number')
+        && (savannaSettings.gameLevel >= 1)
+        && (savannaSettings.gameLevel <= 6)) {
+        this.localSettings.gameLevel = savannaSettings.gameLevel;
+      } else {
+        this.localSettings.gameLevel = 1;
+      }
+
+      // mod variant of this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords || true;
+      if ((savannaSettings.gameWithLearnedWords !== null)
+        && ((typeof savannaSettings.gameWithLearnedWords) === 'boolean')) {
+        this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords;
+      } else {
+        this.localSettings.gameWithLearnedWords = true;
+      }
+
+      // mod variant of this.localSettings.gameInvert = savannaSettings.gameInvert || false;
+      if ((savannaSettings.gameInvert !== null)
+        && ((typeof savannaSettings.gameInvert) === 'boolean')) {
+        this.localSettings.gameInvert = savannaSettings.gameInvert;
+      } else {
+        this.localSettings.gameInvert = true;
+      }
+
+      // mod variant of this.localSettings.gameIrregularVerbs = savannaSettings.gameIrregularVerbs || false;
+      if ((savannaSettings.gameIrregularVerbs !== null)
+        && ((typeof savannaSettings.gameIrregularVerbs) === 'boolean')) {
+        this.localSettings.gameIrregularVerbs = false; // savannaSettings.gameIrregularVerbs;
+      } else {
+        this.localSettings.gameIrregularVerbs = false;
+      }
+
+      console.log('this.localSettings', this.localSettings);
+      // gameLevel: 1,
+      // gameWithLearnedWords: true,
+      // gameInvert: false,
+      // gameIrregularVerbs: false,
+    } else {
+      this.localSettings = {
+        gameLevel: 1,
+        gameWithLearnedWords: true,
+        gameInvert: false,
+        gameIrregularVerbs: false,
+      };
+      console.log('else this.localSettings', this.localSettings);
+    }
+
+
+    //     this.localSettings = getSettingsFromStorage('savannaGameLocalSettings') || {
+    //   gameLevel: 1,
+    //   gameWithLearnedWords: true,
+    //   gameInvert: false,
+    //   gameIrregularVerbs: false,
+    // };
     // this.$el = $$(selector);
     // this.components = [];
     // /* this.observer = new Observer(); */
@@ -47,7 +128,7 @@ export default class Savannah {
 
   render() {
     this.rootTag.innerHTML = showTemplate();
-    document.getElementById('startSavannaGameButton').addEventListener('click', (event) => this._startGame(event));
+
     this.audioBip = document.getElementById('SavannaAudioBip');
     this.audioGong = document.getElementById('SavannaAudioGong');
     this.audioCorrect = document.getElementById('SavannaAudioCorrect');
@@ -74,14 +155,17 @@ export default class Savannah {
     this.soundContainers = this.rootTag.querySelectorAll('.savanna-audioSource');
     this.gameLives = this.rootTag.querySelectorAll('.savanna-lives');
 
+    this.startSavannaGameButton = document.getElementById('startSavannaGameButton');
+
+
     this.SettingNew = true;
     this.Setting2 = true;
-    this.localSettings = getSettingsFromStorage('savannaGameLocalSettings') || {
-      gameLevel: 1,
-      gameWithLearnedWords: true,
-      gameInvert: false,
-      gameIrregularVerbs: false,
-    };
+    // this.localSettings = getSettingsFromStorage('savannaGameLocalSettings') || {
+    //   gameLevel: 1,
+    //   gameWithLearnedWords: true,
+    //   gameInvert: false,
+    //   gameIrregularVerbs: false,
+    // };
     this.settingsElemetns = {};
     this.settingsElemetns.level = document.getElementById('savannaGameLevel');
     this.settingsElemetns.isLearnedWords1 = document.getElementById('savannaisLearnedWords1');
@@ -114,14 +198,35 @@ export default class Savannah {
   }
 
   _getGameSettings() {
-    this.localSettings.gameLevel = this.settingsElemetns.level.value;
+    this.localSettings.gameLevel = Number(this.settingsElemetns.level.value);
+    if (Number.isNaN(this.localSettings.gameLevel)
+      || (this.localSettings.gameLevel < 1)
+      || (this.localSettings.gameLevel > 6)) {
+      this.localSettings.gameLevel = 1;
+    }
     this.localSettings.gameWithLearnedWords = this.settingsElemetns.isLearnedWords1.checked;
     this.localSettings.gameInvert = this.settingsElemetns.gameInvert.checked;
     this.localSettings.gameIrregularVerbs = this.settingsElemetns.gameIrregularVerbs.checked;
   }
 
   _startGame() {
-    console.log('start game');
+    this.options.dataForApp.settings.optional.savannaSettings = JSON.stringify(this.localSettings);
+
+    try {
+      this.options.api.updateSettings(this.options.dataForApp.settings).catch((err) => {
+        console.log('ошибка при работе с апи', err);
+      });
+    } catch (err) {
+      console.log('ошибка при работе с апи', err);
+    }
+    // console.log('start game', this.options.dataForApp.settings.optional.savannaSettings);
+    console.log(this.options);
+
+    // this.options.api.getAllUserAggregatedWords(0, 6000, '{"$or":[{"$or":[{"userWord.optional.gameError":false}, {"userWord.optional.gameError":true}]},{"userWord":null}]}').then((e) => {
+    //   console.log('then', e);
+    // }).catch((e) => {
+    //   console.log('catch', e);
+    // });
     document.getElementById('savanna-start-page').classList.add('savanna-display-none');
     document.getElementById('savanna-preloader-countdown').textContent = '';
     document.getElementById('savanna-main-spinner').classList.remove('savanna-display-none');
@@ -237,6 +342,8 @@ export default class Savannah {
     } else if (event.target === this.goHomeButton) {
       console.log('goHomeButton');
       this.options.observer.emit('selectPage', 'MainPage');
+    } else if (event.target === this.startSavannaGameButton) {
+      this._startGame();
     }
   }
 
@@ -269,7 +376,9 @@ export default class Savannah {
       || (this.settingsElemetns.gameInvert)
       || (this.settingsElemetns.gameIrregularVerbs)) {
       this._getGameSettings();
-      setSettingsToStorage('savannaGameLocalSettings', this.localSettings);
+      console.log('else this.localSettings', this.localSettings);
+      this.options.dataForApp.settings.optional.savannaSettings = JSON.stringify(this.localSettings);
+      // setSettingsToStorage('savannaGameLocalSettings', this.localSettings);
     }
   }
 
