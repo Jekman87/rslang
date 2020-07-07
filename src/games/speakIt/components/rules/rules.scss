@@ -1,0 +1,12 @@
+.rules {
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+  left:50%;
+  transform: translateX(-50%);
+  transition: .8s;
+  z-index: 999;
+  &-content {
+    background: #fff;
+  }
+}
