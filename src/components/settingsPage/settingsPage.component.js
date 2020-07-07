@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
 import Component from '../../core/Component';
 import createSettingsHTML from './settingsPage.template';
@@ -14,11 +13,13 @@ export default class Settings extends Component {
       ...options,
     });
     this.options = options;
+    this.settings = this.options.dataForApp.settings;
+    this.optional = this.options.dataForApp.settings.optional;
     this.isClickAble = true;
   }
 
   getSettingsElements() {
-    this.elements = {
+    this.el = {
       $wordsPerDay: this.$root.find('#settingsPageWordsPerDay'),
       $cardsPerDay: this.$root.find('#settingsPageCardsPerDay'),
       $mixedTraining: this.$root.find('#settingsPageMixedTraining'),
@@ -34,8 +35,8 @@ export default class Settings extends Component {
       $cardExample: this.$root.find('#settingsPageCardExample'),
       $cardTranscription: this.$root.find('#settingsPageCardTranscription'),
       $cardImage: this.$root.find('#settingsPageCardImage'),
-      $cardTranslationAfterSuccess: this.$root.find('#settingsPageCardTranslationAfterSuccess'),
-      $cardExplanationTranslation: this.$root.find('#settingsPageCardExplanationTranslation'),
+      $cardTranslationAfter: this.$root.find('#settingsPageCardTranslationAfterSuccess'),
+      $cardExplTranslation: this.$root.find('#settingsPageCardExplanationTranslation'),
       $cardExampleTranslation: this.$root.find('#settingsPageCardExampleTranslation'),
       $cardAutoSound: this.$root.find('#settingsPageCardAutoSound'),
       $cardAnswerButton: this.$root.find('#settingsPageCardAnswerButton'),
@@ -47,95 +48,105 @@ export default class Settings extends Component {
 
   // расставляет галочки от полей объекта
   setCheckboxFields() {
-    this.elements.$wordsPerDay.$el.value = this.options.dataForApp.settings.wordsPerDay;
-    this.elements.$cardsPerDay.$el.value = this.options.dataForApp.settings.optional.cardsPerDay;
-    const typeOfTraining = [this.elements.$mixedTraining.$el, this.elements.$onlyNewWordsTraining.$el, this.elements.$onlyOldWordsTraining.$el, this.elements.$onlyDifficultWordsTraining.$el];
+    this.el.$wordsPerDay.$el.value = this.settings.wordsPerDay;
+    this.el.$cardsPerDay.$el.value = this.optional.cardsPerDay;
+    const typeOfTraining = [
+      this.el.$mixedTraining.$el,
+      this.el.$onlyNewWordsTraining.$el,
+      this.el.$onlyOldWordsTraining.$el,
+      this.el.$onlyDifficultWordsTraining.$el];
     typeOfTraining.forEach((el) => {
       el.checked = false;
     });
-    typeOfTraining[this.options.dataForApp.settings.optional.mixedCards].checked = true;
-    this.elements.$vocabularyExplanation.$el.checked = this.options.dataForApp.settings.optional.vocabularyExplanation === true;
-    this.elements.$vocabularyExample.$el.checked = this.options.dataForApp.settings.optional.vocabularyExample === true;
-    this.elements.$vocabularyTranscription.$el.checked = this.options.dataForApp.settings.optional.vocabularyTranscription === true;
-    if (this.elements.$vocabularyTranscription.$el.checked === true) {
-      this.elements.$cardTranslationAfterSuccess.$el.disabled = true;
+    typeOfTraining[this.optional.mixedCards].checked = true;
+    this.el.$vocabularyExplanation.$el.checked = this.optional.vocabularyExplanation === true;
+    this.el.$vocabularyExample.$el.checked = this.optional.vocabularyExample === true;
+    this.el.$vocabularyTranscription.$el.checked = this.optional.vocabularyTranscription === true;
+    if (this.el.$vocabularyTranscription.$el.checked === true) {
+      this.el.$cardTranslationAfter.$el.disabled = true;
     }
-    this.elements.$vocabularyImage.$el.checked = this.options.dataForApp.settings.optional.vocabularyImage === true;
-    this.elements.$cardTranslation.$el.checked = this.options.dataForApp.settings.optional.cardTranslation === true;
-    this.elements.$cardExplanation.$el.checked = this.options.dataForApp.settings.optional.cardExplanation === true;
-    this.elements.$cardExample.$el.checked = this.options.dataForApp.settings.optional.cardExample === true;
-    this.elements.$cardTranscription.$el.checked = this.options.dataForApp.settings.optional.cardTranscription === true;
-    this.elements.$cardImage.$el.checked = this.options.dataForApp.settings.optional.cardImage === true;
-    this.elements.$cardTranslationAfterSuccess.$el.checked = this.options.dataForApp.settings.optional.cardTranslationAfterSuccess === true;
-    if (this.elements.$cardTranslationAfterSuccess.$el.checked === true) {
-      this.elements.$cardTranslationAfterSuccess.$el.disabled = false;
+    this.el.$vocabularyImage.$el.checked = this.optional.vocabularyImage === true;
+    this.el.$cardTranslation.$el.checked = this.optional.cardTranslation === true;
+    this.el.$cardExplanation.$el.checked = this.optional.cardExplanation === true;
+    this.el.$cardExample.$el.checked = this.optional.cardExample === true;
+    this.el.$cardTranscription.$el.checked = this.optional.cardTranscription === true;
+    this.el.$cardImage.$el.checked = this.optional.cardImage === true;
+    this.el.$cardTranslationAfter.$el.checked = this.optional.cardTranslationAfter === true;
+    if (this.el.$cardTranslationAfter.$el.checked === true) {
+      this.el.$cardTranslationAfter.$el.disabled = false;
     }
-    this.elements.$cardExplanationTranslation.$el.checked = this.options.dataForApp.settings.optional.cardExplanationTranslation === true;
-    if (this.elements.$cardExplanationTranslation.$el.checked === true) {
-      this.elements.$cardExplanationTranslation.$el.disabled = false;
+    this.el.$cardExplTranslation.$el.checked = this.optional.cardExplTranslation === true;
+    if (this.el.$cardExplTranslation.$el.checked === true) {
+      this.el.$cardExplTranslation.$el.disabled = false;
     }
-    this.elements.$cardExampleTranslation.$el.checked = this.options.dataForApp.settings.optional.cardExampleTranslation === true;
-    if (this.elements.$cardExampleTranslation.$el.checked === true) {
-      this.elements.$cardExampleTranslation.$el.disabled = false;
+    this.el.$cardExampleTranslation.$el.checked = this.optional.cardExampleTranslation === true;
+    if (this.el.$cardExampleTranslation.$el.checked === true) {
+      this.el.$cardExampleTranslation.$el.disabled = false;
     }
-    this.elements.$cardAutoSound.$el.checked = this.options.dataForApp.settings.optional.autoSound === true;
-    this.elements.$cardAnswerButton.$el.checked = this.options.dataForApp.settings.optional.answerButton === true;
-    this.elements.$cardDifficultWordsButton.$el.checked = this.options.dataForApp.settings.optional.difficultWordsButton === true;
-    this.elements.$cardDeleteButton.$el.checked = this.options.dataForApp.settings.optional.deleteButton === true;
-    this.elements.$cardFeedbackButtons.$el.checked = this.options.dataForApp.settings.optional.feedbackButtons === true;
+    this.el.$cardAutoSound.$el.checked = this.optional.autoSound === true;
+    this.el.$cardAnswerButton.$el.checked = this.optional.answerButton === true;
+    this.el.$cardDifficultWordsButton.$el.checked = this.optional.difficultWordsButton === true;
+    this.el.$cardDeleteButton.$el.checked = this.optional.deleteButton === true;
+    this.el.$cardFeedbackButtons.$el.checked = this.optional.feedbackButtons === true;
   }
 
   // собирать галочки из полей
   setObjectFields() {
-    this.options.dataForApp.settings.wordsPerDay = this.elements.$wordsPerDay.$el.value;
-    this.options.dataForApp.settings.optional.cardsPerDay = this.elements.$cardsPerDay.$el.value;
-    const typeOfTraining = [this.elements.$mixedTraining.$el, this.elements.$onlyNewWordsTraining.$el, this.elements.$onlyOldWordsTraining.$el, this.elements.$onlyDifficultWordsTraining.$el];
-    this.options.dataForApp.settings.optional.mixedCards = typeOfTraining.findIndex((item) => item.checked === true);
-    this.options.dataForApp.settings.optional.vocabularyExplanation = this.elements.$vocabularyExplanation.$el.checked === true;
-    this.options.dataForApp.settings.optional.vocabularyExample = this.elements.$vocabularyExample.$el.checked === true;
-    this.options.dataForApp.settings.optional.vocabularyTranscription = this.elements.$vocabularyTranscription.$el.checked === true;
-    this.options.dataForApp.settings.optional.vocabularyImage = this.elements.$vocabularyImage.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardTranslation = this.elements.$cardTranslation.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardExplanation = this.elements.$cardExplanation.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardExample = this.elements.$cardExample.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardTranscription = this.elements.$cardTranscription.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardImage = this.elements.$cardImage.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardTranslationAfterSuccess = this.elements.$cardTranslationAfterSuccess.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardExplanationTranslation = this.elements.$cardExplanationTranslation.$el.checked === true;
-    this.options.dataForApp.settings.optional.cardExampleTranslation = this.elements.$cardExampleTranslation.$el.checked === true;
-    this.options.dataForApp.settings.optional.autoSound = this.elements.$cardAutoSound.$el.checked === true;
-    this.options.dataForApp.settings.optional.answerButton = this.elements.$cardAnswerButton.$el.checked === true;
-    this.options.dataForApp.settings.optional.difficultWordsButton = this.elements.$cardDifficultWordsButton.$el.checked === true;
-    this.options.dataForApp.settings.optional.deleteButton = this.elements.$cardDeleteButton.$el.checked === true;
-    this.options.dataForApp.settings.optional.feedbackButtons = this.elements.$cardFeedbackButtons.$el.checked === true;
+    this.settings.wordsPerDay = this.el.$wordsPerDay.$el.value;
+    this.optional.cardsPerDay = this.el.$cardsPerDay.$el.value;
+    const typeOfTraining = [
+      this.el.$mixedTraining.$el,
+      this.el.$onlyNewWordsTraining.$el,
+      this.el.$onlyOldWordsTraining.$el,
+      this.el.$onlyDifficultWordsTraining.$el];
+    this.optional.mixedCards = typeOfTraining.findIndex((item) => item.checked === true);
+    this.optional.vocabularyExplanation = this.el.$vocabularyExplanation.$el.checked === true;
+    this.optional.vocabularyExample = this.el.$vocabularyExample.$el.checked === true;
+    this.optional.vocabularyTranscription = this.el.$vocabularyTranscription.$el.checked === true;
+    this.optional.vocabularyImage = this.el.$vocabularyImage.$el.checked === true;
+    this.optional.cardTranslation = this.el.$cardTranslation.$el.checked === true;
+    this.optional.cardExplanation = this.el.$cardExplanation.$el.checked === true;
+    this.optional.cardExample = this.el.$cardExample.$el.checked === true;
+    this.optional.cardTranscription = this.el.$cardTranscription.$el.checked === true;
+    this.optional.cardImage = this.el.$cardImage.$el.checked === true;
+    this.optional.cardTranslationAfter = this.el.$cardTranslationAfter.$el.checked === true;
+    this.optional.cardExplTranslation = this.el.$cardExplTranslation.$el.checked === true;
+    this.optional.cardExampleTranslation = this.el.$cardExampleTranslation.$el.checked === true;
+    this.optional.autoSound = this.el.$cardAutoSound.$el.checked === true;
+    this.optional.answerButton = this.el.$cardAnswerButton.$el.checked === true;
+    this.optional.difficultWordsButton = this.el.$cardDifficultWordsButton.$el.checked === true;
+    this.optional.deleteButton = this.el.$cardDeleteButton.$el.checked === true;
+    this.optional.feedbackButtons = this.el.$cardFeedbackButtons.$el.checked === true;
   }
 
   // отслеживать изменение 3 полей
   watchDependenceOfThreeMainCardsField() {
-    if (this.elements.$cardTranslation.$el.checked === true) {
-      this.elements.$cardTranslationAfterSuccess.$el.checked = false;
-      this.elements.$cardTranslationAfterSuccess.$el.disabled = true;
+    if (this.el.$cardTranslation.$el.checked === true) {
+      this.el.$cardTranslationAfter.$el.checked = false;
+      this.el.$cardTranslationAfter.$el.disabled = true;
     } else {
-      this.elements.$cardTranslationAfterSuccess.$el.disabled = false;
+      this.el.$cardTranslationAfter.$el.disabled = false;
     }
-    if (this.elements.$cardExplanation.$el.checked === true) {
-      this.elements.$cardExplanationTranslation.$el.disabled = false;
+    if (this.el.$cardExplanation.$el.checked === true) {
+      this.el.$cardExplTranslation.$el.disabled = false;
     } else {
-      this.elements.$cardExplanationTranslation.$el.checked = false;
-      this.elements.$cardExplanationTranslation.$el.disabled = true;
+      this.el.$cardExplTranslation.$el.checked = false;
+      this.el.$cardExplTranslation.$el.disabled = true;
     }
-    if (this.elements.$cardExample.$el.checked === true) {
-      this.elements.$cardExampleTranslation.$el.disabled = false;
+    if (this.el.$cardExample.$el.checked === true) {
+      this.el.$cardExampleTranslation.$el.disabled = false;
     } else {
-      this.elements.$cardExampleTranslation.$el.checked = false;
-      this.elements.$cardExampleTranslation.$el.disabled = true;
+      this.el.$cardExampleTranslation.$el.checked = false;
+      this.el.$cardExampleTranslation.$el.disabled = true;
     }
   }
 
   watchThreeMainCardsField() {
     const applyButton = this.$root.find('#settingsPageApplyButton').$el;
     const warningHeading = this.$root.find('#warning-heading');
-    if (this.elements.$cardTranslation.$el.checked === false && this.elements.$cardExplanation.$el.checked === false && this.elements.$cardExample.$el.checked === false) {
+    if (this.el.$cardTranslation.$el.checked === false
+      && this.el.$cardExplanation.$el.checked === false
+      && this.el.$cardExample.$el.checked === false) {
       applyButton.disabled = true;
       warningHeading.addClass('text-danger');
       warningHeading.removeClass('text-muted');
@@ -147,105 +158,105 @@ export default class Settings extends Component {
   }
 
   setStandardSettings() {
-    this.options.dataForApp.settings.wordsPerDay = BASE_SETTINGS.wordsPerDay;
-    this.options.dataForApp.settings.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
-    this.options.dataForApp.settings.optional.mixedCards = BASE_SETTINGS.optional.mixedCards;
-    this.options.dataForApp.settings.optional.vocabularyExplanation = BASE_SETTINGS.optional.vocabularyExplanation;
-    this.options.dataForApp.settings.optional.vocabularyExample = BASE_SETTINGS.optional.vocabularyExample;
-    this.options.dataForApp.settings.optional.vocabularyTranscription = BASE_SETTINGS.optional.vocabularyTranscription;
-    this.options.dataForApp.settings.optional.vocabularyImage = BASE_SETTINGS.optional.vocabularyImage;
-    this.options.dataForApp.settings.optional.cardTranslation = BASE_SETTINGS.optional.cardTranslation;
-    this.options.dataForApp.settings.optional.cardExplanation = BASE_SETTINGS.optional.cardExplanation;
-    this.options.dataForApp.settings.optional.cardExample = BASE_SETTINGS.optional.cardExample;
-    this.options.dataForApp.settings.optional.cardTranscription = BASE_SETTINGS.optional.cardTranscription;
-    this.options.dataForApp.settings.optional.cardImage = BASE_SETTINGS.optional.cardImage;
-    this.options.dataForApp.settings.optional.cardTranslationAfterSuccess = BASE_SETTINGS.optional.cardTranslationAfterSuccess;
-    this.options.dataForApp.settings.optional.cardExplanationTranslation = BASE_SETTINGS.optional.cardExplanationTranslation;
-    this.options.dataForApp.settings.optional.cardExampleTranslation = BASE_SETTINGS.optional.cardExampleTranslation;
-    this.options.dataForApp.settings.optional.autoSound = BASE_SETTINGS.optional.autoSound;
-    this.options.dataForApp.settings.optional.answerButton = BASE_SETTINGS.optional.answerButton;
-    this.options.dataForApp.settings.optional.difficultWordsButton = BASE_SETTINGS.optional.difficultWordsButton;
-    this.options.dataForApp.settings.optional.deleteButton = BASE_SETTINGS.optional.deleteButton;
-    this.options.dataForApp.settings.optional.feedbackButtons = BASE_SETTINGS.optional.feedbackButtons;
+    this.settings.wordsPerDay = BASE_SETTINGS.wordsPerDay;
+    this.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
+    this.optional.mixedCards = BASE_SETTINGS.optional.mixedCards;
+    this.optional.vocabularyExplanation = BASE_SETTINGS.optional.vocabularyExplanation;
+    this.optional.vocabularyExample = BASE_SETTINGS.optional.vocabularyExample;
+    this.optional.vocabularyTranscription = BASE_SETTINGS.optional.vocabularyTranscription;
+    this.optional.vocabularyImage = BASE_SETTINGS.optional.vocabularyImage;
+    this.optional.cardTranslation = BASE_SETTINGS.optional.cardTranslation;
+    this.optional.cardExplanation = BASE_SETTINGS.optional.cardExplanation;
+    this.optional.cardExample = BASE_SETTINGS.optional.cardExample;
+    this.optional.cardTranscription = BASE_SETTINGS.optional.cardTranscription;
+    this.optional.cardImage = BASE_SETTINGS.optional.cardImage;
+    this.optional.cardTranslationAfter = BASE_SETTINGS.optional.cardTranslationAfterSuccess;
+    this.optional.cardExplTranslation = BASE_SETTINGS.optional.cardExplanationTranslation;
+    this.optional.cardExampleTranslation = BASE_SETTINGS.optional.cardExampleTranslation;
+    this.optional.autoSound = BASE_SETTINGS.optional.autoSound;
+    this.optional.answerButton = BASE_SETTINGS.optional.answerButton;
+    this.optional.difficultWordsButton = BASE_SETTINGS.optional.difficultWordsButton;
+    this.optional.deleteButton = BASE_SETTINGS.optional.deleteButton;
+    this.optional.feedbackButtons = BASE_SETTINGS.optional.feedbackButtons;
   }
 
   watchDependenceNewWordsPerDayAndCardsPerDay() {
-    const settingsObj = this.options.dataForApp.settings;
-    if (settingsObj.wordsPerDay * 2.5 > settingsObj.optional.cardsPerDay) {
-      settingsObj.optional.cardsPerDay = Math.ceil(settingsObj.wordsPerDay * 2.5);
-      this.elements.$cardsPerDay.$el.value = settingsObj.optional.cardsPerDay;
+    if (this.settings.wordsPerDay * 2.5 > this.optional.cardsPerDay) {
+      this.optional.cardsPerDay = Math.ceil(this.settings.wordsPerDay * 2.5);
+      this.el.$cardsPerDay.$el.value = this.optional.cardsPerDay;
     }
   }
 
   validateWordsPerDay() {
-    if (this.elements.$wordsPerDay.$el.value <= 0 || Number.isNaN(Number(this.elements.$wordsPerDay.$el.value))) {
-      this.elements.$wordsPerDay.$el.value = BASE_SETTINGS.wordsPerDay;
-      this.elements.$wordsPerDay.addClass('border-danger');
-      this.elements.$wordsPerDay.addClass('text-danger');
-      setTimeout(() => this.elements.$wordsPerDay.removeClass('border-danger'), 500);
-      setTimeout(() => this.elements.$wordsPerDay.removeClass('text-danger'), 500);
+    if (this.el.$wordsPerDay.$el.value <= 0
+      || Number.isNaN(Number(this.el.$wordsPerDay.$el.value))) {
+      this.el.$wordsPerDay.$el.value = BASE_SETTINGS.wordsPerDay;
+      this.el.$wordsPerDay.addClass('border-danger');
+      this.el.$wordsPerDay.addClass('text-danger');
+      setTimeout(() => this.el.$wordsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.el.$wordsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.elements.$wordsPerDay.$el.value > 200) {
-      this.elements.$wordsPerDay.$el.value = 200;
-      this.elements.$wordsPerDay.addClass('border-danger');
-      this.elements.$wordsPerDay.addClass('text-danger');
-      setTimeout(() => this.elements.$wordsPerDay.removeClass('border-danger'), 500);
-      setTimeout(() => this.elements.$wordsPerDay.removeClass('text-danger'), 500);
+    if (this.el.$wordsPerDay.$el.value > 200) {
+      this.el.$wordsPerDay.$el.value = 200;
+      this.el.$wordsPerDay.addClass('border-danger');
+      this.el.$wordsPerDay.addClass('text-danger');
+      setTimeout(() => this.el.$wordsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.el.$wordsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.elements.$wordsPerDay.$el.value * 2.5 > this.elements.$cardsPerDay.$el.value) {
-      this.elements.$cardsPerDay.$el.value = Math.ceil(this.elements.$wordsPerDay.$el.value * 2.5);
-      this.elements.$cardsPerDay.addClass('border-danger');
-      this.elements.$cardsPerDay.addClass('text-danger');
-      setTimeout(() => this.elements.$cardsPerDay.removeClass('border-danger'), 500);
-      setTimeout(() => this.elements.$cardsPerDay.removeClass('text-danger'), 500);
+    if (this.el.$wordsPerDay.$el.value * 2.5 > this.el.$cardsPerDay.$el.value) {
+      this.el.$cardsPerDay.$el.value = Math.ceil(this.el.$wordsPerDay.$el.value * 2.5);
+      this.el.$cardsPerDay.addClass('border-danger');
+      this.el.$cardsPerDay.addClass('text-danger');
+      setTimeout(() => this.el.$cardsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.el.$cardsPerDay.removeClass('text-danger'), 500);
     }
   }
 
   validateCardsPerDay() {
-    if (this.elements.$cardsPerDay.$el.value <= 2 || Number.isNaN(Number(this.elements.$cardsPerDay.$el.value))) {
-      this.elements.$cardsPerDay.$el.value = BASE_SETTINGS.optional.cardsPerDay;
-      this.elements.$cardsPerDay.addClass('border-danger');
-      this.elements.$cardsPerDay.addClass('text-danger');
-      setTimeout(() => this.elements.$cardsPerDay.removeClass('border-danger'), 500);
-      setTimeout(() => this.elements.$cardsPerDay.removeClass('text-danger'), 500);
+    if (this.el.$cardsPerDay.$el.value <= 2
+      || Number.isNaN(Number(this.el.$cardsPerDay.$el.value))) {
+      this.el.$cardsPerDay.$el.value = BASE_SETTINGS.optional.cardsPerDay;
+      this.el.$cardsPerDay.addClass('border-danger');
+      this.el.$cardsPerDay.addClass('text-danger');
+      setTimeout(() => this.el.$cardsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.el.$cardsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.elements.$cardsPerDay.$el.value > 500) {
-      this.elements.$cardsPerDay.$el.value = 500;
-      this.elements.$cardsPerDay.addClass('border-danger');
-      this.elements.$cardsPerDay.addClass('text-danger');
-      setTimeout(() => this.elements.$cardsPerDay.removeClass('border-danger'), 500);
-      setTimeout(() => this.elements.$cardsPerDay.removeClass('text-danger'), 500);
+    if (this.el.$cardsPerDay.$el.value > 500) {
+      this.el.$cardsPerDay.$el.value = 500;
+      this.el.$cardsPerDay.addClass('border-danger');
+      this.el.$cardsPerDay.addClass('text-danger');
+      setTimeout(() => this.el.$cardsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.el.$cardsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.elements.$wordsPerDay.$el.value * 2.5 > this.elements.$cardsPerDay.$el.value) {
-      this.elements.$wordsPerDay.$el.value = Math.floor(this.elements.$cardsPerDay.$el.value / 2.5);
-      this.elements.$wordsPerDay.addClass('border-danger');
-      this.elements.$wordsPerDay.addClass('text-danger');
-      setTimeout(() => this.elements.$wordsPerDay.removeClass('border-danger'), 500);
-      setTimeout(() => this.elements.$wordsPerDay.removeClass('text-danger'), 500);
+    if (this.el.$wordsPerDay.$el.value * 2.5 > this.el.$cardsPerDay.$el.value) {
+      this.el.$wordsPerDay.$el.value = Math.floor(this.el.$cardsPerDay.$el.value / 2.5);
+      this.el.$wordsPerDay.addClass('border-danger');
+      this.el.$wordsPerDay.addClass('text-danger');
+      setTimeout(() => this.el.$wordsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.el.$wordsPerDay.removeClass('text-danger'), 500);
     }
   }
 
   validate() {
     this.setObjectFields();
-    const settingsObj = this.options.dataForApp.settings;
-    if (settingsObj.wordsPerDay <= 0 || Number.isNaN(Number(settingsObj.wordsPerDay))) {
-      settingsObj.wordsPerDay = BASE_SETTINGS.wordsPerDay;
+    if (this.settings.wordsPerDay <= 0 || Number.isNaN(Number(this.settings.wordsPerDay))) {
+      this.settings.wordsPerDay = BASE_SETTINGS.wordsPerDay;
     }
     this.watchDependenceNewWordsPerDayAndCardsPerDay();
-    if (settingsObj.optional.cardsPerDay <= 2 || Number.isNaN(Number(settingsObj.optional.cardsPerDay))) {
-      settingsObj.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
+    if (this.optional.cardsPerDay <= 2 || Number.isNaN(Number(this.optional.cardsPerDay))) {
+      this.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
     }
-    if (settingsObj.optional.mixedCards < 0 || settingsObj.optional.mixedCards > 3 || (typeof settingsObj.optional.mixedCards !== 'number')) {
-      settingsObj.optional.mixedCards = BASE_SETTINGS.optional.mixedCards;
+    if (this.optional.mixedCards < 0 || this.optional.mixedCards > 3 || (typeof this.optional.mixedCards !== 'number')) {
+      this.optional.mixedCards = BASE_SETTINGS.optional.mixedCards;
     }
-    if (settingsObj.optional.cardTranslation === true) {
-      settingsObj.optional.cardTranslationAfterSuccess = false;
+    if (this.optional.cardTranslation === true) {
+      this.optional.cardTranslationAfter = false;
     }
-    if (settingsObj.optional.cardExplanation === false) {
-      settingsObj.optional.cardExplanationTranslation = false;
+    if (this.optional.cardExplanation === false) {
+      this.optional.cardExplanationTranslation = false;
     }
-    if (settingsObj.optional.cardExample === false) {
-      settingsObj.optional.cardExampleTranslation = false;
+    if (this.optional.cardExample === false) {
+      this.optional.cardExampleTranslation = false;
     }
     this.setCheckboxFields();
   }
@@ -263,7 +274,7 @@ export default class Settings extends Component {
   onClick(event) {
     if (event.target.id === 'settingsPageApplyButton' && this.isClickAble) {
       this.validate();
-      this.options.api.updateSettings(this.options.dataForApp.settings)
+      this.options.api.updateSettings(this.settings)
         .then(() => {
           this.isClickAble = false;
           this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
@@ -288,7 +299,7 @@ export default class Settings extends Component {
     if (event.target.id === 'settingsPageResetButton' && this.isClickAble) {
       this.setStandardSettings();
       this.setCheckboxFields();
-      this.options.api.updateSettings(this.options.dataForApp.settings)
+      this.options.api.updateSettings(this.settings)
         .then(() => {
           this.isClickAble = false;
           this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
