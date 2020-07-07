@@ -7,6 +7,13 @@ const minCardsPerDay = 3;
 const maxWordsPerDay = 200;
 const minWordsPerDay = 1;
 const wordToCardRatio = 2.5;
+const buttonsText = {
+  applyButtonStandardText: 'Применить',
+  standardSettingsButtonStandardText: 'Сбросить до стандартных настроек',
+  textForErrors: 'Не получилось отправить. Попробуйте еще раз.',
+  applyButtonTextforApplying: 'Настройки применены',
+  standardSettingsButtonTextforApplying: 'Применены стандартные настройки',
+};
 
 export default class Settings extends Component {
   static className = 'Settings';
@@ -287,20 +294,20 @@ export default class Settings extends Component {
           this.isClickAble = false;
           this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
           this.$root.find('#settingsPageApplyButton').addClass('btn-info');
-          this.$root.find('#settingsPageApplyButton').text('Настройки применены');
+          this.$root.find('#settingsPageApplyButton').text(buttonsText.applyButtonTextforApplying);
           setTimeout(() => this.$root.find('#settingsPageApplyButton').removeClass('btn-info'), 2000);
           setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
-          setTimeout(() => this.$root.find('#settingsPageApplyButton').text('Применить'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').text(buttonsText.applyButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
         })
         .catch(() => {
           this.isClickAble = false;
           this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
           this.$root.find('#settingsPageApplyButton').addClass('btn-warning');
-          this.$root.find('#settingsPageApplyButton').text('Не получилось отправить. Попробуйте еще раз.');
+          this.$root.find('#settingsPageApplyButton').text(buttonsText.textForErrors);
           setTimeout(() => this.$root.find('#settingsPageApplyButton').removeClass('btn-warning'), 2000);
           setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
-          setTimeout(() => this.$root.find('#settingsPageApplyButton').text('Применить'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').text(buttonsText.applyButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
         });
     }
@@ -312,20 +319,20 @@ export default class Settings extends Component {
           this.isClickAble = false;
           this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
           this.$root.find('#settingsPageResetButton').addClass('btn-info');
-          this.$root.find('#settingsPageResetButton').text('Применены стандартные настройки');
+          this.$root.find('#settingsPageResetButton').text(buttonsText.standardSettingsButtonTextforApplying);
           setTimeout(() => this.$root.find('#settingsPageResetButton').removeClass('btn-info'), 2000);
           setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
-          setTimeout(() => this.$root.find('#settingsPageResetButton').text('Сбросить до стандартных настроек'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageResetButton').text(buttonsText.standardSettingsButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
         })
         .catch(() => {
           this.isClickAble = false;
           this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
           this.$root.find('#settingsPageResetButton').addClass('btn-warning');
-          this.$root.find('#settingsPageResetButton').text('Не получилось отправить. Попробуйте еще раз.');
+          this.$root.find('#settingsPageResetButton').text(buttonsText.textForErrors);
           setTimeout(() => this.$root.find('#settingsPageResetButton').removeClass('btn-warning'), 2000);
           setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
-          setTimeout(() => this.$root.find('#settingsPageResetButton').text('Сбросить до стандартных настроек'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageResetButton').text(buttonsText.standardSettingsButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
         });
     }
