@@ -1,33 +1,20 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable no-lonely-if */
 /* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
-/* eslint-disable one-var-declaration-per-line */
-/* eslint-disable prefer-const */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-var */
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable import/extensions */
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 
 // exapmle of file string https://raw.githubusercontent.com/av-shell/rslang-data/master/files/01_0009.jpg
-import book1 from './js/book1.js';
+import book1 from './js/book1';
 import createEssence from './js/createEssence';
-import { setSettingsToStorage, getSettingsFromStorage } from './js/myStorage';
-import { storage } from '../../core/utils';
+// import { setSettingsToStorage, getSettingsFromStorage } from './js/myStorage';
+// import { storage } from '../../core/utils';
 import showTemplate from './js/template';
 import './sass/style.scss';
-import BASE_USER_WORD from '../../constants/user-word.constants';
-import $$ from '../../core/domManipulation';
-import Observer from '../../core/Observer';
-
+// import BASE_USER_WORD from '../../constants/user-word.constants';
+// import $$ from '../../core/domManipulation';
+// import Observer from '../../core/Observer';
 
 const gameFailHeaderText = 'В этот раз всё великолепно';
 const gameWinWithErrorHeaderText = 'В этот раз не получилось, но продолжай тренироваться!';
 const gameWinHeaderText = 'В этот раз неплохо, но можно и лучше!';
-
 
 export default class Savannah {
   static className = 'Savannah';
@@ -43,10 +30,11 @@ export default class Savannah {
     console.log(options);
 
     const { statistics, settings } = this.options.dataForApp;
-    const gameNameLongStats = [
-      { data: 123, round: '2-18', result: '16-4' },
-      // ... всего 10 раундов-объектов, если нужно больше - делаем больше
-    ];
+    // const gameNameLongStats = [
+    //   { data: 123, round: '2-18', result: '16-4' },
+    //   // ... всего 10 раундов-объектов, если нужно больше - делаем больше
+    // ];
+
     console.log(statistics, settings);
 
     this.suprermegaarray = [{ 1: 'a' }, { 2: 'b' }, { 3: 'c' }];
@@ -65,7 +53,6 @@ export default class Savannah {
     //     gameNameLong: JSON.stringify(gameNameLongStats),
     //     gameNameMain: JSON.stringify(gameNameMainStats),
     // };
-
 
     // otladka
     // window.savanna = {};
@@ -96,7 +83,8 @@ export default class Savannah {
         this.localSettings.gameLevel = 1;
       }
 
-      // mod variant of this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords || true;
+      // mod variant of
+      // this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords || true;
       if ((savannaSettings.gameWithLearnedWords !== null)
         && ((typeof savannaSettings.gameWithLearnedWords) === 'boolean')) {
         this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords;
@@ -112,7 +100,8 @@ export default class Savannah {
         this.localSettings.gameInvert = true;
       }
 
-      // mod variant of this.localSettings.gameIrregularVerbs = savannaSettings.gameIrregularVerbs || false;
+      // mod variant of
+      // this.localSettings.gameIrregularVerbs = savannaSettings.gameIrregularVerbs || false;
       if ((savannaSettings.gameIrregularVerbs !== null)
         && ((typeof savannaSettings.gameIrregularVerbs) === 'boolean')) {
         this.localSettings.gameIrregularVerbs = false; // savannaSettings.gameIrregularVerbs;
@@ -134,7 +123,6 @@ export default class Savannah {
       };
       console.log('else this.localSettings', this.localSettings);
     }
-
 
     // TODO: remove after debugging
     window.savannaLocalSettings = this.localSettings;
@@ -306,7 +294,8 @@ export default class Savannah {
   }
 
   _audioStopAllSound() {
-    this.soundContainers.forEach((el) => {
+    this.soundContainers.forEach((e) => {
+      const el = e;
       el.pause();
       el.currentTime = 0;
     });
@@ -315,7 +304,8 @@ export default class Savannah {
   _audioMute() {
     console.log('muted');
     this._audioStopAllSound();
-    this.soundContainers.forEach((el) => {
+    this.soundContainers.forEach((e) => {
+      const el = e;
       el.muted = true;
     });
   }
@@ -323,11 +313,11 @@ export default class Savannah {
   _audioUnmute() {
     console.log('unmuted');
     this._audioStopAllSound();
-    this.soundContainers.forEach((el) => {
+    this.soundContainers.forEach((e) => {
+      const el = e;
       el.muted = false;
     });
   }
-
 
   _gameDataPrepare() {
     // this.gameState.wordArrays[this.localSettings.gameLevel] = e[0].paginatedResults;
@@ -350,7 +340,7 @@ export default class Savannah {
           return 1;
         });
         if (tmpArray.length < 30) {
-          let tmpArray2 = this.gameState.wordArrays[this.localSettings.gameLevel].filter((el) => !(el.userWord));
+          const tmpArray2 = this.gameState.wordArrays[this.localSettings.gameLevel].filter((el) => !(el.userWord));
           this.shuffle(tmpArray2);
           console.log('learned words sorting', tmpArray);
           tmpArray = tmpArray.concat(tmpArray2.slice(0, 30 - tmpArray.length));
@@ -363,36 +353,35 @@ export default class Savannah {
         console.log('learned words sorting', tmpArray);
         this.shuffle(tmpArray);
       } else {
-        tmpArray = book1.filter((el) => true);
+        tmpArray = book1.filter(() => true);
+        this.shuffle(tmpArray);
+        tmpArray = tmpArray.slice(0, 30);
+      }
+    } else if (this.gameState.isWordsFromBackend) {
+      tmpArray = this.gameState.wordArrays[this.localSettings.gameLevel].filter((el) => !(el.userWord));
+      if (tmpArray.length < 30) {
+        const tmpArray2 = this.gameState.wordArrays[this.localSettings.gameLevel]
+          .filter((el) => !!(el.userWord))
+          .sort((a, b) => {
+            if (a.userWord.optional.gameError === b.userWord.optional.gameError) {
+              return 0;
+            }
+            if (a.userWord.optional.gameError) {
+              return -1;
+            }
+            return 1;
+          });
+        tmpArray = tmpArray.concat(tmpArray2.slice(0, 30 - tmpArray.length));
+      } else {
         this.shuffle(tmpArray);
         tmpArray = tmpArray.slice(0, 30);
       }
     } else {
-      if (this.gameState.isWordsFromBackend) {
-        tmpArray = this.gameState.wordArrays[this.localSettings.gameLevel].filter((el) => !(el.userWord));
-        if (tmpArray.length < 30) {
-          let tmpArray2 = this.gameState.wordArrays[this.localSettings.gameLevel]
-            .filter((el) => !!(el.userWord))
-            .sort((a, b) => {
-              if (a.userWord.optional.gameError === b.userWord.optional.gameError) {
-                return 0;
-              }
-              if (a.userWord.optional.gameError) {
-                return -1;
-              }
-              return 1;
-            });
-          tmpArray = tmpArray.concat(tmpArray2.slice(0, 30 - tmpArray.length));
-        } else {
-          this.shuffle(tmpArray);
-          tmpArray = tmpArray.slice(0, 30);
-        }
-      } else {
-        tmpArray = book1.filter((el) => true);
-        this.shuffle(tmpArray);
-        tmpArray = tmpArray.slice(0, 30);
-      }
+      tmpArray = book1.filter(() => true);
+      this.shuffle(tmpArray);
+      tmpArray = tmpArray.slice(0, 30);
     }
+
     console.log('tmpArray:', tmpArray);
 
     this.gameWordArray = tmpArray;
@@ -507,11 +496,9 @@ export default class Savannah {
           this.gameState.answersWord = 'wordTranslate';
         }
 
-        this.gameState.wrAnsArr = this.gameWordArray.filter((el) => {
-          return (this.gameWordArray[this.gameState.step] !== el);
-        });
+        this.gameState.wrAnsArr = this.gameWordArray.filter((el) => (this.gameWordArray[this.gameState.step] !== el));
         this.shuffle(this.gameState.wrAnsArr);
-        // debugger;
+
         // this.answbtn0.textContent = `1) ${this.gameWordArray[this.gameState.step * 4 + 0][this.gameState.answersWord]}`;
         // this.answbtn1.textContent = `2) ${this.gameWordArray[this.gameState.step * 4 + 1][this.gameState.answersWord]}`;
         // this.answbtn2.textContent = `3) ${this.gameWordArray[this.gameState.step * 4 + 2][this.gameState.answersWord]}`;
@@ -523,7 +510,8 @@ export default class Savannah {
         this.gameState.questionWordLink = this.gameWordArray[this.gameState.step];
         this.gameState.questionWordBias = Math.floor(Math.random() * 4);
 
-        this.answbtnArray.forEach((el, i) => {
+        this.answbtnArray.forEach((e, i) => {
+          const el = e;
           el.textContent = `${i + 1}) ${this.gameState.wrAnsArr[i][this.gameState.answersWord]}`;
         });
         this.answbtnArray[this.gameState.questionWordBias].textContent = `${this.gameState.questionWordBias + 1}) ${this.gameWordArray[this.gameState.step][this.gameState.answersWord]}`;
@@ -578,7 +566,7 @@ export default class Savannah {
             // for (let i = 0; i < 4; i++) {
             //   this[`answbtn${i}`].classList.add('savannaWrongAnswerBtn');
             // }
-            this.answbtnArray.forEach((el, i) => {
+            this.answbtnArray.forEach((el) => {
               el.classList.add('savannaWrongAnswerBtn');
             });
           }
@@ -605,7 +593,7 @@ export default class Savannah {
           //   this._gameResolve();
           // }, 2500);
           this.fallingEnergyContainer.classList.add('energy-container-piupiupiu');
-          this.gameState.rightAnswersCounter++;
+          this.gameState.rightAnswersCounter += 1;
         }
         if (event === 'fallingEnergyAnimationEnd') {
           if ((this.gameState.rightAnswersCounter % 5) === 0) {
@@ -620,7 +608,7 @@ export default class Savannah {
       case 'incorrectAnswer':
         console.log('incorrect Answer');
         this.gameState.statisticWrongAnswers.push(this.gameState.questionWordLink);
-        this.gameState.lives--;
+        this.gameState.lives -= 1;
         this.gameLives.forEach((el, i) => {
           if ((i + this.gameState.lives) < 5) {
             el.classList.add('savanna-lives-broken');
@@ -653,7 +641,7 @@ export default class Savannah {
         break;
       case 'nextQuestion':
         console.log('nextQuestion');
-        this.gameState.step++;
+        this.gameState.step += 1;
         // for (let i = 0; i < 4; i++) {
         //   this[`answbtn${i}`].classList.remove('savannaWrongAnswerBtn', 'savannaCorrectAnswerBtn');
         // }
@@ -662,9 +650,7 @@ export default class Savannah {
         });
         // if (this.gameState.step < Math.floor(this.gameWordArray.length / 4)) {
         if (this.gameState.step < 30) {
-          this.gameState.wrAnsArr = this.gameWordArray.filter((el) => {
-            return (this.gameWordArray[this.gameState.step] !== el);
-          });
+          this.gameState.wrAnsArr = this.gameWordArray.filter((el) => (this.gameWordArray[this.gameState.step] !== el));
           this.shuffle(this.gameState.wrAnsArr);
 
           // this.answbtn0.textContent = `1) ${this.gameWordArray[this.gameState.step * 4 + 0][this.gameState.answersWord]}`;
@@ -676,7 +662,8 @@ export default class Savannah {
           // this.questionWord.textContent = `${this.gameState.questionWordLink[this.gameState.mainWord]}`;
           this.gameState.questionWordLink = this.gameWordArray[this.gameState.step];
           this.gameState.questionWordBias = Math.floor(Math.random() * 4);
-          this.answbtnArray.forEach((el, i) => {
+          this.answbtnArray.forEach((e, i) => {
+            const el = e;
             el.textContent = `${i + 1}) ${this.gameState.wrAnsArr[i][this.gameState.answersWord]}`;
           });
           this.answbtnArray[this.gameState.questionWordBias].textContent = `${this.gameState.questionWordBias + 1}) ${this.gameWordArray[this.gameState.step][this.gameState.answersWord]}`;
@@ -714,7 +701,8 @@ export default class Savannah {
     const tp = this.gameState.statisticObj;
 
     if (this.gameState.isWordsFromBackend) {
-      this.gameState.statisticCorrectAnswers.forEach((el) => {
+      this.gameState.statisticCorrectAnswers.forEach((e) => {
+        const el = e;
         if (el.userWord) {
           el.userWord.optional.gameError = false;
           // todo Send word to backand;
@@ -724,7 +712,8 @@ export default class Savannah {
           });
         }
       });
-      this.gameState.statisticWrongAnswers.forEach((el) => {
+      this.gameState.statisticWrongAnswers.forEach((e) => {
+        const el = e;
         if (el.userWord) {
           el.userWord.optional.gameError = true;
           console.log('Update UserWord', el);
@@ -735,8 +724,6 @@ export default class Savannah {
         }
       });
     }
-
-
 
     if (this.gameState.statisticWrongAnswers.length === 0) {
       this.savannaStatisticHeadingElement.textContent = gameFailHeaderText;
@@ -753,7 +740,7 @@ export default class Savannah {
       tp.WPSpan1 = createEssence('span', null, 'Неверно:', null);
       tp.WP = createEssence('p', 'h5 mb-3', [tp.WPSpan1, tp.WPSpan2], tp.WUl);
       tp.WLi = [];
-      for (let i = 0; i < this.gameState.statisticWrongAnswers.length; i++) {
+      for (let i = 0; i < this.gameState.statisticWrongAnswers.length; i += 1) {
         tp.WLi[i] = {};
         tp.WLi[i].span1 = createEssence('span', 'word h5 text-info', `${this.gameState.statisticWrongAnswers[i].word}`, null);
         tp.WLi[i].span2 = createEssence('span', 'px-1', '—', null);
@@ -777,7 +764,7 @@ export default class Savannah {
       tp.CPSpan1 = createEssence('span', null, 'Верно:', null);
       tp.CP = createEssence('p', 'h5 mb-3', [tp.CPSpan1, tp.CPSpan2], tp.CUl);
       tp.CLi = [];
-      for (let i = 0; i < this.gameState.statisticCorrectAnswers.length; i++) {
+      for (let i = 0; i < this.gameState.statisticCorrectAnswers.length; i += 1) {
         tp.CLi[i] = {};
         tp.CLi[i].span1 = createEssence('span', 'word h5 text-info', `${this.gameState.statisticCorrectAnswers[i].word}`, null);
         tp.CLi[i].span2 = createEssence('span', 'px-1', '—', null);
@@ -795,10 +782,11 @@ export default class Savannah {
     document.getElementById('savanna-start-page').classList.remove('savanna-display-none');
   }
 
-  shuffle(arr) {
+  shuffle(marr) {
+    const arr = marr;
     let j;
     let temp;
-    for (let i = arr.length - 1; i > 0; i--) {
+    for (let i = arr.length - 1; i > 0; i -= 1) {
       j = Math.floor(Math.random() * (i));
       temp = arr[j];
       arr[j] = arr[i];
