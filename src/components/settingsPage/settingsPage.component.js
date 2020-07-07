@@ -57,6 +57,9 @@ export default class Settings extends Component {
     this.elements.$vocabularyExplanation.$el.checked = this.options.dataForApp.settings.optional.vocabularyExplanation === true;
     this.elements.$vocabularyExample.$el.checked = this.options.dataForApp.settings.optional.vocabularyExample === true;
     this.elements.$vocabularyTranscription.$el.checked = this.options.dataForApp.settings.optional.vocabularyTranscription === true;
+    if (this.elements.$vocabularyTranscription.$el.checked === true) {
+      this.elements.$cardTranslationAfterSuccess.$el.disabled = true;
+    }
     this.elements.$vocabularyImage.$el.checked = this.options.dataForApp.settings.optional.vocabularyImage === true;
     this.elements.$cardTranslation.$el.checked = this.options.dataForApp.settings.optional.cardTranslation === true;
     this.elements.$cardExplanation.$el.checked = this.options.dataForApp.settings.optional.cardExplanation === true;
@@ -64,8 +67,17 @@ export default class Settings extends Component {
     this.elements.$cardTranscription.$el.checked = this.options.dataForApp.settings.optional.cardTranscription === true;
     this.elements.$cardImage.$el.checked = this.options.dataForApp.settings.optional.cardImage === true;
     this.elements.$cardTranslationAfterSuccess.$el.checked = this.options.dataForApp.settings.optional.cardTranslationAfterSuccess === true;
+    if (this.elements.$cardTranslationAfterSuccess.$el.checked === true) {
+      this.elements.$cardTranslationAfterSuccess.$el.disabled = false;
+    }
     this.elements.$cardExplanationTranslation.$el.checked = this.options.dataForApp.settings.optional.cardExplanationTranslation === true;
+    if (this.elements.$cardExplanationTranslation.$el.checked === true) {
+      this.elements.$cardExplanationTranslation.$el.disabled = false;
+    }
     this.elements.$cardExampleTranslation.$el.checked = this.options.dataForApp.settings.optional.cardExampleTranslation === true;
+    if (this.elements.$cardExampleTranslation.$el.checked === true) {
+      this.elements.$cardExampleTranslation.$el.disabled = false;
+    }
     this.elements.$cardAutoSound.$el.checked = this.options.dataForApp.settings.optional.autoSound === true;
     this.elements.$cardAnswerButton.$el.checked = this.options.dataForApp.settings.optional.answerButton === true;
     this.elements.$cardDifficultWordsButton.$el.checked = this.options.dataForApp.settings.optional.difficultWordsButton === true;
