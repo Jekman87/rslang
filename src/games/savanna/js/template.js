@@ -70,6 +70,9 @@ export default function showTemplate() {
 
 
   <div class="savanna-main-spinner savanna-display-none" id="savanna-main-spinner">
+    <h1 class="statistics-heading" id="savannaMainSpinnerHeader">
+        Ищем оазис!
+    </h1>
     <div class="savanna-preloader">
       <div class="savanna-preloader-internal"></div>
       <div class="savanna-preloader-countdown" id="savanna-preloader-countdown"></div>
@@ -111,9 +114,9 @@ export default function showTemplate() {
           <span class="fas fa-heart"></span>
           <span class="fas fa-heart-broken"></span>
         </div>
-        <div class="savanna-abort-game p-1 ml-3">
+        <!-- <div class="savanna-abort-game p-1 ml-3">
           <span class="fas fa-times"></span>
-        </div>
+        </div> -->
         </div>
       </div>
     </div>

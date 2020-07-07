@@ -294,7 +294,7 @@ export default class Api {
   async getAllUserAggregatedWords(group, wordsPerPage, filter) {
     let url = `${BASE_URL}/users/${this.userId}/aggregatedWords?`;
 
-    if (group) url += `group=${group}`;
+    if (group !== null) url += `group=${group}`;
     if (wordsPerPage) url += `&wordsPerPage=${wordsPerPage}`;
 
     if (filter) {
