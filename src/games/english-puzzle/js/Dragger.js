@@ -14,8 +14,6 @@ export default class Dragger {
     this.target = e.target;
 
     this.savePositionParams(e);
-    // this.raiseUpTarget();
-    // this.moveAt(e.pageX, e.pageY);
 
     const handleMouseMoveBinded = this.handleMouseMove.bind(this);
     document.addEventListener('mousemove', handleMouseMoveBinded);
@@ -60,14 +58,12 @@ export default class Dragger {
   }
 
   raiseUpTarget() {
-    this.target.classList.add('word_transported');
     this.target.style.position = 'absolute';
     this.target.style.zIndex = 1000;
     document.body.append(this.target);
   }
 
   pullDownTarget() {
-    this.target.classList.remove('word_transported');
     this.target.style.position = '';
     this.target.style.zIndex = '';
   }
@@ -129,7 +125,12 @@ export default class Dragger {
   }
 
   handleClick(mouseDownX, mouseDownY, e) {
-    if (e.clientX === mouseDownX && e.clientY === mouseDownY) {
+    const shiftX = Math.abs(e.clientX - mouseDownX);
+    const shiftY = Math.abs(e.clientY - mouseDownY);
+    const isMinorShiftX = shiftX >= 0 && shiftX <= 3;
+    const isMinorShiftY = shiftY >= 0 && shiftY <= 3;
+
+    if (isMinorShiftX && isMinorShiftY) {
       if (this.parentEl === this.availableWords) {
         this.sentenceConstructor.append(this.target);
       } else {

@@ -24,5 +24,12 @@ export default class App {
     this.helpController.init();
     this.lvlController.init();
     this.gameController.init();
+    this.start();
+  }
+
+  start() {
+    const startPageBg = new Image();
+    startPageBg.onload = () => document.querySelector('div.start-page').classList.remove('invisible');
+    startPageBg.src = 'start-page.jpg';
   }
 }

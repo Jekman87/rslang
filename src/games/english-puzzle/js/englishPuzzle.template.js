@@ -1,6 +1,6 @@
 const template = `
  <div id="pzl">
-  <div class="start-page">
+  <div class="start-page invisible">
     <h1 class="h1">English Puzzle</h1>
     <p class="preview">Изучай английский и живопись вместе! Собери паззл правильно и получи произведение искусства в личную коллекцию!</p>
     <button class="btn btn-primary start-button visible">Старт</button>
@@ -29,7 +29,7 @@ const template = `
           </div>
           <button class="pzl-btn level-pzl-btn">Перейти</button>
         </div>
-        <button class="pzl-btn logout-pzl-btn" title="Выйти в главное приложение"></button>
+        <button class="pzl-btn exit-pzl-btn" title="Выйти в главное приложение"></button>
         <div class="help-pzl-btn-group">
           <button class="pzl-btn help-pzl-btn autoplay-pzl-btn" data-type="autoplayHelp" title="Подсказка: Предварительное произношение"></button>
           <button class="pzl-btn help-pzl-btn pronounce-pzl-btn" data-type="pronounceHelp" title="Подсказка: Произношение по клику"></button>

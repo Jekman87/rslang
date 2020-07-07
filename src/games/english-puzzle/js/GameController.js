@@ -17,7 +17,7 @@ export default class GameController {
     this.painting = document.querySelector('figure.painting-block');
     this.playBtn = document.querySelector('button.play-pzl-btn');
     this.startBtn = document.querySelector('button.start-button');
-    this.logoutBtn = document.querySelector('button.logout-pzl-btn');
+    this.exitBtn = document.querySelector('button.exit-pzl-btn');
     this.spinner = document.querySelector('div.spinner');
     this.popUp = document.querySelector('div.pop-up');
     this.resultsBlock = document.querySelector('div.results-block');
@@ -38,7 +38,7 @@ export default class GameController {
     document.querySelector('button.close-pzl-btn').addEventListener('click', this.closePopUp.bind(this));
 
     this.startBtn.addEventListener('click', this.startGame.bind(this));
-    this.logoutBtn.addEventListener('click', this.logOut.bind(this));
+    this.exitBtn.addEventListener('click', this.exit.bind(this));
 
     this.playBtn.addEventListener('click', this.playAudio.bind(this));
     this.resultsBlock.addEventListener('click', this.playByClick.bind(this));
@@ -64,7 +64,7 @@ export default class GameController {
     this.fillHelpers();
     this.getAvailableWords();
     this.setPaintingInfo();
-    this.removeLoadingEffect();
+    this.switchPage();
   }
 
   switchElementsVisibility(isEndOfRound) {
@@ -97,9 +97,7 @@ export default class GameController {
     }
   }
 
-  removeLoadingEffect() {
-    this.startBtn.classList.remove('visible');
-    this.spinner.classList.remove('visible');
+  switchPage() {
     document.querySelector('div.start-page').classList.add('hidden');
     document.querySelector('main.main').classList.add('visible');
   }
@@ -232,6 +230,7 @@ export default class GameController {
     this.showHelpers();
     this.showCorrect();
 
+    this.sentenceConstructor.classList.add('sentence-constructor_disabled');
     e.target.previousElementSibling.textContent = 'Продолжить';
     e.target.classList.add('disabled');
   }
@@ -266,6 +265,7 @@ export default class GameController {
     this.cleanConstructionArea();
     this.getAvailableWords();
     e.target.textContent = 'Проверить';
+    this.sentenceConstructor.classList.remove('sentence-constructor_disabled');
   }
 
   showCorrect() {
@@ -307,6 +307,7 @@ export default class GameController {
     } else {
       e.target.textContent = 'Ещё раз';
     }
+    this.sentenceConstructor.classList.add('sentence-constructor_disabled');
   }
 
   markSentence() {
@@ -438,7 +439,11 @@ export default class GameController {
     const data = this.get('sentencesData');
 
     data.forEach((item, i) => {
-      const sentenceItem = `<li class="answer-list__item"><button class="pzl-btn play-pzl-btn play-pzl-btn_small" data-src="${item.audio}" title="play"></button>${item.text.join(' ')}</li>`;
+      const sentenceItem = `
+      <li class="answer-list__item">
+        <button class="pzl-btn play-pzl-btn play-pzl-btn_small" data-src="${item.audio}" title="play"></button>${item.text.join(' ')}
+      </li>`;
+
       if (this.results[i] === true) {
         correctSentences.push(sentenceItem);
       } else {
@@ -484,9 +489,16 @@ export default class GameController {
         const [level, round] = artLocation.split('-');
         const basicPath = 'https://raw.githubusercontent.com/torchik-slava/rslang_data_paintings/master/';
         const artInfo = paintings[level - 1][round - 1];
-        slides.push(`<div class="carousel-item"><figure class="gallery-item"><div class="frame">
-        <img class="picture" src="${basicPath}${artInfo.cutSrc}" alt="picture art"></div>
-        <figcaption class="art-name">${artInfo.name}</figcaption></figure></div>`);
+        const slide = `
+        <div class="carousel-item">
+          <figure class="gallery-item">
+            <div class="frame">
+              <img class="picture" src="${basicPath}${artInfo.cutSrc}" alt="picture art">
+            </div>
+            <figcaption class="art-name">${artInfo.name}</figcaption>
+          </figure>
+        </div>`;
+        slides.push(slide);
       });
     }
 
@@ -514,7 +526,7 @@ export default class GameController {
     this.puzzleDrawer.resizePuzzles(this.sentenceIndex, this.currentWords, restPuzzles);
   }
 
-  logOut() {
+  exit() {
     document.location.reload(true);
   }
 
