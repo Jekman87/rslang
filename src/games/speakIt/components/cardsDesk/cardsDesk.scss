@@ -1,10 +1,16 @@
-.desk-word{
-  cursor: pointer;
-  transition: transform 0.5s;
-  transform: scale(0.9);
-  word-break: break-word;
-  text-align: center;
-}
-.desk-word.bg-success{
-  transform: scale(0.97);
+.cards-desk-content{
+  .desk-word{
+    cursor: pointer;
+    transition: transform 0.5s;
+    transform: scale(0.9);
+    word-break: break-word;
+    text-align: center;
+  }
+  .desk-word.bg-success{
+    transform: scale(0.97);
+  }
+  
+  .card-text{
+    font-size: 1.25rem;
+  }
 }

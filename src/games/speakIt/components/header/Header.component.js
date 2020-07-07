@@ -13,6 +13,8 @@ export default class Header extends Component {
       listeners: ['click', 'change'],
       ...options,
     });
+    this.mainObserver = this.dataForApp.mainApp.observer;
+    this.mainApi = this.dataForApp.mainApp.api;
   }
 
   init() {
@@ -34,16 +36,14 @@ export default class Header extends Component {
       if (this.dataForApp.state.gameLevel.group === 0) {
         this.dataForApp.state.gameLevel.group += 1;
         this.$round.$el.options.value = `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`;
-        console.log(this.$round.$el.options.value);
         changeSelector.call(this, 'round');
       } else if (this.dataForApp.state.gameLevel.group === 1
         && this.dataForApp.state.gameLevel.round < 29) {
         this.dataForApp.state.gameLevel.group = 0;
         this.dataForApp.state.gameLevel.round += 1;
         this.$round.$el.options.value = `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`;
-        console.log(this.$round.$el.options.value);
         changeSelector.call(this, 'round');
-        await changeGameRound.call(this);
+        await changeGameRoundWords.call(this);
       } else if (this.dataForApp.state.gameLevel.group === 1
         && this.dataForApp.state.gameLevel.round === 29) {
         this.dataForApp.state.gameLevel.group = 0;
@@ -57,7 +57,7 @@ export default class Header extends Component {
         }
         this.$level.$el.options.value = this.dataForApp.state.gameLevel.level;
         changeSelector.call(this, 'level');
-        await changeGameRound.call(this);
+        await changeGameRoundWords.call(this);
       }
       if (this.dataForApp.state.speakMode) {
         saveGameHistory.call(this);
@@ -101,7 +101,7 @@ export default class Header extends Component {
     }
     if (clickedElement.data.type === 'exit') {
       this.dataForApp.destroy();
-      this.dataForApp.mainApp.observer.emit('selectPage', 'MainPage');
+      this.mainObserver.emit('selectPage', 'MainPage');
     }
     if (clickedElement.data.type === 'history') {
       this.emit('header:history', '');
@@ -119,7 +119,7 @@ export default class Header extends Component {
     const clickedElement = $$(event.target);
     if (clickedElement.$el.id === 'gameLevel') {
       this.dataForApp.state.gameLevel.level = +clickedElement.text();
-      await changeGameRound.call(this);
+      await changeGameRoundWords.call(this);
       restart.call(this);
       stopSpeak.call(this);
       this.emit('header:restart', this.dataForApp.state.speakMode);
@@ -127,11 +127,10 @@ export default class Header extends Component {
     }
     if (clickedElement.$el.id === 'gameRound') {
       const [round, group] = clickedElement.text().split('-');
-      console.log(round, group);
       this.dataForApp.state.gameLevel.round = +round;
       this.dataForApp.state.gameLevel.group = +group;
       if (this.dataForApp.state.gameLevel.group === 0) {
-        await changeGameRound.call(this);
+        await changeGameRoundWords.call(this);
       }
       restart.call(this);
       stopSpeak.call(this);
@@ -162,16 +161,15 @@ function stopSpeak() {
   }
 }
 
-async function changeGameRound() {
+async function changeGameRoundWords() {
   const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
   try {
-    this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(pg, gr);
+    this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
   } catch (e) {
     if (e.message === '401') {
-      console.log(e.message);
-      // logout
+      this.mainObserver.emit('mainLogout');
     } else {
-      console.log(`${e.message}: something went wrong`);
+      console.error(`${e.message}: something went wrong`);
     }
   }
 }

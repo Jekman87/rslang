@@ -2,6 +2,11 @@
 @import '../../scss/mixins';
 
 .header{
+  .header-content{
+    .selector-title{
+      color: #fff;
+    }
+  }
   .fa-stack {
     width: 2em;
   }

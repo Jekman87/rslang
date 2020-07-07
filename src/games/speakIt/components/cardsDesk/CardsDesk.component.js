@@ -39,9 +39,9 @@ export default class CardsDesk extends Component {
       if ($card) {
         playAudio.apply(this, ['correct.mp3', `${LOCAL_ASSETS_URL}voices/`]);
         const card = $$($card);
-        card.removeClass('bg-info').addClass('bg-success');
+        card.removeClass('bg-primary').addClass('bg-success');
         const cardBody = card.find('.card-body');
-        cardBody.removeClass('bg-info').addClass('bg-success');
+        cardBody.removeClass('bg-primary').addClass('bg-success');
       } else {
         playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}voices/`]);
       }
@@ -93,14 +93,14 @@ export default class CardsDesk extends Component {
           clickedElement = $$(clickedElement.closest('.card'));
         }
         this.$root.findAll('.card').forEach((el) => {
-          $$(el).removeClass('bg-success').addClass('bg-info');
+          $$(el).removeClass('bg-success').addClass('bg-primary');
         });
         this.$root.findAll('.card-body').forEach((el) => {
-          $$(el).removeClass('bg-success').addClass('bg-info');
+          $$(el).removeClass('bg-success').addClass('bg-primary');
         });
         const cardBody = clickedElement.find('.card-body');
         clickedElement.addClass('bg-success');
-        cardBody.removeClass('bg-info').addClass('bg-success');
+        cardBody.removeClass('bg-primary').addClass('bg-success');
         const data = this.dataForApp.state.gameWords
           .find((el) => el.id === clickedElement.data.wordid);
         const { audio } = data;
@@ -152,9 +152,9 @@ function toCardHTML() {
 
 function unSelectCards() {
   this.$root.findAll('.card').forEach((el) => {
-    $$(el).removeClass('bg-success').addClass('bg-info');
+    $$(el).removeClass('bg-success').addClass('bg-primary');
   });
   this.$root.findAll('.card-body').forEach((el) => {
-    $$(el).removeClass('bg-success').addClass('bg-info');
+    $$(el).removeClass('bg-success').addClass('bg-primary');
   });
 }

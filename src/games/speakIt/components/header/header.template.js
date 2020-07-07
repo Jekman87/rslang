@@ -23,13 +23,13 @@ export default function createHeaderHTML() {
     <nav class="nav flex-column">
     <div class="row justify-content-center">
     <div class="form-group mr-2">
-      <h5><label for="gameLevel" class="text-primary"><i class="fas fa-layer-group"></i><strong> Уровень(1-6)</strong></label></h5>
+      <h5><label for="gameLevel" class="selector-title"><i class="fas fa-layer-group"></i><strong> Уровень(1-6)</strong></label></h5>
       <select class="form-control" id="gameLevel">
         ${createOptions(6)}
       </select>
     </div>
     <div class="form-group mr-2">
-      <h5><label for="gameRound" class="text-primary"><i class="fas fa-object-group"></i><strong> Раунд(1-60)</strong></label></h5>
+      <h5><label for="gameRound" class="selector-title"><i class="fas fa-object-group"></i><strong> Раунд(1-60)</strong></label></h5>
       <select class="form-control" id="gameRound">
       ${createOptionsRound(30)}
       </select>

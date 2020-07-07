@@ -25,6 +25,9 @@ export default class Intro extends Component {
       successWords: [],
       words: [],
     };
+    this.mainObserver = this.dataForApp.mainApp.observer;
+    this.mainApi = this.dataForApp.mainApp.api;
+    window.a_1 = this.dataForApp;
   }
 
   init() {
@@ -40,17 +43,16 @@ export default class Intro extends Component {
       // get words - from dictionary or from user level or from page 1 group 1
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       try {
-        this.dataForApp.state.words = await this.dataForApp.mainApp.api.getWords(pg, gr);
+        this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
+        hide.call(this);
+        this.emit('intro:start', '');
       } catch (e) {
         if (e.message === '401') {
-          console.log(e.message);
-          // logout
+          this.mainObserver.emit('mainLogout');
         } else {
-          console.log(`${e.message}: something went wrong`);
+          console.error(`${e.message}: something went wrong`);
         }
       }
-      hide.call(this);
-      this.emit('intro:start', '');
     }
   }
 
