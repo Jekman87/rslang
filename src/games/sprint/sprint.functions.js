@@ -14,8 +14,6 @@ const state = {
   wordCount: 0,
 };
 
-// hide components
-
 function hideIntro() {
   document.querySelector('.intro').style.display = 'none';
 }
@@ -33,8 +31,6 @@ function hideShortTimeStatistic() {
   document.querySelector('.statistic-screen').style.display = 'none';
 }
 
-// show components
-
 function showCountdown() {
   document.querySelector('.main-sp').style.display = 'flex';
 }
@@ -44,7 +40,8 @@ function showLongTimeStatistic() {
 
   document.querySelector('.games').innerHTML = '';
 
-  games.forEach((el) => document.querySelector('.games').insertAdjacentHTML('beforeend', `${prepareLongTimeStatistic(el)}`));
+  games.forEach((el) => document.querySelector('.games')
+    .insertAdjacentHTML('beforeend', `${prepareLongTimeStatistic(el)}`));
 }
 
 function showBestIndicator() {
@@ -284,12 +281,20 @@ function getDate() {
 function rewriteLongTimeStatistic() {
   if (localStorage.getItem('arrayWithGames') === null) {
     const games = [];
-    const currentGame = [getDate(), `результат игры - ${state.points};`, `правильных ответов - ${state.correctAnswers};`, `ошибок - ${state.wrongAnswers}.`];
+    const currentGame = [
+      getDate(),
+      `результат игры - ${state.points};`,
+      `правильных ответов - ${state.correctAnswers};`,
+      `ошибок - ${state.wrongAnswers}.`];
     games.push(currentGame);
     localStorage.setItem('arrayWithGames', JSON.stringify(games));
   } else {
     const games = JSON.parse(localStorage.getItem('arrayWithGames'));
-    const currentGame = [getDate(), `результат игры - ${state.points};`, `правильных ответов - ${state.correctAnswers};`, `ошибок - ${state.wrongAnswers}.`];
+    const currentGame = [
+      getDate(),
+      `результат игры - ${state.points};`,
+      `правильных ответов - ${state.correctAnswers};`,
+      `ошибок - ${state.wrongAnswers}.`];
     games.push(currentGame);
     localStorage.setItem('arrayWithGames', JSON.stringify(games));
   }
@@ -329,8 +334,14 @@ function resetProgress() {
   state.comboAnswers = 0;
   state.colorCount = 0;
   state.pointsWeigth = 10;
-  document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-  document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
+  document.querySelectorAll('.progress-place div').forEach((el) => {
+    const element = el;
+    element.style.backgroundColor = 'transparent';
+  });
+  document.querySelectorAll('.progress-place div').forEach((el) => {
+    const element = el;
+    element.innerHTML = '';
+  });
   document.querySelectorAll('.bird').forEach((el) => el.remove());
 }
 
@@ -360,8 +371,14 @@ function compareAnswers() {
 }
 
 function resetBonusPlaces() {
-  document.querySelectorAll('.progress-place div').forEach((el) => el.style.backgroundColor = 'transparent');
-  document.querySelectorAll('.progress-place div').forEach((el) => el.innerHTML = '');
+  document.querySelectorAll('.progress-place div').forEach((el) => {
+    const element = el;
+    element.style.backgroundColor = 'transparent';
+  });
+  document.querySelectorAll('.progress-place div').forEach((el) => {
+    const element = el;
+    element.innerHTML = '';
+  });
   state.colorCount = 0;
   state.pointsWeigth += state.pointsWeigth;
 }
