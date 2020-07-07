@@ -98,7 +98,7 @@ export default class PuzzleDrawer {
     if (pzl.classList.contains('word_colored')) {
       this.addImg(pzl, ctx, i, j);
     } else {
-      PuzzleDrawer.addBackground(pzl, ctx);
+      this.addBackground(pzl, ctx);
     }
 
     this.addText(pzl, ctx, textWord, j, lastWordIndex);
@@ -144,7 +144,7 @@ export default class PuzzleDrawer {
     ctx.drawImage(this.img, left, top, picWidth, picHeight, 0, 0, elem.width, elem.height);
   }
 
-  static addBackground(elem, ctx) {
+  addBackground(elem, ctx) {
     ctx.fillStyle = '#b7b7b7';
     ctx.fillRect(0, 0, elem.width, elem.height);
   }

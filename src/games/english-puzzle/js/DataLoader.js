@@ -38,7 +38,7 @@ export default class Loader {
 
       const sentencesInfo = [];
       data.forEach((item) => {
-        const sentence = Loader.formatString(item.textExample);
+        const sentence = this.formatString(item.textExample);
         sentencesInfo.push({
           text: sentence,
           audio: item.audioExample,
@@ -73,7 +73,7 @@ export default class Loader {
     }
   }
 
-  static formatString(str) {
+  formatString(str) {
     let result = str.replace(/<[\\/\w]{1,2}>/g, '');
     result = result.replace('.', '');
     result = result.split(' ');

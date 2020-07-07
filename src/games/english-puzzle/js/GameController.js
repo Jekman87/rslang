@@ -58,7 +58,7 @@ export default class GameController {
     this.sentenceIndex = 0;
     this.correctCounter = 0;
     this.results = [];
-    console.log('state', this.storage);
+
     this.switchElementsVisibility(false);
     this.cleanConstructionArea();
     await this.createPuzzles();
@@ -82,9 +82,7 @@ export default class GameController {
       document.querySelector('div.answer-pzl-btn-group').classList.add('hidden');
       document.querySelector('div.next-round-block').classList.remove('hidden');
     } else {
-      this.sentenceList.forEach((sentence) => {
-        sentence.classList.remove('sentence_guessed');
-      });
+      this.sentenceList.forEach((sentence) => sentence.classList.remove('sentence_guessed'));
       this.closePopUp();
       this.playBtn.classList.remove('invisible');
       this.painting.classList.add('hidden');
@@ -191,24 +189,21 @@ export default class GameController {
     const newWords = this.currentWords.map((word) => this.puzzleDrawer.cloneCanvas(word));
 
     this.puzzleDrawer.drawSentence(newWords, this.sentenceIndex);
-
-    GameController.shuffle(newWords);
-
-    newWords.forEach((word) => {
-      this.availableWords.append(word);
-    });
+    this.shuffle(newWords);
+    newWords.forEach((word) => this.availableWords.append(word));
   }
 
   setPaintingInfo() {
     const data = this.get('paintingData');
     const info = `${data.author} - ${data.name} (${data.year})`;
+
+    document.querySelector('img.painting-pic_small').src = data.link;
     document.querySelectorAll('figcaption:not(.art-name)').forEach((el) => {
       el.textContent = info;
     });
-    document.querySelector('img.painting-pic_small').src = data.link;
   }
 
-  static shuffle(arr) {
+  shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -238,9 +233,10 @@ export default class GameController {
 
   check(e) {
     const unusedWords = this.availableWords.querySelectorAll('.word');
+
     if (unusedWords.length) {
-      GameController.toggleHighLigth(unusedWords);
-      setTimeout(() => GameController.toggleHighLigth(unusedWords), 2000);
+      this.toggleHighLigth(unusedWords);
+      setTimeout(() => this.toggleHighLigth(unusedWords), 2000);
     } else {
       this.compare(e);
     }
@@ -280,7 +276,7 @@ export default class GameController {
     this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
   }
 
-  static toggleHighLigth(list) {
+  toggleHighLigth(list) {
     list.forEach((item) => item.classList.toggle('word_still-available'));
   }
 
@@ -297,8 +293,8 @@ export default class GameController {
       }
     });
 
+    this.results[this.sentenceIndex] = this.isCorrect;
     this.showResult(this.isCorrect);
-    this.results.push(this.isCorrect);
 
     if (this.isCorrect) {
       this.correctCounter += 1;
