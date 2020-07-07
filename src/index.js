@@ -10,10 +10,11 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import Team from './components/teamPage';
 import Settings from './components/settingsPage';
 
 const pages = {
-  Authorization, MainPage, MainGame, Settings,
+  Authorization, MainPage, MainGame, Team, Settings,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
