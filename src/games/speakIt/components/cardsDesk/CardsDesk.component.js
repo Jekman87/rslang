@@ -2,7 +2,7 @@ import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createCardsDeskHTML from './cardsDesk.template';
 import createCardHTML from './card.template';
-import { ASSETS_URL, LOCAL_ASSETS_URL } from '../../api/constants';
+import { ASSETS_URL, LOCAL_ASSETS_URL, PER_GAME_WORDS } from '../../constants/constants';
 import { delay } from '../../../../core/utils';
 
 export default class CardsDesk extends Component {
@@ -37,17 +37,17 @@ export default class CardsDesk extends Component {
       const $card = Array.from(this.$root.findAll('.card'))
         .find((el) => $$(el).data.wordid === id);
       if ($card) {
-        playAudio.apply(this, ['correct.mp3', `${LOCAL_ASSETS_URL}voices/`]);
+        playAudio.apply(this, ['correct.mp3', `${LOCAL_ASSETS_URL}/voices/`]);
         const card = $$($card);
         card.removeClass('bg-primary').addClass('bg-success');
         const cardBody = card.find('.card-body');
         cardBody.removeClass('bg-primary').addClass('bg-success');
       } else {
-        playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}voices/`]);
+        playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}/voices/`]);
       }
     });
     this.subscribe('cardContainer:notFindWord', () => {
-      playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}voices/`]);
+      playAudio.apply(this, ['error.mp3', `${LOCAL_ASSETS_URL}/voices/`]);
     });
 
     this.subscribe('header:changeGameRound', () => {
@@ -58,7 +58,8 @@ export default class CardsDesk extends Component {
     this.subscribe('stopSpeak', () => {
       const { group } = this.dataForApp.state.gameLevel;
       const wordsArr = this.dataForApp.state.words;
-      const wordsTen = group ? wordsArr.slice(0, 10) : wordsArr.slice(10, 20);
+      const wordsTen = group ? wordsArr.slice(0, PER_GAME_WORDS)
+        : wordsArr.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
       this.dataForApp.state.gameWords = wordsTen;
     });
     this.subscribe('results:playword', (wordId) => {
@@ -78,7 +79,7 @@ export default class CardsDesk extends Component {
     });
     this.subscribe('score:finishGame', async () => {
       await delay(1500);
-      playAudio.apply(this, ['success.mp3', `${LOCAL_ASSETS_URL}voices/`]);
+      playAudio.apply(this, ['success.mp3', `${LOCAL_ASSETS_URL}/voices/`]);
       unSelectCards.call(this);
       prepareCardsDataHTML.call(this);
       this.emit('cardsDesk:finishGame', '');
@@ -117,8 +118,8 @@ export default class CardsDesk extends Component {
 
 function prepareCardsDataHTML() {
   const { group } = this.dataForApp.state.gameLevel;
-  const wordsTen = group ? this.dataForApp.state.words.slice(0, 10)
-    : this.dataForApp.state.words.slice(10, 20);
+  const wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
+    : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
   const cards = wordsTen.map((name) => {
     const {
       id, word: term, wordTranslate: translation, transcription,
@@ -137,7 +138,7 @@ function playAudio(file, url) {
   if (file) {
     this.$audio.attr(
       'src',
-      `${url}${file}`,
+      `${url}/${file}`,
     );
     this.$audio.$el.currentTime = 0;
     this.$audio.$el.play();

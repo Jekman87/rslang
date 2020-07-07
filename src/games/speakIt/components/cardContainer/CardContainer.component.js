@@ -1,6 +1,6 @@
 import Component from '../../../../core/Component';
 import createCardContainerHTML from './cardContainer.template';
-import { ASSETS_URL, LOCAL_ASSETS_URL } from '../../api/constants';
+import { ASSETS_URL, LOCAL_ASSETS_URL } from '../../constants/constants';
 
 export default class CardContainer extends Component {
   static className = 'card-container';
@@ -30,7 +30,7 @@ export default class CardContainer extends Component {
       if (speakMode) {
         this.$wordCardImg.attr(
           'src',
-          `${LOCAL_ASSETS_URL}img/blank.jpg`,
+          `${LOCAL_ASSETS_URL}/img/blank.jpg`,
         );
         this.$wordCardFormGroup.removeClass('d-none');
         this.$wordCardTranslation.clear();
@@ -74,7 +74,7 @@ function updateWordCard(data) {
   } = data;
   this.$wordCardImg.attr(
     'src',
-    `${ASSETS_URL}${image.replace('files/', '')}`,
+    `${ASSETS_URL}/${image.replace('files/', '')}`,
   );
   this.$wordCardTranslation.removeClass('d-none').text(wordTranslate);
   this.$wordCardInput.text(word);
@@ -93,7 +93,7 @@ function changeStateWordsArrays(word) {
 function resetCard() {
   this.$wordCardImg.attr(
     'src',
-    `${LOCAL_ASSETS_URL}img/blank.jpg`,
+    `${LOCAL_ASSETS_URL}/img/blank.jpg`,
   );
   this.$wordCardFormGroup.addClass('d-none');
   this.$wordCardTranslation.removeClass('d-none').clear();

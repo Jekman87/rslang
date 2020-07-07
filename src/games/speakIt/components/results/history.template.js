@@ -3,7 +3,6 @@ export default function createHistoryHTML(data) {
     date, round, result,
   } = data;
   const [correct, errors] = result.split('-');
-  // const [level, round, group] = game.split('-');
   const dateToLocal = new Date(date).toLocaleString().split(',').join(' ');
   return `
   <div data-date="${date}" class="card-body p-1 d-flex align-items-center  mb-1">
@@ -26,5 +25,6 @@ export default function createHistoryHTML(data) {
      </div>
     </div>
   </div>
+  <hr class="m-0">
   `;
 }

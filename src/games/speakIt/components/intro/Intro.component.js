@@ -3,6 +3,9 @@ import $$ from '../../../../core/domManipulation';
 import createIntroHTML from './intro.template';
 import createButtonSpinnerHTML from './button-spinner.template';
 import { delay } from '../../../../core/utils';
+import {
+  GAME_DEFAULT_STATE,
+} from '../../constants/constants';
 
 export default class Intro extends Component {
   static className = 'intro';
@@ -13,21 +16,10 @@ export default class Intro extends Component {
       listeners: ['click'],
       ...options,
     });
-    this.dataForApp.state.words = null;
-    this.dataForApp.state = {
-      gameLevel: {
-        level: 0,
-        round: 0,
-        group: 0,
-      },
-      gameWords: [],
-      correct: 0,
-      successWords: [],
-      words: [],
-    };
+    this.dataForApp.state = GAME_DEFAULT_STATE;
+
     this.mainObserver = this.dataForApp.mainApp.observer;
     this.mainApi = this.dataForApp.mainApp.api;
-    window.a_1 = this.dataForApp; // Delete!
     this.mainStatistic = this.dataForApp.mainApp.dataForApp.statistics;
   }
 
@@ -47,7 +39,7 @@ export default class Intro extends Component {
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       try {
         this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
-        hide.call(this);
+        this.$root.addClass('none');
         this.emit('intro:start', '');
       } catch (e) {
         if (e.message === '401') {
@@ -62,8 +54,4 @@ export default class Intro extends Component {
   toHTML() {
     return createIntroHTML().trim();
   }
-}
-
-function hide() {
-  this.$root.addClass('none');
 }

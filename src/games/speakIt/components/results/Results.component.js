@@ -25,6 +25,7 @@ export default class Results extends Component {
     this.$successNum = this.$root.find('.success-num');
     this.$successItems = this.$root.find('.success-items');
     this.$historyItems = this.$root.find('.history-items');
+
     this.subscribe('header:speak', (speakMode) => {
       if (speakMode) {
         updateResults.call(this);

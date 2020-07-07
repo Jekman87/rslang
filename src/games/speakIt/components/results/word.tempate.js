@@ -3,8 +3,10 @@ export default function createWordHTML(wordObj, type) {
     id, word, transcription, wordTranslate,
   } = wordObj;
   return `
-  <div data-wordid="${id}" class="card-body p-1 d-flex align-items-center bg-${type} text-white mb-1">
-    <i data-type="playword" class="fa fa-2x fa-volume-up mr-2 cursor" aria-hidden="true"></i>
+  <div data-wordid="${id}" 
+   class="card-body p-1 d-flex align-items-center bg-${type} text-white mb-1">
+    <i data-type="playword"
+     class="fa fa-2x fa-volume-up mr-2 cursor" aria-hidden="true"></i>
     <p class="term card-text m-0 p-1">
     ${word}
     </p>

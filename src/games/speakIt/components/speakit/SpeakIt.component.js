@@ -48,7 +48,8 @@ export default class SpeakIt {
   render() {
     const $body = $$(document).find('body');
     $body.css({
-      background: 'linear-gradient(rgba(0,0,0,.67) 0%, rgba(0,0,0,.67) 100%), url("/assets/speakit/img/bg.jpg") no-repeat center center / cover',
+      background: `linear-gradient(rgba(0,0,0,.67) 0%, rgba(0,0,0,.67) 100%), 
+      url("/assets/speakit/img/bg.jpg") no-repeat center center / cover`,
     });
 
     this.$el.append(this.getRoot());

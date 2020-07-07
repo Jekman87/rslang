@@ -22,9 +22,9 @@ export default function createCardContainerHTML() {
               </span>
             </div>
             <input
-              class="form-control card-text word-card__input text-center font-weight-bold text-success"
-              type="text"
-              readonly=""
+            class="form-control card-text word-card__input text-center font-weight-bold text-success"
+            type="text"
+            readonly=""
             />
             <div class="input-group-append">
               <span class="input-group-text">

@@ -1,7 +1,10 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createHeaderHTML from './header.template';
-import SpeechRecognition from '../../api/SpeechRecognition.api';
+import SpeechRecognition from '../../utils/SpeechRecognition.api';
+import {
+  MAX_WORDS_PAGES, MAX_WORDS_LEVEL, PER_GAME_WORDS, MAX_HISTORY_LIST_COUNT,
+} from '../../constants/constants';
 
 export default class Header extends Component {
   static className = 'header';
@@ -32,29 +35,35 @@ export default class Header extends Component {
       changeSelector.call(this, 'round');
     });
     this.subscribe('results:continue', async () => {
-      if (this.dataForApp.state.gameLevel.group === 0) {
-        this.dataForApp.state.gameLevel.group += 1;
-        this.$round.$el.options.value = `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`;
+      let { level, round, group } = this.dataForApp.state.gameLevel;
+      if (group === 0) {
+        group += 1;
+        this.$round.$el.options.value = `${round}-${group}`;
+        this.dataForApp.state.gameLevel.group = group;
         changeSelector.call(this, 'round');
-      } else if (this.dataForApp.state.gameLevel.group === 1
-        && this.dataForApp.state.gameLevel.round < 29) {
-        this.dataForApp.state.gameLevel.group = 0;
-        this.dataForApp.state.gameLevel.round += 1;
-        this.$round.$el.options.value = `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`;
+      } else if (group === 1 && round < MAX_WORDS_PAGES) {
+        group = 0;
+        round += 1;
+        this.$round.$el.options.value = `${round}-${group}`;
+        this.dataForApp.state.gameLevel.group = group;
+        this.dataForApp.state.gameLevel.round = round;
         changeSelector.call(this, 'round');
         await changeGameRoundWords.call(this);
-      } else if (this.dataForApp.state.gameLevel.group === 1
-        && this.dataForApp.state.gameLevel.round === 29) {
-        this.dataForApp.state.gameLevel.group = 0;
-        this.dataForApp.state.gameLevel.round = 0;
-        this.$round.$el.options.value = `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`;
+      } else if (group === 1 && round === MAX_WORDS_PAGES) {
+        group = 0;
+        round = 0;
+        this.$round.$el.options.value = `${round}-${group}`;
+        this.dataForApp.state.gameLevel.group = group;
+        this.dataForApp.state.gameLevel.round = round;
         changeSelector.call(this, 'round');
-        if (this.dataForApp.state.gameLevel.level < 5) {
-          this.dataForApp.state.gameLevel.level += 1;
+        if (level < MAX_WORDS_LEVEL) {
+          level += 1;
+          this.dataForApp.state.gameLevel.level = level;
         } else {
-          this.dataForApp.state.gameLevel.level = 0;
+          level = 0;
+          this.dataForApp.state.gameLevel.level = level;
         }
-        this.$level.$el.options.value = this.dataForApp.state.gameLevel.level;
+        this.$level.$el.options.value = level;
         changeSelector.call(this, 'level');
         await changeGameRoundWords.call(this);
       }
@@ -144,6 +153,7 @@ export default class Header extends Component {
 }
 
 function startSpeak() {
+  this.dataForApp.state.successWords = [];
   this.faMicrophone.addClass('fa-anim-flash');
   this.speakBtn.removeClass('btn-warning').addClass('btn-primary');
   if (!(this.speech instanceof SpeechRecognition)) {
@@ -191,13 +201,13 @@ async function saveGameHistory() {
   const speakItLongStat = {
     date,
     round: `${gameRound}`,
-    result: `${correct}-${10 - correct}`,
+    result: `${correct}-${PER_GAME_WORDS - correct}`,
   };
 
   let histories = [];
   if (this.mainStatistic.optional.SpeakItLong) {
     histories = JSON.parse(this.mainStatistic.optional.SpeakItLong);
-    if (histories.length > 9) {
+    if (histories.length >= MAX_HISTORY_LIST_COUNT) {
       histories = histories.slice(1);
     }
     histories.push(speakItLongStat);
@@ -210,13 +220,6 @@ async function saveGameHistory() {
   this.mainStatistic.optional.SpeakItMain = JSON.stringify(speakItMain);
   try {
     await this.mainApi.updateStatistics(this.mainStatistic);
-    // await this.mainApi.updateStatistics({
-    //   learnedWords: 0,
-    //   optional: {
-    //     MainGameShort: false,
-    //     MainGameLong: false,
-    //   },
-    // });
   } catch (e) {
     if (e.message === '401') {
       this.mainObserver.emit('mainLogout');
@@ -227,9 +230,10 @@ async function saveGameHistory() {
 }
 
 function changeSelector(key) {
+  const { round, group } = this.dataForApp.state.gameLevel;
   Array.from(this[`$${key}`].$el.options).forEach((option, i) => {
     if (key === 'round') {
-      if (option.value === `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`) {
+      if (option.value === `${round}-${group}`) {
         this.$round.$el.selectedIndex = i;
       }
     } else if (option.value === `${this.dataForApp.state.gameLevel[key]}`) {

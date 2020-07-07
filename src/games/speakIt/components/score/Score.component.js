@@ -1,7 +1,9 @@
 import Component from '../../../../core/Component';
-// import $$ from '../../../../core/domManipulation';
 import createScoreContainerHTML from './scoreContainer.template';
 import createScoreHTML from './score.template';
+import {
+  PER_GAME_WORDS,
+} from '../../constants/constants';
 
 export default class Score extends Component {
   static className = 'score';
@@ -24,8 +26,8 @@ export default class Score extends Component {
     this.subscribe('cardContainer:findWord', () => {
       const content = this.$scoreContainer.html();
       this.$scoreContainer.html(`${content}${createScoreHTML()}`);
-      increaseStateCorrect.call(this);
-      if (this.dataForApp.state.correct === 10) {
+      this.dataForApp.state.correct += 1;
+      if (this.dataForApp.state.correct === PER_GAME_WORDS) {
         this.emit('score:finishGame', '');
       }
     });
@@ -45,8 +47,4 @@ export default class Score extends Component {
   toHTML() {
     return createScoreContainerHTML().trim();
   }
-}
-
-function increaseStateCorrect() {
-  this.dataForApp.state.correct += 1;
 }
