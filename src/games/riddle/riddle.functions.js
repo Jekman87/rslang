@@ -26,9 +26,15 @@ function rememberLevelStatistic() {
 
 function rewriteLevelStatistic() {
   for (let i = 0; i < 6; i += 1) {
-    document.querySelector(`.lvl-${i + 1}`).style.width = `${((state.lvlStatistic[i].filter((el) => el === 1).length / 90) * 100)}%`;
-    document.querySelector(`.points-${i + 1}`).textContent = `${state.lvlStatistic[i].filter((el) => el === 1).length}/15`;
-    document.querySelector(`.percent-${i + 1}`).textContent = `${Math.floor((state.lvlStatistic[i].filter((el) => el === 1).length / 15) * 10000) / 100}%`;
+    document.querySelector(`.lvl-${i + 1}`).style.width = `${
+      ((state.lvlStatistic[i].filter((el) => el === 1).length / 90) * 100)
+    }%`;
+    document.querySelector(`.points-${i + 1}`).textContent = `${
+      state.lvlStatistic[i].filter((el) => el === 1).length
+    }/15`;
+    document.querySelector(`.percent-${i + 1}`).textContent = `${
+      Math.floor((state.lvlStatistic[i].filter((el) => el === 1).length / 15) * 10000) / 100
+    }%`;
   }
 }
 
@@ -53,8 +59,13 @@ function removeStatistic() {
 
 function recountNumberOfAnswers() {
   for (let i = 1; i < 7; i += 1) {
-    document.querySelector(`.correct-a-${i}`).textContent = document.querySelector(`.correct-${i}`).children.length;
-    document.querySelector(`.mistake-a-${i}`).textContent = document.querySelector(`.mistake-${i}`).children.length;
+    const correctAElement = document.querySelector(`.correct-a-${i}`);
+    const correctElement = document.querySelector(`.correct-${i}`);
+    correctAElement.textContent = correctElement.children.length;
+
+    const mistaketAElement = document.querySelector(`.mistake-a-${i}`);
+    const mistakeElement = document.querySelector(`.mistake-${i}`);
+    mistaketAElement.textContent = mistakeElement.children.length;
   }
 }
 
@@ -133,10 +144,12 @@ function chooseRiddleInformation() {
   const currentLevel = document.querySelector('.input-level').value;
   const currentPage = document.querySelector('.input-page').value;
   const keys = Object.keys(ALL_RIDDLES[currentLevel - 1]);
-  state.riddleAnswer = ALL_RIDDLES[currentLevel - 1][keys[currentPage - 1]].answer;
-  state.riddleText = ALL_RIDDLES[currentLevel - 1][keys[currentPage - 1]].riddle;
-  state.riddleTranslate = ALL_RIDDLES[currentLevel - 1][keys[currentPage - 1]].translate;
-  state.riddleOptions = ALL_RIDDLES[currentLevel - 1][keys[currentPage - 1]].options;
+  const objectWithData = ALL_RIDDLES[currentLevel - 1][keys[currentPage - 1]];
+
+  state.riddleAnswer = objectWithData.answer;
+  state.riddleText = objectWithData.riddle;
+  state.riddleTranslate = objectWithData.translate;
+  state.riddleOptions = objectWithData.options;
 }
 
 function rewriteRiddleText() {
@@ -205,12 +218,18 @@ function upLevel() {
   const restartGame = document.querySelector('[data-click="start-game"]');
 
   if (+page.value !== 15) {
-    document.querySelector('.answer-blocks').childNodes.forEach((el) => el.style.opacity = '100');
+    document.querySelector('.answer-blocks').childNodes.forEach((el) => {
+      const element = el;
+      element.style.opacity = '100';
+    });
     page.stepUp();
     restartGame.click();
     userInput.value = '';
   } else if (+level.value !== 6) {
-    document.querySelector('.answer-blocks').childNodes.forEach((el) => el.style.opacity = '100');
+    document.querySelector('.answer-blocks').childNodes.forEach((el) => {
+      const element = el;
+      element.style.opacity = '100';
+    });
     level.stepUp();
     page.value = 1;
     restartGame.click();
@@ -232,19 +251,24 @@ function compareAnswers() {
   }
 }
 
-function moveAnswerIntoInput(currentElement, answer) {
+function moveAnswerIntoInput(element, answer) {
+  const currentElement = element;
   document.querySelector('.answer-input').value = answer;
-  document.querySelector('.answer-blocks').childNodes.forEach((el) => el.style.opacity = '100');
+  document.querySelector('.answer-blocks').childNodes.forEach((el) => {
+    const elem = el;
+    elem.style.opacity = '100';
+  });
   currentElement.style.opacity = '0';
 }
 
 function hideTwoWrongAnswers() {
   document.querySelectorAll('.wa').forEach((el, index) => {
+    const element = el;
     if (index === 2) {
       return true;
     }
-    el.style.display = 'none';
-    el.style.pointerEvents = 'none';
+    element.style.display = 'none';
+    element.style.pointerEvents = 'none';
     return true;
   });
 }
