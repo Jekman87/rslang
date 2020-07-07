@@ -1,15 +1,33 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
-/* eslint-disable max-len */
 import $$ from '../../../core/domManipulation';
+import Component from '../../../core/Component';
+import createStartPage from '../StartPage/startPage.template';
 import createAudioCall from './audioCall.template';
 import createAudioCallStats from './stats.template';
 import getRoundWords from './asyncGetRoundWords';
-import { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats, insertLongStats } from './utils';
+import {
+  setRoundWord,
+  setAnswerAttribute,
+  crossTheWord,
+  onArrows,
+  insertStats,
+  insertLongStats,
+  getTip,
+} from './utils';
 
-export default class AudioCall {
-  constructor() {
-    this.app = document.getElementById('app');
+export default class AudioCall extends Component {
+  static className = 'audiocall';
+
+  constructor($root, options) {
+    super($root, {
+      name: 'Audiocall',
+      listeners: ['click', 'keyup'],
+      ...options,
+    });
+    this.options = options;
+
+    this.app = document.querySelector($root);
     this.gameSound = true;
     this.statistics = [];
     this.gamesStatistic = [];
@@ -18,10 +36,13 @@ export default class AudioCall {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.destroy = this.destroy.bind(this);
     this.appendStats = this.appendStats.bind(this);
+    this.fillRoundWords = this.fillRoundWords.bind(this);
   }
 
   async fillRoundWords() {
     const roundWordsArr = await getRoundWords();
+    // const roundWordsArr = await this.options.api.getWords(0, 0, 10, 30);
+    // console.log(roundWordsArr);
     this.spanRoundWords = document.querySelectorAll('.round-word');
     this.spanRoundWordsNumbers = document.querySelectorAll('.round-word-number');
     this.btnsRoundWords = document.querySelectorAll('.btn-word');
@@ -44,7 +65,11 @@ export default class AudioCall {
         this.rightAnswerSpan = this.spanRoundWords[i];
         this.rightAnswerSpanNumber = this.spanRoundWordsNumbers[i];
 
-        this.statistics.push([roundWordsArr[i].word, roundWordsArr[i].wordTranslate, roundWordsArr[i].audio]);
+        this.statistics.push([
+          roundWordsArr[i].word,
+          roundWordsArr[i].wordTranslate,
+          roundWordsArr[i].audio,
+        ]);
 
         this.answerPic.src = `https://raw.githubusercontent.com/Jekman87/rslang-data/master/${this.roundWord.image}`;
         this.answerWord.innerText = this.roundWord.word;
@@ -64,15 +89,17 @@ export default class AudioCall {
   }
 
   playWinSound() {
-    // const audio = new Audio();
+    const audio = new Audio();
     // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/pew.mp3';
-    // audio.play().catch((err) => console.log(err));
+    audio.src = '/assets/audio/pew.mp3';
+    audio.play().catch((err) => console.log(err));
   }
 
   playWrongSound() {
-    // const audio = new Audio();
+    const audio = new Audio();
     // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/wrong.mp3';
-    // audio.play().catch((err) => console.log(err));
+    audio.src = '/assets/audio/wrong.mp3';
+    audio.play().catch((err) => console.log(err));
   }
 
   onRightAnswer() {
@@ -96,7 +123,11 @@ export default class AudioCall {
 
     switch (target.dataset.event) {
       case 'close':
-        this.destroy();
+        this.options.observer.emit('selectPage', 'MainPage');
+        break;
+      case 'startGame':
+        this.app.innerHTML = '';
+        this.renderGame();
         break;
       case 'soundOff':
         document.querySelector('.fa-slash').classList.toggle('d-none');
@@ -125,7 +156,10 @@ export default class AudioCall {
           };
           this.gamesStatistic.push(gameResult);
 
-          this.longStatResults.insertAdjacentHTML('afterbegin', insertLongStats(gameResult.data, gameResult.result));
+          this.longStatResults.insertAdjacentHTML(
+            'afterbegin',
+            insertLongStats(gameResult.data, gameResult.result)
+          );
           this.appendStats();
         }
         break;
@@ -142,8 +176,8 @@ export default class AudioCall {
         );
         break;
       case 'new-game':
-        this.destroy();
-        this.render();
+        this.app.innerHTML = '';
+        this.renderGame();
         break;
       case 'stat-sound':
         target.parentNode.children[1].play();
@@ -155,6 +189,9 @@ export default class AudioCall {
       case 'back-to-short-stat':
         this.longStatContainer.classList.add('d-none');
         this.statContainer.classList.remove('d-none');
+        break;
+      case 'tip':
+        getTip();
         break;
       default:
         break;
@@ -203,22 +240,11 @@ export default class AudioCall {
           crossTheWord(document.activeElement);
           this.onRightAnswer();
           this.statistics[this.progress - 1].push('failure');
-          // this.mistakeContainer.insertAdjacentHTML(
-          //   'beforeend',
-          //   insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
-          // );
           document.activeElement.blur();
         } else if (document.activeElement.getAttribute('data-answer') === 'true') {
-          if (this.gameSound) {
-            this.playWinSound();
-          }
           this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
           this.onRightAnswer();
           this.statistics[this.progress - 1].push('success');
-          // this.correctContainer.insertAdjacentHTML(
-          //   'beforeend',
-          //   insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
-          // );
           document.activeElement.blur();
         } else if (!this.btnNext.classList.contains('d-none')) {
           if (this.progress < 10) {
@@ -230,7 +256,10 @@ export default class AudioCall {
             };
             this.gamesStatistic.push(gameResult);
 
-            this.longStatResults.insertAdjacentHTML('afterbegin', insertLongStats(gameResult.data, gameResult.result));
+            this.longStatResults.insertAdjacentHTML(
+              'afterbegin',
+              insertLongStats(gameResult.data, gameResult.result)
+            );
             this.appendStats();
           }
         }
@@ -255,6 +284,16 @@ export default class AudioCall {
   }
 
   render() {
+    this.startPageWrapper = $$.create('div', 'container-fluid').$el;
+    this.startPageWrapper.classList.add('audio-call-start-page');
+
+    this.startPageWrapper.insertAdjacentHTML('afterbegin', createStartPage());
+
+    this.app.append(this.startPageWrapper);
+    this.startPageWrapper.addEventListener('click', this.onClick);
+  }
+
+  renderGame() {
     this.audioCallWrapper = $$.create('div', 'container-fluid').$el;
     this.audioCallWrapper.classList.add('audio-call-wrapper');
     this.audioCallWrapper.setAttribute('tabindex', '0');
@@ -298,8 +337,9 @@ export default class AudioCall {
   }
 
   destroy() {
-    document.getElementById('app').innerHTML = '';
-    this.audioCallWrapper.removeEventListener('click', this.onClick);
+    if (this.audioCallWrapper) {
+      this.audioCallWrapper.removeEventListener('click', this.onClick);
+    }
     document.body.removeEventListener('keyup', this.onKeyUp);
   }
 }

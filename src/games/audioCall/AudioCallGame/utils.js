@@ -75,4 +75,16 @@ function insertLongStats(data, result) {
   `;
 }
 
-export { setRoundWord, setAnswerAttribute, crossTheWord, onArrows, insertStats, insertLongStats };
+function getTip() {
+  alert('Здесь будет подсказка');
+}
+
+export {
+  setRoundWord,
+  setAnswerAttribute,
+  crossTheWord,
+  onArrows,
+  insertStats,
+  insertLongStats,
+  getTip,
+};

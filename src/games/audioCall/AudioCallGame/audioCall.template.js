@@ -17,13 +17,17 @@ export default function createAudioCall() {
 
 <div class="container">
   <div class="row mt-5">
-    <div class="col">
+    <div class="col-2 d-flex">
+      <button class="btn btn-tip d-flex mr-3" type="button" data-event="tip">
+        <i class="fas fa-lightbulb" data-event="tip"></i>
+      </button>
       <button class="btn btn-sound-off d-flex" type="button" data-event="soundOff">
         <i class="fas fa-music" data-event="soundOff"></i>
         <i class="fas fa-slash d-none" data-event="soundOff"></i>
       </button>
+      
     </div>
-    <div class="col-6 col-sm-10"></div>
+    <div class="col-6 col-sm-9"></div>
     <div class="col">
       <button class="btn btn-close" type="button" data-event="close">
         <i class="fas fa-times" data-event="close"></i>

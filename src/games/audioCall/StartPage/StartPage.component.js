@@ -3,7 +3,9 @@ import createStartPage from './startPage.template';
 import AudioCall from '../AudioCallGame/AudioCall.component';
 
 export default class StartPage {
-  constructor() {
+  constructor($root, options) {
+    this.options = options;
+    console.log(options);
     this.startPageWrapper = $$.create('div', 'container-fluid').$el;
     this.startPageWrapper.classList.add('audio-call-start-page');
 
