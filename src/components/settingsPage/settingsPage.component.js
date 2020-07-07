@@ -14,6 +14,7 @@ export default class Settings extends Component {
       ...options,
     });
     this.options = options;
+    this.isClickAble = true;
   }
 
   getSettingsElements() {
@@ -232,7 +233,7 @@ export default class Settings extends Component {
       settingsObj.optional.cardExplanationTranslation = false;
     }
     if (settingsObj.optional.cardExample === false) {
-      settingsObj.optional.cardExampleTranslation.$el.disabled = false;
+      settingsObj.optional.cardExampleTranslation = false;
     }
     this.setCheckboxFields();
   }
@@ -248,28 +249,54 @@ export default class Settings extends Component {
   }
 
   onClick(event) {
-    if (event.target.id === 'settingsPageApplyButton') {
+    if (event.target.id === 'settingsPageApplyButton' && this.isClickAble) {
       this.validate();
-      this.options.api.updateSettings(this.options.dataForApp.settings).catch(() => {
-        this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
-        this.$root.find('#settingsPageApplyButton').addClass('btn-warning');
-        this.$root.find('#settingsPageApplyButton').text('Не получилось отправить. Попробуйте еще раз.');
-        setTimeout(() => this.$root.find('#settingsPageApplyButton').removeClass('btn-warning'), 2000);
-        setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
-        setTimeout(() => this.$root.find('#settingsPageApplyButton').text('Применить'), 2000);
-      });
+      this.options.api.updateSettings(this.options.dataForApp.settings)
+        .then(() => {
+          this.isClickAble = false;
+          this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
+          this.$root.find('#settingsPageApplyButton').addClass('btn-info');
+          this.$root.find('#settingsPageApplyButton').text('Настройки применены');
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').removeClass('btn-info'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').text('Применить'), 2000);
+          setTimeout(() => { this.isClickAble = true; }, 2000);
+        })
+        .catch(() => {
+          this.isClickAble = false;
+          this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
+          this.$root.find('#settingsPageApplyButton').addClass('btn-warning');
+          this.$root.find('#settingsPageApplyButton').text('Не получилось отправить. Попробуйте еще раз.');
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').removeClass('btn-warning'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageApplyButton').text('Применить'), 2000);
+          setTimeout(() => { this.isClickAble = true; }, 2000);
+        });
     }
-    if (event.target.id === 'settingsPageResetButton') {
+    if (event.target.id === 'settingsPageResetButton' && this.isClickAble) {
       this.setStandardSettings();
       this.setCheckboxFields();
-      this.options.api.updateSettings(this.options.dataForApp.settings).catch(() => {
-        this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
-        this.$root.find('#settingsPageResetButton').addClass('btn-warning');
-        this.$root.find('#settingsPageResetButton').text('Не получилось отправить. Попробуйте еще раз.');
-        setTimeout(() => this.$root.find('#settingsPageResetButton').removeClass('btn-warning'), 2000);
-        setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
-        setTimeout(() => this.$root.find('#settingsPageResetButton').text('Сбросить до стандартных настроек'), 2000);
-      });
+      this.options.api.updateSettings(this.options.dataForApp.settings)
+        .then(() => {
+          this.isClickAble = false;
+          this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
+          this.$root.find('#settingsPageResetButton').addClass('btn-info');
+          this.$root.find('#settingsPageResetButton').text('Применены стандартные настройки');
+          setTimeout(() => this.$root.find('#settingsPageResetButton').removeClass('btn-info'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageResetButton').text('Сбросить до стандартных настроек'), 2000);
+          setTimeout(() => { this.isClickAble = true; }, 2000);
+        })
+        .catch(() => {
+          this.isClickAble = false;
+          this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
+          this.$root.find('#settingsPageResetButton').addClass('btn-warning');
+          this.$root.find('#settingsPageResetButton').text('Не получилось отправить. Попробуйте еще раз.');
+          setTimeout(() => this.$root.find('#settingsPageResetButton').removeClass('btn-warning'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
+          setTimeout(() => this.$root.find('#settingsPageResetButton').text('Сбросить до стандартных настроек'), 2000);
+          setTimeout(() => { this.isClickAble = true; }, 2000);
+        });
     }
   }
 

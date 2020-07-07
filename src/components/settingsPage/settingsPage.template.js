@@ -146,8 +146,8 @@ export default function createSettingsHTML() {
     </div>
     <div class="d-lg-flex justify-content-lg-between">
 
-    <button class="col-12 col-lg-3 btn btn-primary btn-lg mb-3 mb-lg-0" href="#" role="button" id="settingsPageApplyButton">Применить</button>
-    <button class="col-12 col-lg-8 btn btn-danger btn-lg" href="#" role="button" id="settingsPageResetButton">Сбросить до стандартных настроек</button>
+    <button class="col-12 col-lg-4 btn btn-primary btn-lg mb-3 mb-lg-0" href="#" role="button" id="settingsPageApplyButton">Применить</button>
+    <button class="col-12 col-lg-7 btn btn-danger btn-lg" href="#" role="button" id="settingsPageResetButton">Сбросить до стандартных настроек</button>
     </div>
   </div>
     `;
