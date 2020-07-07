@@ -14,6 +14,7 @@ export default class Settings extends Component {
       ...options,
     });
     this.options = options;
+    console.log(this.options);
   }
 
   getSettingsElements() {
@@ -156,6 +157,30 @@ export default class Settings extends Component {
     this.options.dataForApp.settings.optional.feedbackButtons = BASE_SETTINGS.optional.feedbackButtons;
   }
 
+  validate() {
+    this.setObjectFields();
+    const settingsObj = this.options.dataForApp.settings;
+    if (settingsObj.wordsPerDay <= 0 || Number.isNaN(Number(settingsObj.wordsPerDay))) {
+      settingsObj.wordsPerDay = BASE_SETTINGS.wordsPerDay;
+    }
+    if (settingsObj.optional.cardsPerDay <= 0 || Number.isNaN(Number(settingsObj.optional.cardsPerDay))) {
+      settingsObj.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
+    }
+    if (settingsObj.optional.mixedCards < 0 || settingsObj.optional.mixedCards > 3 || (typeof settingsObj.optional.mixedCards !== 'number')) {
+      settingsObj.optional.mixedCards = BASE_SETTINGS.optional.mixedCards;
+    }
+    if (settingsObj.optional.cardTranslation === true) {
+      settingsObj.optional.cardTranslationAfterSuccess = false;
+    }
+    if (settingsObj.optional.cardExplanation === false) {
+      settingsObj.optional.cardExplanationTranslation = false;
+    }
+    if (settingsObj.optional.cardExample === false) {
+      settingsObj.optional.cardExampleTranslation.$el.disabled = false;
+    }
+    this.setCheckboxFields();
+  }
+
   init() {
     super.init();
     this.getSettingsElements();
@@ -168,7 +193,7 @@ export default class Settings extends Component {
 
   onClick(event) {
     if (event.target.id === 'settingsPageApplyButton') {
-      this.setObjectFields();
+      this.validate();
       this.options.api.updateSettings(this.options.dataForApp.settings);
     }
     if (event.target.id === 'settingsPageResetButton') {
