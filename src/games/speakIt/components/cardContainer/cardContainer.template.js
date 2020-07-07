@@ -9,7 +9,7 @@ export default function createCardContainerHTML() {
         <img
           class="card-img-top img-thumbnail img-fluid word-card__img"
           src="/assets/speakit/img/blank.jpg"
-          alt=""
+          alt="word image"
         />
       </div>
       <div class="card-body text-center p-1">

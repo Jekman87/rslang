@@ -44,7 +44,6 @@ export default class CardContainer extends Component {
       const wordObj = checkSpeechWord.call(this, word);
       if (wordObj) {
         const { id } = wordObj;
-        // check image loading
         updateWordCard.call(this, wordObj);
         changeStateWordsArrays.call(this, word);
         this.emit('cardContainer:findWord', id);
@@ -73,7 +72,6 @@ function updateWordCard(data) {
   const {
     image, wordTranslate, word,
   } = data;
-  // check image loading
   this.$wordCardImg.attr(
     'src',
     `${ASSETS_URL}${image.replace('files/', '')}`,
