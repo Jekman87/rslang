@@ -13,29 +13,29 @@ export default function createSettingsHTML() {
             <div class="form-group">
               <div class="d-flex flex-column-reverse flex-lg-row align-items-start  align-items-xl-baseline mb-2 mb-lg-1">
                 <p class="d-flex justify-content-start align-items-baseline mb-lg-1">
-              <input type="text" class="form-control mr-1" id="settingsPageWordsPerDay" style="width: 4rem" value="">шт</p>
-                <label class="col-form-label col-12 col-lg-9" for="settingsPageWordsPerDay">Количество новых слов в день</label>
+              <input type="text" class="form-control mr-1 text-primary" id="settingsPageWordsPerDay" title="Карточек должно быть минимум в 2,5 раза больше чем новых слов" style="width: 4rem" value="" autocomplete="off" maxlength="3">шт</p>
+                <label class="col-form-label col-12 col-lg-9" for="settingsPageWordsPerDay">Количество новых слов в день<span class="text-muted">(от 1 до 200)</span></label>
 
               </div>
               <div class="d-flex flex-column-reverse flex-lg-row align-items-start align-items-lg-end  align-items-xl-baseline mb-2">
               <p class="d-flex justify-content-start align-items-baseline">
-                <input type="text" class="form-control mr-1" id="settingsPageCardsPerDay" style="width: 4rem" value="">шт</p>
-                <label class="col-form-label col-12 col-lg-9" for="settingsPageCardsPerDay">Максимальное количество карточек в день</label>
+                <input type="text" class="form-control mr-1 text-primary" id="settingsPageCardsPerDay" title="Карточек должно быть минимум в 2,5 раза больше чем новых слов" style="width: 4rem" value="" autocomplete="off" maxlength="3">шт</p>
+                <label class="col-form-label col-12 col-lg-9" for="settingsPageCardsPerDay">Максимальное количество карточек в день<span class="text-muted">(от 3 до 500)</span></label>
 
               </div>
-              <div class="custom-control custom-radio mb-2 mb-md-3 mb-xl-2">
+              <div class="custom-control custom-radio mb-2 mb-md-3 mb-lg-2">
                 <input type="radio" id="settingsPageMixedTraining" name="customRadio" class="custom-control-input">
                 <label class="custom-control-label" for="settingsPageMixedTraining">Изучать слова вперемешку</label>
               </div>
-              <div class="custom-control custom-radio mb-2 mb-md-3 mb-xl-2">
+              <div class="custom-control custom-radio mb-2 mb-md-3 mb-lg-2">
                 <input type="radio" id="settingsPageOnlyNewWordsTraining" name="customRadio" class="custom-control-input">
                 <label class="custom-control-label" for="settingsPageOnlyNewWordsTraining">Изучать только новые слова</label>
               </div>
-              <div class="custom-control custom-radio mb-2 mb-md-3 mb-xl-2">
+              <div class="custom-control custom-radio mb-2 mb-md-3 mb-lg-2">
                 <input type="radio" id="settingsPageOnlyOldWordsTraining" name="customRadio" class="custom-control-input">
                 <label class="custom-control-label" for="settingsPageOnlyOldWordsTraining">Повторить изучаемые слова</label>
               </div>
-              <div class="custom-control custom-radio mb-2 mb-md-3 mb-xl-2">
+              <div class="custom-control custom-radio mb-2 mb-md-3 mb-lg-2">
                 <input type="radio" id="settingsPageOnlyDifficultWordsTraining" name="customRadio" class="custom-control-input">
                 <label class="custom-control-label" for="settingsPageOnlyDifficultWordsTraining">Повторить сложные слова</label>
               </div>

@@ -10,7 +10,7 @@ export default class Settings extends Component {
   constructor($root, options) {
     super($root, {
       name: 'Settings',
-      listeners: ['click', 'change'],
+      listeners: ['click', 'change', 'focusout'],
       ...options,
     });
     this.options = options;
@@ -157,13 +157,70 @@ export default class Settings extends Component {
     this.options.dataForApp.settings.optional.feedbackButtons = BASE_SETTINGS.optional.feedbackButtons;
   }
 
+  watchDependenceNewWordsPerDayAndCardsPerDay() {
+    const settingsObj = this.options.dataForApp.settings;
+    if (settingsObj.wordsPerDay * 2.5 > settingsObj.optional.cardsPerDay) {
+      settingsObj.optional.cardsPerDay = Math.ceil(settingsObj.wordsPerDay * 2.5);
+      this.elements.$cardsPerDay.$el.value = settingsObj.optional.cardsPerDay;
+    }
+  }
+
+  validateWordsPerDay() {
+    if (this.elements.$wordsPerDay.$el.value <= 0 || Number.isNaN(Number(this.elements.$wordsPerDay.$el.value))) {
+      this.elements.$wordsPerDay.$el.value = BASE_SETTINGS.wordsPerDay;
+      this.elements.$wordsPerDay.addClass('border-danger');
+      this.elements.$wordsPerDay.addClass('text-danger');
+      setTimeout(() => this.elements.$wordsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.elements.$wordsPerDay.removeClass('text-danger'), 500);
+    }
+    if (this.elements.$wordsPerDay.$el.value > 200) {
+      this.elements.$wordsPerDay.$el.value = 200;
+      this.elements.$wordsPerDay.addClass('border-danger');
+      this.elements.$wordsPerDay.addClass('text-danger');
+      setTimeout(() => this.elements.$wordsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.elements.$wordsPerDay.removeClass('text-danger'), 500);
+    }
+    if (this.elements.$wordsPerDay.$el.value * 2.5 > this.elements.$cardsPerDay.$el.value) {
+      this.elements.$cardsPerDay.$el.value = Math.ceil(this.elements.$wordsPerDay.$el.value * 2.5);
+      this.elements.$cardsPerDay.addClass('border-danger');
+      this.elements.$cardsPerDay.addClass('text-danger');
+      setTimeout(() => this.elements.$cardsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.elements.$cardsPerDay.removeClass('text-danger'), 500);
+    }
+  }
+
+  validateCardsPerDay() {
+    if (this.elements.$cardsPerDay.$el.value <= 2 || Number.isNaN(Number(this.elements.$cardsPerDay.$el.value))) {
+      this.elements.$cardsPerDay.$el.value = BASE_SETTINGS.optional.cardsPerDay;
+      this.elements.$cardsPerDay.addClass('border-danger');
+      this.elements.$cardsPerDay.addClass('text-danger');
+      setTimeout(() => this.elements.$cardsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.elements.$cardsPerDay.removeClass('text-danger'), 500);
+    }
+    if (this.elements.$cardsPerDay.$el.value > 500) {
+      this.elements.$cardsPerDay.$el.value = 500;
+      this.elements.$cardsPerDay.addClass('border-danger');
+      this.elements.$cardsPerDay.addClass('text-danger');
+      setTimeout(() => this.elements.$cardsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.elements.$cardsPerDay.removeClass('text-danger'), 500);
+    }
+    if (this.elements.$wordsPerDay.$el.value * 2.5 > this.elements.$cardsPerDay.$el.value) {
+      this.elements.$wordsPerDay.$el.value = Math.floor(this.elements.$cardsPerDay.$el.value / 2.5);
+      this.elements.$wordsPerDay.addClass('border-danger');
+      this.elements.$wordsPerDay.addClass('text-danger');
+      setTimeout(() => this.elements.$wordsPerDay.removeClass('border-danger'), 500);
+      setTimeout(() => this.elements.$wordsPerDay.removeClass('text-danger'), 500);
+    }
+  }
+
   validate() {
     this.setObjectFields();
     const settingsObj = this.options.dataForApp.settings;
     if (settingsObj.wordsPerDay <= 0 || Number.isNaN(Number(settingsObj.wordsPerDay))) {
       settingsObj.wordsPerDay = BASE_SETTINGS.wordsPerDay;
     }
-    if (settingsObj.optional.cardsPerDay <= 0 || Number.isNaN(Number(settingsObj.optional.cardsPerDay))) {
+    this.watchDependenceNewWordsPerDayAndCardsPerDay();
+    if (settingsObj.optional.cardsPerDay <= 2 || Number.isNaN(Number(settingsObj.optional.cardsPerDay))) {
       settingsObj.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
     }
     if (settingsObj.optional.mixedCards < 0 || settingsObj.optional.mixedCards > 3 || (typeof settingsObj.optional.mixedCards !== 'number')) {
@@ -192,6 +249,7 @@ export default class Settings extends Component {
   }
 
   onClick(event) {
+    console.log(event);
     if (event.target.id === 'settingsPageApplyButton') {
       this.validate();
       this.options.api.updateSettings(this.options.dataForApp.settings);
@@ -207,6 +265,16 @@ export default class Settings extends Component {
     if (event.target.id === 'settingsPageCardTranslation' || event.target.id === 'settingsPageCardExplanation' || event.target.id === 'settingsPageCardExample') {
       this.watchDependenceOfThreeMainCardsField();
       this.watchThreeMainCardsField();
+    }
+  }
+
+  onFocusout(event) {
+    console.log(event);
+    if (event.target.id === 'settingsPageWordsPerDay') {
+      this.validateWordsPerDay();
+    }
+    if (event.target.id === 'settingsPageCardsPerDay') {
+      this.validateCardsPerDay();
     }
   }
 
