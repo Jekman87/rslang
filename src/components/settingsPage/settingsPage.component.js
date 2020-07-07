@@ -1,7 +1,12 @@
-/* eslint-disable no-param-reassign */
 import Component from '../../core/Component';
 import createSettingsHTML from './settingsPage.template';
 import BASE_SETTINGS from '../../constants/settings.constants';
+
+const maxCardsPerDay = 500;
+const minCardsPerDay = 3;
+const maxWordsPerDay = 200;
+const minWordsPerDay = 1;
+const wordToCardRatio = 2.5;
 
 export default class Settings extends Component {
   static className = 'Settings';
@@ -56,7 +61,8 @@ export default class Settings extends Component {
       this.el.$onlyOldWordsTraining.$el,
       this.el.$onlyDifficultWordsTraining.$el];
     typeOfTraining.forEach((el) => {
-      el.checked = false;
+      const training = el;
+      training.checked = false;
     });
     typeOfTraining[this.optional.mixedCards].checked = true;
     this.el.$vocabularyExplanation.$el.checked = this.optional.vocabularyExplanation === true;
@@ -181,14 +187,14 @@ export default class Settings extends Component {
   }
 
   watchDependenceNewWordsPerDayAndCardsPerDay() {
-    if (this.settings.wordsPerDay * 2.5 > this.optional.cardsPerDay) {
-      this.optional.cardsPerDay = Math.ceil(this.settings.wordsPerDay * 2.5);
+    if (this.settings.wordsPerDay * wordToCardRatio > this.optional.cardsPerDay) {
+      this.optional.cardsPerDay = Math.ceil(this.settings.wordsPerDay * wordToCardRatio);
       this.el.$cardsPerDay.$el.value = this.optional.cardsPerDay;
     }
   }
 
   validateWordsPerDay() {
-    if (this.el.$wordsPerDay.$el.value <= 0
+    if (this.el.$wordsPerDay.$el.value < minWordsPerDay
       || Number.isNaN(Number(this.el.$wordsPerDay.$el.value))) {
       this.el.$wordsPerDay.$el.value = BASE_SETTINGS.wordsPerDay;
       this.el.$wordsPerDay.addClass('border-danger');
@@ -196,15 +202,15 @@ export default class Settings extends Component {
       setTimeout(() => this.el.$wordsPerDay.removeClass('border-danger'), 500);
       setTimeout(() => this.el.$wordsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.el.$wordsPerDay.$el.value > 200) {
-      this.el.$wordsPerDay.$el.value = 200;
+    if (this.el.$wordsPerDay.$el.value > maxWordsPerDay) {
+      this.el.$wordsPerDay.$el.value = maxWordsPerDay;
       this.el.$wordsPerDay.addClass('border-danger');
       this.el.$wordsPerDay.addClass('text-danger');
       setTimeout(() => this.el.$wordsPerDay.removeClass('border-danger'), 500);
       setTimeout(() => this.el.$wordsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.el.$wordsPerDay.$el.value * 2.5 > this.el.$cardsPerDay.$el.value) {
-      this.el.$cardsPerDay.$el.value = Math.ceil(this.el.$wordsPerDay.$el.value * 2.5);
+    if (this.el.$wordsPerDay.$el.value * wordToCardRatio > this.el.$cardsPerDay.$el.value) {
+      this.el.$cardsPerDay.$el.value = Math.ceil(this.el.$wordsPerDay.$el.value * wordToCardRatio);
       this.el.$cardsPerDay.addClass('border-danger');
       this.el.$cardsPerDay.addClass('text-danger');
       setTimeout(() => this.el.$cardsPerDay.removeClass('border-danger'), 500);
@@ -221,15 +227,15 @@ export default class Settings extends Component {
       setTimeout(() => this.el.$cardsPerDay.removeClass('border-danger'), 500);
       setTimeout(() => this.el.$cardsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.el.$cardsPerDay.$el.value > 500) {
-      this.el.$cardsPerDay.$el.value = 500;
+    if (this.el.$cardsPerDay.$el.value > maxCardsPerDay) {
+      this.el.$cardsPerDay.$el.value = maxCardsPerDay;
       this.el.$cardsPerDay.addClass('border-danger');
       this.el.$cardsPerDay.addClass('text-danger');
       setTimeout(() => this.el.$cardsPerDay.removeClass('border-danger'), 500);
       setTimeout(() => this.el.$cardsPerDay.removeClass('text-danger'), 500);
     }
-    if (this.el.$wordsPerDay.$el.value * 2.5 > this.el.$cardsPerDay.$el.value) {
-      this.el.$wordsPerDay.$el.value = Math.floor(this.el.$cardsPerDay.$el.value / 2.5);
+    if (this.el.$wordsPerDay.$el.value * wordToCardRatio > this.el.$cardsPerDay.$el.value) {
+      this.el.$wordsPerDay.$el.value = Math.floor(this.el.$cardsPerDay.$el.value / wordToCardRatio);
       this.el.$wordsPerDay.addClass('border-danger');
       this.el.$wordsPerDay.addClass('text-danger');
       setTimeout(() => this.el.$wordsPerDay.removeClass('border-danger'), 500);
@@ -239,11 +245,13 @@ export default class Settings extends Component {
 
   validate() {
     this.setObjectFields();
-    if (this.settings.wordsPerDay <= 0 || Number.isNaN(Number(this.settings.wordsPerDay))) {
+    if (this.settings.wordsPerDay < minWordsPerDay
+      || Number.isNaN(Number(this.settings.wordsPerDay))) {
       this.settings.wordsPerDay = BASE_SETTINGS.wordsPerDay;
     }
     this.watchDependenceNewWordsPerDayAndCardsPerDay();
-    if (this.optional.cardsPerDay <= 2 || Number.isNaN(Number(this.optional.cardsPerDay))) {
+    if (this.optional.cardsPerDay < minCardsPerDay
+      || Number.isNaN(Number(this.optional.cardsPerDay))) {
       this.optional.cardsPerDay = BASE_SETTINGS.optional.cardsPerDay;
     }
     if (this.optional.mixedCards < 0 || this.optional.mixedCards > 3 || (typeof this.optional.mixedCards !== 'number')) {
