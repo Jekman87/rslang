@@ -11,9 +11,10 @@ import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 import Team from './components/teamPage';
+import Vocabulary from './components/vocabularyPage';
 
 const pages = {
-  Authorization, MainPage, MainGame, Team,
+  Authorization, MainPage, MainGame, Team, Vocabulary,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });

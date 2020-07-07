@@ -1,4 +1,4 @@
-export default function showTemplate() {
+export default function createVocabularyHTML() {
   return `
     <div class='vocabulary-wrapper col-12'>
     <p class="h2 text-primary">Мой словарь</p>
