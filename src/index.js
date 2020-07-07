@@ -10,10 +10,11 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import Team from './components/teamPage';
 import Puzzle from './games/english-puzzle/index';
 
 const pages = {
-  Authorization, MainPage, MainGame, Puzzle,
+  Authorization, MainPage, MainGame, Team, Puzzle,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
