@@ -63,6 +63,12 @@
     cursor: pointer;
   }
 
+  .difficulty-level div span:hover {
+    transform: scale(1.2);
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
   .audio-icon:hover i {
     color: #339a198f;
     transform: scale(1.2);

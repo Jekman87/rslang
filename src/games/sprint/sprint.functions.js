@@ -116,6 +116,11 @@ function restartGame() {
 function countdown() {
   let timer;
 
+  if (document.querySelector('.timer') === null) {
+    clearTimeout(timer);
+    return false;
+  }
+
   state.currentTime -= 1;
   document.querySelector('.timer').innerHTML = state.currentTime;
 
@@ -126,9 +131,24 @@ function countdown() {
     rewriteLongTimeStatistic();
     showShortTimeStatistic();
     showLongTimeStatistic();
-    removeListeners();
+    removeKeyDownListeners();
   } else {
     timer = setTimeout(countdown, 1000);
+  }
+  return true;
+}
+
+function changeLevelAndPage(answerFromHandler) {
+  const level = document.querySelector('.input-level');
+  switch (answerFromHandler) {
+    case 'minus-level':
+      level.stepDown();
+      break;
+    case 'plus-level':
+      level.stepUp();
+      break;
+    default:
+      break;
   }
 }
 
@@ -147,7 +167,7 @@ function readySetGo() {
   setTimeout(opacityOff, 4500);
   setTimeout(playStartAudio, 5000);
   setTimeout(hideCountdown, 5000);
-  setTimeout(countdown, 5400);
+  setTimeout(countdown, 5000);
 }
 
 function playTickAudio() {
@@ -195,7 +215,6 @@ function generateCorrectWordCouple() {
   state.audioWord = randomAudioWord;
 
   state.roundStatus = true;
-  console.log(state.roundStatus, randomEngWord, randomRusWord);
 }
 
 function generateWrongWordCouple() {
@@ -213,7 +232,6 @@ function generateWrongWordCouple() {
   state.audioWord = randomAudioWord;
 
   state.roundStatus = false;
-  console.log(state.roundStatus, randomEngWord, randomRusWord);
 }
 
 function addAnswerToStatistic(answer) {
@@ -381,8 +399,9 @@ function pointsCount() {
       resetPointsPlaces();
       break;
     default:
-      console.log();
+      return true;
   }
+  return true;
 }
 
 function rewriteStatistic() {
@@ -478,8 +497,9 @@ function keyUp(event) {
       unmarkRightKeys();
       break;
     default:
-      console.log();
+      return true;
   }
+  return true;
 }
 
 function keyDown(event) {
@@ -493,8 +513,9 @@ function keyDown(event) {
       markRightKeys();
       break;
     default:
-      console.log();
+      return true;
   }
+  return true;
 }
 
 function keyDownListener() {
@@ -502,16 +523,17 @@ function keyDownListener() {
   document.addEventListener('keyup', keyUp);
 }
 
-function removeListeners() {
+function removeKeyDownListeners() {
   document.removeEventListener('keydown', keyDown);
   document.removeEventListener('keyup', keyUp);
 }
 
 export {
   hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
-  playWordAudio, playStatisticAudio,
+  playWordAudio, playStatisticAudio, changeLevelAndPage,
   compareAnswers, rewriteStatistic, resetLongTimeStatistic,
   muteGameVoice, onGameVoice,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic, keyDownListener, restartGame,
+  switchToLongTimeStatistic, switchToRoundStatistic, restartGame,
+  keyDownListener, removeKeyDownListeners,
 };

@@ -2,7 +2,17 @@ export default function createGameField() {
   return `
     <div class="intro">
       <h1><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
-      <p>Истинная гонка на проверку знаний.<br> Верно ли указан перевод слова?</p>
+      <p>Истинная гонка на проверку знаний.<br> Укажите верно ли указан перевод слова?</p>
+
+      <div class="difficulty-level">
+        <span>Уровень</span>
+        <div>
+          <span data-click="minus-level">-</span>
+            <input type="number" min="1" max="6" value="1" readonly class="input-level">
+          <span data-click="plus-level">+</span>
+        </div>
+      </div>
+
       <button type="button" class="btn btn-outline-success" data-button="start">Начать забег</button>
     </div>
 
@@ -18,7 +28,7 @@ export default function createGameField() {
     <div class="sprint-main-container">
       <header class="sprint-header">
         <div class="timer">Время</div>
-        <button class="btn btn-outline-danger button">
+        <button class="btn btn-outline-danger button" data-click="home">
           <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="home"></i>
         </button>
       </header>

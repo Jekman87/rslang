@@ -3,12 +3,13 @@ import './scss/sprint.scss';
 import Component from '../../core/Component';
 import createGameField from './sprint.template';
 import {
-  hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
+  hideIntro, callRandomFunction, showWordsInThePage, writeUserAnswer,
   playWordAudio, playStatisticAudio, resetLongTimeStatistic,
-  compareAnswers, rewriteStatistic,
+  compareAnswers, rewriteStatistic, changeLevelAndPage,
   muteGameVoice, onGameVoice,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic, keyDownListener, restartGame,
+  switchToLongTimeStatistic, switchToRoundStatistic, restartGame,
+  keyDownListener, removeKeyDownListeners,
 } from './sprint.functions';
 
 export default class SprintGame extends Component {
@@ -34,7 +35,7 @@ export default class SprintGame extends Component {
     switch (event.target.dataset.button) {
       case 'start':
         hideIntro();
-        readySetGo();
+        restartGame();
         break;
       case 'Wrong':
         writeUserAnswer(event.target.dataset.button);
@@ -47,10 +48,16 @@ export default class SprintGame extends Component {
         rewriteStatistic();
         break;
       default:
-        console.log();
+        break;
     }
 
     switch (event.target.dataset.click) {
+      case 'minus-level':
+        changeLevelAndPage(event.target.dataset.click);
+        break;
+      case 'plus-level':
+        changeLevelAndPage(event.target.dataset.click);
+        break;
       case 'mute':
         muteGameVoice();
         break;
@@ -61,6 +68,8 @@ export default class SprintGame extends Component {
         playWordAudio();
         break;
       case 'home':
+        this.destroy();
+        removeKeyDownListeners();
         this.options.observer.emit('selectPage', 'MainPage');
         break;
       case 'destroy':
@@ -76,7 +85,7 @@ export default class SprintGame extends Component {
         restartGame();
         break;
       default:
-        console.log();
+        break;
     }
 
     if (event.target.dataset.statistic) {
@@ -93,7 +102,7 @@ export default class SprintGame extends Component {
         markRightKeys();
         break;
       default:
-        console.log();
+        break;
     }
   }
 
@@ -106,7 +115,7 @@ export default class SprintGame extends Component {
         unmarkRightKeys();
         break;
       default:
-        console.log();
+        break;
     }
   }
 
