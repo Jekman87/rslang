@@ -1,8 +1,8 @@
 export default function createHistoryHTML(data) {
   const {
-    d: date, c: correct, r: game,
+    date, round, result,
   } = data;
-  const errors = 10 - +(correct);
+  const [correct, errors] = result.split('-');
   // const [level, round, group] = game.split('-');
   const dateToLocal = new Date(date).toLocaleString().split(',').join(' ');
   return `
@@ -14,7 +14,7 @@ export default function createHistoryHTML(data) {
     </div>
     <div class="round card-text text-center m-0 p-1 mr-2">
      <p class="text-primary m-0"><strong>Уровень:</strong></p>
-     <p class="text-info m-0">${game}</p>
+     <p class="text-info m-0">${round}</p>
     </div>
     <div class="game card-text text-center m-0 p-1 mr-2">
      <p class="text-primary m-0"><strong>Счет:</strong></p>

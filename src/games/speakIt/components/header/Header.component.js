@@ -1,6 +1,5 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
-import { storage } from '../../../../core/utils';
 import createHeaderHTML from './header.template';
 import SpeechRecognition from '../../api/SpeechRecognition.api';
 
@@ -15,6 +14,7 @@ export default class Header extends Component {
     });
     this.mainObserver = this.dataForApp.mainApp.observer;
     this.mainApi = this.dataForApp.mainApp.api;
+    this.mainStatistic = this.dataForApp.mainApp.dataForApp.statistics;
   }
 
   init() {
@@ -32,7 +32,6 @@ export default class Header extends Component {
       changeSelector.call(this, 'round');
     });
     this.subscribe('results:continue', async () => {
-      console.log(this.dataForApp.state.gameLevel);
       if (this.dataForApp.state.gameLevel.group === 0) {
         this.dataForApp.state.gameLevel.group += 1;
         this.$round.$el.options.value = `${this.dataForApp.state.gameLevel.round}-${this.dataForApp.state.gameLevel.group}`;
@@ -179,7 +178,7 @@ function restart() {
   this.dataForApp.state.correct = 0;
 }
 
-function saveGameHistory() {
+async function saveGameHistory() {
   const correct = this.dataForApp.state.successWords.length;
   const { level, round, group } = this.dataForApp.state.gameLevel;
   const date = Date.now();
@@ -189,22 +188,41 @@ function saveGameHistory() {
   } else {
     gameRound = `${level + 1}-${(round + 1) * 2}`;
   }
-  const history = {
-    d: date,
-    c: correct,
-    r: `${gameRound}`,
+  const speakItLongStat = {
+    date,
+    round: `${gameRound}`,
+    result: `${correct}-${10 - correct}`,
   };
+
   let histories = [];
-  if (storage('speakit-history')) {
-    histories = storage('speakit-history');
-    if (histories.length > 10) {
+  if (this.mainStatistic.optional.SpeakItLong) {
+    histories = JSON.parse(this.mainStatistic.optional.SpeakItLong);
+    if (histories.length > 9) {
       histories = histories.slice(1);
     }
-    histories.push(history);
-    storage('speakit-history', histories);
+    histories.push(speakItLongStat);
   } else {
-    histories.push(history);
-    storage('speakit-history', histories);
+    histories.push(speakItLongStat);
+  }
+  const speakItMain = { lastRound: { level, round, group } };
+
+  this.mainStatistic.optional.SpeakItLong = JSON.stringify(histories);
+  this.mainStatistic.optional.SpeakItMain = JSON.stringify(speakItMain);
+  try {
+    await this.mainApi.updateStatistics(this.mainStatistic);
+    // await this.mainApi.updateStatistics({
+    //   learnedWords: 0,
+    //   optional: {
+    //     MainGameShort: false,
+    //     MainGameLong: false,
+    //   },
+    // });
+  } catch (e) {
+    if (e.message === '401') {
+      this.mainObserver.emit('mainLogout');
+    } else {
+      console.error(`${e.message}: something went wrong`);
+    }
   }
 }
 

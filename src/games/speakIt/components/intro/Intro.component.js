@@ -27,11 +27,16 @@ export default class Intro extends Component {
     };
     this.mainObserver = this.dataForApp.mainApp.observer;
     this.mainApi = this.dataForApp.mainApp.api;
-    window.a_1 = this.dataForApp;
+    window.a_1 = this.dataForApp; // Delete!
+    this.mainStatistic = this.dataForApp.mainApp.dataForApp.statistics;
   }
 
   init() {
     super.init();
+    if (this.mainStatistic.optional.SpeakItMain) {
+      const { lastRound } = JSON.parse(this.mainStatistic.optional.SpeakItMain);
+      this.dataForApp.state.gameLevel = { ...lastRound };
+    }
   }
 
   async onClick(event) {
@@ -39,8 +44,6 @@ export default class Intro extends Component {
     if (clickedElement.data.action === 'start') {
       clickedElement.html(createButtonSpinnerHTML().trim()).attr('disabled', true);
       await delay(1500);
-      // check game level
-      // get words - from dictionary or from user level or from page 1 group 1
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       try {
         this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);

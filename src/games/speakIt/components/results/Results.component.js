@@ -3,7 +3,6 @@ import $$ from '../../../../core/domManipulation';
 import createResultsHTML from './results.template';
 import createWordHTML from './word.tempate';
 import createHistoryHTML from './history.template';
-import { storage } from '../../../../core/utils';
 
 export default class Results extends Component {
   static className = 'results';
@@ -14,6 +13,7 @@ export default class Results extends Component {
       listeners: ['click'],
       ...options,
     });
+    this.mainStatistic = this.dataForApp.mainApp.dataForApp.statistics;
   }
 
   init() {
@@ -96,10 +96,12 @@ function updateResults() {
 }
 
 function updateGameHistory() {
-  const history = storage('speakit-history');
-  if (history) {
-    const historyToHTML = history.reverse().map((game) => createHistoryHTML(game));
-    this.$historyItems.html(historyToHTML.join(''));
+  if (this.mainStatistic.optional.SpeakItLong) {
+    const history = JSON.parse(this.mainStatistic.optional.SpeakItLong);
+    if (history) {
+      const historyToHTML = history.reverse().map((game) => createHistoryHTML(game));
+      this.$historyItems.html(historyToHTML.join(''));
+    }
   } else {
     this.$historyItems.html('<p>Вы еще не играли.</p>');
   }
