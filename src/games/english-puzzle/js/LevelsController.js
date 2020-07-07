@@ -12,7 +12,7 @@ export default class LevelsController {
     document.addEventListener('newData', this.renderNavigation.bind(this));
 
     this.roundSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
-    this.levelSelectEl.addEventListener('click', (e) => e.target.classList.toggle('select_closed'));
+    this.levelSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
 
     document.querySelector('button.next-round__pzl-btn').addEventListener('click', this.moveToNextRound.bind(this));
     document.querySelector('div.selection-group').addEventListener('click', this.handleSelect.bind(this));
@@ -68,8 +68,17 @@ export default class LevelsController {
   }
 
   toggleRoundBtn(e) {
-    this.setRoundsBlockHeight();
-    e.target.classList.toggle('select_closed');
+    if (e.target === this.levelSelectEl) {
+      if (!this.roundSelectEl.classList.contains('select_closed')) {
+        this.setRoundsBlockHeight();
+      }
+      this.levelSelectEl.classList.toggle('select_closed');
+      this.roundSelectEl.classList.add('select_closed');
+    } else {
+      this.setRoundsBlockHeight();
+      this.roundSelectEl.classList.toggle('select_closed');
+      this.levelSelectEl.classList.add('select_closed');
+    }
   }
 
   setRoundsBlockHeight() {
