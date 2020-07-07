@@ -11,11 +11,6 @@ module.exports = {
   },
   rules: {
     'no-use-before-define': ['error', { functions: false }],
-    'class-methods-use-this': 'off',
-
-    'no-console': 'off',
-    'no-param-reassign': 'off',
-    'no-return-assign': 'off',
-    'no-restricted-globals': 'off',
+    'class-methods-use-this': 'off'
   },
 };
