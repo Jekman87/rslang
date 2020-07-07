@@ -17,7 +17,6 @@ function restartStatistic() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 }
-restartStatistic();
 
 function rememberLevelStatistic() {
   const level = +document.querySelector('.input-level').value - 1;
@@ -126,7 +125,7 @@ function changeLevelAndPage(answerFromHandler) {
       page.stepDown();
       break;
     default:
-      console.log(13);
+      break;
   }
 }
 
@@ -170,7 +169,6 @@ function showGameFields() {
 }
 
 function fillGameFields() {
-  console.log(state.riddleAnswer);
   showGameFields();
   rewriteRiddleText();
   rewriteRiddleTranslate();
@@ -290,7 +288,7 @@ function backToGameFromStatistic() {
 }
 
 export {
-  hideIntroScreen, hideTwoWrongAnswers,
+  hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
   compareAnswers, moveAnswerIntoInput, passHandler,

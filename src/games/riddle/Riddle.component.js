@@ -3,7 +3,7 @@ import './scss/sprint.scss';
 import Component from '../../core/Component';
 import createGameField from './riddle.template';
 import {
-  hideIntroScreen, hideTwoWrongAnswers,
+  hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
   compareAnswers, moveAnswerIntoInput, passHandler,
@@ -26,9 +26,10 @@ export default class RiddleGame extends Component {
 
   init() {
     super.init();
+    restartStatistic();
   }
 
-  onClick() {
+  onClick(event) {
     switch (event.target.dataset.click) {
       case 'start':
         hideIntroScreen();
@@ -85,10 +86,11 @@ export default class RiddleGame extends Component {
         backToGameFromStatistic();
         break;
       case 'home':
-        location.reload(true);
+        this.destroy();
+        this.options.observer.emit('selectPage', 'MainPage');
         break;
       default:
-        console.log();
+        break;
     }
 
     if (event.target.classList.contains('answer-block')) {

@@ -2,8 +2,8 @@ export default function createGameField() {
   return `
     <div class="riddle__intro">
     <div class="riddle__name"><h2>ЗАГАДКА</h2><h2>ОТГАДКА</h2></div>
-      <p>Задействуй все свои знания и кругозор<br> для решения лучших загадок со всего мира.</p>
-      <button type="button" class="btn btn-outline-success" data-click="start">Приступить</button>
+      <p>Задействуй знания английского языка и кругозор<br> для решения лучших загадок со всего мира.</p>
+      <button type="button" class="btn btn-outline-success" data-click="start">Начать</button>
     </div>
 
     <div class="main-sp">
@@ -37,7 +37,7 @@ export default function createGameField() {
 
           <button type="button" class="btn btn-outline-success button" data-click="start-game">Запустить игру</button>
 
-          <button class="btn btn-outline-danger button">
+          <button class="btn btn-outline-danger button" data-click="home">
             <i class="fa fa-times icon-parameters" aria-hidden="true" data-click="home"></i>
           </button>
         </header>
