@@ -14,7 +14,6 @@ export default class Settings extends Component {
       ...options,
     });
     this.options = options;
-    console.log(this.options);
   }
 
   getSettingsElements() {
@@ -249,15 +248,28 @@ export default class Settings extends Component {
   }
 
   onClick(event) {
-    console.log(event);
     if (event.target.id === 'settingsPageApplyButton') {
       this.validate();
-      this.options.api.updateSettings(this.options.dataForApp.settings);
+      this.options.api.updateSettings(this.options.dataForApp.settings).catch(() => {
+        this.$root.find('#settingsPageApplyButton').removeClass('btn-primary');
+        this.$root.find('#settingsPageApplyButton').addClass('btn-warning');
+        this.$root.find('#settingsPageApplyButton').text('Не получилось отправить. Попробуйте еще раз.');
+        setTimeout(() => this.$root.find('#settingsPageApplyButton').removeClass('btn-warning'), 2000);
+        setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
+        setTimeout(() => this.$root.find('#settingsPageApplyButton').text('Применить'), 2000);
+      });
     }
     if (event.target.id === 'settingsPageResetButton') {
       this.setStandardSettings();
       this.setCheckboxFields();
-      this.options.api.updateSettings(this.options.dataForApp.settings);
+      this.options.api.updateSettings(this.options.dataForApp.settings).catch(() => {
+        this.$root.find('#settingsPageResetButton').removeClass('btn-danger');
+        this.$root.find('#settingsPageResetButton').addClass('btn-warning');
+        this.$root.find('#settingsPageResetButton').text('Не получилось отправить. Попробуйте еще раз.');
+        setTimeout(() => this.$root.find('#settingsPageResetButton').removeClass('btn-warning'), 2000);
+        setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
+        setTimeout(() => this.$root.find('#settingsPageResetButton').text('Сбросить до стандартных настроек'), 2000);
+      });
     }
   }
 
@@ -269,7 +281,6 @@ export default class Settings extends Component {
   }
 
   onFocusout(event) {
-    console.log(event);
     if (event.target.id === 'settingsPageWordsPerDay') {
       this.validateWordsPerDay();
     }
