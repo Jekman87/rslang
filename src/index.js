@@ -10,9 +10,17 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
-import { AudioCall } from './games/audioCall/index';
 
-const pages = { Authorization, MainPage, MainGame, AudioCall };
+import { AudioCall } from './games/audioCall/index';
+import Team from './components/teamPage';
+
+const pages = {
+  Authorization,
+  MainPage,
+  MainGame,
+  Team,
+  AudioCall,
+};
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
 mainApp.render();
