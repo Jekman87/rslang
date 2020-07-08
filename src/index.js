@@ -15,6 +15,8 @@ import { AudioCall } from './games/audioCall/index';
 import Team from './components/teamPage';
 import SpeakIt from './games/speakIt/index';
 
+import Sprint from './games/sprint/Sprint.render';
+
 const pages = {
   Authorization,
   MainPage,
@@ -22,6 +24,7 @@ const pages = {
   Team,
   SpeakIt,
   AudioCall,
+  Sprint,
 };
 
 const mainApp = new MainApp('#app', {
