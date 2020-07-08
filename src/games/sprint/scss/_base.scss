@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+.sprint-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right bottom, #faffc4, #e6f9ba, #d0f4b2, #b7efac, #9ce9aa, #71d6ac, #45c3ad, #00aeac, #0086a1, #005e8d, #00366e, #090e44);  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  font-family: 'Roboto', Helvetica, sans-serif;
+
+  .sprint-main-container {
+    max-width: 1280px;
+    margin: auto;
+  }
+}
