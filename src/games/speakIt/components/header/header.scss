@@ -2,6 +2,7 @@
 @import '../../scss/mixins';
 
 .header{
+  transition: .8s;
   .header-content{
     .selector-title{
       color: #fff;

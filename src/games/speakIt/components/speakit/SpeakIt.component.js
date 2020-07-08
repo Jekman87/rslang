@@ -33,7 +33,7 @@ export default class SpeakIt {
       if (['intro'].includes(Component.className)) {
         element.addClass('h-100');
       }
-      if (['header', 'card-container', 'score', 'cards-desk'].includes(Component.className)) {
+      if (['header', 'card-container', 'score', 'cards-desk', 'rules'].includes(Component.className)) {
         element.addClass('d-none');
       }
       const component = new Component(element, componentOptions);

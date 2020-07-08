@@ -47,7 +47,7 @@ export default function createHeaderHTML() {
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-secondary main-btn" data-type="results">
-          <i class="fas fa-poll-h" data-type="results" data-type="results"></i> Результат
+          <i class="fas fa-poll-h" data-type="results"></i> Результат
         </button>
         <button type="button" class="btn btn-secondary main-btn" data-type="history">
           <i class="fas fa-history" aria-hidden="true" data-type="history"></i> История игр
@@ -70,6 +70,9 @@ export default function createHeaderHTML() {
         </button>
       </div>
     </div>
+    <button type="button" class="btn btn-info mt-3" data-type="rules" title="Произношение">
+      <i class="fas fa-info-circle cursor" data-type="rules"></i>
+    </button>
   </div>
   `;
 }
