@@ -1,5 +1,6 @@
 const LOCAL_ASSETS_URL = '/assets/speakit';
 const ASSETS_URL = 'https://raw.githubusercontent.com/vviiiii/rslang-data/master/data';
+const PRONOUNCE_URL = 'https://www.native-english.ru/audio/pronounce';
 
 const MAX_WORDS_PAGES = 29;
 const MAX_WORDS_LEVEL = 5;
@@ -27,4 +28,5 @@ export {
   PER_GAME_WORDS,
   MAX_HISTORY_LIST_COUNT,
   GAME_DEFAULT_STATE,
+  PRONOUNCE_URL,
 };

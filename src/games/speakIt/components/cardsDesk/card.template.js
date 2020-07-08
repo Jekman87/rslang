@@ -7,7 +7,7 @@ export default function createCardHTML(data) {
     <div
     class="card-body p-1 d-flex flex-column justify-content-center align-items-center bg-primary text-white"
     >
-      <i class="fa fa-2x fa-volume-up" aria-hidden="true"></i>
+      <i class="fab fa-2x fa-itunes-note" aria-hidden="true"></i>
       <p class="term card-text m-0 p-1">
         ${term}
       </p>
