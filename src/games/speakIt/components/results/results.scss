@@ -1,11 +1,13 @@
-.translation{
-  word-break: break-word;
-}
-
-[data-type="playword"]:active {
-  transform: scale(0.9);
-}
-
-[data-type="playword"]:hover {
-  color: var(--primary);
+.results{
+  .translation{
+    word-break: break-word;
+  }
+  
+  [data-type="playword"]:active {
+    transform: scale(0.9);
+  }
+  
+  [data-type="playword"]:hover {
+    color: var(--primary);
+  }
 }
