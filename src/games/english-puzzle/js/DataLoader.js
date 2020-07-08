@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import paintings from './paintingsInfo';
+import { BASE_URL, FILE_URL } from '../../../constants/constants';
 
 export default class Loader {
   constructor(storage, reporter) {
@@ -30,7 +31,7 @@ export default class Loader {
 
   async loadData(group, page) {
     try {
-      const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=${page}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`);
+      const response = await fetch(`${BASE_URL}/words?group=${group}&page=${page}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`);
       if (!response.ok) {
         throw new Error('Загрузка данных не удалась!');
       }
@@ -48,7 +49,7 @@ export default class Loader {
 
       const audios = await Promise.all(
         sentencesInfo.map(async (item) => {
-          const audioResponse = await fetch(`https://raw.githubusercontent.com/torchik-slava/rslang-data/master/${item.audio}`);
+          const audioResponse = await fetch(`${FILE_URL}/${item.audio}`);
           if (!audioResponse.ok) {
             throw new Error('Загрузка аудио не удалась!');
           }

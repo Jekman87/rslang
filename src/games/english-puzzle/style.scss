@@ -636,13 +636,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 10%;
-    width: calc(800px + 5%);
+    width: calc(840px + 5%);
     height: 680px;
     background-color: #fff;
     border: 1px solid black;
     box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.7);
     @media (max-width: 1023px) {
-      width: calc(623px + 5%);
+      width: calc(653px + 5%);
       min-height: 630px;
     }
     @media (max-width: 767px) {

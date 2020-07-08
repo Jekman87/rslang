@@ -125,10 +125,8 @@ export default class Dragger {
   }
 
   handleClick(mouseDownX, mouseDownY, e) {
-    const shiftX = Math.abs(e.clientX - mouseDownX);
-    const shiftY = Math.abs(e.clientY - mouseDownY);
-    const isMinorShiftX = shiftX >= 0 && shiftX <= 3;
-    const isMinorShiftY = shiftY >= 0 && shiftY <= 3;
+    const isMinorShiftX = Math.abs(e.clientX - mouseDownX) <= 3;
+    const isMinorShiftY = Math.abs(e.clientY - mouseDownY) <= 3;
 
     if (isMinorShiftX && isMinorShiftY) {
       if (this.parentEl === this.availableWords) {

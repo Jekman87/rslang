@@ -1,34 +1,46 @@
 export default class LevelsController {
   constructor(storage) {
     this.storage = storage;
-    this.levels = document.querySelector('ul.levels');
-    this.rounds = document.querySelector('ul.rounds');
-    this.levelSelectEl = document.querySelector('span.level-select');
-    this.roundSelectEl = document.querySelector('span.round-select');
     this.roundsNumber = [null, 45, 40, 40, 25, 25, 25];
   }
 
   init() {
+    this.defineElems();
+    this.addListeners();
+  }
+
+  defineElems() {
+    this.elems = {
+      selectionGroup: document.querySelector('div.selection-group'),
+      levels: document.querySelector('ul.levels'),
+      rounds: document.querySelector('ul.rounds'),
+      levelSelectEl: document.querySelector('span.level-select'),
+      roundSelectEl: document.querySelector('span.round-select'),
+      nextRoundBtn: document.querySelector('button.next-round__pzl-btn'),
+      goToRoundBtn: document.querySelector('button.level-pzl-btn'),
+      levelDownControl: document.querySelector('div.levels-block span.select__control_down'),
+      roundDownControl: document.querySelector('div.rounds-block span.select__control_down'),
+      levelUpControl: document.querySelector('div.levels-block span.select__control_up'),
+      roundUpControl: document.querySelector('div.rounds-block span.select__control_up'),
+    };
+  }
+
+  addListeners() {
     document.addEventListener('newData', this.renderNavigation.bind(this));
-
-    this.roundSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
-    this.levelSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
-
-    document.querySelector('button.next-round__pzl-btn').addEventListener('click', this.moveToNextRound.bind(this));
-    document.querySelector('div.selection-group').addEventListener('click', this.handleSelect.bind(this));
-
-    document.querySelector('div.selection-group').addEventListener('click', this.handleSelectControlClick.bind(this));
-    document.querySelector('button.level-pzl-btn').addEventListener('click', this.moveToRound.bind(this));
+    this.elems.selectionGroup.addEventListener('click', this.handleClick.bind(this));
+    this.elems.roundSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
+    this.elems.levelSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
+    this.elems.nextRoundBtn.addEventListener('click', this.moveToNextRound.bind(this));
   }
 
   renderNavigation() {
     this.collectRoundsData();
 
     this.renderLevels(6);
-    this.levelSelectEl.textContent = this.get('currentLevel');
+    this.elems.levelSelectEl.textContent = this.get('currentLevel');
 
     this.renderRounds(this.roundsNumber[this.get('currentLevel')]);
-    this.roundSelectEl.textContent = this.get('currentRound');
+    this.elems.roundSelectEl.textContent = this.get('currentRound');
 
     this.setControlsStatus();
   }
@@ -44,7 +56,7 @@ export default class LevelsController {
       options.push(`<li class="option level-option">${i}</li>`);
     }
     options[this.get('currentLevel') - 1] = `<li class="option level-option option_current">${this.get('currentLevel')}</li>`;
-    this.levels.innerHTML = options.join('');
+    this.elems.levels.innerHTML = options.join('');
   }
 
   renderRounds(times) {
@@ -53,65 +65,45 @@ export default class LevelsController {
       options.push(`<li class="option round-option ${this.roundsData[this.get('currentLevel')][i] === '1' ? 'option_passed' : ''}">${i}</li>`);
     }
     options[this.get('currentRound') - 1] = `<li class="option round-option option_current">${this.get('currentRound')}</li>`;
-    this.rounds.innerHTML = options.join('');
+    this.elems.rounds.innerHTML = options.join('');
   }
 
   setControlsStatus() {
     const level = this.get('currentLevel');
     const round = this.get('currentRound');
 
-    if (Number(level) === 1) document.querySelector('div.levels-block span.select__control_down').classList.add('disabled');
-    if (Number(round) === 1) document.querySelector('div.rounds-block span.select__control_down').classList.add('disabled');
-
-    if (Number(level) === 6) document.querySelector('div.levels-block span.select__control_up').classList.add('disabled');
-    if (Number(round) === this.roundsNumber[level]) document.querySelector('div.rounds-block span.select__control_up').classList.add('disabled');
-  }
-
-  toggleRoundBtn(e) {
-    if (e.target === this.levelSelectEl) {
-      if (!this.roundSelectEl.classList.contains('select_closed')) {
-        this.setRoundsBlockHeight();
-      }
-      this.levelSelectEl.classList.toggle('select_closed');
-      this.roundSelectEl.classList.add('select_closed');
+    if (Number(level) === 1) {
+      this.elems.levelDownControl.classList.add('disabled');
     } else {
-      this.setRoundsBlockHeight();
-      this.roundSelectEl.classList.toggle('select_closed');
-      this.levelSelectEl.classList.add('select_closed');
+      this.elems.levelDownControl.classList.remove('disabled');
+    }
+
+    if (Number(round) === 1) {
+      this.elems.roundDownControl.classList.add('disabled');
+    } else {
+      this.elems.roundDownControl.classList.remove('disabled');
+    }
+
+    if (Number(level) === 6) {
+      this.elems.levelUpControl.classList.add('disabled');
+    } else {
+      this.elems.levelUpControl.classList.remove('disabled');
+    }
+
+    if (Number(round) === this.roundsNumber[level]) {
+      this.elems.roundUpControl.classList.add('disabled');
+    } else {
+      this.elems.roundUpControl.classList.remove('disabled');
     }
   }
 
-  setRoundsBlockHeight() {
-    let { height } = this.rounds.style;
-    if (height) {
-      height = '';
-    } else {
-      height = `${38 * (this.roundsNumber[this.get('currentLevel')] / 5) + 2}px`;
-    }
-    this.rounds.style.height = height;
-  }
-
-  moveToNextRound() {
-    if (this.get('currentRound') === this.roundsNumber[this.get('currentLevel')]) {
-      this.set('currentRound', 1);
-      this.set('currentLevel', this.get('currentLevel') + 1);
-    } else {
-      this.set('currentRound', this.get('currentRound') + 1);
-    }
-
-    document.dispatchEvent(new CustomEvent('dataRequired'));
-    document.querySelector('div.next-round-block').classList.add('hidden');
-  }
-
-  moveToRound() {
-    this.set('currentLevel', Number(this.levelSelectEl.textContent));
-    this.set('currentRound', Number(this.roundSelectEl.textContent));
-    document.dispatchEvent(new CustomEvent('dataRequired'));
+  handleClick(e) {
+    if (e.target.classList.contains('option')) this.handleSelect(e);
+    if (e.target.classList.contains('select__control')) this.handleSelectControlClick(e);
+    if (e.target === this.elems.goToRoundBtn) this.moveToRound();
   }
 
   handleSelect(e) {
-    if (!e.target.classList.contains('option')) return;
-
     const logicalContainer = e.target.closest('div');
     const relativeBtn = logicalContainer.querySelector('span.select');
 
@@ -125,10 +117,10 @@ export default class LevelsController {
     }
 
     document.dispatchEvent(new CustomEvent('dataRequired'));
+    this.setControlsStatus();
   }
 
   handleSelectControlClick(e) {
-    if (!e.target.classList.contains('select__control')) return;
     const select = e.target.closest('div').querySelector('span.select');
     const value = Number(select.textContent);
 
@@ -146,6 +138,49 @@ export default class LevelsController {
       select.textContent = value - 1;
       e.target.nextElementSibling.classList.remove('disabled');
     }
+  }
+
+  moveToRound() {
+    this.set('currentLevel', Number(this.elems.levelSelectEl.textContent));
+    this.set('currentRound', Number(this.elems.roundSelectEl.textContent));
+    document.dispatchEvent(new CustomEvent('dataRequired'));
+  }
+
+  toggleRoundBtn(e) {
+    if (e.target === this.elems.levelSelectEl) {
+      if (!this.elems.roundSelectEl.classList.contains('select_closed')) {
+        this.setRoundsBlockHeight();
+      }
+      this.elems.levelSelectEl.classList.toggle('select_closed');
+      this.elems.roundSelectEl.classList.add('select_closed');
+    } else {
+      this.setRoundsBlockHeight();
+      this.elems.roundSelectEl.classList.toggle('select_closed');
+      this.elems.levelSelectEl.classList.add('select_closed');
+    }
+  }
+
+  setRoundsBlockHeight() {
+    let { height } = this.elems.rounds.style;
+    if (height) {
+      height = '';
+    } else {
+      height = `${38 * (this.roundsNumber[this.get('currentLevel')] / 5) + 2}px`;
+    }
+    this.elems.rounds.style.height = height;
+  }
+
+  moveToNextRound() {
+    if (this.get('currentRound') === this.roundsNumber[this.get('currentLevel')]) {
+      this.set('currentRound', 1);
+      this.set('currentLevel', this.get('currentLevel') + 1);
+    } else {
+      this.set('currentRound', this.get('currentRound') + 1);
+    }
+
+    document.dispatchEvent(new CustomEvent('dataRequired'));
+    document.querySelector('div.next-round-block').classList.add('hidden');
+    this.setControlsStatus();
   }
 
   get(prop) {

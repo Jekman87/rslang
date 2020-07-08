@@ -9,6 +9,8 @@ const monthNames = ['Января', 'Февраля', 'Марта', 'Апрел�
 
 const puzzleSizeSettings = {
   801: {
+    aspectRatio: 1.78,
+    partsAmount: 10,
     marginShift: 22,
     minSpace: 20,
     fontSize: 16,
@@ -18,6 +20,8 @@ const puzzleSizeSettings = {
     circleShiftX2: 7.5,
   },
   623: {
+    aspectRatio: 1.78,
+    partsAmount: 10,
     marginShift: 22,
     minSpace: 20,
     fontSize: 12,

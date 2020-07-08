@@ -4,8 +4,8 @@ import { puzzleSizeSettings } from './variables';
 export default class PuzzleDrawer {
   constructor() {
     this.containerWidth = document.querySelector('ul.sentences-list').offsetWidth;
-    this.containerHeight = this.containerWidth / 1.78;
     this.sizes = puzzleSizeSettings[this.containerWidth];
+    this.containerHeight = this.containerWidth / this.sizes.aspectRatio;
     this.sentenceEls = document.querySelectorAll('li.sentence');
   }
 
@@ -35,7 +35,8 @@ export default class PuzzleDrawer {
       const canvases = [];
       sentence.lengths.forEach((length, j) => {
         const className = j + 1 === sentence.words ? 'word word_colored word_last' : 'word word_colored';
-        canvases.push(`<canvas class="${className}" data-idx="${j}" width="${length}" height="${this.containerHeight / 10}"></canvas>`);
+        const height = this.containerHeight / this.sizes.partsAmount;
+        canvases.push(`<canvas class="${className}" data-idx="${j}" width="${length}" height="${height}"></canvas>`);
       });
       this.sentenceEls[i].innerHTML = '';
       this.sentenceEls[i].innerHTML = canvases.join('');
@@ -137,7 +138,7 @@ export default class PuzzleDrawer {
     const picWidth = elem.width * coefficient;
     const lengths = this.sentenceParams[i].lengths.slice(0, j);
     const left = lengths.reduce((acc, length) => acc + (length - 22) * coefficient, 0);
-    const picHeight = this.img.naturalHeight / 10;
+    const picHeight = this.img.naturalHeight / this.sizes.partsAmount;
     const top = i * picHeight;
 
     ctx.globalAlpha = 0.5;
@@ -172,7 +173,7 @@ export default class PuzzleDrawer {
     newCanvas.dataset.idx = oldCanvas.dataset.idx;
 
     newCanvas.width = width || oldCanvas.width;
-    newCanvas.height = this.containerHeight / 10;
+    newCanvas.height = this.containerHeight / this.sizes.partsAmount;
 
     return newCanvas;
   }
@@ -211,7 +212,7 @@ export default class PuzzleDrawer {
 
   resetParams() {
     this.containerWidth = document.querySelector('ul.sentences-list').offsetWidth;
-    this.containerHeight = this.containerWidth / 1.78;
+    this.containerHeight = this.containerWidth / this.sizes.aspectRatio;
     this.sizes = puzzleSizeSettings[this.containerWidth];
 
     if (document.querySelector('canvas') === null) {

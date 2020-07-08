@@ -9,47 +9,66 @@ export default class GameController {
     this.storage = storage;
     this.repoter = reporter;
     this.puzzleDrawer = new PuzzleDrawer();
-    this.sentenceList = document.querySelectorAll('li.sentence');
-    this.sentenceConstructor = document.querySelector('div.sentence-constructor');
-    this.availableWords = document.querySelector('div.available-words');
-    this.translateHelp = document.querySelector('p.sentence-translate');
     this.audioHelp = new Audio();
-    this.imgHelp = document.querySelector('img.painting-pic');
-    this.painting = document.querySelector('figure.painting-block');
-    this.playBtn = document.querySelector('button.play-pzl-btn');
-    this.startBtn = document.querySelector('button.start-button');
-    this.exitBtn = document.querySelector('button.exit-pzl-btn');
-    this.spinner = document.querySelector('div.spinner');
-    this.popUp = document.querySelector('div.pop-up');
-    this.resultsBlock = document.querySelector('div.results-block');
-    this.statBlock = document.querySelector('div.statistics-block');
   }
 
   init() {
+    this.defineElems();
+    this.addListeners();
+  }
+
+  defineElems() {
+    this.elems = {
+      sentenceList: document.querySelectorAll('li.sentence'),
+      sentenceConstructor: document.querySelector('div.sentence-constructor'),
+      availableWords: document.querySelector('div.available-words'),
+      translateHelp: document.querySelector('p.sentence-translate'),
+      imgHelp: document.querySelector('img.painting-pic'),
+      painting: document.querySelector('figure.painting-block'),
+      playBtn: document.querySelector('button.play-pzl-btn'),
+      startBtn: document.querySelector('button.start-button'),
+      exitBtn: document.querySelector('button.exit-pzl-btn'),
+      spinner: document.querySelector('div.spinner'),
+      popUp: document.querySelector('div.pop-up'),
+      resultsBlock: document.querySelector('div.results-block'),
+      statBlock: document.querySelector('div.statistics-block'),
+      positiveBtn: document.querySelector('button.check-pzl-btn'),
+      negativeBtn: document.querySelector('button.give-up-pzl-btn'),
+      resultsBtn: document.querySelector('button.results-pzl-btn'),
+      statisticsBtn: document.querySelector('button.statistics-pzl-btn'),
+      galleryBtn: document.querySelector('button.gallery-pzl-btn'),
+      closeBtn: document.querySelector('button.close-pzl-btn'),
+      answerBlock: document.querySelector('div.answer-pzl-btn-group'),
+      nextRoundBlock: document.querySelector('div.next-round-block'),
+      sentenceListWrapper: document.querySelector('div.sentences-list-wrapper'),
+      startPage: document.querySelector('div.start-page'),
+      mainPage: document.querySelector('main.main'),
+      statTable: document.querySelector('table.statistics-table'),
+      slidesContainer: document.querySelector('div.carousel-inner'),
+    };
+  }
+
+  addListeners() {
     window.addEventListener('resize', this.handleWindowResize.bind(this));
     document.addEventListener('newData', this.handleNewData.bind(this));
     document.addEventListener('helperStatusChange', this.handleHelperStatusChange.bind(this));
 
-    document.querySelector('button.check-pzl-btn').addEventListener('click', this.handlePositiveAnswer.bind(this));
-    document.querySelector('button.give-up-pzl-btn').addEventListener('click', this.handleNegativeAnswer.bind(this));
+    this.elems.answerBlock.addEventListener('click', this.handleAnswer.bind(this));
+    this.elems.nextRoundBlock.addEventListener('click', this.handleUserAction.bind(this));
 
-    document.querySelector('button.results-pzl-btn').addEventListener('click', this.showRoundResults.bind(this));
-    document.querySelector('button.statistics-pzl-btn').addEventListener('click', this.showStatistics.bind(this));
-    document.querySelector('button.gallery-pzl-btn').addEventListener('click', this.showGallery.bind(this));
-    document.querySelector('button.close-pzl-btn').addEventListener('click', this.closePopUp.bind(this));
+    this.elems.closeBtn.addEventListener('click', this.closePopUp.bind(this));
 
-    this.startBtn.addEventListener('click', this.startGame.bind(this));
-    this.exitBtn.addEventListener('click', this.exit.bind(this));
+    this.elems.startBtn.addEventListener('click', this.startGame.bind(this));
+    this.elems.exitBtn.addEventListener('click', this.exit.bind(this));
 
-    this.playBtn.addEventListener('click', this.playAudio.bind(this));
-    this.resultsBlock.addEventListener('click', this.playByClick.bind(this));
-
+    this.elems.playBtn.addEventListener('click', this.playAudio.bind(this));
+    this.elems.resultsBlock.addEventListener('click', this.playByClick.bind(this));
     this.audioHelp.addEventListener('ended', this.removePlayEffect.bind(this));
     this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
   }
 
   startGame() {
-    this.spinner.classList.add('visible');
+    this.elems.spinner.classList.add('visible');
     this.defineNextRound();
     document.dispatchEvent(new CustomEvent('dataRequired'));
   }
@@ -69,42 +88,42 @@ export default class GameController {
   }
 
   switchElementsVisibility(isEndOfRound) {
-    this.translateHelp.classList.remove('visible');
+    this.elems.translateHelp.classList.remove('visible');
 
     if (isEndOfRound) {
       if (this.correctCounter === 10) {
-        this.painting.classList.remove('hidden');
-        document.querySelector('div.sentences-list-wrapper').classList.add('sentences-list-wrapper_cut');
+        this.elems.painting.classList.remove('hidden');
+        this.elems.sentenceListWrapper.classList.add('sentences-list-wrapper_cut');
       }
-      this.playBtn.classList.add('invisible');
-      this.sentenceConstructor.classList.add('hidden');
-      this.availableWords.classList.add('hidden');
-      document.querySelector('div.answer-pzl-btn-group').classList.add('hidden');
-      document.querySelector('div.next-round-block').classList.remove('hidden');
+      this.elems.playBtn.classList.add('invisible');
+      this.elems.sentenceConstructor.classList.add('hidden');
+      this.elems.availableWords.classList.add('hidden');
+      this.elems.answerBlock.classList.add('hidden');
+      this.elems.nextRoundBlock.classList.remove('hidden');
     } else {
-      this.sentenceList.forEach((sentence) => sentence.classList.remove('sentence_guessed'));
+      this.elems.sentenceList.forEach((sentence) => sentence.classList.remove('sentence_guessed'));
       this.closePopUp();
-      this.playBtn.classList.remove('invisible');
-      this.painting.classList.add('hidden');
-      this.sentenceConstructor.classList.remove('hidden');
-      this.availableWords.classList.remove('hidden');
-      document.querySelector('div.answer-pzl-btn-group').classList.remove('hidden');
-      document.querySelector('div.next-round-block').classList.add('hidden');
-      document.querySelector('button.check-pzl-btn').textContent = 'Проверить';
-      document.querySelector('button.give-up-pzl-btn').classList.remove('disabled');
-      document.querySelector('div.sentences-list-wrapper').classList.remove('sentences-list-wrapper_cut');
+      this.elems.playBtn.classList.remove('invisible');
+      this.elems.painting.classList.add('hidden');
+      this.elems.sentenceConstructor.classList.remove('hidden');
+      this.elems.availableWords.classList.remove('hidden');
+      this.elems.answerBlock.classList.remove('hidden');
+      this.elems.nextRoundBlock.classList.add('hidden');
+      this.elems.positiveBtn.textContent = 'Проверить';
+      this.elems.negativeBtn.classList.remove('disabled');
+      this.elems.sentenceListWrapper.classList.remove('sentences-list-wrapper_cut');
     }
   }
 
   switchPage() {
-    document.querySelector('div.start-page').classList.add('hidden');
-    document.querySelector('main.main').classList.add('visible');
+    this.elems.startPage.classList.add('hidden');
+    this.elems.mainPage.classList.add('visible');
   }
 
   async createPuzzles() {
-    this.imgHelp.src = this.get('paintingData').link;
+    this.elems.imgHelp.src = this.get('paintingData').link;
     await new Promise((resolve) => {
-      this.imgHelp.onload = () => {
+      this.elems.imgHelp.onload = () => {
         this.puzzleDrawer.setData(this.get('sentencesData'));
         this.puzzleDrawer.renderCanvases();
         this.puzzleDrawer.drawPuzzles();
@@ -116,22 +135,22 @@ export default class GameController {
   fillHelpers() {
     const data = this.get('sentencesData');
 
-    this.translateHelp.textContent = data[this.sentenceIndex].translate;
+    this.elems.translateHelp.textContent = data[this.sentenceIndex].translate;
     if (this.get('translateHelp') === 'on') {
-      this.translateHelp.classList.add('visible');
+      this.elems.translateHelp.classList.add('visible');
     } else {
-      this.translateHelp.classList.remove('visible');
+      this.elems.translateHelp.classList.remove('visible');
     }
 
     this.audioHelp.src = data[this.sentenceIndex].audio;
     if (this.get('pronounceHelp') === 'off') {
-      this.playBtn.classList.add('disabled');
+      this.elems.playBtn.classList.add('disabled');
     }
     if (this.get('autoplayHelp') === 'on') {
       this.playAudio();
     }
 
-    const words = [...this.sentenceList[this.sentenceIndex].children];
+    const words = [...this.elems.sentenceList[this.sentenceIndex].children];
     const isColored = this.get('visualHelp') === 'on';
     this.currentWords = words.map((word) => {
       const newWord = this.puzzleDrawer.cloneCanvas(word);
@@ -141,24 +160,24 @@ export default class GameController {
   }
 
   handleHelperStatusChange(e) {
-    const isCollectedSentence = document.querySelector('button.check-pzl-btn').textContent === 'Продолжить';
+    const isCollectedSentence = this.elems.positiveBtn.textContent === 'Продолжить';
     if (isCollectedSentence) return;
 
     if (e.detail === 'pronounceHelp') {
-      this.playBtn.classList.toggle('disabled');
+      this.elems.playBtn.classList.toggle('disabled');
     }
 
     if (e.detail === 'translateHelp') {
-      this.translateHelp.classList.toggle('visible');
+      this.elems.translateHelp.classList.toggle('visible');
     }
 
     if (e.detail === 'visualHelp') {
       this.currentWords.forEach((word) => word.classList.toggle('word_colored'));
-      [...this.sentenceConstructor.children].forEach((word) => word.classList.toggle('word_colored'));
-      [...this.availableWords.children].forEach((word) => word.classList.toggle('word_colored'));
+      [...this.elems.sentenceConstructor.children].forEach((word) => word.classList.toggle('word_colored'));
+      [...this.elems.availableWords.children].forEach((word) => word.classList.toggle('word_colored'));
 
-      this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
-      this.puzzleDrawer.drawSentence(this.availableWords, this.sentenceIndex);
+      this.puzzleDrawer.drawSentence(this.elems.sentenceConstructor, this.sentenceIndex);
+      this.puzzleDrawer.drawSentence(this.elems.availableWords, this.sentenceIndex);
     }
   }
 
@@ -167,22 +186,22 @@ export default class GameController {
       this.playAudio();
     }
 
-    this.translateHelp.classList.add('visible');
-    this.playBtn.classList.remove('disabled');
+    this.elems.translateHelp.classList.add('visible');
+    this.elems.playBtn.classList.remove('disabled');
   }
 
   playAudio() {
     this.audioHelp.play();
-    setTimeout(() => this.playBtn.classList.add('play-pzl-btn_active'), 0);
+    setTimeout(() => this.elems.playBtn.classList.add('play-pzl-btn_active'), 0);
   }
 
   removePlayEffect() {
-    this.playBtn.classList.remove('play-pzl-btn_active');
+    this.elems.playBtn.classList.remove('play-pzl-btn_active');
   }
 
   cleanConstructionArea() {
-    this.sentenceConstructor.innerHTML = '';
-    this.availableWords.innerHTML = '';
+    this.elems.sentenceConstructor.innerHTML = '';
+    this.elems.availableWords.innerHTML = '';
   }
 
   getAvailableWords() {
@@ -190,7 +209,7 @@ export default class GameController {
 
     this.puzzleDrawer.drawSentence(newWords, this.sentenceIndex);
     this.shuffle(newWords);
-    newWords.forEach((word) => this.availableWords.append(word));
+    newWords.forEach((word) => this.elems.availableWords.append(word));
   }
 
   setPaintingInfo() {
@@ -210,6 +229,16 @@ export default class GameController {
     }
   }
 
+  handleAnswer(e) {
+    if (!e.target.classList.contains('answer-pzl-btn')) return;
+
+    if (e.target === this.elems.positiveBtn) {
+      this.handlePositiveAnswer(e);
+    } else {
+      this.handleNegativeAnswer(e);
+    }
+  }
+
   handlePositiveAnswer(e) {
     if (e.target.textContent === 'Проверить') {
       this.check(e);
@@ -226,13 +255,13 @@ export default class GameController {
     this.showHelpers();
     this.showCorrect();
 
-    this.sentenceConstructor.classList.add('sentence-constructor_disabled');
+    this.elems.sentenceConstructor.classList.add('sentence-constructor_disabled');
     e.target.previousElementSibling.textContent = 'Продолжить';
     e.target.classList.add('disabled');
   }
 
   check(e) {
-    const unusedWords = this.availableWords.querySelectorAll('.word');
+    const unusedWords = this.elems.availableWords.querySelectorAll('.word');
 
     if (unusedWords.length) {
       this.toggleHighLigth(unusedWords);
@@ -244,7 +273,7 @@ export default class GameController {
 
   goNext(e) {
     this.markSentence();
-    this.sentenceList[this.sentenceIndex].classList.add('sentence_guessed');
+    this.elems.sentenceList[this.sentenceIndex].classList.add('sentence_guessed');
     e.target.nextElementSibling.classList.remove('disabled');
 
     if (this.sentenceIndex === 9) {
@@ -262,7 +291,7 @@ export default class GameController {
     this.cleanConstructionArea();
     this.getAvailableWords();
     e.target.textContent = 'Проверить';
-    this.sentenceConstructor.classList.remove('sentence-constructor_disabled');
+    this.elems.sentenceConstructor.classList.remove('sentence-constructor_disabled');
   }
 
   showCorrect() {
@@ -270,10 +299,10 @@ export default class GameController {
 
     this.currentWords.forEach((word) => {
       word.classList.add('word_colored');
-      this.sentenceConstructor.append(this.puzzleDrawer.cloneCanvas(word));
+      this.elems.sentenceConstructor.append(this.puzzleDrawer.cloneCanvas(word));
     });
 
-    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
+    this.puzzleDrawer.drawSentence(this.elems.sentenceConstructor, this.sentenceIndex);
   }
 
   toggleHighLigth(list) {
@@ -281,7 +310,7 @@ export default class GameController {
   }
 
   compare(e) {
-    const answers = this.sentenceConstructor.querySelectorAll('.word');
+    const answers = this.elems.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
 
     answers.forEach((word, i) => {
@@ -304,19 +333,19 @@ export default class GameController {
     } else {
       e.target.textContent = 'Ещё раз';
     }
-    this.sentenceConstructor.classList.add('sentence-constructor_disabled');
+    this.elems.sentenceConstructor.classList.add('sentence-constructor_disabled');
   }
 
   markSentence() {
     const mark = `<span class="sentence__num ${this.isCorrect ? 'sentence__num_correct' : ''}">${this.sentenceIndex + 1}</span>`;
-    this.sentenceList[this.sentenceIndex].insertAdjacentHTML('afterbegin', mark);
+    this.elems.sentenceList[this.sentenceIndex].insertAdjacentHTML('afterbegin', mark);
   }
 
   showResult(isCollectedCorectly) {
     if (isCollectedCorectly) {
-      [...this.sentenceConstructor.children].forEach((word) => word.classList.add('word_colored'));
+      [...this.elems.sentenceConstructor.children].forEach((word) => word.classList.add('word_colored'));
     }
-    this.puzzleDrawer.drawSentence(this.sentenceConstructor, this.sentenceIndex);
+    this.puzzleDrawer.drawSentence(this.elems.sentenceConstructor, this.sentenceIndex);
   }
 
   defineNextRound() {
@@ -389,21 +418,36 @@ export default class GameController {
   }
 
   closePopUp() {
-    this.popUp.classList.add('hidden');
-    this.resultsBlock.classList.add('hidden');
-    this.statBlock.classList.add('hidden');
+    this.elems.popUp.classList.add('hidden');
+    this.elems.resultsBlock.classList.add('hidden');
+    this.elems.statBlock.classList.add('hidden');
+  }
+
+  handleUserAction(e) {
+    switch (e.target) {
+      case this.elems.resultsBtn:
+        this.showRoundResults();
+        break;
+      case this.elems.statisticsBtn:
+        this.showStatistics();
+        break;
+      case this.elems.galleryBtn:
+        this.showGallery();
+        break;
+      default:
+    }
   }
 
   showRoundResults() {
     this.fillRoundResults();
-    this.resultsBlock.classList.remove('hidden');
-    this.popUp.classList.remove('hidden');
+    this.elems.resultsBlock.classList.remove('hidden');
+    this.elems.popUp.classList.remove('hidden');
   }
 
   showStatistics() {
     this.fillStatistics();
-    this.statBlock.classList.remove('hidden');
-    this.popUp.classList.remove('hidden');
+    this.elems.statBlock.classList.remove('hidden');
+    this.elems.popUp.classList.remove('hidden');
   }
 
   showGallery() {
@@ -456,7 +500,7 @@ export default class GameController {
   }
 
   fillStatistics() {
-    document.querySelector('table.statistics-table').innerHTML = '';
+    this.elems.statTable.innerHTML = '';
     const rows = [tableHeader];
     const statistics = this.get('statistics');
     statistics.forEach((mark) => {
@@ -473,11 +517,11 @@ export default class GameController {
       </tr>`;
       rows.push(tr);
     });
-    document.querySelector('table.statistics-table').innerHTML = rows.join('');
+    this.elems.statTable.innerHTML = rows.join('');
   }
 
   fillGallery() {
-    document.querySelector('div.carousel-inner').innerHTML = '';
+    this.elems.slidesContainer.innerHTML = '';
     const slides = [defaultSlide];
     const artItems = this.get('gallery');
 
@@ -501,7 +545,7 @@ export default class GameController {
 
     slides[slides.length - 1] = slides[slides.length - 1].replace('carousel-item', 'carousel-item active');
 
-    document.querySelector('div.carousel-inner').innerHTML = slides.reverse().join('');
+    this.elems.slidesContainer.innerHTML = slides.reverse().join('');
   }
 
   playByClick(e) {
@@ -519,7 +563,7 @@ export default class GameController {
   }
 
   handleWindowResize() {
-    const restPuzzles = [this.sentenceConstructor, this.availableWords];
+    const restPuzzles = [this.elems.sentenceConstructor, this.elems.availableWords];
     this.puzzleDrawer.resizePuzzles(this.sentenceIndex, this.currentWords, restPuzzles);
   }
 
