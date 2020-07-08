@@ -11,9 +11,10 @@ import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 import Team from './components/teamPage';
+import SpeakIt from './games/speakIt/index';
 
 const pages = {
-  Authorization, MainPage, MainGame, Team,
+  Authorization, MainPage, MainGame, Team, SpeakIt,
 };
 
 const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
