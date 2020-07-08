@@ -1,6 +1,27 @@
-// у каждой игры должна быть общая точка входа, например^
-// const game = new SpeakIt();
-// game.start();
-// в каждой игре должна быть кнопка возврата в основное приложение
-// бекенд пока пробуем сделать сами без сохранения статистике
-// просто берем рандомные слова для вашей игры
+import SpeakIt from './components/speakit/index';
+import Intro from './components/intro/index';
+import Header from './components/header/index';
+import CardContainer from './components/cardContainer/index';
+import Score from './components/score/index';
+import CardsDesk from './components/cardsDesk/index';
+import Results from './components/results/index';
+
+class Speakit {
+  constructor(elem, options) {
+    this.app = elem;
+    this.options = options;
+  }
+
+  render() {
+    this.speakitGame = new SpeakIt(this.app, {
+      components: [Intro, Header, CardContainer, Score, CardsDesk, Results],
+      options: this.options,
+    });
+    this.speakitGame.render();
+  }
+
+  destroy() {
+    this.speakitGame.destroy();
+  }
+}
+export { Speakit as default };

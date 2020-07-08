@@ -1,0 +1,43 @@
+.riddle-header {
+  @include flexibleSpace;
+  flex-wrap: wrap;
+  padding: 2%;
+  width: 100%;
+
+  button {
+    box-shadow: 6px 6px 10px #7b8a8b;
+    transition: all 0.8s;
+    font-size: 1rem;
+    color: $fontColor;
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: $fontColor;
+  }
+
+  input::-webkit-inner-spin-button {
+    display: none;
+  }
+}
+
+.difficulty-level,
+.difficulty-page {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px 10px 10px;
+
+  div {
+    display: flex;
+    justify-content: center;
+  }
+  span {
+    text-align: center;
+    color: $fontColor;
+    margin: 10px auto;
+  }
+}

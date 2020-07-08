@@ -1,0 +1,140 @@
+@media (max-width: 480px) {
+  .intro h1 {
+    font-size: 2rem;
+  }
+
+  .intro button {
+    min-width: 150px;
+    padding: 10px 20px;
+    font-size: 1.4rem;
+  }
+
+  .intro p {
+    font-size: 1.3rem;
+  }
+
+  .game-block {
+    width: 280px;
+    padding: 5%;
+  }
+
+  .language-eng,
+  .language-rus {
+    min-height: 40px;
+  }
+
+  .sprint-score {
+    width: 270px;
+  }
+
+  .language-eng,
+  .language-rus {
+    font-size: 1.2rem;
+  }
+
+  .birds .bird-1 {
+    top: 26%;
+    left: 1%;
+  }
+
+  .birds .bird-2 {
+    top: 40%;
+    left: 24%;
+  }
+
+  .birds .bird-3 {
+    top: 33%;
+    left: 47%;
+  }
+
+  .birds span {
+    width: 90%;
+  }
+}
+
+@media (hover:hover) {
+  .intro button:hover {
+    transform: scale(0.9);
+    opacity: 0.8;
+    color: #005986;
+    background-color: #faffcd;
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .difficulty-level div span:hover {
+    transform: scale(1.2);
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .audio-icon:hover i {
+    color: #339a198f;
+    transform: scale(1.2);
+    transition: all 0.6s;
+    cursor: pointer;
+  }
+
+  .mute:hover i {
+    color: red;
+    transform: scale(1.2);
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .unmute:hover .crossed-note {
+    color: $fontColor;
+    transform: scale(1.2);
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .unmute:hover .cross-line {
+    color: $fontColor;
+    transform: scale(1.2);
+    transition: all 0.8s;
+    transform: rotate(-236deg);
+    cursor: pointer;
+  }
+
+  header button:hover {
+    box-shadow: 1px 1px 10px #7b8a8b;
+    transition: all 0.8s;
+  }
+
+  header button:hover i {
+    color: white;
+    transition: all 0.8s;
+    transform: rotate(360deg);
+  }
+
+  .left-arrow:hover i {
+    transition: all 0.8s;
+    transform: scale(1.2);
+    transform: rotate(360deg);
+    color: #042158;
+    cursor: pointer;
+  }
+
+  .right-arrow:hover i {
+    transition: all 0.8s;
+    transform: scale(1.2);
+    transform: rotate(-360deg);
+    color: #042158;
+    cursor: pointer;
+  }
+
+  .click-buttons button:hover {
+    box-shadow: 1px 1px 1px #7b8a8b;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .statistic-button:hover {
+    box-shadow: 1px 1px 1px #7b8a8b;
+    color: #002e46;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+}
