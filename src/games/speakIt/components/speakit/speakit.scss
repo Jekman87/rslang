@@ -1,0 +1,54 @@
+.speakit {
+  min-height: 100vh;
+  overflow: auto;
+  .none {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .cursor{
+    cursor: pointer;
+  }
+
+  dialog{
+    border: white;
+    border-radius: 6px;
+  }
+  dialog[open] {
+    animation: appear .15s cubic-bezier(0, 1.8, 1, 1.8);
+  }
+  
+  dialog::backdrop {
+    background: linear-gradient(45deg, rgba(13, 49, 39, 0.5), rgba(19, 17, 10, 0.5));
+  }
+}
+
+.fa-anim-flash {
+  color: red !important;
+  animation: fa-anim-flash 1s ease infinite;
+}
+
+@keyframes fa-anim-flash {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
