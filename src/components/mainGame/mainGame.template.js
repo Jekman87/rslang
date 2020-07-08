@@ -37,7 +37,7 @@ export default function createMainGameHTML(dataForApp) {
                     <div class="card-body">
                       <p class="card-text">Введите слово на англ</p>
                       <p class="card-text" id="word-en">${word.word}</p>
-                      <input type="text" class="form-control" id="word-input">
+                      <input type="text" class="form-control" id="word-input" autocomplete="off">
                       <div class="row">
                         <div class="col-6">
                           <p class="card-text font-weight-bold ${settingsOptional.cardTranslation ? '' : 'd-none'}" id="word-translate">${word.wordTranslate}</p>

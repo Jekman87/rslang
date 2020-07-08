@@ -8,7 +8,7 @@ const BASE_SETTINGS = {
     cardExample: true,
     cardTranscription: true,
     cardImage: true,
-    cardTranslationAfterSuccess: true,
+    cardTranslationAfterSuccess: false,
     cardExplanationTranslation: true,
     cardExampleTranslation: true,
     autoSound: true,

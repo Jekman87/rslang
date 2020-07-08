@@ -86,6 +86,7 @@ export default class PageContainer extends Component {
     this.$root.clear();
     this.component = new NewGame('.PageContainer', componentOptions);
     this.component.render();
+    console.log('renderGame', componentOptions);
 
     // одинаковый интерфейс для всех игр
     // this.component = new NewGame('.PageContainer', this.options);
@@ -104,18 +105,24 @@ export default class PageContainer extends Component {
 
   async initSettingsAndStats() {
     try {
-      // переделать в promise.all
-      this.dataForApp.settings = await this.options.api.getSettings();
-      this.dataForApp.statistics = await this.options.api.getStatistics();
+      const data = await Promise.all([
+        this.options.api.getSettings(),
+        this.options.api.getStatistics(),
+      ]);
+
+      [this.dataForApp.settings, this.dataForApp.statistics] = data;
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
         this.emit('mainLogout');
       } else if (error.message === '404') {
         // если настроек и статистики нету - устанавливаем стандартные
-        // переделать в promise.all
-        this.dataForApp.settings = await this.options.api.updateSettings(BASE_SETTINGS);
-        this.dataForApp.statistics = await this.options.api.updateStatistics(BASE_STATS);
+        const data = await Promise.all([
+          this.options.api.updateSettings(BASE_SETTINGS),
+          this.options.api.updateStatistics(BASE_STATS),
+        ]);
+
+        [this.dataForApp.settings, this.dataForApp.statistics] = data;
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
@@ -134,8 +141,12 @@ export default class PageContainer extends Component {
       // преобразуем порядок слов? Составляем карточки? AggregatedWords
       const page = 0;
       const group = 0;
-      this.dataForApp.userCards = await this.options.api.getWords(page, group);
-      this.dataForApp.userWords = await this.options.api.getAllUserWords();
+      const data = await Promise.all([
+        this.options.api.getWords(page, group),
+        this.options.api.getAllUserWords(),
+      ]);
+
+      [this.dataForApp.userCards, this.dataForApp.userWords] = data;
       console.log('userCards', this.dataForApp.userCards);
       console.log('userWords', this.dataForApp.userWords);
     } catch (error) {

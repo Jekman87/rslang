@@ -5,6 +5,8 @@ import createMainGameHTML from './mainGame.template';
 import { delay } from '../../core/utils';
 
 import { FILE_URL } from '../../constants/constants';
+import { timers } from 'jquery';
+// import BASE_USER_WORD from '../../constants/user-word.constants';
 
 export default class MainGame extends Component {
   static className = 'MainGame';
@@ -298,7 +300,43 @@ export default class MainGame extends Component {
     this.state.currentCardNum = nextCandNum;
   }
 
+  getTodayWordsToRepeat() {
+    let todayWordsToRepeat = [];
+
+    if (this.userWords.lenght) {
+      // определяем время ресета - след день 4 утра
+      const time = new Date();
+      const hour = time.getHours();
+      if (hour >= 4) time.setDate(time.getDate() + 1);
+      const resetDayTime = time.setHours(4, 0);
+
+      todayWordsToRepeat = this.userWords
+        .filter((word) => word.optional.nextRepeat < resetDayTime);
+    }
+
+    return todayWordsToRepeat;
+  }
+
   intervalRepetitionAlgorithm() {
+    const todayWordsToRepeat = this.getTodayWordsToRepeat();
+
+    if (todayWordsToRepeat.lenght) {
+      // если есть слова пользователя, фильтруем и находим слова на сегодня
+      // если на сегодня нет - берем с бекенда следующие
+      // в зависимости от последней карты, на которой остановились
+      // если есть карты на сегодня - в любом случае добираем
+      // новыми словами с последней карты
+
+    } else {
+      // если нет, значит пользователь играет в первый раз
+      // либо на сегодня нет слов для повторения
+      // берем с бекенда с самого начала или с последней точки
+      // this.userCards;
+    }
+
+    // миксовать карты
+    // на повторение (если есть) - новые - повторение новых
+
     /*
     первым делом идут карты на повторение, затем новые слова
     нет на повторении - начинаем с новых
