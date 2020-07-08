@@ -13,6 +13,7 @@ import MainGame from './components/mainGame';
 
 import { AudioCall } from './games/audioCall/index';
 import Team from './components/teamPage';
+import Settings from './components/settingsPage';
 
 import Riddle from './games/riddle/Riddle.render';
 import SpeakIt from './games/speakIt/index';
@@ -24,6 +25,7 @@ const pages = {
   MainPage,
   MainGame,
   Team,
+  Settings,
   SpeakIt,
   AudioCall,
   Sprint,
