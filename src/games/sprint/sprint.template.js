@@ -1,6 +1,6 @@
 export default function createGameField() {
   return `
-    <div class="intro">
+    <div class="intro__sprint">
       <h1><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
       <p>Истинная гонка на проверку знаний.<br> Укажите верно ли указан перевод слова?</p>
 

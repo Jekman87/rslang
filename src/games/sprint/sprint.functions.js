@@ -15,7 +15,7 @@ const state = {
 };
 
 function hideIntro() {
-  document.querySelector('.intro').style.display = 'none';
+  document.querySelector('.intro__sprint').style.display = 'none';
 }
 
 function hideBestIndicator() {

@@ -11,13 +11,24 @@ import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 
+import { AudioCall } from './games/audioCall/index';
+import Team from './components/teamPage';
+import SpeakIt from './games/speakIt/index';
+
 import Sprint from './games/sprint/Sprint.render';
 
-import Team from './components/teamPage';
-
 const pages = {
-  Authorization, MainPage, MainGame, Team, Sprint,
+  Authorization,
+  MainPage,
+  MainGame,
+  Team,
+  SpeakIt,
+  AudioCall,
+  Sprint,
 };
 
-const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
+const mainApp = new MainApp('#app', {
+  components: [Header, PageContainer],
+  pages,
+});
 mainApp.render();
