@@ -1,6 +1,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 import $$ from '../../../core/domManipulation';
+import { FILE_URL } from '../../../constants/constants';
 import Component from '../../../core/Component';
 import createStartPage from '../StartPage/startPage.template';
 import createAudioCall from './audioCall.template';
@@ -22,7 +23,6 @@ export default class AudioCall extends Component {
   constructor($root, options) {
     super($root, {
       name: 'Audiocall',
-      listeners: ['click', 'keyup'],
       ...options,
     });
     this.options = options;
@@ -71,7 +71,7 @@ export default class AudioCall extends Component {
           roundWordsArr[i].audio,
         ]);
 
-        this.answerPic.src = `https://raw.githubusercontent.com/Jekman87/rslang-data/master/${this.roundWord.image}`;
+        this.answerPic.src = `${FILE_URL}/${this.roundWord.image}`;
         this.answerWord.innerText = this.roundWord.word;
       } else {
         setAnswerAttribute(this.spanRoundWords[i], false);
@@ -147,12 +147,12 @@ export default class AudioCall extends Component {
         this.sayRoundWord();
         break;
       case 'next':
-        if (this.progress < 10) {
+        if (this.progress < this.maxProgress) {
           this.fillRoundWords();
         } else {
           const gameResult = {
             data: Date.now(),
-            result: `${10 - this.mistakesCounter}-${this.mistakesCounter}`,
+            result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
           this.gamesStatistic.push(gameResult);
 
@@ -230,10 +230,11 @@ export default class AudioCall extends Component {
 
   onKeyUp(event) {
     const { code } = event;
+    const dataAnswer = document.activeElement.getAttribute('data-answer');
 
     switch (code) {
       case 'Enter':
-        if (document.activeElement.getAttribute('data-answer') === 'false') {
+        if (dataAnswer === 'false') {
           if (this.gameSound) {
             this.playWrongSound();
           }
@@ -241,18 +242,18 @@ export default class AudioCall extends Component {
           this.onRightAnswer();
           this.statistics[this.progress - 1].push('failure');
           document.activeElement.blur();
-        } else if (document.activeElement.getAttribute('data-answer') === 'true') {
+        } else if (dataAnswer === 'true') {
           this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
           this.onRightAnswer();
           this.statistics[this.progress - 1].push('success');
           document.activeElement.blur();
         } else if (!this.btnNext.classList.contains('d-none')) {
-          if (this.progress < 10) {
+          if (this.progress < this.maxProgress) {
             this.fillRoundWords();
           } else {
             const gameResult = {
               data: Date.now(),
-              result: `${10 - this.mistakesCounter}-${this.mistakesCounter}`,
+              result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
             this.gamesStatistic.push(gameResult);
 
@@ -325,6 +326,7 @@ export default class AudioCall extends Component {
     this.longStatResults = document.querySelector('.long-stat-results');
 
     this.progress = 0;
+    this.maxProgress = 10;
     this.mistakesCounter = 0;
     this.fillRoundWords();
   }
@@ -332,13 +334,14 @@ export default class AudioCall extends Component {
   appendStats() {
     this.app.removeChild(this.app.firstChild);
     document.querySelector('.span-mistakes').innerText = this.mistakesCounter;
-    document.querySelector('.span-correct').innerText = 10 - this.mistakesCounter;
+    document.querySelector('.span-correct').innerText = this.maxProgress - this.mistakesCounter;
     this.statsWrapper.classList.remove('d-none');
   }
 
   destroy() {
     if (this.audioCallWrapper) {
       this.audioCallWrapper.removeEventListener('click', this.onClick);
+      this.statsWrapper.removeEventListener('click', this.onClick);
     }
     document.body.removeEventListener('keyup', this.onKeyUp);
   }

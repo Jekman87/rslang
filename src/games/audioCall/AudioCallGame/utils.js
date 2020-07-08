@@ -1,10 +1,9 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable no-param-reassign */
 function setRoundWord(roundWordsArr) {
+  const arrCopy = roundWordsArr;
   const wordsCopy = roundWordsArr.concat();
   const [roundWord] = wordsCopy.splice(Math.floor(Math.random() * wordsCopy.length), 1);
 
-  roundWordsArr.find((word) => word.id === roundWord.id).isAnswer = true;
+  arrCopy.find((word) => word.id === roundWord.id).isAnswer = true;
 
   return roundWord;
 }
