@@ -17,7 +17,7 @@ import Settings from './components/settingsPage';
 
 import Riddle from './games/riddle/Riddle.render';
 import SpeakIt from './games/speakIt/index';
-
+import Puzzle from './games/english-puzzle/index';
 import Sprint from './games/sprint/Sprint.render';
 
 const pages = {
@@ -30,6 +30,7 @@ const pages = {
   AudioCall,
   Sprint,
   Riddle,
+  Puzzle,
 };
 
 const mainApp = new MainApp('#app', {
