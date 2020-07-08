@@ -8,7 +8,7 @@ class Dom {
       this.$el.innerHTML = html;
       return this;
     }
-    return this.$el.outerHTML.trim();
+    return this.$el.innerHTML.trim();
   }
 
   clear() {
@@ -26,6 +26,10 @@ class Dom {
 
   hasClass(className) {
     return this.$el.classList.contains(className);
+  }
+
+  closest(className) {
+    return this.$el.closest(className);
   }
 
   removeClass(className) {

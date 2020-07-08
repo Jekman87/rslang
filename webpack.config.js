@@ -92,6 +92,10 @@ const plugins = () => {
         from: `${PATHS.src}/assets`,
         to: `${PATHS.assets}`,
       },
+      {
+        from: `${PATHS.src}/assets/voices`,
+        to: `${PATHS.assets}voices`,
+      },
     ]),
     new MiniCssExtractPlugin({ filename: filename('css') }),
   ];

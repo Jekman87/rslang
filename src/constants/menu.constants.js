@@ -13,9 +13,9 @@ const GAME_MENU_TITLES = [
   { data: 'SpeakIt', title: 'SpeakIt' },
   { data: 'Puzzle', title: 'English puzzle' },
   { data: 'Savannah', title: 'Саванна' },
-  { data: 'Audiocall', title: 'Аудиовызов' },
+  { data: 'AudioCall', title: 'Аудиовызов' },
   { data: 'Sprint', title: 'Спринт' },
-  { data: 'Ourgame', title: 'Своя игра' },
+  { data: 'Riddle', title: 'Своя игра' },
 ];
 
 const AUTH_PAGE_NAME = 'Authorization';
