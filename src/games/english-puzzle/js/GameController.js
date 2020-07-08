@@ -28,7 +28,7 @@ export default class GameController {
       playBtn: document.querySelector('button.play-pzl-btn'),
       startBtn: document.querySelector('button.start-button'),
       exitBtn: document.querySelector('button.exit-pzl-btn'),
-      spinner: document.querySelector('div.spinner'),
+      spinner: document.querySelector('div.pzl-spinner'),
       popUp: document.querySelector('div.pop-up'),
       resultsBlock: document.querySelector('div.results-block'),
       statBlock: document.querySelector('div.statistics-block'),

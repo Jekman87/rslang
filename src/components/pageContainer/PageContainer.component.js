@@ -65,8 +65,10 @@ export default class PageContainer extends Component {
   }
 
   async renderPage(NewPage) {
-    if (NewPage.className !== AUTH_PAGE_NAME
-      && (!this.dataForApp.settings || !this.dataForApp.statistics)) {
+    if (
+      NewPage.className !== AUTH_PAGE_NAME &&
+      (!this.dataForApp.settings || !this.dataForApp.statistics)
+    ) {
       // add loader?
       await this.initSettingsAndStats();
       await this.initWords();
@@ -85,6 +87,7 @@ export default class PageContainer extends Component {
     const componentOptions = { ...this.options, dataForApp: this.dataForApp };
     this.$root.clear();
     this.component = new NewGame('.PageContainer', componentOptions);
+
     this.component.render();
 
     // одинаковый интерфейс для всех игр

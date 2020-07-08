@@ -1,4 +1,4 @@
-import './style.scss';
+import './puzzle.scss';
 import { puzzleGame } from './js/templates';
 import App from './js/App';
 
