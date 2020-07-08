@@ -379,7 +379,7 @@ export default class Savannah {
     } else if (event.target.id === 'savanna-to-game-start-page') {
       if (showConsoleLog) console.log('na glavnuyu');
       this._returnStartGamePage();
-    // } else if (event.target.classList.contains('soundOnOff')) {
+      // } else if (event.target.classList.contains('soundOnOff')) {
       // document.querySelectorAll('soundOnOff').forEach((element))
     } else if (event.target === this.soundOnIcon) {
       this.soundOffIcon.classList.remove('savanna-display-none');
@@ -652,7 +652,7 @@ export default class Savannah {
     if (showConsoleLog) console.log('correct', this.gameState.statisticCorrectAnswers);
     if (showConsoleLog) console.log('Wrong', this.gameState.statisticWrongAnswers);
     this.gameState.statisticObj = {};
-    const tp = this.gameState.statisticObj;
+    const statObj = this.gameState.statisticObj;
 
     if (this.gameState.isWordsFromBackend) {
       this.gameState.statisticCorrectAnswers.forEach((e) => {
@@ -689,74 +689,82 @@ export default class Savannah {
 
     this.savannaStatisticContent.innerHTML = '';
     if (this.gameState.statisticWrongAnswers.length > 0) {
-      tp.WUl = createEssence('ul', 'word-list', null, null);
-      tp.WPSpan2 = createEssence(
+      statObj.WUl = createEssence('ul', 'word-list', null, null);
+      statObj.WPSpan2 = createEssence(
         'span',
         'badge badge-danger ml-2',
         `${this.gameState.statisticWrongAnswers.length}`,
         null,
       );
-      tp.WPSpan1 = createEssence('span', null, 'Неверно:', null);
-      tp.WP = createEssence('p', 'h5 mb-3', [tp.WPSpan1, tp.WPSpan2], tp.WUl);
-      tp.WLi = [];
+      statObj.WPSpan1 = createEssence('span', null, 'Неверно:', null);
+      statObj.WP = createEssence(
+        'p', 'h5 mb-3', [statObj.WPSpan1, statObj.WPSpan2], statObj.WUl,
+      );
+      statObj.WLi = [];
       for (let i = 0; i < this.gameState.statisticWrongAnswers.length; i += 1) {
-        tp.WLi[i] = {};
-        tp.WLi[i].span1 = createEssence(
+        statObj.WLi[i] = {};
+        statObj.WLi[i].span1 = createEssence(
           'span', 'word h5 text-info', `${this.gameState.statisticWrongAnswers[i].word}`, null,
         );
-        tp.WLi[i].span2 = createEssence('span', 'px-1', '—', null);
-        tp.WLi[i].span3 = createEssence(
+        statObj.WLi[i].span2 = createEssence('span', 'px-1', '—', null);
+        statObj.WLi[i].span3 = createEssence(
           'span', null, `${this.gameState.statisticWrongAnswers[i].wordTranslate}`, null,
         );
-        tp.WLi[i].div2 = createEssence(
-          'div', null, [tp.WLi[i].span1, tp.WLi[i].span2, tp.WLi[i].span3], null,
+        statObj.WLi[i].div2 = createEssence(
+          'div', null,
+          [statObj.WLi[i].span1, statObj.WLi[i].span2, statObj.WLi[i].span3], null,
         );
-        tp.WLi[i].div1 = createEssence(
+        statObj.WLi[i].div1 = createEssence(
           'div', 'text-secondary fas fa-volume-up sound-button h5 mr-2', null, null,
         );
-        tp.WLi[i].li = createEssence(
-          'li', 'statistics-word', [tp.WLi[i].div1, tp.WLi[i].div2], tp.WUl,
+        statObj.WLi[i].li = createEssence(
+          'li', 'statistics-word',
+          [statObj.WLi[i].div1, statObj.WLi[i].div2], statObj.WUl,
         );
       }
-      this.savannaStatisticContent.append(tp.WUl);
+      this.savannaStatisticContent.append(statObj.WUl);
     }
 
     if ((this.gameState.statisticWrongAnswers.length > 0)
       && (this.gameState.statisticCorrectAnswers.length > 0)) {
-      tp.HR = createEssence('hr', null, null, null);
-      this.savannaStatisticContent.append(tp.HR);
+      statObj.HR = createEssence('hr', null, null, null);
+      this.savannaStatisticContent.append(statObj.HR);
     }
 
     // correct statistics
     if (this.gameState.statisticCorrectAnswers.length > 0) {
-      tp.CUl = createEssence('ul', 'word-list', null, null);
-      tp.CPSpan2 = createEssence(
+      statObj.CUl = createEssence('ul', 'word-list', null, null);
+      statObj.CPSpan2 = createEssence(
         'span', 'badge badge-success ml-2',
         `${this.gameState.statisticCorrectAnswers.length}`, null,
       );
-      tp.CPSpan1 = createEssence('span', null, 'Верно:', null);
-      tp.CP = createEssence('p', 'h5 mb-3', [tp.CPSpan1, tp.CPSpan2], tp.CUl);
-      tp.CLi = [];
+      statObj.CPSpan1 = createEssence('span', null, 'Верно:', null);
+      statObj.CP = createEssence(
+        'p', 'h5 mb-3', [statObj.CPSpan1, statObj.CPSpan2], statObj.CUl,
+      );
+      statObj.CLi = [];
       for (let i = 0; i < this.gameState.statisticCorrectAnswers.length; i += 1) {
-        tp.CLi[i] = {};
-        tp.CLi[i].span1 = createEssence(
+        statObj.CLi[i] = {};
+        statObj.CLi[i].span1 = createEssence(
           'span', 'word h5 text-info', `${this.gameState.statisticCorrectAnswers[i].word}`, null,
         );
-        tp.CLi[i].span2 = createEssence('span', 'px-1', '—', null);
-        tp.CLi[i].span3 = createEssence(
+        statObj.CLi[i].span2 = createEssence('span', 'px-1', '—', null);
+        statObj.CLi[i].span3 = createEssence(
           'span', null, `${this.gameState.statisticCorrectAnswers[i].wordTranslate}`, null,
         );
-        tp.CLi[i].div2 = createEssence(
-          'div', null, [tp.CLi[i].span1, tp.CLi[i].span2, tp.CLi[i].span3], null,
+        statObj.CLi[i].div2 = createEssence(
+          'div', null,
+          [statObj.CLi[i].span1, statObj.CLi[i].span2, statObj.CLi[i].span3], null,
         );
-        tp.CLi[i].div1 = createEssence(
+        statObj.CLi[i].div1 = createEssence(
           'div', 'text-secondary fas fa-volume-up sound-button h5 mr-2', null, null,
         );
-        tp.CLi[i].li = createEssence(
-          'li', 'statistics-word', [tp.CLi[i].div1, tp.CLi[i].div2], tp.CUl,
+        statObj.CLi[i].li = createEssence(
+          'li', 'statistics-word',
+          [statObj.CLi[i].div1, statObj.CLi[i].div2], statObj.CUl,
         );
       }
-      this.savannaStatisticContent.append(tp.CUl);
+      this.savannaStatisticContent.append(statObj.CUl);
     }
   }
 
