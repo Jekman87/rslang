@@ -19,4 +19,6 @@ function storage(key, data) {
   return true;
 }
 
-export { capitalize, delay, storage };
+export {
+  capitalize, delay, storage,
+};
