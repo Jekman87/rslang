@@ -1,9 +1,9 @@
 export default function createRulesHTML() {
   return `
-  <div class="rules-content h-100 p-5">
+  <div class="rules-content h-100 p-4 m-3 rounded bg-light">
   <div class="list__folder">
-    <strong>Звуки английского языка</strong>
-    <ul class="list">
+   <h3 class="text-center">Английское произношение.</h3>
+    <ul class="sounds-list">
       <li class="list__folder">
         <strong>Гласные</strong>
         <ul class="list">
