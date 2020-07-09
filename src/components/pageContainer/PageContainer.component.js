@@ -111,6 +111,7 @@ export default class PageContainer extends Component {
     const componentOptions = { ...this.options, dataForApp: this.dataForApp };
     this.$root.clear();
     this.component = new NewGame('.PageContainer', componentOptions);
+
     this.component.render();
   }
 

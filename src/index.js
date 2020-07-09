@@ -10,11 +10,32 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import Settings from './components/settingsPage';
 import Team from './components/teamPage';
 
+import { AudioCall } from './games/audioCall/index';
+import Riddle from './games/riddle/Riddle.render';
+import SpeakIt from './games/speakIt/index';
+import Puzzle from './games/english-puzzle/index';
+import Sprint from './games/sprint/Sprint.render';
+import Savannah from './games/savanna/savanna';
+
 const pages = {
-  Authorization, MainPage, MainGame, Team,
+  Authorization,
+  MainPage,
+  MainGame,
+  Settings,
+  Team,
+  AudioCall,
+  Puzzle,
+  Riddle,
+  Savannah,
+  SpeakIt,
+  Sprint,
 };
 
-const mainApp = new MainApp('#app', { components: [Header, PageContainer], pages });
+const mainApp = new MainApp('#app', {
+  components: [Header, PageContainer],
+  pages,
+});
 mainApp.render();
