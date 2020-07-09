@@ -236,6 +236,7 @@ export default class AudioCall extends Component {
 
   onKeyUp(event) {
     const { code } = event;
+    const wordIndex = code.substring(5);
     const dataAnswer = document.activeElement.getAttribute('data-answer');
 
     switch (code) {
@@ -284,6 +285,36 @@ export default class AudioCall extends Component {
         if (document.activeElement.tagName === 'BODY') {
           this.btnsRoundWords[0].focus();
         } else onArrows('right');
+        break;
+      case 'Digit1':
+      case 'Digit2':
+      case 'Digit3':
+      case 'Digit4':
+      case 'Digit5':
+        if (this.btnsRoundWords[wordIndex - 1].dataset.answer === 'true') {
+          if (this.gameSound) {
+            this.playWinSound();
+          }
+          this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
+          this.onRightAnswer();
+          this.statistics[this.progress - 1].push('success');
+          this.correctContainer.insertAdjacentHTML(
+            'beforeend',
+            insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+          );
+        } else {
+          if (this.gameSound) {
+            this.playWrongSound();
+          }
+          crossTheWord(this.btnsRoundWords[wordIndex - 1]);
+          this.onRightAnswer();
+          this.statistics[this.progress - 1].push('failure');
+          this.mistakesCounter += 1;
+          this.mistakeContainer.insertAdjacentHTML(
+            'beforeend',
+            insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+          );
+        }
         break;
       default:
         break;
