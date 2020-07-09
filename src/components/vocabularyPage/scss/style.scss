@@ -1,47 +1,159 @@
-.vocabulary-wrapper{
-    max-width: 1020px;
-    margin: 0 auto;
-}
-.nav-item:nth-child(2) a.text-info.active{
-    // color:#E74C3C !important;
-    color:#ffffff !important;
-    background-color: #E74C3C;
-}
-.nav-item:first-child a.text-info.active{
-    // color:#18BC9C !important;
-    color:#ffffff !important;
-    background-color:#18BC9C;
-}
-.nav-item:last-child a.text-info.active{
-    // color:#7b8a8b !important;
-    color:#ffffff !important;
-    background-color: #7b8a8b;
-}
-.tab-content{
-    padding-top: 4rem;
-}
-.progress-wrapper{
-    width: 30%;
-    height: 1rem;
-}
-.progress{
-    width: 20%;
-    min-width: 1%;
-    height:0.8rem
-}
-.sound-button,
-.retrieval-button{
-    font-size: 2rem;
-    line-height: 2rem;
-    padding: 0.115rem 0.15rem !important;
-}
-img {
-    width: 5rem;
-    height: auto;
-    transition: all .5s ease-in-out;
-    cursor: pointer;
-}
-img:hover {
-    transform: scale(4) translate(-37%, 36%);
-    z-index: 4;
+.Vocabulary {
+    .vocabulary-wrapper {
+        // max-width: 1020px;
+        // margin: 0 auto;
+        background-color: transparent;
+        padding: 2rem 0;
+        // @media (min-width: 411px) {
+        //     padding: 2rem 1rem;
+        // }
+        @media (min-width: 576px) {
+            padding: 4rem 2rem;
+        }
+    }
+    .display-4 {
+        @media (min-width: 320px) {
+            font-size: 2rem;
+        }
+
+        @media (min-width: 375px) {
+            font-size: 2.4rem;
+        }
+
+        @media (min-width: 411px) {
+            font-size: 2.7rem;
+        }
+
+        @media (min-width: 576px) {
+            font-size: 3.5rem;
+        }
+    }
+    .nav-item:nth-child(2) a.text-info.active {
+        color: #ffffff !important;
+        background-color: #e74c3c;
+    }
+    .nav-item:first-child a.text-info.active {
+        color: #ffffff !important;
+        background-color: #18bc9c;
+    }
+    .nav-item:last-child a.text-info.active {
+        color: #ffffff !important;
+        background-color: #7b8a8b;
+    }
+
+    .nav-link {
+        padding: 0;
+
+        @media (min-width: 411px) {
+            padding: 0.5rem 1rem;
+        }
+
+        @media (min-width: 576px) {
+            padding: 0.5rem 2rem;
+        }
+    }
+
+    .tab-content {
+        padding-top: 4rem;
+        height: 60vh;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 0.5rem;
+            background: transparent;
+            border-radius: 0 0 5px 0;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #ccd4d8d9;
+            border-radius: 10px;
+        }
+    }
+    .tab-pane {
+        width: 98%;
+        margin: 0 auto;
+    }
+    // карточка
+    .breadcrumb-item+.breadcrumb-item {
+        padding-left: 0;
+        @media (min-width: 992px) {
+            padding-left: 0.5rem; 
+        }
+        
+    }
+    .breadcrumb-item+.breadcrumb-item::before {
+       
+        content: "";
+        padding-right: 0;
+        @media (min-width: 992px) {
+            content: "/"; 
+            padding-right: 0.5rem
+        }
+    }
+
+    .progress-wrapper {
+        // width: 30%;
+        height: 1rem;
+        @media (min-width: 576px) {
+            height: 3rem;
+        }
+        @media (min-width: 992px) {
+            height: auto;
+        }
+
+    }
+    .progress {
+        width: 20%;
+        min-width: 1%;
+        height: 0.8rem;
+        @media (min-width: 576px) {
+            width: 100%;
+        }
+        @media (min-width: 992px) {
+            width: 30%;
+        }
+        @media (min-width: 1200px) {
+            width: 40%;
+        }
+    }
+    .word-wrapper {
+        flex-direction: column;
+        @media (min-width: 768px) {
+            flex-direction: row;
+        }
+
+    }
+    .word-image {
+        width: 100%;
+        height: auto;
+        @media (min-width: 411px) {
+            height: 10rem;
+            width: 15rem;
+            align-self: center;
+        }
+        @media (min-width: 768px) {
+            height: 9rem;
+            width: 12rem;
+            align-self: flex-start;
+        }
+
+    }
+    .word-info-wrapper{
+        @media (min-width: 768px) {
+            flex-grow: 1;
+            margin-right: 0.8rem;
+        }
+    }
+    .buttons-wrapper{
+        @media (min-width: 768px) {
+            max-height: 9rem;
+        }
+    }
+    .sound-button,
+    .retrieval-button {
+        font-size: 2rem;
+        line-height: 2rem;
+        padding: 0.115rem 0.15rem !important;
+    }
+    .hidden{
+        display: none;
+    }
 }
