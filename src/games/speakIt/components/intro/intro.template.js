@@ -7,8 +7,11 @@ export default function createIntroHTML() {
         Нажмите на карточку со словом, чтобы услышать, как оно произносится.</br>
         Нажмите на кнопку "Говорить" и произнесите в микрофон по очереди все слова которые видите на карточках.
       </p>
-      <button data-action="start" class="btn btn-warning btn-lg">
-        Начать
+      <button type="button" class="btn btn-warning btn-lg mt-1" data-action="start">
+        Начать <i class="fas fa-gamepad" data-action="start"></i>
+      </button>
+      <button type="button" class="btn btn-secondary btn-lg mt-1" data-action="exit">
+        Выход <i class="fas fa-power-off" data-type="exit"></i>
       </button>
     </div>
   </div>

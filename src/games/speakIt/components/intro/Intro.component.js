@@ -49,6 +49,10 @@ export default class Intro extends Component {
         }
       }
     }
+    if (clickedElement.data.action === 'exit') {
+      this.dataForApp.destroy();
+      this.mainObserver.emit('selectPage', 'MainPage');
+    }
   }
 
   toHTML() {
