@@ -50,6 +50,7 @@ export default class SpeakIt {
     $body.css({
       background: `linear-gradient(rgba(0,0,0,.67) 0%, rgba(0,0,0,.67) 100%), 
       url("/assets/speakit/img/bg.jpg") no-repeat center center / cover`,
+      opacity: 0,
     });
 
     this.$el.append(this.getRoot());
