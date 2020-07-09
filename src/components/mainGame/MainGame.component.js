@@ -5,8 +5,11 @@ import createMainGameHTML from './mainGame.template';
 import { delay } from '../../core/utils';
 
 import { FILE_URL } from '../../constants/constants';
-import { timers } from 'jquery';
+// import UserWord from '../../core/UserWord';
 // import BASE_USER_WORD from '../../constants/user-word.constants';
+const DIFFICULTY = {
+  again: 0, hard: 1, good: 2, easy: 3,
+};
 
 export default class MainGame extends Component {
   static className = 'MainGame';
@@ -21,8 +24,11 @@ export default class MainGame extends Component {
     this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
-    this.userCards = this.dataForApp.userCards;
+    this.newWords = this.dataForApp.newWords;
     this.userWords = this.dataForApp.userWords;
+    this.todayWordsToRepeat = this.dataForApp.todayWordsToRepeat;
+    this.userCards = this.dataForApp.userCards;
+
     this.state = {
       currentCardNum: 0,
       studiedСardNum: 0,
@@ -58,6 +64,7 @@ export default class MainGame extends Component {
       $prevBtn: this.$root.find('.navigate-button.prev i'),
       $nextBtn: this.$root.find('.navigate-button.next i'),
       $studiedСardNum: this.$root.find('#studied-card-num'),
+      $maxStudiedCards: this.$root.find('#max-studied-cards'),
       $progressBar: this.$root.find('.progress-bar'),
     };
   }
@@ -77,10 +84,10 @@ export default class MainGame extends Component {
 
       case 'next-btn':
         // доработать повторное нажатие
-        if (this.state.currentCardNum >= this.state.studiedСardNum) {
+        if (this.state.currentCardNum === this.state.studiedСardNum) {
           this.checkWord();
         } else {
-          this.changeCard(1);
+          this.changeCard();
         }
 
         break;
@@ -90,28 +97,32 @@ export default class MainGame extends Component {
         // ручное уплавление алгоритмом - again
         // пометка - слово повторить скоро - 1 мин?
         // переход на след карту
-        this.changeCard(1);
+        this.setDifficulty(DIFFICULTY.again);
+        this.changeCard();
         break;
 
       case 'hard-btn':
         // ручное уплавление алгоритмом - hard
         // пометка - слово повторить скоро - 10 мин?
         // переход на след карту
-        this.changeCard(1);
+        this.setDifficulty(DIFFICULTY.hard);
+        this.changeCard();
         break;
 
       case 'good-btn':
         // ручное уплавление алгоритмом - good
         // пометка - слово повторить скоро - 1 день?
         // переход на след карту
-        this.changeCard(1);
+        this.setDifficulty(DIFFICULTY.good);
+        this.changeCard();
         break;
 
       case 'easy-btn':
         // ручное уплавление алгоритмом - easy
         // пометка - слово повторить скоро - 2 дня?
         // переход на след карту
-        this.changeCard(1);
+        this.setDifficulty(DIFFICULTY.easy);
+        this.changeCard();
         break;
 
       case 'delete-btn':
@@ -119,7 +130,7 @@ export default class MainGame extends Component {
         // убираем из карточек
         // айди слова - сохраняем персональную? статистику - в удаленные
         // переход на след карту
-        this.changeCard(1);
+        this.changeCard();
         break;
 
       case 'difficult-btn':
@@ -127,7 +138,7 @@ export default class MainGame extends Component {
         // убираем из карточек ?
         // айди слова - сохраняем персональную? статистику - в сложные
         // переход на след карту
-        this.changeCard(1);
+        this.changeCard();
         break;
 
       case 'show-answer-btn':
@@ -137,7 +148,7 @@ export default class MainGame extends Component {
         // аудио
         // переходим автоматом или пользователю нужно ввести слово?
         // переход на след карту
-        this.changeCard(1);
+        this.changeCard();
         break;
 
       case 'volume-btn':
@@ -156,10 +167,10 @@ export default class MainGame extends Component {
     const keyEnter = 'Enter';
 
     if (event.key === keyEnter) {
-      if (this.state.currentCardNum >= this.state.studiedСardNum) {
+      if (this.state.currentCardNum === this.state.studiedСardNum) {
         this.checkWord();
       } else {
-        this.changeCard(1);
+        this.changeCard();
       }
     }
   }
@@ -176,8 +187,10 @@ export default class MainGame extends Component {
     // проверяем инпут на соответствие
     // проверка на текущее изучаемое слово для листания
     if (inputText === currentWord) {
-      // отметка ок в статистике
+      // отметка ок в статистике лова
+      // статистика пользователя дневная и долгосрочная
       // учесть окончание карточек
+
       // перенести в функцию? showWordInSentence()
       this.elements.$wordExample.addClass('show-word');
       this.elements.$wordMeaning.addClass('show-word');
@@ -186,6 +199,11 @@ export default class MainGame extends Component {
       if (this.settingsOptional.feedbackButtons) {
         this.elements.$cardFooter.removeClass('invisible');
       }
+
+      // статистика слова
+      // статистика пользователя
+      this.state.studiedСardNum += 1;
+
       // воспроизведение аудио в зависимости от настроек +
       if (this.settingsOptional.autoSound) {
         await this.speakText();
@@ -196,19 +214,13 @@ export default class MainGame extends Component {
         await delay(1500);
       }
 
-      // статистика слова
-      // статистика пользователя
-
-      this.state.studiedСardNum += 1;
-      this.elements.$studiedСardNum.text(this.state.studiedСardNum);
-      const percent = (this.state.studiedСardNum / this.settingsOptional.cardsPerDay) * 100;
-      this.elements.$progressBar.css({ width: `${percent}%` });
-
       // после аудио либо автоматом на след слово
       // либо ждем реакции через кнопки фидбэка, если они включены
-      if (this.settingsOptional.feedbackButtons) { // добавить '!'
+      if (!this.settingsOptional.feedbackButtons) { // добавить '!'
         // переход на след карту
-        this.changeCard(1);
+        // если кнопки выкючены - сами определяем алгоритм
+        this.setDifficulty(DIFFICULTY.good);
+        this.changeCard();
       }
 
       // через кнопки сложности переход на след слово
@@ -230,6 +242,7 @@ export default class MainGame extends Component {
 
     await this.playAudio(currentCard.audio);
 
+    // чекнуть идет ли проверка карты сейчас?
     if (this.settingsOptional.cardExample) {
       await this.playAudio(currentCard.audioExample);
     }
@@ -250,7 +263,7 @@ export default class MainGame extends Component {
   }
 
   changeCard(step = 1) {
-    console.log('change card');
+    console.log('change card 1', this.state);
     const nextCandNum = this.state.currentCardNum + step;
 
     if (nextCandNum < 0 || nextCandNum + 1 < this.state.studiedСardNum
@@ -263,7 +276,7 @@ export default class MainGame extends Component {
 
     if (nextCandNum === 0 || nextCandNum < this.state.studiedСardNum) {
       this.elements.$prevBtn.addClass('arrow-disabled');
-    } else if (nextCandNum + 1 === this.settingsOptional.cardsPerDay) {
+    } else if (nextCandNum + 1 === this.dataForApp.userCards.length) {
       this.elements.$nextBtn.addClass('arrow-disabled');
     } else {
       this.elements.$prevBtn.removeClass('arrow-disabled');
@@ -271,6 +284,11 @@ export default class MainGame extends Component {
     }
 
     this.elements.$cardFooter.addClass('invisible');
+
+    this.elements.$studiedСardNum.text(this.state.studiedСardNum);
+    this.elements.$maxStudiedCards.text(this.userCards.length);
+    const percent = (this.state.studiedСardNum / this.userCards.length) * 100;
+    this.elements.$progressBar.css({ width: `${percent}%` });
 
     const word = this.userCards[nextCandNum];
     // из статистики берем
@@ -298,64 +316,74 @@ export default class MainGame extends Component {
     }
 
     this.state.currentCardNum = nextCandNum;
+    console.log('change card 2', this.state);
   }
 
-  getTodayWordsToRepeat() {
-    let todayWordsToRepeat = [];
-
-    if (this.userWords.lenght) {
-      // определяем время ресета - след день 4 утра
-      const time = new Date();
-      const hour = time.getHours();
-      if (hour >= 4) time.setDate(time.getDate() + 1);
-      const resetDayTime = time.setHours(4, 0);
-
-      todayWordsToRepeat = this.userWords
-        .filter((word) => word.optional.nextRepeat < resetDayTime);
+  setDifficulty(wordDifficulty) {
+    const word = this.userCards[this.state.currentCardNum];
+    console.log('setDifficulty word', word);
+    // определяем сложность для слова
+    // сохраняем само слово
+    // сохраняем статистику пользователя за день
+    // долгосрочная статистика
+    // если нужно добавляем в массив карточек
+    // либо через одно либо в конец
+    if (wordDifficulty === DIFFICULTY.again) {
+      // пометка статистики
+      // в конец user card если меньше 50ти (настройки)
+      // иначе в начало массива повторений
+      if (this.userCards.length < 50) {
+        this.userCards.push(word);
+      } else {
+        this.todayWordsToRepeat.unshift(word);
+      }
     }
 
-    return todayWordsToRepeat;
-  }
-
-  intervalRepetitionAlgorithm() {
-    const todayWordsToRepeat = this.getTodayWordsToRepeat();
-
-    if (todayWordsToRepeat.lenght) {
-      // если есть слова пользователя, фильтруем и находим слова на сегодня
-      // если на сегодня нет - берем с бекенда следующие
-      // в зависимости от последней карты, на которой остановились
-      // если есть карты на сегодня - в любом случае добираем
-      // новыми словами с последней карты
-
-    } else {
-      // если нет, значит пользователь играет в первый раз
-      // либо на сегодня нет слов для повторения
-      // берем с бекенда с самого начала или с последней точки
-      // this.userCards;
+    if (wordDifficulty === DIFFICULTY.hard) {
+      // пометка статистики
+      this.todayWordsToRepeat.push(word);
     }
 
-    // миксовать карты
-    // на повторение (если есть) - новые - повторение новых
+    if (wordDifficulty === DIFFICULTY.good) {
+      // пометка статистики
+      // если в первый раз - на повторение тоже
+      if (word) {
+        this.todayWordsToRepeat.push(word);
+      }
+    }
 
-    /*
-    первым делом идут карты на повторение, затем новые слова
-    нет на повторении - начинаем с новых
-    сейчас 20 карточек, нужно добить до 50
-    изначальные 20 - новые слова - лучше увеличивать при  хорошем прогрессе
-    при угадывании/неугадывании - идет пометка в статистику слова
-
-    вначале 10 новых слов - 10 повторений
-    10 новых, 10 повторений - итого 40
-    еще 10 заполнить теми, где были ошибки/нажата кнопка "снова", из 1й партии
-    или сделать меньше карт? На сегодня карт больше нет...
-    динамическая смена количества карт??!
-    несколько прогрессбаров
-    новые слова, изучаемые на повторении
-
-    далее (след день) начать с повтора 20 карт? или части из них, которые сложные
-
-    */
+    if (wordDifficulty === DIFFICULTY.easy) {
+      // пометка статистики
+    }
   }
+
+  /*
+  первым делом идут карты на повторение, затем новые слова
+  нет на повторении - начинаем с новых
+  сейчас 20 карточек, нужно добить до 50
+  изначальные 20 - новые слова - лучше увеличивать при  хорошем прогрессе
+  при угадывании/неугадывании - идет пометка в статистику слова
+
+  вначале 10 новых слов - 10 повторений
+  10 новых, 10 повторений - итого 40
+  еще 10 заполнить теми, где были ошибки/нажата кнопка "снова", из 1й партии
+  или сделать меньше карт? На сегодня карт больше нет...
+  динамическая смена количества карт??!
+  несколько прогрессбаров
+  новые слова, изучаемые на повторении
+
+  далее (след день) начать с повтора 20 карт? или части из них, которые сложные
+
+  */
+
+  // если есть слова для повторения на сегодня
+  // если на сегодня нет - берем с бекенда следующие
+  // в зависимости от последней карты, на которой остановились
+  // если есть карты на сегодня - в любом случае добираем
+  // новыми словами с последней карты
+  // если нет, значит пользователь играет в первый раз
+  // либо на сегодня нет слов для повторения
+  // берем с бекенда с самого начала или с последней точки
 
   destroy() {
     super.destroy();

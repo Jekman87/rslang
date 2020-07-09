@@ -1,8 +1,9 @@
 const BASE_DATA_FOR_APP = {
   settings: null,
   statistics: null,
-  userCards: null,
   userWords: null,
+  newWords: null,
+  userCards: [],
   state: null,
 };
 

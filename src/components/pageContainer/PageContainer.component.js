@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import { storage } from '../../core/utils';
@@ -6,6 +7,10 @@ import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 import BASE_SETTINGS from '../../constants/settings.constants';
 import BASE_STATS from '../../constants/stats.constants';
 import BASE_DATA_FOR_APP from '../../constants/data-for-app.constants';
+
+const WORDS_PER_STEP = 10;
+const WORDS_PER_PAGE = 20;
+const LAST_PAGE_NUM = 29;
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -22,7 +27,17 @@ export default class PageContainer extends Component {
     this.options = options;
     this.pages = options.pages;
     this.component = options.startPage;
-    this.dataForApp = { ...BASE_DATA_FOR_APP };
+    this.dataForApp = null;
+
+    this.settings = null;
+    this.statistics = null;
+    this.longTermStats = null;
+    this.shortTermStats = null;
+
+    this.userWords = null;
+    this.todayWordsToRepeat = null;
+    this.newWords = null;
+    this.userCards = [];
   }
 
   init() {
@@ -66,10 +81,21 @@ export default class PageContainer extends Component {
 
   async renderPage(NewPage) {
     if (NewPage.className !== AUTH_PAGE_NAME
-      && (!this.dataForApp.settings || !this.dataForApp.statistics)) {
+      && (!this.settings || !this.statistics)) {
       // add loader?
       await this.initSettingsAndStats();
-      await this.initWords();
+      await this.loadWords();
+      this.createStartUserCards();
+      this.dataForApp = {
+        settings: this.settings,
+        statistics: this.statistics,
+        userWords: this.userWords,
+        todayWordsToRepeat: this.todayWordsToRepeat,
+        newWords: this.newWords,
+        userCards: this.userCards,
+        longTermStats: this.longTermStats,
+        shortTermStats: this.shortTermStats,
+      };
       // remove loader?
     }
 
@@ -86,21 +112,6 @@ export default class PageContainer extends Component {
     this.$root.clear();
     this.component = new NewGame('.PageContainer', componentOptions);
     this.component.render();
-    console.log('renderGame', componentOptions);
-
-    // одинаковый интерфейс для всех игр
-    // this.component = new NewGame('.PageContainer', this.options);
-    // this.component.render();
-    // .PageContainer - в этот контейнер рендерится ваша игра
-    // в this.options содержатся observer и api
-    // чтобы вернуться в главное приложение вы можете вызвать событие
-    // this.options.observer.emit('selectPage', 'MainPage');
-    // чтобы выйти на страницу авторизации используйте
-    // this.options.observer.emit('mainLogout');
-    // в this.options.api уже содержатся token and userId
-    // также в этом объекте есть все необходимые методы
-    // чтобы раборало меню, поправьте название вашего класса в
-    // /constants/menu.constants
   }
 
   async initSettingsAndStats() {
@@ -110,7 +121,22 @@ export default class PageContainer extends Component {
         this.options.api.getStatistics(),
       ]);
 
-      [this.dataForApp.settings, this.dataForApp.statistics] = data;
+      [this.settings, this.statistics] = data;
+
+      const longStatsJson = this.statistics.optional.MainGameLong;
+
+      if (longStatsJson) {
+        this.longTermStats = JSON.parse(longStatsJson);
+      }
+
+      const shortStatsJson = this.statistics.optional.MainGameShort;
+
+      if (shortStatsJson) {
+        this.shortTermStats = JSON.parse(shortStatsJson);
+      }
+
+      console.log('this.settings', this.settings);
+      console.log('this.statistics', this.statistics);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -129,7 +155,7 @@ export default class PageContainer extends Component {
     }
   }
 
-  async initWords() {
+  async loadWords() {
     try {
       // загружать все слова пользователя?
       // по ним смотреть что нужно повторить
@@ -139,16 +165,52 @@ export default class PageContainer extends Component {
       // первым делом идут карты на повторение, затем новые слова
       // нет на повторении - начинаем с новых
       // преобразуем порядок слов? Составляем карточки? AggregatedWords
-      const page = 0;
-      const group = 0;
+
+      // подгружаем нужное количество карточек в зависимости от настроек
+      // this.dataForApp.settings.wordsPerDay;
+
+      // проверить на удаленные
+      // фильтр для userWords
+
+      // в статистике будет сохранено последнее слово
+      // берем его айди и определяем где оно находится
+      let userAggregatedWords;
+      let group = 0;
+      let page = 0;
+
+      if (this.longTermStats) {
+        const { lastWordId } = this.longTermStats;
+        const lastWord = await this.options.api.getUserAggregatedWordById(lastWordId);
+        group = lastWord[0].group;
+        page = lastWord[0].page;
+      }
+
+      const filter = this.createUserWordsFilter(group, page);
+      // const filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}';
+      // const filter = '{"$or":[{"page":0},{"page":1}]}';
+      // const filter = `{"$and":[{"group":${group},"page":${page}}]}`;
+      // const filter = '{"userWord":{"$exists":false}}';
+      // {"$and":[{"userWord":{"$ne":null}, "group":3}]}
+      // {"$and":[{"userWord":{"$exists": true}},{"userWord.difficulty":{"$ne": "easy"}}]}
+
       const data = await Promise.all([
-        this.options.api.getWords(page, group),
+        this.options.api.getAllUserAggregatedWords(null, 90, filter),
         this.options.api.getAllUserWords(),
       ]);
 
-      [this.dataForApp.userCards, this.dataForApp.userWords] = data;
-      console.log('userCards', this.dataForApp.userCards);
-      console.log('userWords', this.dataForApp.userWords);
+      [userAggregatedWords, this.userWords] = data;
+      userAggregatedWords = userAggregatedWords[0].paginatedResults;
+
+      if (this.longTermStats) {
+        const { lastWordId } = this.longTermStats;
+        const lastWordIndex = userAggregatedWords.findIndex((word) => word._id === lastWordId);
+        this.newWords = userAggregatedWords.splice(lastWordIndex + 1, this.settings.wordsPerDay);
+      } else {
+        this.newWords = userAggregatedWords;
+      }
+
+      console.log('newWords', this.newWords);
+      console.log('userWords', this.userWords);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -157,6 +219,89 @@ export default class PageContainer extends Component {
         console.log('Другая ошибка: ', error.message);
       }
     }
+  }
+
+  createUserWordsFilter(group, page) {
+    const additionalPages = Math.ceil((this.settings.wordsPerDay) / WORDS_PER_PAGE);
+    const pageOffset = this.longTermStats ? 1 : 0;
+    let filter = '';
+
+    if (page + additionalPages > LAST_PAGE_NUM) {
+      const pageFilterArrA = [];
+      const pageFilterArrB = [];
+
+      [...Array(additionalPages + pageOffset)].forEach((_, index) => {
+        let pageNum = page + index;
+
+        if (pageNum > LAST_PAGE_NUM) {
+          pageNum -= LAST_PAGE_NUM + 1;
+          pageFilterArrB.push(`{"page":${pageNum}}`);
+        } else {
+          pageFilterArrA.push(`{"page":${pageNum}}`);
+        }
+      });
+
+      const pageFilterA = pageFilterArrA.join(',');
+      const pageFilterB = pageFilterArrB.join(',');
+
+      filter = `{"$or":[
+        {"$and":[{"group":${group}},{"$or":[${pageFilterA}]}]},
+        {"$and":[{"group":${group + 1}},{"$or":[${pageFilterB}]}]}
+      ]}`;
+    } else {
+      const pageFilterArr = [...Array(additionalPages + pageOffset)]
+        .map((_, index) => `{"page":${page + index}}`);
+
+      const pageFilter = pageFilterArr.join(',');
+      filter = `{"$and":[{"$or":[{"group":${group}}]},{"$or":[${pageFilter}]}]}`;
+    }
+
+    return filter;
+  }
+
+  // подготовка массива карт
+  createStartUserCards() {
+    this.todayWordsToRepeat = this.getTodayWordsToRepeat();
+
+    if (this.todayWordsToRepeat.length) {
+      if (this.todayWordsToRepeat.length > WORDS_PER_STEP) {
+        this.userCards.push(...this.todayWordsToRepeat.splice(0, WORDS_PER_STEP));
+        // карточки еще останутся и перейдут либо в конец либо на след тренировку
+      } else {
+        this.userCards.push(...this.todayWordsToRepeat);
+      }
+    }
+    // далее добавляем новые слова
+    if (this.newWords.length > WORDS_PER_STEP) {
+      this.userCards.push(...this.newWords.splice(0, WORDS_PER_STEP));
+    } else {
+      this.userCards.push(...this.newWords);
+    }
+    console.log('this.userCards', this.userCards);
+  }
+
+  getTodayWordsToRepeat() {
+    let todayWordsToRepeat = [];
+
+    if (this.userWords.length) {
+      // определяем время ресета - след день 4 утра
+      const time = new Date();
+      const hour = time.getHours();
+      if (hour >= 4) time.setDate(time.getDate() + 1);
+      const resetDayTime = time.setHours(4, 0);
+
+      // берем слова на сегодня и сортируем по возрастанию
+      // чтобы повторять сначала самые старые
+
+      // проверить на удаленные или фильтр?
+      // чекать время в фильтре?
+      todayWordsToRepeat = this.userWords
+        .filter((word) => word.optional.nextRepeat < resetDayTime)
+        .sort((wordA, wordB) => wordA.optional.nextRepeat - wordB.optional.nextRepeat);
+    }
+
+    // todayWordsToRepeat.length - столько слов на повторении на сегодня?
+    return todayWordsToRepeat;
   }
 
   destroy() {

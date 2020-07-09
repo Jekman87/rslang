@@ -76,7 +76,7 @@ export default function createMainGameHTML(dataForApp) {
             <div class="progress-bar bg-info" role="progressbar" style="width: ${((studiedСardNum) / settingsOptional.cardsPerDay) * 100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
-        <div class="col-1 text-center">${settingsOptional.cardsPerDay}</div>
+        <div class="col-1 text-center" id="max-studied-cards">${dataForApp.userCards.length}</div>
       </div>
     </div>
   `;
