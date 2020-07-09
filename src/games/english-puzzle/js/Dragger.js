@@ -6,7 +6,22 @@ export default class Dragger {
   }
 
   init() {
-    document.addEventListener('mousedown', this.handleMouseDown.bind(this));
+    this.bindMethods();
+    this.addListeners();
+  }
+
+  bindMethods() {
+    this.bindedMethods = {
+      handleMouseDown: this.handleMouseDown.bind(this),
+    };
+  }
+
+  addListeners() {
+    document.addEventListener('mousedown', this.bindedMethods.handleMouseDown);
+  }
+
+  destroy() {
+    document.removeEventListener('mousedown', this.bindedMethods.handleMouseDown);
   }
 
   handleMouseDown(e) {

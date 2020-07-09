@@ -6,8 +6,25 @@ export default class HelpersController {
   }
 
   init() {
-    this.helpersBlock.addEventListener('click', this.changeHelperStatus.bind(this));
-    document.addEventListener('newData', this.displayHelpersStatus.bind(this));
+    this.bindMethods();
+    this.addListeners();
+  }
+
+  bindMethods() {
+    this.bindedMethods = {
+      changeHelperStatus: this.changeHelperStatus.bind(this),
+      displayHelpersStatus: this.displayHelpersStatus.bind(this),
+    };
+  }
+
+  addListeners() {
+    this.helpersBlock.addEventListener('click', this.bindedMethods.changeHelperStatus);
+    document.addEventListener('newData', this.bindedMethods.displayHelpersStatus);
+  }
+
+  destroy() {
+    this.helpersBlock.removeEventListener('click', this.bindedMethods.changeHelperStatus);
+    document.removeEventListener('newData', this.bindedMethods.displayHelpersStatus);
   }
 
   changeHelperStatus(e) {

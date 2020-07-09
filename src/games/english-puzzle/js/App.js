@@ -7,11 +7,11 @@ import DataLoader from './DataLoader';
 import LevelsController from './LevelsController';
 
 export default class App {
-  constructor(api, statistics) {
+  constructor(api, statistics, observer) {
     this.storage = new Storage(api, statistics);
     this.reporter = new Reporter();
     this.loader = new DataLoader(this.storage, this.reporter);
-    this.gameController = new GameController(this.storage, this.reporter);
+    this.gameController = new GameController(this.storage, this.reporter, observer);
     this.dragger = new Dragger();
     this.helpController = new HelpersController(this.storage);
     this.lvlController = new LevelsController(this.storage);
@@ -28,8 +28,18 @@ export default class App {
   }
 
   start() {
-    const startPageBg = new Image();
-    startPageBg.onload = () => document.querySelector('div.start-page').classList.remove('invisible');
-    startPageBg.src = '/assets/puzzle/img/start-page.jpg';
+    this.startPageBg = new Image();
+    this.startPageBg.onload = () => document.querySelector('div.start-page').classList.remove('invisible');
+    this.startPageBg.src = '/assets/puzzle/img/start-page.jpg';
+  }
+
+  destoy() {
+    this.storage.destroy();
+    this.loader.destroy();
+    this.dragger.destroy();
+    this.helpController.destroy();
+    this.lvlController.destroy();
+    this.gameController.destroy();
+    this.startPageBg.onload = '';
   }
 }

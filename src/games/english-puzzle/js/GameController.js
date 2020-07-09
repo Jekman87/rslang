@@ -5,15 +5,17 @@ import paintings from './paintingsInfo';
 import { defaultSlide, tableHeader } from './templates';
 
 export default class GameController {
-  constructor(storage, reporter) {
+  constructor(storage, reporter, observer) {
     this.storage = storage;
     this.repoter = reporter;
     this.puzzleDrawer = new PuzzleDrawer();
     this.audioHelp = new Audio();
+    this.externalObserver = observer;
   }
 
   init() {
     this.defineElems();
+    this.bindMethods();
     this.addListeners();
   }
 
@@ -48,23 +50,59 @@ export default class GameController {
     };
   }
 
+  bindMethods() {
+    this.bindedMethods = {
+      handleWindowResize: this.handleWindowResize.bind(this),
+      handleNewData: this.handleNewData.bind(this),
+      handleHelperStatusChange: this.handleHelperStatusChange.bind(this),
+      handleAnswer: this.handleAnswer.bind(this),
+      handleUserAction: this.handleUserAction.bind(this),
+      closePopUp: this.closePopUp.bind(this),
+      startGame: this.startGame.bind(this),
+      exit: this.exit.bind(this),
+      playAudio: this.playAudio.bind(this),
+      playByClick: this.playByClick.bind(this),
+      removePlayEffect: this.removePlayEffect.bind(this),
+    };
+  }
+
   addListeners() {
-    window.addEventListener('resize', this.handleWindowResize.bind(this));
-    document.addEventListener('newData', this.handleNewData.bind(this));
-    document.addEventListener('helperStatusChange', this.handleHelperStatusChange.bind(this));
+    window.addEventListener('resize', this.bindedMethods.handleWindowResize);
+    document.addEventListener('newData', this.bindedMethods.handleNewData);
+    document.addEventListener('helperStatusChange', this.bindedMethods.handleHelperStatusChange);
 
-    this.elems.answerBlock.addEventListener('click', this.handleAnswer.bind(this));
-    this.elems.nextRoundBlock.addEventListener('click', this.handleUserAction.bind(this));
+    this.elems.answerBlock.addEventListener('click', this.bindedMethods.handleAnswer);
+    this.elems.nextRoundBlock.addEventListener('click', this.bindedMethods.handleUserAction);
 
-    this.elems.closeBtn.addEventListener('click', this.closePopUp.bind(this));
+    this.elems.closeBtn.addEventListener('click', this.bindedMethods.closePopUp);
 
-    this.elems.startBtn.addEventListener('click', this.startGame.bind(this));
-    this.elems.exitBtn.addEventListener('click', this.exit.bind(this));
+    this.elems.startBtn.addEventListener('click', this.bindedMethods.startGame);
+    this.elems.exitBtn.addEventListener('click', this.bindedMethods.exit);
 
-    this.elems.playBtn.addEventListener('click', this.playAudio.bind(this));
-    this.elems.resultsBlock.addEventListener('click', this.playByClick.bind(this));
-    this.audioHelp.addEventListener('ended', this.removePlayEffect.bind(this));
-    this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
+    this.elems.playBtn.addEventListener('click', this.bindedMethods.playAudio);
+    this.elems.resultsBlock.addEventListener('click', this.bindedMethods.playByClick);
+    this.audioHelp.addEventListener('ended', this.bindedMethods.removePlayEffect);
+    this.audioHelp.addEventListener('abort', this.bindedMethods.removePlayEffect);
+  }
+
+  destroy() {
+    window.removeEventListener('resize', this.bindedMethods.handleWindowResize);
+    document.removeEventListener('newData', this.bindedMethods.handleNewData);
+    document.removeEventListener('helperStatusChange', this.bindedMethods.handleHelperStatusChange);
+    this.elems.answerBlock.removeEventListener('click', this.bindedMethods.handleAnswer);
+    this.elems.nextRoundBlock.removeEventListener('click', this.bindedMethods.handleUserAction);
+    this.elems.closeBtn.removeEventListener('click', this.bindedMethods.closePopUp);
+    this.elems.startBtn.removeEventListener('click', this.bindedMethods.startGame);
+    this.elems.exitBtn.removeEventListener('click', this.bindedMethods.exit);
+    this.elems.playBtn.removeEventListener('click', this.bindedMethods.playAudio);
+    this.elems.resultsBlock.removeEventListener('click', this.bindedMethods.playByClick);
+    this.audioHelp.removeEventListener('ended', this.bindedMethods.removePlayEffect);
+    this.audioHelp.removeEventListener('abort', this.bindedMethods.removePlayEffect);
+
+    this.elems.imgHelp.onload = '';
+    this.audioHelp.onplay = '';
+    this.audioHelp.onended = '';
+    document.removeEventListener('click', this.bindedFn);
   }
 
   startGame() {
@@ -568,7 +606,7 @@ export default class GameController {
   }
 
   exit() {
-    document.location.reload(true);
+    this.externalObserver.emit('selectPage', 'MainPage');
   }
 
   get(prop) {

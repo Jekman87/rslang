@@ -23,16 +23,25 @@ export default class Storage {
   }
 
   init() {
-    document.addEventListener('userDataChange', this.updateUserData.bind(this));
+    this.bindMethods();
+    this.addListeners();
 
-    if (!this.sharedStatObj.optional.PuzzleLong) {
-      this.sharedStatObj.optional.PuzzleLong = JSON.stringify([]);
-    }
-    if (!this.sharedStatObj.optional.PuzzleMain) {
-      this.sharedStatObj.optional.PuzzleMain = JSON.stringify(userBasicSettings);
-    }
-
+    this.checkUserData();
     this.setUserData();
+  }
+
+  bindMethods() {
+    this.bindedMethods = {
+      updateUserData: this.updateUserData.bind(this),
+    };
+  }
+
+  addListeners() {
+    document.addEventListener('userDataChange', this.bindedMethods.updateUserData);
+  }
+
+  destroy() {
+    document.removeEventListener('userDataChange', this.bindedMethods.updateUserData);
   }
 
   setProp(propName, value) {
@@ -41,6 +50,15 @@ export default class Storage {
 
   getProp(propName) {
     return this[propName];
+  }
+
+  checkUserData() {
+    if (!this.sharedStatObj.optional.PuzzleLong) {
+      this.sharedStatObj.optional.PuzzleLong = JSON.stringify([]);
+    }
+    if (!this.sharedStatObj.optional.PuzzleMain) {
+      this.sharedStatObj.optional.PuzzleMain = JSON.stringify(userBasicSettings);
+    }
   }
 
   setUserData() {
