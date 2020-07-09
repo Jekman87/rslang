@@ -348,15 +348,19 @@ export default class GameController {
   }
 
   compare(e) {
+    const correctAnswers = this.get('sentencesData')[this.sentenceIndex].text;
     const answers = this.elems.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
 
     answers.forEach((word, i) => {
-      if (Number(word.dataset.idx) !== i) {
+      if (word.dataset.content !== correctAnswers[i]) {
         this.isCorrect = false;
         word.classList.add('incorrect');
       } else {
         word.classList.add('correct');
+        if (Number(word.dataset.idx) !== i) {
+          word.dataset.idx = i;
+        }
       }
     });
 
