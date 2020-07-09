@@ -11,7 +11,7 @@ import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 
-import { AudioCall } from './games/audioCall/index';
+import AudioCall from './games/audioCall/index';
 import Team from './components/teamPage';
 import Settings from './components/settingsPage';
 

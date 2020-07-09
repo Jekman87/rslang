@@ -125,7 +125,13 @@ export default class AudioCall extends Component {
       case 'close':
         this.options.observer.emit('selectPage', 'MainPage');
         break;
+      case 'settings':
+        document.querySelector('.audiocall-setting-card').classList.toggle('setting-card-opened');
+        break;
       case 'startGame':
+        this.gameLevel = document.getElementById('audiocallGameLevel').value;
+        this.gameWithNewWords = document.getElementById('audiocallisLearnedWords2').checked;
+        console.log(this.gameWithNewWords);
         this.app.innerHTML = '';
         this.renderGame();
         break;
