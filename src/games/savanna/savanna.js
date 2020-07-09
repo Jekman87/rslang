@@ -396,6 +396,9 @@ export default class Savannah {
       this.options.observer.emit('selectPage', 'MainPage');
     } else if (event.target === this.startSavannaGameButton) {
       this._startGame();
+    } else if (event.target.classList.contains('savanna-statistic-sound-button')) {
+      const savannaStatSoundID = event.target.dataset.soundID;
+      document.getElementById(savannaStatSoundID).play().catch(() => true);
     }
   }
 
@@ -715,7 +718,12 @@ export default class Savannah {
           [statObj.WLi[i].span1, statObj.WLi[i].span2, statObj.WLi[i].span3], null,
         );
         statObj.WLi[i].div1 = createEssence(
-          'div', 'text-secondary fas fa-volume-up sound-button h5 mr-2', null, null,
+          'div', 'text-secondary fas fa-volume-up savanna-statistic-sound-button h5 mr-2', null, null, ['soundID', `savannaAudioWrongStatistic${i}`],
+        );
+        statObj.WLi[i].audio = createEssence(
+          'audio', 'savanna-audio-source-statistic', null, statObj.WLi[i].div1,
+          ['id', `savannaAudioWrongStatistic${i}`],
+          ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticWrongAnswers[i].audio}`],
         );
         statObj.WLi[i].li = createEssence(
           'li', 'statistics-word',
@@ -757,7 +765,12 @@ export default class Savannah {
           [statObj.CLi[i].span1, statObj.CLi[i].span2, statObj.CLi[i].span3], null,
         );
         statObj.CLi[i].div1 = createEssence(
-          'div', 'text-secondary fas fa-volume-up sound-button h5 mr-2', null, null,
+          'div', 'text-secondary fas fa-volume-up savanna-statistic-sound-button h5 mr-2', null, null, ['soundID', `savannaAudioCorrectStatistic${i}`],
+        );
+        statObj.CLi[i].audio = createEssence(
+          'audio', 'savanna-audio-source-statistic', null, statObj.CLi[i].div1,
+          ['id', `savannaAudioCorrectStatistic${i}`],
+          ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticCorrectAnswers[i].audio}`],
         );
         statObj.CLi[i].li = createEssence(
           'li', 'statistics-word',
