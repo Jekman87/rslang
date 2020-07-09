@@ -9,8 +9,10 @@ import BASE_STATS from '../../constants/stats.constants';
 import BASE_DATA_FOR_APP from '../../constants/data-for-app.constants';
 
 const WORDS_PER_STEP = 10;
-const WORDS_PER_PAGE = 20;
-const LAST_PAGE_NUM = 29;
+const ALL_WORDS = 3600;
+const RESET_HOUR = 4;
+// const WORDS_PER_PAGE = 20;
+// const LAST_PAGE_NUM = 29;
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -34,9 +36,8 @@ export default class PageContainer extends Component {
     this.longTermStats = null;
     this.shortTermStats = null;
 
-    this.userWords = null;
-    this.todayWordsToRepeat = null;
     this.newWords = null;
+    this.wordsToRepeatToday = null;
     this.userCards = [];
   }
 
@@ -89,9 +90,8 @@ export default class PageContainer extends Component {
       this.dataForApp = {
         settings: this.settings,
         statistics: this.statistics,
-        userWords: this.userWords,
-        todayWordsToRepeat: this.todayWordsToRepeat,
         newWords: this.newWords,
+        wordsToRepeatToday: this.wordsToRepeatToday,
         userCards: this.userCards,
         longTermStats: this.longTermStats,
         shortTermStats: this.shortTermStats,
@@ -157,60 +157,31 @@ export default class PageContainer extends Component {
 
   async loadWords() {
     try {
-      // загружать все слова пользователя?
-      // по ним смотреть что нужно повторить
-      // 10-20 повторений, затем новых 20, затем повторения новых
+      // определяем время ресета - след день 4 утра
+      const newWordsFilter = '{"userWord":null}';
 
-      // подгрузка слов в зависимости от статистики и алгоритма
-      // первым делом идут карты на повторение, затем новые слова
-      // нет на повторении - начинаем с новых
-      // преобразуем порядок слов? Составляем карточки? AggregatedWords
-
-      // подгружаем нужное количество карточек в зависимости от настроек
-      // this.dataForApp.settings.wordsPerDay;
-
-      // проверить на удаленные
-      // фильтр для userWords
-
-      // в статистике будет сохранено последнее слово
-      // берем его айди и определяем где оно находится
-      let userAggregatedWords;
-      let group = 0;
-      let page = 0;
-
-      if (this.longTermStats) {
-        const { lastWordId } = this.longTermStats;
-        const lastWord = await this.options.api.getUserAggregatedWordById(lastWordId);
-        group = lastWord[0].group;
-        page = lastWord[0].page;
-      }
-
-      const filter = this.createUserWordsFilter(group, page);
-      // const filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}';
-      // const filter = '{"$or":[{"page":0},{"page":1}]}';
-      // const filter = `{"$and":[{"group":${group},"page":${page}}]}`;
-      // const filter = '{"userWord":{"$exists":false}}';
-      // {"$and":[{"userWord":{"$ne":null}, "group":3}]}
-      // {"$and":[{"userWord":{"$exists": true}},{"userWord.difficulty":{"$ne": "easy"}}]}
+      const time = new Date();
+      const hour = time.getHours();
+      if (hour >= RESET_HOUR) time.setDate(time.getDate() + 1);
+      const resetDayTime = time.setHours(RESET_HOUR, 0);
+      const wordsToRepeatTodayFilter = `{"$and":[
+        {"userWord":{"$ne":null}},
+        {"userWord.optional.status":{"$ne":"deleted"}},
+        {"userWord.optional.nextRepeat":{"$lt":${resetDayTime}}}
+      ]}`;
 
       const data = await Promise.all([
-        this.options.api.getAllUserAggregatedWords(null, 90, filter),
-        this.options.api.getAllUserWords(),
+        this.options.api.getAllUserAggregatedWords(null, this.settings.wordsPerDay, newWordsFilter),
+        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, wordsToRepeatTodayFilter),
       ]);
 
-      [userAggregatedWords, this.userWords] = data;
-      userAggregatedWords = userAggregatedWords[0].paginatedResults;
-
-      if (this.longTermStats) {
-        const { lastWordId } = this.longTermStats;
-        const lastWordIndex = userAggregatedWords.findIndex((word) => word._id === lastWordId);
-        this.newWords = userAggregatedWords.splice(lastWordIndex + 1, this.settings.wordsPerDay);
-      } else {
-        this.newWords = userAggregatedWords;
-      }
+      const [newWords, wordsToRepeatToday] = data;
+      this.newWords = newWords[0].paginatedResults;
+      this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults
+        .sort((wordA, wordB) => wordA.optional.nextRepeat - wordB.optional.nextRepeat);
 
       console.log('newWords', this.newWords);
-      console.log('userWords', this.userWords);
+      console.log('userWords', this.wordsToRepeatToday);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -221,54 +192,14 @@ export default class PageContainer extends Component {
     }
   }
 
-  createUserWordsFilter(group, page) {
-    const additionalPages = Math.ceil((this.settings.wordsPerDay) / WORDS_PER_PAGE);
-    const pageOffset = this.longTermStats ? 1 : 0;
-    let filter = '';
-
-    if (page + additionalPages > LAST_PAGE_NUM) {
-      const pageFilterArrA = [];
-      const pageFilterArrB = [];
-
-      [...Array(additionalPages + pageOffset)].forEach((_, index) => {
-        let pageNum = page + index;
-
-        if (pageNum > LAST_PAGE_NUM) {
-          pageNum -= LAST_PAGE_NUM + 1;
-          pageFilterArrB.push(`{"page":${pageNum}}`);
-        } else {
-          pageFilterArrA.push(`{"page":${pageNum}}`);
-        }
-      });
-
-      const pageFilterA = pageFilterArrA.join(',');
-      const pageFilterB = pageFilterArrB.join(',');
-
-      filter = `{"$or":[
-        {"$and":[{"group":${group}},{"$or":[${pageFilterA}]}]},
-        {"$and":[{"group":${group + 1}},{"$or":[${pageFilterB}]}]}
-      ]}`;
-    } else {
-      const pageFilterArr = [...Array(additionalPages + pageOffset)]
-        .map((_, index) => `{"page":${page + index}}`);
-
-      const pageFilter = pageFilterArr.join(',');
-      filter = `{"$and":[{"$or":[{"group":${group}}]},{"$or":[${pageFilter}]}]}`;
-    }
-
-    return filter;
-  }
-
-  // подготовка массива карт
+  // подготовка массива карт: 10 слов на повторение и 10 новыех
   createStartUserCards() {
-    this.todayWordsToRepeat = this.getTodayWordsToRepeat();
-
-    if (this.todayWordsToRepeat.length) {
-      if (this.todayWordsToRepeat.length > WORDS_PER_STEP) {
-        this.userCards.push(...this.todayWordsToRepeat.splice(0, WORDS_PER_STEP));
+    if (this.wordsToRepeatToday.length) {
+      if (this.wordsToRepeatToday.length > WORDS_PER_STEP) {
+        this.userCards.push(...this.wordsToRepeatToday.splice(0, WORDS_PER_STEP));
         // карточки еще останутся и перейдут либо в конец либо на след тренировку
       } else {
-        this.userCards.push(...this.todayWordsToRepeat);
+        this.userCards.push(...this.wordsToRepeatToday);
       }
     }
     // далее добавляем новые слова
@@ -278,30 +209,6 @@ export default class PageContainer extends Component {
       this.userCards.push(...this.newWords);
     }
     console.log('this.userCards', this.userCards);
-  }
-
-  getTodayWordsToRepeat() {
-    let todayWordsToRepeat = [];
-
-    if (this.userWords.length) {
-      // определяем время ресета - след день 4 утра
-      const time = new Date();
-      const hour = time.getHours();
-      if (hour >= 4) time.setDate(time.getDate() + 1);
-      const resetDayTime = time.setHours(4, 0);
-
-      // берем слова на сегодня и сортируем по возрастанию
-      // чтобы повторять сначала самые старые
-
-      // проверить на удаленные или фильтр?
-      // чекать время в фильтре?
-      todayWordsToRepeat = this.userWords
-        .filter((word) => word.optional.nextRepeat < resetDayTime)
-        .sort((wordA, wordB) => wordA.optional.nextRepeat - wordB.optional.nextRepeat);
-    }
-
-    // todayWordsToRepeat.length - столько слов на повторении на сегодня?
-    return todayWordsToRepeat;
   }
 
   destroy() {
