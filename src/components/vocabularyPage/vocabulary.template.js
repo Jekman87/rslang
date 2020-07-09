@@ -166,7 +166,7 @@ export default function createVocabularyHTML() {
     
           <div class="additional-info mt-3 desktop-block d-none d-md-block">
             <div class="description d-flex mb-2">
-              <div class="icon-container col-md-2 text-center text-info"><i class="fas fa-graduation-cap"></i></div>
+              <div class="icon-container col-md-2 col-lg-1 text-center text-info"><i class="fas fa-graduation-cap"></i></div>
               <div class="text-container">
                 <span class="text-primary"><strong>To arrive is to get somewhere</strong></span>
                 <span class="">—</span>
@@ -175,7 +175,7 @@ export default function createVocabularyHTML() {
             </div>
     
             <div class="example d-flex">
-              <div class="icon-container col-md-2 text-center text-info"><i class="fas fa-lightbulb"></i></div>
+              <div class="icon-container col-md-2 col-lg-1 text-center text-info"><i class="fas fa-lightbulb"></i></div>
               <div class="text-container">
                 <span class="text-text-primary"><strong>They arrived at school at 7 a.m</strong></span>
                 <span class="">—</span>
