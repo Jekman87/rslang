@@ -1,26 +1,28 @@
-.rules {
-  position: absolute;
-  max-width: 960px;
-  min-width: 320px;
-  top:0;
-  left:50%;
-  transition: .8s;
-  transform: translateX(-50%);
-  transition: .8s;
-  z-index: 999;
-  &-content {
-    background: #fff;
-  }
-  .sounds-list{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    list-style: none;
-  }
-  .rules-modal{
-    max-width: 100%;
-  }
-  .list {
-    list-style: none;
+.speakit {
+  .rules {
+    position: absolute;
+    max-width: 960px;
+    min-width: 320px;
+    top:0;
+    left:50%;
+    transition: .8s;
+    transform: translateX(-50%);
+    transition: .8s;
+    z-index: 999;
+    &-content {
+      background: #fff;
+    }
+    .sounds-list{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      list-style: none;
+    }
+    .rules-modal{
+      max-width: 100%;
+    }
+    .list {
+      list-style: none;
+    }
   }
 }

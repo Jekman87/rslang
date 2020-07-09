@@ -1,15 +1,17 @@
-.card-container{
-  transition: .8s;
-  .card-body {
-    min-height: 46px;
-  }
-  .word-card{
-    &__img{
-      object-fit: cover;
-      height: 223px;
+.speakit {
+  .card-container{
+    transition: .8s;
+    .card-body {
+      min-height: 46px;
     }
-  }
-  .card-text{
-    font-size: 1.25rem;
+    .word-card{
+      &__img{
+        object-fit: cover;
+        height: 223px;
+      }
+    }
+    .card-text{
+      font-size: 1.25rem;
+    }
   }
 }
