@@ -543,9 +543,9 @@ export default class GameController {
 
   fillStatistics() {
     this.elems.statTable.innerHTML = '';
-    const rows = [tableHeader];
+    const rows = [];
     const statistics = this.get('statistics');
-    statistics.reverse();
+
     statistics.forEach((mark) => {
       const [level, round] = mark.round.split('-');
       const date = new Date(mark.date);
@@ -555,11 +555,14 @@ export default class GameController {
         <td class="td">${level}</td>
         <td class="td">${round}</td>
         <td class="td">${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}</td>
-        <td class="td">${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
+        <td class="td">${date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
         <td class="td">${score}</td>
       </tr>`;
       rows.push(tr);
     });
+
+    rows.push(tableHeader);
+    rows.reverse();
     this.elems.statTable.innerHTML = rows.join('');
   }
 
