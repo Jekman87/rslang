@@ -17,8 +17,6 @@ import Team from './components/teamPage';
 import Riddle from './games/riddle/Riddle.render';
 import SpeakIt from './games/speakIt/index';
 
-import Sprint from './games/sprint/Sprint.render';
-
 const pages = {
   Authorization,
   MainPage,
@@ -26,7 +24,6 @@ const pages = {
   Team,
   SpeakIt,
   AudioCall,
-  Sprint,
   Riddle,
 };
 

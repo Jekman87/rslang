@@ -1,6 +1,7 @@
 import ALL_RIDDLES from './ridlde.data';
 
 const state = {
+  round: 0,
   riddleAnswer: '',
   riddleText: '',
   riddleTranslate: '',
@@ -18,22 +19,56 @@ function restartStatistic() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 }
 
+function checkRound() {
+  if (state.round !== 0) {
+    const restartGame = document.querySelector('[data-click="start-game"]');
+    const level = document.querySelector('.input-level');
+    const page = document.querySelector('.input-page');
+    const lastPlaceInTheGame = state.round.split('-');
+
+    [level.value, page.value] = lastPlaceInTheGame;
+
+    restartGame.click();
+  }
+}
+
+function prepareLongTimeStatistic() {
+  let correctAnswers = 0;
+  const currentDate = Date.now();
+
+  const currentGameResults = {
+    date: '',
+    round: '',
+    result: '',
+  };
+
+  for (let i = 0; i < 6; i += 1) {
+    correctAnswers += state.lvlStatistic[i].filter((el) => el !== 0).length;
+  }
+
+  currentGameResults.date = currentDate;
+  currentGameResults.round = state.round;
+  currentGameResults.result = correctAnswers;
+
+  return currentGameResults;
+}
+
 function rememberLevelStatistic() {
   const level = +document.querySelector('.input-level').value - 1;
   const page = +document.querySelector('.input-page').value - 1;
-  state.lvlStatistic[level][page] = 1;
+  state.lvlStatistic[level][page] = Date.now();
 }
 
 function rewriteLevelStatistic() {
   for (let i = 0; i < 6; i += 1) {
     document.querySelector(`.lvl-${i + 1}`).style.width = `${
-      ((state.lvlStatistic[i].filter((el) => el === 1).length / 90) * 100)
+      ((state.lvlStatistic[i].filter((el) => el !== 0).length / 90) * 100)
     }%`;
     document.querySelector(`.points-${i + 1}`).textContent = `${
-      state.lvlStatistic[i].filter((el) => el === 1).length
+      state.lvlStatistic[i].filter((el) => el !== 0).length
     }/15`;
     document.querySelector(`.percent-${i + 1}`).textContent = `${
-      Math.floor((state.lvlStatistic[i].filter((el) => el === 1).length / 15) * 10000) / 100
+      Math.floor((state.lvlStatistic[i].filter((el) => el !== 0).length / 15) * 10000) / 100
     }%`;
   }
 }
@@ -69,6 +104,26 @@ function recountNumberOfAnswers() {
   }
 }
 
+function convertDate(time) {
+  const currentDate = new Date(time);
+  const Year = currentDate.getFullYear();
+  const Month = currentDate.getMonth() + 1 < 10
+    ? `0${currentDate.getMonth() + 1}`
+    : currentDate.getMonth();
+  const Day = currentDate.getDate() < 10
+    ? `0${currentDate.getDate()}`
+    : currentDate.getDate();
+  const Hours = currentDate.getHours();
+  const Minutes = currentDate.getMinutes() < 10
+    ? `0${currentDate.getMinutes()}`
+    : currentDate.getMinutes();
+  const Seconds = currentDate.getSeconds() < 10
+    ? `0${currentDate.getSeconds()}`
+    : currentDate.getSeconds();
+
+  return `${Day}/${Month}/${Year} - ${Hours}:${Minutes}:${Seconds} (UTC +3:00);`;
+}
+
 function recountStatistic() {
   removeOldSentences();
 
@@ -79,18 +134,19 @@ function recountStatistic() {
       const riddleAnswer = ALL_RIDDLES[i][keys[j]].answer;
 
       const correctAnswer = `
-      <div class="statistic-block correct">
+      <div class="riddle-statistic-block riddle-correct">
+        <span><b>${convertDate(state.lvlStatistic[i][j])}</b></span>
         <span>${riddleText}</span>
         <span>- ${riddleAnswer}</span>
       </div>
       `;
       const wrongAnswer = `
-      <div class="statistic-block wrong">
+      <div class="riddle-statistic-block riddle-wrong">
         <span>${riddleText}</span>
       </div>
       `;
 
-      if (state.lvlStatistic[i][j] === 1) {
+      if (state.lvlStatistic[i][j] !== 0) {
         document.querySelector(`.correct-${i + 1}`).insertAdjacentHTML('beforeend', correctAnswer);
       } else {
         document.querySelector(`.mistake-${i + 1}`).insertAdjacentHTML('beforeend', wrongAnswer);
@@ -106,11 +162,11 @@ function hideIntro() {
 }
 
 function showSpinner() {
-  document.querySelector('.main-sp').style.display = 'flex';
+  document.querySelector('.riddle-main-sp').style.display = 'flex';
 }
 
 function hideSpinner() {
-  document.querySelector('.main-sp').style.display = 'none';
+  document.querySelector('.riddle-main-sp').style.display = 'none';
 }
 
 function hideIntroScreen() {
@@ -157,26 +213,26 @@ function rewriteRiddleText() {
 }
 
 function rewriteRiddleTranslate() {
-  document.querySelector('.translate-block').innerHTML = state.riddleTranslate;
+  document.querySelector('.riddle-translate-block').innerHTML = state.riddleTranslate;
 }
 
 function rewriteRiddleOptions() {
-  document.querySelector('.answer-blocks').innerHTML = '';
+  document.querySelector('.riddle-answer-blocks').innerHTML = '';
   state.riddleOptions.forEach((el) => {
     if (el === state.riddleAnswer) {
-      document.querySelector('.answer-blocks').insertAdjacentHTML('beforeend',
-        `<button type="button" class="btn btn-outline-success button answer-block">${el}</button>`);
+      document.querySelector('.riddle-answer-blocks').insertAdjacentHTML('beforeend',
+        `<button type="button" class="btn btn-outline-success riddle-button answer-block">${el}</button>`);
       return true;
     }
-    document.querySelector('.answer-blocks').insertAdjacentHTML('beforeend',
-      `<button type="button" class="btn btn-outline-success button answer-block wa">${el}</button>`);
+    document.querySelector('.riddle-answer-blocks').insertAdjacentHTML('beforeend',
+      `<button type="button" class="btn btn-outline-success riddle-button answer-block wa">${el}</button>`);
     return true;
   });
 }
 
 function showGameFields() {
   document.querySelector('.riddle-container').style.border = '2px solid #005e8d';
-  document.querySelector('.answer-form').style.opacity = '100';
+  document.querySelector('.riddle-answer-form').style.opacity = '100';
   document.querySelector('.riddle-prompts').style.position = 'static';
   document.querySelector('.riddle-prompts').style.opacity = '100';
 }
@@ -214,19 +270,20 @@ function playWrongAudio() {
 function upLevel() {
   const level = document.querySelector('.input-level');
   const page = document.querySelector('.input-page');
-  const userInput = document.querySelector('.answer-input');
+  const userInput = document.querySelector('.riddle-answer-input');
   const restartGame = document.querySelector('[data-click="start-game"]');
 
   if (+page.value !== 15) {
-    document.querySelector('.answer-blocks').childNodes.forEach((el) => {
+    document.querySelector('.riddle-answer-blocks').childNodes.forEach((el) => {
       const element = el;
       element.style.opacity = '100';
     });
     page.stepUp();
     restartGame.click();
     userInput.value = '';
+    state.round = `${level.value}-${page.value}`;
   } else if (+level.value !== 6) {
-    document.querySelector('.answer-blocks').childNodes.forEach((el) => {
+    document.querySelector('.riddle-answer-blocks').childNodes.forEach((el) => {
       const element = el;
       element.style.opacity = '100';
     });
@@ -234,17 +291,19 @@ function upLevel() {
     page.value = 1;
     restartGame.click();
     userInput.value = '';
+    state.round = `${level.value}-${page.value}`;
   }
 }
 
 function compareAnswers() {
-  const currentAnswer = document.querySelector('.answer-input').value.toLowerCase();
+  const currentAnswer = document.querySelector('.riddle-answer-input').value.toLowerCase();
   if (state.riddleAnswer.toLowerCase() === currentAnswer) {
     playCorrectAudio();
     rememberLevelStatistic();
     markAnswer(true);
     upLevel();
     rewriteLevelStatistic();
+    prepareLongTimeStatistic();
   } else {
     playWrongAudio();
     markAnswer(false);
@@ -253,8 +312,8 @@ function compareAnswers() {
 
 function moveAnswerIntoInput(element, answer) {
   const currentElement = element;
-  document.querySelector('.answer-input').value = answer;
-  document.querySelector('.answer-blocks').childNodes.forEach((el) => {
+  document.querySelector('.riddle-answer-input').value = answer;
+  document.querySelector('.riddle-answer-blocks').childNodes.forEach((el) => {
     const elem = el;
     elem.style.opacity = '100';
   });
@@ -274,41 +333,46 @@ function hideTwoWrongAnswers() {
 }
 
 function showOrHideTranslatePrompt() {
-  document.querySelector('.translate-block').classList.toggle('hide-prompt');
+  document.querySelector('.riddle-translate-block').classList.toggle('riddle-hide-prompt');
 }
 
 function showOrHideOptionsPrompt() {
-  document.querySelector('.answer-blocks').classList.toggle('hide-prompt');
+  document.querySelector('.riddle-answer-blocks').classList.toggle('riddle-hide-prompt');
 }
 
 function passHandler() {
+  const level = document.querySelector('.input-level');
+  const page = document.querySelector('.input-page');
+
   document.querySelector('.pass-voice').play().catch(() => true);
   markAnswer();
   upLevel();
+
+  state.round = `${level.value}-${page.value}`;
 }
 
 function showStatistic() {
-  document.querySelector('.statistic-screen').style.display = 'flex';
+  document.querySelector('.riddle-statistic-screen').style.display = 'flex';
 }
 
 function showCorrectPartOfStatistic() {
-  document.querySelector('.statistic-blocks').style.display = 'none';
-  document.querySelector('.statistic-blocks-correct').style.display = 'block';
+  document.querySelector('.riddle-statistic-blocks').style.display = 'none';
+  document.querySelector('.riddle-statistic-blocks-correct').style.display = 'block';
 }
 
 function showWrongPartOfStatistic() {
-  document.querySelector('.statistic-blocks').style.display = 'none';
-  document.querySelector('.statistic-blocks-wrong').style.display = 'block';
+  document.querySelector('.riddle-statistic-blocks').style.display = 'none';
+  document.querySelector('.riddle-statistic-blocks-wrong').style.display = 'block';
 }
 
 function backToStatisticScreen() {
-  document.querySelector('.statistic-blocks-correct').style.display = 'none';
-  document.querySelector('.statistic-blocks-wrong').style.display = 'none';
-  document.querySelector('.statistic-blocks').style.display = 'block';
+  document.querySelector('.riddle-statistic-blocks-correct').style.display = 'none';
+  document.querySelector('.riddle-statistic-blocks-wrong').style.display = 'none';
+  document.querySelector('.riddle-statistic-blocks').style.display = 'block';
 }
 
 function backToGameFromStatistic() {
-  document.querySelector('.statistic-screen').style.display = 'none';
+  document.querySelector('.riddle-statistic-screen').style.display = 'none';
 }
 
 export {
@@ -318,5 +382,6 @@ export {
   compareAnswers, moveAnswerIntoInput, passHandler,
   showStatistic, recountStatistic, removeStatistic,
   showCorrectPartOfStatistic, showWrongPartOfStatistic,
-  backToStatisticScreen, backToGameFromStatistic,
+  backToStatisticScreen, backToGameFromStatistic, state,
+  prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
 };
