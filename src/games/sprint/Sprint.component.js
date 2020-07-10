@@ -80,7 +80,7 @@ export default class SprintGame extends Component {
         break;
       case 'destroy':
         resetLongTimeStatistic();
-        this.statistic.optional.sprintLongStats = JSON.stringify([]);
+        this.statistic.optional.SprintLong = JSON.stringify([]);
         break;
       case 'long-time-statistic':
         switchToLongTimeStatistic();
@@ -146,16 +146,20 @@ export default class SprintGame extends Component {
   }
 
   prepareStatisticForSend(roundResult) {
-    const sprintLongStats = JSON.parse(this.statistic.optional.sprintLongStats);
+    let sprintLongStatistic = [];
 
-    if (sprintLongStats.length < 10) {
-      sprintLongStats.push(roundResult);
-    } else {
-      sprintLongStats.shift();
-      sprintLongStats.push(roundResult);
+    if (this.statistic.optional.SprintLong) {
+      sprintLongStatistic = JSON.parse(this.statistic.optional.SprintLong);
     }
 
-    this.statistic.optional.sprintLongStats = JSON.stringify(sprintLongStats);
+    if (sprintLongStatistic.length < 15) {
+      sprintLongStatistic.push(roundResult);
+    } else {
+      sprintLongStatistic.shift();
+      sprintLongStatistic.push(roundResult);
+    }
+
+    this.statistic.optional.SprintLong = JSON.stringify(sprintLongStatistic);
     this.mainApi.updateStatistics(this.statistic);
   }
 
@@ -174,7 +178,11 @@ export default class SprintGame extends Component {
   }
 
   showLongTimeStatistic() {
-    const arrayWithStatisic = JSON.parse(this.statistic.optional.sprintLongStats);
+    let arrayWithStatisic = [];
+
+    if (this.statistic.optional.SprintLong) {
+      arrayWithStatisic = (JSON.parse(this.statistic.optional.SprintLong)).reverse();
+    }
 
     document.querySelector('.sprint-games').innerHTML = '';
 
