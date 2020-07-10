@@ -415,7 +415,7 @@ export default class GameController {
     this.saveRoundResult();
     this.savePassedRound();
     this.saveGallery();
-    document.dispatchEvent(new CustomEvent('userDataChange'));
+    document.dispatchEvent(new CustomEvent('userDataChange', { detail: 'statistics' }));
   }
 
   saveRoundResult() {
@@ -426,10 +426,8 @@ export default class GameController {
     };
     const statistics = this.get('statistics');
 
-    statistics.unshift(roundResult);
-    if (statistics.length > 25) {
-      statistics.length = 25;
-    }
+    if (statistics.length === 20) statistics.shift();
+    statistics.push(roundResult);
 
     this.set('statistics', statistics);
   }
@@ -545,6 +543,7 @@ export default class GameController {
     this.elems.statTable.innerHTML = '';
     const rows = [tableHeader];
     const statistics = this.get('statistics');
+    statistics.reverse();
     statistics.forEach((mark) => {
       const [level, round] = mark.round.split('-');
       const date = new Date(mark.date);

@@ -7,8 +7,8 @@ import DataLoader from './DataLoader';
 import LevelsController from './LevelsController';
 
 export default class App {
-  constructor(api, statistics, observer) {
-    this.storage = new Storage(api, statistics);
+  constructor(api, statistics, settings, observer) {
+    this.storage = new Storage(api, statistics, settings);
     this.reporter = new Reporter();
     this.loader = new DataLoader(this.storage, this.reporter);
     this.gameController = new GameController(this.storage, this.reporter, observer);

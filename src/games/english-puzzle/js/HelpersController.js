@@ -38,7 +38,7 @@ export default class HelpersController {
       this.set(`${e.target.dataset.type}`, 'on');
     }
 
-    document.dispatchEvent(new CustomEvent('userDataChange'));
+    document.dispatchEvent(new CustomEvent('userDataChange', { detail: 'settings' }));
     document.dispatchEvent(new CustomEvent('helperStatusChange', { detail: e.target.dataset.type }));
   }
 
