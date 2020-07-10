@@ -30,13 +30,17 @@ export default class AudioCall extends Component {
     this.app = document.querySelector($root);
     this.gameSound = true;
     this.statistics = [];
-    this.gamesStatistic = [];
+
+    this.statistic = this.options.dataForApp.statistics;
+    this.mainApi = this.options.api;
 
     this.onClick = this.onClick.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.destroy = this.destroy.bind(this);
     this.appendStats = this.appendStats.bind(this);
     this.fillRoundWords = this.fillRoundWords.bind(this);
+
+    console.log(this.statistic.optional.audiocallLongStats);
   }
 
   async fillRoundWords() {
@@ -118,6 +122,22 @@ export default class AudioCall extends Component {
     this.rightAnswerSpan.classList.remove('text-muted');
   }
 
+  sendStatistic(roundResult) {
+    const audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats) || [];
+
+    if (audiocallLongStats.length < 10) {
+      audiocallLongStats.push(roundResult);
+    } else {
+      audiocallLongStats.shift();
+      audiocallLongStats.push(roundResult);
+    }
+
+    this.statistic.optional.audiocallLongStats = JSON.stringify(audiocallLongStats);
+    this.mainApi.updateStatistics(this.statistic);
+  }
+
+  // ОТКЛЮЧИТЬ ВЗАИМОДЕЙСТВИЕ СО СЛОВАМИ ПРИ ПОКАЗЕ ПРАВИЛЬНОГО ОТВЕТА
+
   onClick(event) {
     const { target } = event;
 
@@ -160,12 +180,8 @@ export default class AudioCall extends Component {
             data: Date.now(),
             result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
-          this.gamesStatistic.push(gameResult);
 
-          this.longStatResults.insertAdjacentHTML(
-            'afterbegin',
-            insertLongStats(gameResult.data, gameResult.result)
-          );
+          this.sendStatistic(gameResult);
           this.appendStats();
         }
         break;
@@ -262,12 +278,8 @@ export default class AudioCall extends Component {
               data: Date.now(),
               result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
-            this.gamesStatistic.push(gameResult);
 
-            this.longStatResults.insertAdjacentHTML(
-              'afterbegin',
-              insertLongStats(gameResult.data, gameResult.result)
-            );
+            this.sendStatistic(gameResult);
             this.appendStats();
           }
         }
@@ -369,6 +381,14 @@ export default class AudioCall extends Component {
   }
 
   appendStats() {
+    const audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats);
+    audiocallLongStats.forEach((stat) => {
+      this.longStatResults.insertAdjacentHTML(
+        'afterbegin',
+        insertLongStats(stat.data, stat.result)
+      );
+    });
+
     this.app.removeChild(this.app.firstChild);
     document.querySelector('.span-mistakes').innerText = this.mistakesCounter;
     document.querySelector('.span-correct').innerText = this.maxProgress - this.mistakesCounter;
