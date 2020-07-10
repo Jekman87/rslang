@@ -1,0 +1,72 @@
+
+$fontColor: #005e8d;
+
+@mixin width-center() {
+    width: 100%;
+    margin: auto;
+}
+
+@mixin flexible() {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flexibleSpace() {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin activeShadow() {
+  box-shadow: 6px 6px 10px black;
+}
+
+
+.promo__main-container {
+  max-width: 1280px;
+  background-color: rgba(46, 139, 86, 0.431);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  padding: 2% 0 2% 0;
+  margin: auto;
+}
+
+.promo__training-description {
+  border-bottom: 2px solid black;
+
+  h2 {
+    text-align: center;
+    margin: 0 auto 2%;
+  }
+
+  span {
+    display: block;
+    width: 80%;
+    margin: 2% auto 2%;
+  }
+
+  .my_video iframe {
+    display: block;
+    width: 80%;
+    margin: auto;
+  }
+
+}
+
+.promo__game-description {
+  
+  h3 {
+    text-align: center;
+    margin: 2% auto 2%;
+
+  }
+  span {
+    display: block;
+    width: 80%;
+    margin: 2% auto 0;
+  }
+
+}
+

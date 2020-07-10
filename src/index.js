@@ -17,6 +17,8 @@ import SpeakIt from './games/speakIt/index';
 
 import Sprint from './games/sprint/Sprint.render';
 
+import Promo from './components/promoPage';
+
 const pages = {
   Authorization,
   MainPage,
@@ -25,6 +27,7 @@ const pages = {
   SpeakIt,
   AudioCall,
   Sprint,
+  Promo,
 };
 
 const mainApp = new MainApp('#app', {
