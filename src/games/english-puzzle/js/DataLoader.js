@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import paintings from './paintingsInfo';
 import { BASE_URL, FILE_URL } from '../../../constants/constants';
 
@@ -74,7 +73,8 @@ export default class Loader {
       );
 
       sentencesInfo.forEach((item, index) => {
-        item.audio = audios[index];
+        const info = item;
+        info.audio = audios[index];
       });
 
       const pictureInfo = await this.loadPicture(group, page);

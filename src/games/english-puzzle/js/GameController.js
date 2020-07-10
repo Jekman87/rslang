@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import PuzzleDrawer from './PuzzleDrawer';
 import { monthNames } from './variables';
 import paintings from './paintingsInfo';
@@ -256,11 +255,13 @@ export default class GameController {
 
     document.querySelector('img.painting-pic_small').src = data.link;
     document.querySelectorAll('figcaption:not(.art-name)').forEach((el) => {
-      el.textContent = info;
+      const caption = el;
+      caption.textContent = info;
     });
   }
 
-  shuffle(arr) {
+  shuffle(array) {
+    const arr = array;
     for (let i = arr.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -352,7 +353,8 @@ export default class GameController {
     const answers = this.elems.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
 
-    answers.forEach((word, i) => {
+    answers.forEach((answer, i) => {
+      const word = answer;
       if (word.dataset.content !== correctAnswers[i]) {
         this.isCorrect = false;
         word.classList.add('incorrect');
