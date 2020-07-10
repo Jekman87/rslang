@@ -5,11 +5,12 @@ import createMainGameHTML from './mainGame.template';
 import { delay } from '../../core/utils';
 
 import { FILE_URL } from '../../constants/constants';
-// import UserWord from '../../core/UserWord';
+import UserWord from '../../core/UserWord';
 // import BASE_USER_WORD from '../../constants/user-word.constants';
 const DIFFICULTY = {
-  again: 0, hard: 1, good: 2, easy: 3,
+  again: 'again', hard: 'hard', good: 'good', easy: 'easy',
 };
+const AGAIN_STEP = 4;
 
 export default class MainGame extends Component {
   static className = 'MainGame';
@@ -25,14 +26,15 @@ export default class MainGame extends Component {
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
     this.newWords = this.dataForApp.newWords;
-    this.userWords = this.dataForApp.userWords;
     this.todayWordsToRepeat = this.dataForApp.todayWordsToRepeat;
     this.userCards = this.dataForApp.userCards;
-
     this.state = {
       currentCardNum: 0,
       studiedСardNum: 0,
       isChecking: false,
+      currentWord: null,
+      seriesOfCorrectAnswers: 0,
+      longestSeriesOfCorrectAnswers: 0,
     };
     this.dataForApp.state = this.state;
     this.elements = null;
@@ -119,7 +121,7 @@ export default class MainGame extends Component {
 
       case 'easy-btn':
         // ручное уплавление алгоритмом - easy
-        // пометка - слово повторить скоро - 2 дня?
+        // пометка - слово повторить скоро - 3 дня?
         // переход на след карту
         this.setDifficulty(DIFFICULTY.easy);
         this.changeCard();
@@ -135,8 +137,8 @@ export default class MainGame extends Component {
 
       case 'difficult-btn':
         // перенос слова в сложные
-        // убираем из карточек ?
         // айди слова - сохраняем персональную? статистику - в сложные
+        // статистика по слову меняется
         // переход на след карту
         this.changeCard();
         break;
@@ -187,7 +189,7 @@ export default class MainGame extends Component {
     // проверяем инпут на соответствие
     // проверка на текущее изучаемое слово для листания
     if (inputText === currentWord) {
-      // отметка ок в статистике лова
+      // отметка ок в статистике слова
       // статистика пользователя дневная и долгосрочная
       // учесть окончание карточек
 
@@ -202,6 +204,7 @@ export default class MainGame extends Component {
 
       // статистика слова
       // статистика пользователя
+      // считаем карту изученной до всех задержек
       this.state.studiedСardNum += 1;
 
       // воспроизведение аудио в зависимости от настроек +
@@ -242,12 +245,11 @@ export default class MainGame extends Component {
 
     await this.playAudio(currentCard.audio);
 
-    // чекнуть идет ли проверка карты сейчас?
-    if (this.settingsOptional.cardExample) {
+    if (this.settingsOptional.cardExample && this.state.isChecking) {
       await this.playAudio(currentCard.audioExample);
     }
 
-    if (this.settingsOptional.cardExplanation) {
+    if (this.settingsOptional.cardExplanation && this.state.isChecking) {
       await this.playAudio(currentCard.audioMeaning);
     }
   }
@@ -263,7 +265,6 @@ export default class MainGame extends Component {
   }
 
   changeCard(step = 1) {
-    console.log('change card 1', this.state);
     const nextCandNum = this.state.currentCardNum + step;
 
     if (nextCandNum < 0 || nextCandNum + 1 < this.state.studiedСardNum
@@ -276,7 +277,7 @@ export default class MainGame extends Component {
 
     if (nextCandNum === 0 || nextCandNum < this.state.studiedСardNum) {
       this.elements.$prevBtn.addClass('arrow-disabled');
-    } else if (nextCandNum + 1 === this.dataForApp.userCards.length) {
+    } else if (nextCandNum + 1 === this.userCards.length) {
       this.elements.$nextBtn.addClass('arrow-disabled');
     } else {
       this.elements.$prevBtn.removeClass('arrow-disabled');
@@ -291,7 +292,7 @@ export default class MainGame extends Component {
     this.elements.$progressBar.css({ width: `${percent}%` });
 
     const word = this.userCards[nextCandNum];
-    // из статистики берем
+    // из статистики берем иначе 0?
     const wordDifficult = 0;
 
     this.elements.$wordDifficult.text(wordDifficult);
@@ -316,45 +317,87 @@ export default class MainGame extends Component {
     }
 
     this.state.currentCardNum = nextCandNum;
-    console.log('change card 2', this.state);
   }
 
-  setDifficulty(wordDifficulty) {
+  setDifficulty(wordDifficulty, success = true) {
     const word = this.userCards[this.state.currentCardNum];
     console.log('setDifficulty word', word);
+
+    // проверяем есть ли для слова статистика, если нету - создаем
+    if (word.userWord) {
+      this.state.currentWord = word.userWord;
+    } else {
+      this.state.currentWord = new UserWord();
+    }
+
+    let difficulty;
+    let lastRepeat;
+    // let nextRepeat;
+    // let counter;
+    // let success;
+    // let progress;
+    // let status;
+    // let gameError;
+
+    // изменить и сохранить слово
+    /*
+    this.difficulty = 'new';
+    this.optional = {
+      lastRepeat: Date.now(),
+      nextRepeat: 0, посчитать в зависимости от сложности
+      counter: 0, показы? +1
+      success: 0, угадано-неугадано - если угадано +1 success?
+      progress: 0, если угадано сразу - 5? иначе 1
+      status: 'active', или др (active -- для изучаемых слов, difficult -- для сложных, deleted -- для удаленных)
+      gameError: false, если ошибка - не трогаем, если ок - меняем на false
+    };
+    */
+
     // определяем сложность для слова
     // сохраняем само слово
     // сохраняем статистику пользователя за день
     // долгосрочная статистика
     // если нужно добавляем в массив карточек
     // либо через одно либо в конец
+    lastRepeat = Date.now();
+
     if (wordDifficulty === DIFFICULTY.again) {
+      difficulty = DIFFICULTY.again;
+      nextRepeat = lastRepeat + (60 * 1000);
       // пометка статистики
       // в конец user card если меньше 50ти (настройки)
       // иначе в начало массива повторений
-      if (this.userCards.length < 50) {
+      const nextRepeatCardNum = this.state.currentCardNum + AGAIN_STEP;
+
+      if (nextRepeatCardNum > this.userCards.length) {
         this.userCards.push(word);
       } else {
-        this.todayWordsToRepeat.unshift(word);
+        this.userCards.splice(nextRepeatCardNum, 0, word);
       }
     }
 
     if (wordDifficulty === DIFFICULTY.hard) {
+      difficulty = DIFFICULTY.hard;
+      nextRepeat = lastRepeat + (10 * 60 * 1000);
       // пометка статистики
-      this.todayWordsToRepeat.push(word);
+      this.userCards.push(word);
     }
 
     if (wordDifficulty === DIFFICULTY.good) {
+      difficulty = DIFFICULTY.good;
+      nextRepeat = lastRepeat + (10 * 60 * 1000);
       // пометка статистики
       // если в первый раз - на повторение тоже
-      if (word) {
-        this.todayWordsToRepeat.push(word);
+      if (this.state.currentWord.difficulty === 'new') {
+        this.userCards.push(word);
       }
     }
 
     if (wordDifficulty === DIFFICULTY.easy) {
       // пометка статистики
     }
+
+    console.log('setDif', this.userCards);
   }
 
   /*

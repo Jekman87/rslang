@@ -50,6 +50,7 @@ export default class PageContainer extends Component {
 
     this.subscribe('changePage', (pageName) => {
       if (this.pages[pageName]) {
+        console.log('this.component.', this.component);
         this.component.destroy();
         storage('currentPage', pageName);
         this.renderPage(this.pages[pageName]);
@@ -86,7 +87,7 @@ export default class PageContainer extends Component {
       // add loader?
       await this.initSettingsAndStats();
       await this.loadWords();
-      this.createStartUserCards();
+      this.createUserCards();
       this.dataForApp = {
         settings: this.settings,
         statistics: this.statistics,
@@ -149,7 +150,7 @@ export default class PageContainer extends Component {
           this.options.api.updateStatistics(BASE_STATS),
         ]);
 
-        [this.dataForApp.settings, this.dataForApp.statistics] = data;
+        [this.settings, this.statistics] = data;
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
@@ -158,9 +159,8 @@ export default class PageContainer extends Component {
 
   async loadWords() {
     try {
-      // определяем время ресета - след день 4 утра
       const newWordsFilter = '{"userWord":null}';
-
+      // определяем время ресета - след день 4 утра
       const time = new Date();
       const hour = time.getHours();
       if (hour >= RESET_HOUR) time.setDate(time.getDate() + 1);
@@ -170,19 +170,23 @@ export default class PageContainer extends Component {
         {"userWord.optional.status":{"$ne":"deleted"}},
         {"userWord.optional.nextRepeat":{"$lt":${resetDayTime}}}
       ]}`;
-
+      const filter1 = '{"userWord":{"$ne":null}}';
       const data = await Promise.all([
         this.options.api.getAllUserAggregatedWords(null, this.settings.wordsPerDay, newWordsFilter),
         this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, wordsToRepeatTodayFilter),
+        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, filter1),
       ]);
 
-      const [newWords, wordsToRepeatToday] = data;
+      // this.options.api.getAllUserWords(),
+
+      const [newWords, wordsToRepeatToday, test] = data;
       this.newWords = newWords[0].paginatedResults;
       this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults
         .sort((wordA, wordB) => wordA.optional.nextRepeat - wordB.optional.nextRepeat);
 
       console.log('newWords', this.newWords);
-      console.log('userWords', this.wordsToRepeatToday);
+      console.log('wordsToRepeatToday', this.wordsToRepeatToday);
+      console.log('test', test);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -193,22 +197,25 @@ export default class PageContainer extends Component {
     }
   }
 
-  // подготовка массива карт: 10 слов на повторение и 10 новыех
-  createStartUserCards() {
-    if (this.wordsToRepeatToday.length) {
-      if (this.wordsToRepeatToday.length > WORDS_PER_STEP) {
-        this.userCards.push(...this.wordsToRepeatToday.splice(0, WORDS_PER_STEP));
-        // карточки еще останутся и перейдут либо в конец либо на след тренировку
+  // подготовка массива карт: 10 слов на повторение, 10 новых и т.д.
+  createUserCards() {
+    while (this.wordsToRepeatToday.length || this.newWords.length) {
+      if (this.wordsToRepeatToday.length) {
+        if (this.wordsToRepeatToday.length > WORDS_PER_STEP) {
+          this.userCards.push(...this.wordsToRepeatToday.splice(0, WORDS_PER_STEP));
+          // карточки еще останутся и перейдут либо в конец либо на след тренировку
+        } else {
+          this.userCards.push(...this.wordsToRepeatToday.splice(0));
+        }
+      }
+      // далее добавляем новые слова
+      if (this.newWords.length > WORDS_PER_STEP) {
+        this.userCards.push(...this.newWords.splice(0, WORDS_PER_STEP));
       } else {
-        this.userCards.push(...this.wordsToRepeatToday);
+        this.userCards.push(...this.newWords.splice(0));
       }
     }
-    // далее добавляем новые слова
-    if (this.newWords.length > WORDS_PER_STEP) {
-      this.userCards.push(...this.newWords.splice(0, WORDS_PER_STEP));
-    } else {
-      this.userCards.push(...this.newWords);
-    }
+
     console.log('this.userCards', this.userCards);
   }
 
