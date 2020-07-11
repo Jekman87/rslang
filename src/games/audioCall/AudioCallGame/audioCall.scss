@@ -2,7 +2,13 @@
   min-height: 100vh;
   // background-image: linear-gradient(to top, #a7a6cb 0%, #8989ba 100%);
   background: rgb(111, 108, 157);
-  background: linear-gradient(90deg, rgba(111, 108, 157, 0.7) 0%, rgba(79, 138, 185, 0.7) 0%, rgb(164, 207, 216) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(111, 108, 157, 0.7) 0%,
+    rgba(79, 138, 185, 0.7) 0%,
+    rgb(164, 207, 216) 100%
+  );
+  padding-bottom: 2%;
 
   .btn-sound-off:focus,
   .btn-tip:focus {
@@ -24,17 +30,14 @@
 
     span:first-child {
       font-size: 0.7em;
-      color: rgb(184, 184, 184);
+      // color: rgb(216, 216, 216);
+      color: #33295e6c;
     }
 
     &:focus {
       background: transparent;
       color: white;
     }
-  }
-
-  .btn-group button:focus {
-    // background: #ffffff2a;
   }
 
   i {
@@ -68,15 +71,12 @@
   background-color: #ffffff2a;
   border-radius: 75px;
   padding: 10%;
-
-  i {
-    // padding: 20%;
-  }
 }
 
 .btn-repeat.on-answer {
   padding: 3%;
-  height: 28%;
+  padding-right: 5%;
+  height: 22%;
   align-self: flex-end;
 
   i {
@@ -102,7 +102,6 @@
 }
 
 .answer-col {
-  // height: 20em;
   display: flex;
 }
 
@@ -201,9 +200,11 @@
 }
 
 @media only screen and (max-width: 576px) {
-  i {
-    &.fa-volume-up {
-      font-size: 3em;
+  .audio-call-wrapper {
+    i {
+      &.fa-volume-up {
+        font-size: 3em;
+      }
     }
   }
 }

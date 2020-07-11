@@ -82,6 +82,7 @@ export default class AudioCall extends Component {
 
     for (let i = 0; i < this.spanRoundWords.length; i += 1) {
       this.spanRoundWords[i].classList.remove('text-muted', 'text-decoration');
+      this.spanRoundWords[i].previousElementSibling.classList.remove('text-muted');
       this.btnsRoundWords[i].classList.remove('text-muted', 'isTipped');
 
       this.spanRoundWords[i].innerText = roundWordsArr[i].wordTranslate;
@@ -141,7 +142,10 @@ export default class AudioCall extends Component {
     this.btnDontKnow.classList.add('d-none');
     this.btnNext.classList.remove('d-none');
 
-    this.spanRoundWords.forEach((word) => word.classList.add('text-muted'));
+    this.spanRoundWords.forEach((word) => {
+      word.classList.add('text-muted');
+      word.previousElementSibling.classList.add('text-muted');
+    });
     this.rightAnswerSpan.classList.remove('text-muted');
   }
 
