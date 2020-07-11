@@ -142,6 +142,11 @@
     overflow: scroll;
   }
 
+  .correct-container,
+  .mistake-container {
+    flex-direction: column;
+  }
+
   .mistake-container {
     border-bottom: 0.2px solid gray;
   }
@@ -169,6 +174,14 @@
 
     p:nth-child(2) {
       margin-bottom: 0;
+    }
+
+    .row {
+      margin-bottom: 3%;
+
+      .fa-music {
+        font-size: 1.5em;
+      }
     }
   }
 }
