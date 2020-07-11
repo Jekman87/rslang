@@ -6,7 +6,22 @@ export default class Dragger {
   }
 
   init() {
-    document.addEventListener('mousedown', this.handleMouseDown.bind(this));
+    this.bindMethods();
+    this.addListeners();
+  }
+
+  bindMethods() {
+    this.bindedMethods = {
+      handleMouseDown: this.handleMouseDown.bind(this),
+    };
+  }
+
+  addListeners() {
+    document.addEventListener('mousedown', this.bindedMethods.handleMouseDown);
+  }
+
+  destroy() {
+    document.removeEventListener('mousedown', this.bindedMethods.handleMouseDown);
   }
 
   handleMouseDown(e) {
@@ -17,7 +32,7 @@ export default class Dragger {
 
     const handleMouseMoveBinded = this.handleMouseMove.bind(this);
     document.addEventListener('mousemove', handleMouseMoveBinded);
-    this.target.onmouseup = this.handleMouseUp.bind(this, handleMouseMoveBinded,
+    document.onmouseup = this.handleMouseUp.bind(this, handleMouseMoveBinded,
       e.clientX, e.clientY);
   }
 
@@ -46,7 +61,7 @@ export default class Dragger {
 
     this.currentDroppable = null;
     document.removeEventListener('mousemove', bindedMouseMoveHandler);
-    this.target.onmouseup = null;
+    document.onmouseup = null;
   }
 
   savePositionParams(e) {
@@ -58,12 +73,14 @@ export default class Dragger {
   }
 
   raiseUpTarget() {
+    this.target.style.cursor = 'grab';
     this.target.style.position = 'absolute';
     this.target.style.zIndex = 1000;
     document.body.append(this.target);
   }
 
   pullDownTarget() {
+    this.target.style.cursor = '';
     this.target.style.position = '';
     this.target.style.zIndex = '';
   }

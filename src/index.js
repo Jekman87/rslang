@@ -11,7 +11,7 @@ import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
 
-import { AudioCall } from './games/audioCall/index';
+import AudioCall from './games/audioCall/index';
 import Team from './components/teamPage';
 import Settings from './components/settingsPage';
 
@@ -20,6 +20,8 @@ import SpeakIt from './games/speakIt/index';
 import Puzzle from './games/english-puzzle/index';
 import Sprint from './games/sprint/Sprint.render';
 import Savannah from './games/savanna/savanna';
+
+import Promo from './components/promoPage';
 
 const pages = {
   Authorization,
@@ -33,6 +35,7 @@ const pages = {
   Puzzle,
   Savannah,
   Sprint,
+  Promo,
 };
 
 const mainApp = new MainApp('#app', {

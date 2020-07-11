@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import paintings from './paintingsInfo';
 import { BASE_URL, FILE_URL } from '../../../constants/constants';
 
@@ -10,7 +9,22 @@ export default class Loader {
   }
 
   init() {
-    document.addEventListener('dataRequired', this.handleDataRequest.bind(this));
+    this.bindMethods();
+    this.addListeners();
+  }
+
+  bindMethods() {
+    this.bindedMethods = {
+      handleDataRequest: this.handleDataRequest.bind(this),
+    };
+  }
+
+  addListeners() {
+    document.addEventListener('dataRequired', this.bindedMethods.handleDataRequest);
+  }
+
+  destroy() {
+    document.removeEventListener('dataRequired', this.bindedMethods.handleDataRequest);
   }
 
   handleDataRequest() {
@@ -59,7 +73,8 @@ export default class Loader {
       );
 
       sentencesInfo.forEach((item, index) => {
-        item.audio = audios[index];
+        const info = item;
+        info.audio = audios[index];
       });
 
       const pictureInfo = await this.loadPicture(group, page);

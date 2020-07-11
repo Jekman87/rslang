@@ -15,7 +15,7 @@ const GAME_MENU_TITLES = [
   { data: 'Savannah', title: 'Саванна' },
   { data: 'AudioCall', title: 'Аудиовызов' },
   { data: 'Sprint', title: 'Спринт' },
-  { data: 'Riddle', title: 'Своя игра' },
+  { data: 'Riddle', title: 'Загадка-отгадка' },
 ];
 
 const AUTH_PAGE_NAME = 'Authorization';
