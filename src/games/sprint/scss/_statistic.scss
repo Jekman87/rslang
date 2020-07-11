@@ -1,4 +1,4 @@
-.statistic-screen {
+.sprint-statistic-screen {
   @include flexible();
   flex-direction: column;
   position: fixed;
@@ -15,7 +15,7 @@
   display: none;
 }
 
-.statistic-blocks {
+.sprint-statistic-blocks {
   width: 90%;
   max-width: 700px;
   max-height: 80vh;
@@ -32,7 +32,7 @@
   z-index: 5;
 }
 
-.game-history {
+.sprint-game-history {
   width: 90%;
   max-width: 700px;
   max-height: 80vh;
@@ -46,20 +46,16 @@
   border: 2px solid #2d303a;
   border-radius: 10px;
   overflow: auto;
-  z-index: 5;
-}
-
-.statistic-blocks {
-  display: inline;
-}
-
-.game-history {
   z-index: 5;
   display: none;
 }
 
-.points-result,
-.history {
+.sprint-statistic-blocks {
+  display: inline;
+}
+
+.sprint-points-result,
+.sprint-history {
   @include flexible();
   color: $fontColor;
   font-size: 1.5rem;
@@ -73,7 +69,7 @@
   margin: 20px 0 20px;
 }
 
-.mistake-answer {
+.sprint-mistake-answer {
   @include flexible();
   background-color: #da5b4c;
   color: #fff;
@@ -82,7 +78,7 @@
   margin-left: 5px;
 }
 
-.correct-answer {
+.sprint-correct-answer {
   @include flexible();
   background-color: #01AF61;
   color: #fff;
@@ -91,8 +87,8 @@
   margin-left: 5px;
 }
 
-.statistic-block,
-.games {
+.sprint-statistic-block,
+.sprint-games {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -102,15 +98,15 @@
   box-shadow: none;
 }
 
-.statistic-block {
+.sprint-statistic-block {
   padding: 0 0 0 20px;
 }
 
-.games {
+.sprint-games {
   padding: 0 0 0 10px;
 }
 
-.statistic-block p {
+.sprint-statistic-block p {
   margin-left: 15px;
   margin-bottom: 10px;
 }
@@ -119,7 +115,7 @@
   display: none;
 }
 
-.statistic-buttons {
+.sprint-statistic-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -128,7 +124,7 @@
   min-height: 110px;
   margin: auto;
 
-  .statistic-button {
+  .sprint-statistic-button {
     @include flexible;
     margin: 4% auto;
     box-shadow: 6px 6px 10px #7b8a8b;
@@ -137,14 +133,14 @@
   }
 }
 
-.long-time span i{
+.long-time span i {
     font-size: 2rem;
     color: #7b8a8b;
     margin: 10px;
     border-bottom: 2px solid #9e8256;
 }
 
-.information-block {
+.sprint-information-block {
   width: 87%;
   display: flex;
   flex-direction: column;

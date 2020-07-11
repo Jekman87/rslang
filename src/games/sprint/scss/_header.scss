@@ -12,6 +12,17 @@
     transition: all 0.8s;
   }
 
+  .button {
+    @include flexible;
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff5c;
+    border: 1px solid #005e8d;
+    i {
+      color: $fontColor;
+    }
+  }
+
   .timer {
     @include flexible;
     width: 80px;

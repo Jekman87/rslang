@@ -7,16 +7,15 @@ export default class Sprint {
     this.$el = $$(selector);
     this.components = [SprintGame];
     this.observer = options.observer;
-    this.dataForApp = {};
+    this.options = options;
   }
 
   getRoot() {
     const $root = $$.create('div', 'sprint-container');
 
-    const componentOptions = { observer: this.observer, dataForApp: this.dataForApp };
     this.components = this.components.map((Component) => {
       const element = $$.create('div', Component.className);
-      const component = new Component(element, componentOptions);
+      const component = new Component(element, this.options);
 
       element.html(component.toHTML());
       $root.append(element);

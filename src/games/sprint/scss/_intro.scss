@@ -55,22 +55,26 @@
     display: none;
   }
 
-  .difficulty-level,
-  .difficulty-page {
-  display: flex;
-  flex-direction: column;
-  margin: 0 10px 30px 10px;
-
-  div {
+  .sprint-difficulty-level {
     display: flex;
-    justify-content: center;
-  }
-  span {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #fff;
-    margin: 10px auto;
-  }
+    flex-direction: column;
+    margin: 0 10px 30px 10px;
+    user-select: none;
+    transition: all 0.8s;
+
+    div {
+      display: flex;
+      justify-content: center;
+    }
+    span {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #fff;
+      margin: 10px auto;
+    }
+    input {
+      user-select: none;
+    }
   }
 
   button {
@@ -88,11 +92,3 @@
   }
 }
 
-.difficulty-level div span {
-  user-select: none;
-  transition: all 0.8s;
-}
-
-.hide-intro {
-  display: none !important;
-}

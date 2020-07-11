@@ -29,10 +29,10 @@ const pages = {
   Settings,
   SpeakIt,
   AudioCall,
-  Sprint,
   Riddle,
   Puzzle,
   Savannah,
+  Sprint,
 };
 
 const mainApp = new MainApp('#app', {

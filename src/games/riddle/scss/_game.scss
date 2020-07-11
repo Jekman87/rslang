@@ -14,7 +14,7 @@
 }
 
 .riddle-block,
-.translate-block {
+.riddle-translate-block {
   width: 90%;
   max-width: 700px;
   max-height: 80vh;
@@ -27,7 +27,7 @@
   overflow: auto;
 }
 
-.hide-prompt {
+.riddle-hide-prompt {
   display: none !important;
 }
 
@@ -59,13 +59,26 @@
   }
 }
 
-.answer-form {
+.riddle-answer-form {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 90%;
   opacity: 0;
   transition: all 0.8s;
+
+  .riddle-answer-input {
+    width: 100%;
+    min-height: 40px;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    background-color: #ffffff5c;
+    border: 1px solid #2d303a;
+    border-radius: 5px;
+    animation: blink 0.7s infinite;
+    transition: all 0.4s;
+  }
 
   button {
     min-width: 110px;
@@ -74,40 +87,27 @@
   }
 }
 
-.answer-input {
-  width: 100%;
-  min-height: 40px;
-  margin: 10px;
-  padding: 5px;
-  text-align: center;
-  background-color: #ffffff5c;
-  border: 1px solid #2d303a;
-  border-radius: 5px;
-  animation: blink 0.7s infinite;
-  transition: all 0.4s;
-}
-
-.answer-blocks {
+.riddle-answer-blocks {
   width: 90%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: auto;
   padding: 10px;
+
+  .answer-block {
+    @include flexible;
+    width: 40%;
+    min-height: 30px;
+    margin: 10px;
+    background-color: #ffffff5c;
+    border: 1px solid #2d303a;
+    border-radius: 5px;
+    transition: all 0.4s;
+  }
 }
 
-.answer-block {
-  @include flexible;
-  width: 40%;
-  min-height: 30px;
-  margin: 10px;
-  background-color: #ffffff5c;
-  border: 1px solid #2d303a;
-  border-radius: 5px;
-  transition: all 0.4s;
-}
-
-.game-block {
+/* .game-block {
   width: 400px;
   display: flex;
   flex-direction: column;
@@ -118,19 +118,19 @@
   border: 1px solid #005e8d;
   background-color: #ffffff5c;
   transition: all 0.2s;
-}
+} */
 
-.correct-color {
+/* .correct-color {
   background-color: #18bc9c4d;
   transition: all 0.2s;
-}
+} */
 
-.wrong-color {
+/* .wrong-color {
   background-color: #d1343463;
   transition: all 0.2s;
-}
+} */
 
-.sprint-score {
+/* .sprint-score {
   width: 380px;
   min-height: 10vh;
   @include flexible;
@@ -157,9 +157,9 @@
       transition: all 0.8s;
     }
   }
-}
+} */
 
-.unmute {
+/* .unmute {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -180,9 +180,9 @@
     color: red;
     transition: all 0.8s;
   }
-}
+} */
 
-.progress-place {
+/* .progress-place {
   width: 90%;
   @include flexible;
   position: relative;
@@ -210,9 +210,9 @@
       transition: all 0.6s;
     }
   }
-}
+} */
 
-.birds,
+/* .birds,
 .language-eng,
 .language-rus {
   @include flexible;
@@ -228,15 +228,15 @@
 .language-rus {
   min-height: 50px;
   text-align: center;
-}
+} */
 
-.points-progress {
+/* .points-progress {
   @include flexible;
   font-size: 0.9rem;
   color: $fontColor;
-}
+} */
 
-.birds {
+/* .birds {
   position: relative;
 
   span {
@@ -283,10 +283,10 @@
     top: 32%;
     left: 68%;
   }
-}
+} */
 
 
-.click-buttons,
+/* .click-buttons,
 .press-buttons {
   width: 70%;
   @include flexibleSpace;
@@ -304,14 +304,14 @@
       color: $fontColor;
     }
   }
-}
+} */
 
-.click-buttons button {
+/* .click-buttons button {
   box-shadow: 6px 6px 10px #7b8a8b;
   transition: all 0.2s;
-}
+} */
 
-.button {
+.riddle-button {
   @include flexible;
   min-width: 40px;
   min-height: 40px;
@@ -322,22 +322,7 @@
   box-shadow: 6px 6px 10px #7b8a8b;
 }
 
-.icon-parameters {
+.riddle-icon-parameters {
   font-size: 1.5rem;
   color: $fontColor;
-}
-
-.right-arrow,
-.left-arrow {
-  transition: all 0.2s;
-}
-
-.right-arrow i,
-.left-arrow i {
-  transition: all 0.8s;
-}
-
-.active-key {
-  opacity: 0.5;
-  transition: all 0.5s;
 }
