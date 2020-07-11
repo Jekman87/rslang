@@ -2,7 +2,7 @@ import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createVocabularyHTML from './vocabulary.template';
 import './scss/style.scss';
-// import { FILE_URL } from '../../constants/constants';
+import { FILE_URL } from '../../constants/constants';
 
 const test = [
   {
@@ -54,6 +54,11 @@ const deletedWordsConfig = {
   systemBottonColor: 'btn-outline-success',
   systemBottonIcon: 'fas fa-trash-restore',
 };
+const progressConfig = {
+  bgColor: ['bg-dark', 'bg-danger', 'bg-warning', 'bg-info', 'bg-success'],
+  barWidth: ['20', '40', '60', '80', '100'],
+  text: ['Я это точно учил?', 'Где-то уже слышал!', 'Нужно еще потренироваться!', 'Ну ещё немножечко...', 'Знаю!'],
+};
 
 export default class Vocabulary extends Component {
   static className = 'Vocabulary';
@@ -70,8 +75,41 @@ export default class Vocabulary extends Component {
     this.settings = this.options.dataForApp.settings.optional;
   }
 
+  decodeDataFromBackend(obj) {
+    return {
+      progressColor: this.defineProgressBarBgColor(obj.userWord.optional.progress),
+      progressWidth: `${this.defineProgressBarWidth(obj.userWord.optional.progress)}%`,
+      progressText: this.defineProgressText(obj.userWord.optional.progress),
+      lastTraining: '07.07.2020',
+      nextTraining: '08.08.2020',
+      counter: obj.userWord.optional.counter,
+      word: obj.word,
+      wordImage: `${FILE_URL}/${obj.image}`,
+      textMeaning: obj.textMeaning,
+      textExample: obj.textExample,
+      transcription: obj.transcription,
+      wordTranslate: obj.wordTranslate,
+      textMeaningTranslate: obj.textMeaningTranslate,
+      textExampleTranslate: obj.textExampleTranslate,
+      audioTagId: `${obj.word}Audio`,
+      audioButtonId: `${obj.word}AudioButton`,
+      audioSrc: `${FILE_URL}/${obj.audio}`,
+    };
+  }
+
+  defineProgressBarBgColor(userWordProgress) {
+    return progressConfig.bgColor[userWordProgress - 1];
+  }
+
+  defineProgressBarWidth(userWordProgress) {
+    return progressConfig.barWidth[userWordProgress - 1];
+  }
+
+  defineProgressText(userWordProgress) {
+    return progressConfig.text[userWordProgress - 1];
+  }
+
   createCard(dataObj, config, deletedConfig) {
-    { /* <li class="list-group-item"></li> */ }
     let additionalInfoOff = false;
     let additionalFieldsOff = false;
     if (this.settings.vocabularyExample === false
@@ -83,9 +121,6 @@ export default class Vocabulary extends Component {
       && this.settings.vocabularyImage === false) {
       additionalFieldsOff = true;
     }
-    // const ul = document.createElement('ul');
-    // ul.classList.add('list-group');
-    // ul.innerHTML =
     return `<li class="list-group-item">
     <div class="d-flex flex-column-reverse align-items-center justify-content-between flex-sm-row">
     <div class="progress-wrapper d-flex  flex-sm-column flex-lg-row col-12 col-sm-4 ml-md-3 mb-1 justify-content-between align-items-center">
@@ -139,8 +174,9 @@ export default class Vocabulary extends Component {
 
 
   <div class="buttons-wrapper d-flex order-md-3 my-md-0 ml-md-2 justify-content-around justify-content-md-between ${additionalFieldsOff ? 'order-3' : 'order-1 flex-md-column my-3'}">
-    <button type="button" class="btn btn-outline-info px-1  ${additionalFieldsOff ? 'mr-2' : ''}" style="border-color:transparent"><i class="fas fa-volume-up sound-button"></i>
+    <button type="button" class="audio-btn btn btn-outline-info px-1  ${additionalFieldsOff ? 'mr-2' : ''}" style="border-color:transparent" id="${dataObj.audioButtonId}"><i class="fas fa-volume-up sound-button"></i>
     </button>
+    <audio id="${dataObj.audioTagId}" src="${dataObj.audioSrc}"></audio>
     <button type="button" class="btn ${config.systemBottonColor} px-1" style="border-color:transparent"><i class="${config.systemBottonIcon} retrieval-button"></i>
     </button>
   </div>
@@ -173,9 +209,6 @@ export default class Vocabulary extends Component {
 </div>
 </li>
 `.trim();
-
-    // </li>
-    // return ul;
   }
 
   createListOfWords(tabId, decodedDataArr, wordsConfig, isDeletedConfig) {
@@ -188,27 +221,28 @@ export default class Vocabulary extends Component {
     parentContainer.innerHTML = '';
     return parentContainer.append(container);
   }
-  // const inputDataTemplate = inputData.map((el, i) => {
-  //   return `
 
-  // ${inputData .text}
-  // `; }) .... mainTemplate() { return
-  // ${inputDataTemplate}
-  // ; }
   init() {
     super.init();
-    this.createListOfWords('active-words', test, activeWordsConfig, false);
-    // подписка на события внутри компонента
+    // otladka
+    const start = Date.now();
+    this.options.api.getAllUserAggregatedWords(null, 3600, '{"userWord":{"$ne":null}}').then((e) => {
+      this.words = e[0].paginatedResults;
+      const end = Date.now();
+      console.log('words', end - start, this.words);
+      const test1 = (this.words).map((el) => this.decodeDataFromBackend(el));
+      this.createListOfWords('active-words', test1, activeWordsConfig, false);
+    }).catch((e) => {
+      console.log('catch', e);
+    });
   }
 
   onClick(event) {
     const clickedElement = $$(event.target);
-
+    console.log(clickedElement);
     if (clickedElement.hasClass('nav-link')) {
-      // console.log(clickedElement.$el.href);
       const typeOfWordsId = clickedElement.$el.href.slice((clickedElement.$el.href.indexOf('#')) + 1);
       if (this.typeOfWordsId !== typeOfWordsId) {
-        // console.log(typeOfWordsId);
         const PrefixOfTypeOfConfig = typeOfWordsId.slice(0, typeOfWordsId.indexOf('-'));
         const isDeleted = PrefixOfTypeOfConfig === 'deleted';
         let typeOfConfig = PrefixOfTypeOfConfig === 'active' ? activeWordsConfig : difficultWordsConfig;
@@ -218,8 +252,12 @@ export default class Vocabulary extends Component {
         this.createListOfWords(typeOfWordsId, test, typeOfConfig, isDeleted);
         this.typeOfWordsId = typeOfWordsId;
       }
-      // const pageName = clickedElement.data.name;
-      // this.emit('selectPage', pageName);
+    }
+
+    if (clickedElement.hasClass('audio-btn')) {
+      const audioTagId = clickedElement.$el.id.slice(0, clickedElement.$el.id.indexOf('Button'));
+      console.log(clickedElement.$el.id, audioTagId, clickedElement.$el.id.indexOf('Button'));
+      document.getElementById(audioTagId).play().catch(() => true);
     }
   }
 
@@ -227,19 +265,3 @@ export default class Vocabulary extends Component {
     return createVocabularyHTML().trim();
   }
 }
-
-// import './scss/style.scss';
-// import showTemplate from './js/vocabulary.template';
-
-// export default class Vocubulary {
-//   static className = 'vocabulary';
-
-//   constructor(tag) {
-//     document.querySelector(tag).innerHTML = showTemplate();
-//     console.log('constructor');
-//   }
-
-//   render() {
-//     console.log('start application');
-//   }
-// }
