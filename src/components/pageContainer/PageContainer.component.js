@@ -38,6 +38,7 @@ export default class PageContainer extends Component {
 
     this.newWords = null;
     this.wordsToRepeatToday = null;
+    this.userWords = null;
     this.userCards = [];
   }
 
@@ -93,6 +94,7 @@ export default class PageContainer extends Component {
         statistics: this.statistics,
         newWords: this.newWords,
         wordsToRepeatToday: this.wordsToRepeatToday,
+        userWords: this.userWords,
         userCards: this.userCards,
         longTermStats: this.longTermStats,
         shortTermStats: this.shortTermStats,
@@ -165,28 +167,32 @@ export default class PageContainer extends Component {
       const hour = time.getHours();
       if (hour >= RESET_HOUR) time.setDate(time.getDate() + 1);
       const resetDayTime = time.setHours(RESET_HOUR, 0);
+
       const wordsToRepeatTodayFilter = `{"$and":[
         {"userWord":{"$ne":null}},
         {"userWord.optional.status":{"$ne":"deleted"}},
         {"userWord.optional.nextRepeat":{"$lt":${resetDayTime}}}
       ]}`;
-      const filter1 = '{"userWord":{"$ne":null}}';
+
+      const userWordsFilter = '{"userWord":{"$ne":null}}';
+
       const data = await Promise.all([
         this.options.api.getAllUserAggregatedWords(null, this.settings.wordsPerDay, newWordsFilter),
         this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, wordsToRepeatTodayFilter),
-        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, filter1),
+        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, userWordsFilter),
       ]);
 
       // this.options.api.getAllUserWords(),
 
-      const [newWords, wordsToRepeatToday, test] = data;
+      const [newWords, wordsToRepeatToday, userWords] = data;
       this.newWords = newWords[0].paginatedResults;
       this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults
         .sort((wordA, wordB) => wordA.optional.nextRepeat - wordB.optional.nextRepeat);
+      this.userWords = userWords[0].paginatedResults;
 
       console.log('newWords', this.newWords);
       console.log('wordsToRepeatToday', this.wordsToRepeatToday);
-      console.log('test', test);
+      console.log('userWords', this.userWords);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);

@@ -1,4 +1,5 @@
 import { FILE_URL } from '../../constants/constants';
+// высчитывать интервалы
 
 export default function createMainGameHTML(dataForApp) {
   const { studiedСardNum } = dataForApp.state;

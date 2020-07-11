@@ -4,11 +4,21 @@ import createMainGameHTML from './mainGame.template';
 
 import { delay } from '../../core/utils';
 
-import { FILE_URL } from '../../constants/constants';
+import {
+  FILE_URL, ONE_MINUTE, TEN_MINUTES, ONE_DAY, MULTIPLIER_GOOD, MULTIPLIER_EASY,
+} from '../../constants/constants';
+
 import UserWord from '../../core/UserWord';
 // import BASE_USER_WORD from '../../constants/user-word.constants';
-const DIFFICULTY = {
-  again: 'again', hard: 'hard', good: 'good', easy: 'easy',
+const WORD_PARAM = {
+  again: 'again',
+  hard: 'hard',
+  good: 'good',
+  easy: 'easy',
+  new: 'new',
+  active: 'active',
+  deleted: 'deleted',
+  difficult: 'difficult',
 };
 const AGAIN_STEP = 4;
 
@@ -27,12 +37,13 @@ export default class MainGame extends Component {
     this.settingsOptional = this.dataForApp.settings.optional;
     this.newWords = this.dataForApp.newWords;
     this.todayWordsToRepeat = this.dataForApp.todayWordsToRepeat;
+    this.userWords = this.dataForApp.userWords;
     this.userCards = this.dataForApp.userCards;
     this.state = {
       currentCardNum: 0,
       studiedСardNum: 0,
       isChecking: false,
-      currentWord: null,
+      currentWordStats: null,
       seriesOfCorrectAnswers: 0,
       longestSeriesOfCorrectAnswers: 0,
     };
@@ -99,7 +110,7 @@ export default class MainGame extends Component {
         // ручное уплавление алгоритмом - again
         // пометка - слово повторить скоро - 1 мин?
         // переход на след карту
-        this.setDifficulty(DIFFICULTY.again);
+        this.setDifficulty(WORD_PARAM.again);
         this.changeCard();
         break;
 
@@ -107,7 +118,7 @@ export default class MainGame extends Component {
         // ручное уплавление алгоритмом - hard
         // пометка - слово повторить скоро - 10 мин?
         // переход на след карту
-        this.setDifficulty(DIFFICULTY.hard);
+        this.setDifficulty(WORD_PARAM.hard);
         this.changeCard();
         break;
 
@@ -115,7 +126,7 @@ export default class MainGame extends Component {
         // ручное уплавление алгоритмом - good
         // пометка - слово повторить скоро - 1 день?
         // переход на след карту
-        this.setDifficulty(DIFFICULTY.good);
+        this.setDifficulty(WORD_PARAM.good);
         this.changeCard();
         break;
 
@@ -123,7 +134,7 @@ export default class MainGame extends Component {
         // ручное уплавление алгоритмом - easy
         // пометка - слово повторить скоро - 3 дня?
         // переход на след карту
-        this.setDifficulty(DIFFICULTY.easy);
+        this.setDifficulty(WORD_PARAM.easy);
         this.changeCard();
         break;
 
@@ -140,6 +151,9 @@ export default class MainGame extends Component {
         // айди слова - сохраняем персональную? статистику - в сложные
         // статистика по слову меняется
         // переход на след карту
+        // кнопку открывать только после угадывания!!
+        // difficulty: hard
+        // status: hard
         this.changeCard();
         break;
 
@@ -184,11 +198,11 @@ export default class MainGame extends Component {
 
     this.state.isChecking = true;
     const inputText = this.elements.$wordInput.text();
-    const currentWord = this.elements.$wordEn.text();
+    const currentWordStats = this.elements.$wordEn.text();
 
     // проверяем инпут на соответствие
     // проверка на текущее изучаемое слово для листания
-    if (inputText === currentWord) {
+    if (inputText === currentWordStats) {
       // отметка ок в статистике слова
       // статистика пользователя дневная и долгосрочная
       // учесть окончание карточек
@@ -222,7 +236,7 @@ export default class MainGame extends Component {
       if (!this.settingsOptional.feedbackButtons) { // добавить '!'
         // переход на след карту
         // если кнопки выкючены - сами определяем алгоритм
-        this.setDifficulty(DIFFICULTY.good);
+        this.setDifficulty(WORD_PARAM.good);
         this.changeCard();
       }
 
@@ -233,6 +247,7 @@ export default class MainGame extends Component {
       // алгоритм показа ошибок
       // показываем ответ как по кнопке "показать ответ"?
       // или просто на время показываем слово в инпуте?
+      this.setDifficulty(WORD_PARAM.hard, false);
       console.log('не верно');
     }
 
@@ -319,85 +334,154 @@ export default class MainGame extends Component {
     this.state.currentCardNum = nextCandNum;
   }
 
-  setDifficulty(wordDifficulty, success = true) {
-    const word = this.userCards[this.state.currentCardNum];
-    console.log('setDifficulty word', word);
+  setDifficulty(wordDifficulty, isSuccess = true) {
+    const currentWord = this.userCards[this.state.currentCardNum];
+    console.log('setDifficulty word', currentWord);
+
+    let isNewWord = true;
 
     // проверяем есть ли для слова статистика, если нету - создаем
-    if (word.userWord) {
-      this.state.currentWord = word.userWord;
+    if (currentWord.userWord) {
+      this.state.currentWordStats = currentWord.userWord;
+      isNewWord = false;
     } else {
-      this.state.currentWord = new UserWord();
+      this.state.currentWordStats = new UserWord();
     }
 
-    let difficulty;
-    let lastRepeat;
-    // let nextRepeat;
-    // let counter;
-    // let success;
-    // let progress;
-    // let status;
-    // let gameError;
+    let {
+      lastRepeat,
+      nextRepeat,
+      counter,
+      success,
+      progress,
+      status,
+      gameError,
+    } = this.state.currentWordStats.optional;
 
-    // изменить и сохранить слово
-    /*
-    this.difficulty = 'new';
-    this.optional = {
-      lastRepeat: Date.now(),
-      nextRepeat: 0, посчитать в зависимости от сложности
-      counter: 0, показы? +1
-      success: 0, угадано-неугадано - если угадано +1 success?
-      progress: 0, если угадано сразу - 5? иначе 1
-      status: 'active', или др (active -- для изучаемых слов, difficult -- для сложных, deleted -- для удаленных)
-      gameError: false, если ошибка - не трогаем, если ок - меняем на false
-    };
-    */
+    let { difficulty } = this.state.currentWordStats;
 
-    // определяем сложность для слова
-    // сохраняем само слово
-    // сохраняем статистику пользователя за день
-    // долгосрочная статистика
-    // если нужно добавляем в массив карточек
-    // либо через одно либо в конец
     lastRepeat = Date.now();
 
-    if (wordDifficulty === DIFFICULTY.again) {
-      difficulty = DIFFICULTY.again;
-      nextRepeat = lastRepeat + (60 * 1000);
+    // intervalAgain: ONE_MINUTE,
+    // intervalHard: TEN_MINUTES,
+    // intervalGood: TEN_MINUTES,
+    // intervalEasy: ONE_DAY,
+
+    if (wordDifficulty === WORD_PARAM.again) {
+      difficulty = WORD_PARAM.again;
+
+      if (status === WORD_PARAM.new) {
+        nextRepeat = lastRepeat + (60 * 1000);
+
+        const nextRepeatCardNum = this.state.currentCardNum + AGAIN_STEP;
+
+        if (nextRepeatCardNum > this.userCards.length) {
+          this.userCards.push(currentWord);
+        } else {
+          this.userCards.splice(nextRepeatCardNum, 0, currentWord);
+        }
+      } else {
+        // для остальных 10 мин
+        nextRepeat = lastRepeat + (10 * 60 * 1000);
+        this.userCards.push(currentWord);
+      }
+
       // пометка статистики
       // в конец user card если меньше 50ти (настройки)
       // иначе в начало массива повторений
-      const nextRepeatCardNum = this.state.currentCardNum + AGAIN_STEP;
+    }
 
-      if (nextRepeatCardNum > this.userCards.length) {
-        this.userCards.push(word);
+    if (wordDifficulty === WORD_PARAM.hard) {
+      difficulty = WORD_PARAM.hard;
+
+      if (status === WORD_PARAM.new) {
+        nextRepeat = lastRepeat + (10 * 60 * 1000);
+        this.userCards.push(currentWord);
       } else {
-        this.userCards.splice(nextRepeatCardNum, 0, word);
+        // след время высчита в зависимости от слова
+
       }
-    }
 
-    if (wordDifficulty === DIFFICULTY.hard) {
-      difficulty = DIFFICULTY.hard;
-      nextRepeat = lastRepeat + (10 * 60 * 1000);
       // пометка статистики
-      this.userCards.push(word);
     }
 
-    if (wordDifficulty === DIFFICULTY.good) {
-      difficulty = DIFFICULTY.good;
+    if (wordDifficulty === WORD_PARAM.good) {
+      difficulty = WORD_PARAM.good;
       nextRepeat = lastRepeat + (10 * 60 * 1000);
+
+      if (status === WORD_PARAM.new) {
+        nextRepeat = lastRepeat + (24 * 60 * 60 * 1000); // 1 день
+      } else {
+        // след время высчита в зависимости от слова
+
+      }
       // пометка статистики
       // если в первый раз - на повторение тоже
-      if (this.state.currentWord.difficulty === 'new') {
-        this.userCards.push(word);
+      if (this.state.currentWordStats.difficulty === 'new') {
+        this.userCards.push(currentWord);
       }
     }
 
-    if (wordDifficulty === DIFFICULTY.easy) {
+    if (wordDifficulty === WORD_PARAM.easy) {
       // пометка статистики
+      difficulty = WORD_PARAM.easy;
+
+      if (status === WORD_PARAM.new) {
+        nextRepeat = lastRepeat + (4 * 24 * 60 * 60 * 1000); // 4 дня
+      } else {
+        // след время высчита в зависимости от слова
+
+      }
     }
 
+    counter += 1;
+    success = isSuccess ? (success + 1) : success;
+
+    if (status === WORD_PARAM.new && isSuccess) {
+      progress = 5;
+    } else {
+      progress = (progress < 5) ? (progress + 1) : progress;
+    }
+
+    if (isSuccess) {
+      gameError = false;
+    }
+
+    // доработать перевод в сложные
+    if (wordDifficulty === WORD_PARAM.deleted || wordDifficulty === WORD_PARAM.difficult) {
+      status = wordDifficulty;
+      difficulty = wordDifficulty;
+    } else {
+      status = WORD_PARAM.active;
+    }
+
+    const {
+      again, hard, good, easy,
+    } = this.getIntervalsOfRepeat(currentWord.userWord);
+
+    this.state.currentWordStats = {
+      difficulty,
+      optional: {
+        intervalAgain: again,
+        intervalHard: hard,
+        intervalGood: good,
+        intervalEasy: easy,
+        lastRepeat,
+        nextRepeat,
+        counter,
+        success,
+        progress,
+        status,
+        gameError,
+      },
+    };
+
+    // если слово новое - добавить в массив this.userWords.push(currentWord);
+
+    // word.userWord = this.state.currentWordStats;
+    // сохраняем слово this.options.api.updateUserWord(this.state.currentWordStats, currentWord._id);
     console.log('setDif', this.userCards);
+    console.log('currentWordStats', this.state.currentWordStats);
   }
 
   /*
@@ -428,6 +512,54 @@ export default class MainGame extends Component {
   // либо на сегодня нет слов для повторения
   // берем с бекенда с самого начала или с последней точки
 
+  getIntervalsOfRepeat(userWord) {
+    let again = ONE_MINUTE;
+    let hard = ONE_MINUTE;
+    let good = TEN_MINUTES;
+    let easy = ONE_DAY * 4;
+
+    if (userWord) {
+      const { difficulty } = userWord;
+      const {
+        intervalAgain, intervalHard, intervalGood, intervalEasy,
+      } = userWord.optional;
+
+      if (difficulty === WORD_PARAM.again) {
+        again = intervalAgain;
+        hard = intervalHard;
+        good = intervalGood;
+        easy = intervalEasy;
+      }
+
+      if (difficulty === WORD_PARAM.hard) {
+        again = intervalAgain;
+        hard = intervalHard;
+        good = intervalGood;
+        easy = intervalEasy;
+      }
+
+      if (difficulty === WORD_PARAM.good) {
+        again = TEN_MINUTES;
+        hard = intervalGood;
+        good = intervalGood === TEN_MINUTES ? ONE_DAY : (intervalGood * MULTIPLIER_GOOD);
+        easy = intervalGood === TEN_MINUTES ? ONE_DAY * 4 : (intervalGood * MULTIPLIER_EASY);
+      }
+
+      if (difficulty === WORD_PARAM.easy) {
+        again = TEN_MINUTES;
+        hard = intervalEasy;
+        good = intervalEasy * MULTIPLIER_GOOD;
+        easy = intervalEasy * MULTIPLIER_EASY;
+      }
+    }
+
+    console.log('intervals: ', again, hard, good, easy);
+
+    return {
+      again, hard, good, easy,
+    };
+  }
+
   destroy() {
     super.destroy();
     this.audio = null;
@@ -439,3 +571,32 @@ export default class MainGame extends Component {
 }
 
 // возможность запустить след партию слов
+
+// let lastRepeat;
+// let nextRepeat;
+// let counter;
+// let success;
+// let progress;
+// let gameError;
+
+// изменить и сохранить слово
+/*
+this.difficulty = 'new';
+this.optional = {
+  lastRepeat: Date.now(),
+  nextRepeat: 0, посчитать в зависимости от сложности
+  counter: 0, показы? +1
+  success: 0, угадано-неугадано - если угадано +1 success?
+  progress: 1, если угадано сразу - 5? иначе 1
+  status: 'active', или др (active -- для изучаемых слов, difficult -- для сложных,
+    deleted -- для удаленных)
+  gameError: false, если ошибка - не трогаем, если ок - меняем на false
+};
+*/
+
+// определяем сложность для слова
+// сохраняем само слово
+// сохраняем статистику пользователя за день
+// долгосрочная статистика
+// если нужно добавляем в массив карточек
+// либо через одно либо в конец
