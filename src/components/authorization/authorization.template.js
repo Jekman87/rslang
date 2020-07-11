@@ -7,10 +7,10 @@ export default function createAuthorizationForm() {
       <div class="my-5 col-10 col-md-5 ml-auto mr-auto py-4 authorization-form">
         <form class="register-form d-none">
           <div class="alert alert-success text-center alert-success-register d-none" role="alert">
-            Success!
+            Успешно!
           </div>
           <div class="alert alert-danger text-center alert-error-register d-none" role="alert">
-            User already exists.
+            Пользователь уже существует.
           </div>
           <div class="form-group">
             <input
@@ -23,39 +23,49 @@ export default function createAuthorizationForm() {
               required
             />
           </div>
+          <div class="form-group">
+            <input
+              type="username"
+              class="form-control form-control-lg"
+              id="userName"
+              aria-describedby="usernameHelp"
+              placeholder="имя пользователя"
+              autocomplete="off"
+              required
+            />
+          </div>
           <div class="form-group mb-4">
             <input
               type="password"
               class="form-control form-control-lg"
               id="registerPassword"
-              placeholder="password"
+              placeholder="пароль"
               pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
               required
             />
             <small
               id="passwordHelpBlock"
               class="form-text  text-justify pass-tip "
-              style="color: #6c757d;"
             >
-            Your password must contain at least: 8 characters, one lowercase
-              letter, one uppercase letter, special character
+              Ваш пароль должен содержать по крайней мере 8 символов, одну прописную, 
+              одну строчную букву и специальный символ
             </small>
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-block" name = "btn-submit-register">
-            REGISTER
+            РЕГИСТРАЦИЯ
           </button>
           <p
-            class="display-6 text-center text-muted font-weight-light sign-in-text my-2"
+            class="display-6 text-center  font-weight-light sign-in-text my-2"
           >
-            Already registered?
+            Уже зарегистрированы?
             <a href="#" class="text-primary change-form-link">
-              Sign In
+              Войти
             </a>
           </p>
         </form>
         <form class="login-form">
           <div class="alert alert-danger alert-error-login text-center d-none" role="alert">
-            Incorrect E-mail or password, please try again.
+            Некорректная почта или пароль, пожалуйста, попробуйте еще раз
           </div>
           <div class="form-group">
             <input
@@ -69,16 +79,16 @@ export default function createAuthorizationForm() {
             />
           </div>
           <div class="form-group mb-4">
-            <input type="password" class="form-control form-control-lg" id="loginPassword" placeholder="password" required />
+            <input type="password" class="form-control form-control-lg" id="loginPassword" placeholder="пароль" required />
           </div>
 
           <button type="submit" class="btn btn-primary btn-lg btn-block">
-            LOGIN
+            ВОЙТИ
           </button>
-          <p class="display-6 text-center text-muted font-weight-light sign-in-text my-2">
-            Not registered?
+          <p class="display-6 text-center font-weight-light sign-in-text my-2">
+            Не зарегистрированы?
             <a href="#" class="text-primary  change-form-link">
-              Create an account
+              Создать аккаунт
             </a>
           </p>
         </form>

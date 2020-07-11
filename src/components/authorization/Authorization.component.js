@@ -34,8 +34,7 @@ export default class Authorization extends Component {
   async onSubmitRegisterForm(event) {
     event.preventDefault();
 
-    // взять из поля юзернейм
-    const userName = 'Julia\'s cat';
+    const userName = document.getElementById('userName').value;
     const userEmail = document.getElementById('registerName').value;
     const password = document.getElementById('registerPassword').value;
 
