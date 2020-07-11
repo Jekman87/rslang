@@ -34,8 +34,7 @@ export default class Authorization extends Component {
   async onSubmitRegisterForm(event) {
     event.preventDefault();
 
-    // взять из поля юзернейм
-    const userName = 'Julia\'s cat';
+    const userName = document.getElementById('userName').value;
     const userEmail = document.getElementById('registerName').value;
     const password = document.getElementById('registerPassword').value;
 
@@ -82,6 +81,13 @@ export default class Authorization extends Component {
     document.querySelector('.register-form').classList.toggle('d-none');
   }
 
+  onClickRegisterEye() {
+    const inputPassword = document.getElementById('registerPassword');
+    if (inputPassword.type === 'password') {
+      inputPassword.type = 'text';
+    } else inputPassword.type = 'password';
+  }
+
   init() {
     super.init();
     this.registerForm = document.querySelector('.register-form');
@@ -94,6 +100,9 @@ export default class Authorization extends Component {
     this.changeFormLinks.forEach((link) => {
       link.addEventListener('click', this.onClickChangeFormLink);
     });
+
+    this.registerEye = document.getElementById('register-eye');
+    this.registerEye.addEventListener('click', this.onClickRegisterEye);
   }
 
   toHTML() {
