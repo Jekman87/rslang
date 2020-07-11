@@ -10,7 +10,17 @@ export default class Puzzle {
 
   render() {
     this.container.innerHTML = puzzleGame;
-    const app = new App(this.options.api, this.options.dataForApp.statistics);
-    app.init();
+    this.app = new App(
+      this.options.api,
+      this.options.dataForApp.statistics,
+      this.options.dataForApp.settings,
+      this.options.observer,
+    );
+    this.app.init();
+  }
+
+  destroy() {
+    this.app.destoy();
+    this.container.innerHTML = '';
   }
 }

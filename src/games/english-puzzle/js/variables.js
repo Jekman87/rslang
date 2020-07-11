@@ -1,9 +1,10 @@
-const userBasicSettings = {
-  pzlHelpers: 'on-on-on-on',
+const userBasicStatistics = {
   pzlLastRound: '1-0',
   pzlPassedRounds: '|-|000000000000000000000000000000000000000000000-|0000000000000000000000000000000000000000-|0000000000000000000000000000000000000000-|0000000000000000000000000-|0000000000000000000000000-|0000000000000000000000000',
   pzlGallery: 'empty',
 };
+
+const userBasicSettings = 'on-on-on-on';
 
 const monthNames = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
 
@@ -32,4 +33,9 @@ const puzzleSizeSettings = {
   },
 };
 
-export { userBasicSettings, monthNames, puzzleSizeSettings };
+export {
+  userBasicStatistics,
+  userBasicSettings,
+  monthNames,
+  puzzleSizeSettings,
+};
