@@ -36,7 +36,7 @@ const popularityChartData = {
   labels: ['SpeakIt', 'English Puzzle', 'Саванна', 'Аудиовызов', 'Спринт', 'Riddle'],
   datasets: [{
     label: 'Сыграно раз',
-    data: [0, 0, 0, 0, 0, 0],
+    data: [7, 0, 4, 2, 5, 1],
     backgroundColor: [
       'rgba(255, 99, 132, 0.4)',
       'rgba(54, 162, 235, 0.4)',
@@ -57,6 +57,59 @@ const popularityChartData = {
   }],
 };
 
+const chartsMarkUpData = [
+  {
+    id: 'perDay',
+    linkText: 'Выучено слов за день',
+    type: 'line-chart',
+
+  },
+  {
+    id: 'allDays',
+    linkText: 'Выучено слов всего',
+    type: 'line-chart',
+
+  },
+  {
+    id: 'popularity',
+    linkText: 'Популярность мини-игр',
+    type: 'bar-chart',
+
+  },
+];
+
+const tablesMarkUpData = [
+  {
+    id: 'speakIt',
+    linkText: 'SpeakIt',
+  },
+  {
+    id: 'englishPuzzle',
+    linkText: 'English Puzzle',
+  },
+  {
+    id: 'savanna',
+    linkText: 'Саванна',
+  },
+  {
+    id: 'audioCall',
+    linkText: 'Аудиовызов',
+  },
+  {
+    id: 'sprint',
+    linkText: 'Спринт',
+  },
+  {
+    id: 'riddle',
+    linkText: 'Riddle',
+  },
+];
+
 export {
-  chartOptions, perDayChartData, allDaysChartData, popularityChartData,
+  chartOptions,
+  perDayChartData,
+  allDaysChartData,
+  popularityChartData,
+  tablesMarkUpData,
+  chartsMarkUpData,
 };
