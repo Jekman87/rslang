@@ -13,6 +13,7 @@ export default class MainPage extends Component {
     });
 
     this.pages = options.pages;
+    this.api = options.api;
   }
 
   init() {
@@ -30,6 +31,9 @@ export default class MainPage extends Component {
   }
 
   toHTML() {
-    return createMainPageHTML().trim();
+    const data = {
+      username: this.api.userName,
+    };
+    return createMainPageHTML(data).trim();
   }
 }
