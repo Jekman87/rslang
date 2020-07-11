@@ -29,6 +29,15 @@ export default class Header extends Component {
     this.subscribe('hideHeader', () => {
       header.addClass('d-none');
     });
+
+    this.subscribe('mainAppSpinner', (isShow) => {
+      const spinner = this.$root.find('.main-app-sp');
+      if (isShow) {
+        spinner.removeClass('d-none');
+      } else {
+        spinner.addClass('d-none');
+      }
+    });
   }
 
   onClick(event) {

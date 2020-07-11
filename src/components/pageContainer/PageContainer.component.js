@@ -85,6 +85,7 @@ export default class PageContainer extends Component {
   async renderPage(NewPage) {
     if (NewPage.className !== AUTH_PAGE_NAME
       && (!this.settings || !this.statistics)) {
+      this.emit('mainAppSpinner', true);
       // add loader?
       await this.initSettingsAndStats();
       await this.loadWords();
@@ -99,7 +100,6 @@ export default class PageContainer extends Component {
         longTermStats: this.longTermStats,
         shortTermStats: this.shortTermStats,
       };
-      // remove loader?
     }
 
     const componentOptions = { ...this.options, dataForApp: this.dataForApp };
@@ -108,6 +108,7 @@ export default class PageContainer extends Component {
     element.html(this.component.toHTML());
     this.$root.clear().append(element.$el);
     this.component.init();
+    this.emit('mainAppSpinner', false);
   }
 
   renderGame(NewGame) {
@@ -116,6 +117,7 @@ export default class PageContainer extends Component {
     this.component = new NewGame('.PageContainer', componentOptions);
 
     this.component.render();
+    this.emit('mainAppSpinner', false);
   }
 
   async initSettingsAndStats() {

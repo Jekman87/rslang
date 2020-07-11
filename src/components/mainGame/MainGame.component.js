@@ -553,8 +553,6 @@ export default class MainGame extends Component {
       }
     }
 
-    console.log('intervals: ', again, hard, good, easy);
-
     return {
       again, hard, good, easy,
     };
