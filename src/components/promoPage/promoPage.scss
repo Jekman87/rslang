@@ -1,4 +1,3 @@
-
 $fontColor: #005e8d;
 
 @mixin width-center() {
@@ -22,7 +21,6 @@ $fontColor: #005e8d;
   box-shadow: 6px 6px 10px black;
 }
 
-
 .promo__main-container {
   max-width: 1280px;
   padding: 0 0 2% 0;
@@ -32,7 +30,6 @@ $fontColor: #005e8d;
 
 .promo__training-description {
   padding: 2% 0 0 0;
-  border-bottom: 2px solid #ffffff;
 
   h2 {
     text-align: center;
@@ -43,6 +40,7 @@ $fontColor: #005e8d;
     display: block;
     width: 80%;
     margin: 2% auto 2%;
+    font-size: 1.3rem;
   }
 
   .my_video iframe {
@@ -54,7 +52,13 @@ $fontColor: #005e8d;
 }
 
 .promo__game-description {
-  padding-top: 2%;
+  margin: 4% auto;
+  padding: 2% 0;
+  width: 80%;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 8px 11px 15px #00000085;
+  transition: all 0.8s;
 
   h3 {
     text-align: center;
@@ -82,4 +86,35 @@ $fontColor: #005e8d;
 .promo__preview {
   text-align: center;
   font-size: 1.2rem;
+}
+
+@media (hover:hover) {
+  .promo__game-description:hover {
+    transform: scale(0.99);
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+    cursor: default;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .promo__training-description h2 {
+    text-align: center;
+    margin: 20px auto 30px;
+  }
+
+  .promo__game-description{
+    max-height: 600px;
+    overflow: auto;
+    margin: 50px auto;
+    padding: 20px 0;
+  }
+
+  .promo__training-description span {
+    display: block;
+    width: 80%;
+    margin: 40px auto 2%;
+    font-size: 1.3rem;
+  }
 }

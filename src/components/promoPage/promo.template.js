@@ -52,11 +52,11 @@ export default function createPromoPageLayout() {
         <h2>RSLang</h2>
 
         <div class="my_video">
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/PEKN8NtBDQ0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/l0dWFPbf28A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
 
-        <span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, aliquam, sapiente cumque architecto excepturi quae cum officiis illo similique maxime quis aspernatur molestiae non sint ipsa libero cupiditate necessitatibus quod sequi! Rem reprehenderit nisi obcaecati ex eum possimus inventore quibusdam at, magnam recusandae provident, eaque similique, omnis iure accusantium aliquid deserunt vitae? Reprehenderit, aliquid? Ducimus culpa animi explicabo atque harum amet, perferendis laudantium mollitia odit rerum quasi, sint quo aspernatur ab placeat vitae itaque consequuntur. A dolorum, neque incidunt id omnis pariatur obcaecati sapiente aperiam maxime quas aspernatur quo laudantium, perspiciatis porro facere voluptatum tenetur at debitis nam perferendis? Perferendis illum quos est. Repudiandae beatae modi atque corporis asperiores repellendus sunt voluptas delectus dolore. Laudantium earum ipsum rem perferendis quae placeat quisquam, ipsa eos libero, cumque reprehenderit? Pariatur ea molestias quod, odit in voluptatibus, neque, numquam nam dicta voluptatum eligendi voluptatem et eum accusamus minima consequatur. Neque tenetur veritatis illo temporibus et debitis nemo eius accusamus assumenda aliquam fugit, animi nesciunt beatae enim maxime ipsum cum impedit corrupti? Impedit cumque eos deserunt molestias? Cum eaque maxime, deleniti harum culpa quam. Unde ex, fuga, fugiat facilis assumenda rem nisi doloribus hic similique ratione excepturi amet dolore exercitationem eius, in odit totam.
+        <span>Рады приветствовать всех, кто заглянул в RSLang - добро пожаловать на маленький островок во вселенной лингвистики. Наше приложение направлено на изучение английского языка, улучшения навыков произношения и восприятия на слух, обновления существующих знаний и развития кругозора. В базовой основе нашего приложения лежит методика интервального повторения, суть которой заключается ...будет дополнено.<br>
+        Не смотря на всю серьёзность научного подхохода изучения языка по этому принципу, в арсенале нашего приложения имеются мини-игры, которые дадут возможность провести время с пользой, закрепить и обновить ваши лингвистические навыки, а также не дадут заскучать и сохранить мотивацию к изучению языка. Ниже вы можете ознакомиться со всеми дополнительными составляющими нашего приложения.
         </span>
 
       </div>
