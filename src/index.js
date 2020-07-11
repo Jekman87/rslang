@@ -13,18 +13,26 @@ import MainGame from './components/mainGame';
 
 import { AudioCall } from './games/audioCall/index';
 import Team from './components/teamPage';
+import Settings from './components/settingsPage';
 
 import Riddle from './games/riddle/Riddle.render';
 import SpeakIt from './games/speakIt/index';
+import Puzzle from './games/english-puzzle/index';
+import Sprint from './games/sprint/Sprint.render';
+import Savannah from './games/savanna/savanna';
 
 const pages = {
   Authorization,
   MainPage,
   MainGame,
   Team,
+  Settings,
   SpeakIt,
   AudioCall,
   Riddle,
+  Puzzle,
+  Savannah,
+  Sprint,
 };
 
 const mainApp = new MainApp('#app', {
