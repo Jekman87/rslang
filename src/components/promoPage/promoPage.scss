@@ -1,26 +1,3 @@
-$fontColor: #005e8d;
-
-@mixin width-center() {
-    width: 100%;
-    margin: auto;
-}
-
-@mixin flexible() {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@mixin flexibleSpace() {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-@mixin activeShadow() {
-  box-shadow: 6px 6px 10px black;
-}
-
 .promo__main-container {
   max-width: 1280px;
   padding: 0 0 2% 0;
@@ -89,6 +66,7 @@ $fontColor: #005e8d;
 }
 
 @media (hover:hover) {
+
   .promo__game-description:hover {
     transform: scale(0.99);
     box-shadow: 1px 1px 1px black;
