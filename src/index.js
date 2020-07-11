@@ -21,6 +21,8 @@ import Puzzle from './games/english-puzzle/index';
 import Sprint from './games/sprint/Sprint.render';
 import Savannah from './games/savanna/savanna';
 
+import Promo from './components/promoPage';
+
 const pages = {
   Authorization,
   MainPage,
@@ -33,6 +35,7 @@ const pages = {
   Puzzle,
   Savannah,
   Sprint,
+  Promo,
 };
 
 const mainApp = new MainApp('#app', {
