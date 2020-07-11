@@ -90,10 +90,10 @@ export default function createMainPageHTML(data) {
           <h5 class="region-title"><i class="fas fa-dice"></i> Игры</h5>
           <div class="d-flex flex-wrap justify-content-center">
             <div class="training-card m-2">
-              <div class="training-card-img" style="background-image:url(https://www.bitgab.com/assets-dashboard/img/Learn-English.jpg);">
+              <div class="training-card-img" style="background-image:url('/assets/games-img/puzzle/1.png');">
                 <div class="training-card-overlay">
                   <div class="overlay-content">
-                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Играть <i class="fas fa-gamepad"></i></a>
                   </div>
                 </div>
               </div>        
@@ -102,10 +102,10 @@ export default function createMainPageHTML(data) {
               </div>
             </div>
                 <div class="training-card m-2">
-                <div class="training-card-img" style="background-image:url(https://www.bitgab.com/assets-dashboard/img/Learn-English.jpg);">
+                <div class="training-card-img" style="background-image:url('/assets/games-img/audiocall/1.png');">
                   <div class="training-card-overlay">
                     <div class="overlay-content">
-                    <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+                    <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Играть <i class="fas fa-gamepad"></i></a>
                     </div>
                   </div>
                 </div>        
@@ -114,10 +114,10 @@ export default function createMainPageHTML(data) {
                 </div>
               </div>
               <div class="training-card m-2">
-              <div class="training-card-img" style="background-image:url(https://www.bitgab.com/assets-dashboard/img/Learn-English.jpg);">
+              <div class="training-card-img" style="background-image:url('/assets/games-img/savanna/1.png');">
                 <div class="training-card-overlay">
                   <div class="overlay-content">
-                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Играть <i class="fas fa-gamepad"></i></a>
                   </div>
                 </div>
               </div>        
@@ -126,10 +126,10 @@ export default function createMainPageHTML(data) {
               </div>
             </div>
             <div class="training-card m-2">
-            <div class="training-card-img" style="background-image:url(https://www.bitgab.com/assets-dashboard/img/Learn-English.jpg);">
+            <div class="training-card-img" style="background-image:url('/assets/games-img/sprint/1.png');">
               <div class="training-card-overlay">
                 <div class="overlay-content">
-                <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+                <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Играть <i class="fas fa-gamepad"></i></a>
                 </div>
               </div>
             </div>        
@@ -138,10 +138,10 @@ export default function createMainPageHTML(data) {
             </div>
           </div>
           <div class="training-card m-2">
-          <div class="training-card-img" style="background-image:url(https://www.bitgab.com/assets-dashboard/img/Learn-English.jpg);">
+          <div class="training-card-img" style="background-image:url('/assets/games-img/speakit/1.jpg');">
             <div class="training-card-overlay">
               <div class="overlay-content">
-              <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+              <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Играть <i class="fas fa-gamepad"></i></a>
               </div>
             </div>
           </div>        
@@ -150,10 +150,10 @@ export default function createMainPageHTML(data) {
           </div>
         </div>
         <div class="training-card m-2">
-        <div class="training-card-img" style="background-image:url(https://www.bitgab.com/assets-dashboard/img/Learn-English.jpg);">
+        <div class="training-card-img" style="background-image:url('/assets/games-img/riddle/1.png');">
           <div class="training-card-overlay">
             <div class="overlay-content">
-            <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+            <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Играть <i class="fas fa-gamepad"></i></a>
             </div>
           </div>
         </div>        
