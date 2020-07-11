@@ -1,7 +1,7 @@
 export default function createAuthorizationForm() {
   return `
-    <div class="container" style="margin-top: 7%;">
-      <h1 class="main-title my-5 text-center text-primary display-1">
+    <div class="container" style="margin-top: 5%;">
+      <h1 class="main-title my-4 text-center text-primary display-1">
         RS Lang
       </h1>
       <div class="my-5 col-10 col-md-5 ml-auto mr-auto py-4 authorization-form">
@@ -35,14 +35,21 @@ export default function createAuthorizationForm() {
             />
           </div>
           <div class="form-group mb-4">
-            <input
-              type="password"
-              class="form-control form-control-lg"
-              id="registerPassword"
-              placeholder="пароль"
-              pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              required
-            />
+              <div class="input-group mb-3">
+                <input
+                type="password"
+                class="form-control form-control-lg"
+                id="registerPassword"
+                placeholder="пароль"
+                pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                required
+              />
+              <div class="input-group-append">
+                <span class="input-group-text bg-white" id="register-eye">
+                  <i class="fas fa-eye"></i>
+                </span>
+              </div>   
+          </div>
             <small
               id="passwordHelpBlock"
               class="form-text  text-justify pass-tip "
@@ -55,10 +62,10 @@ export default function createAuthorizationForm() {
             РЕГИСТРАЦИЯ
           </button>
           <p
-            class="display-6 text-center  font-weight-light sign-in-text my-2"
+            class="display-6 text-center font-weight-light sign-in-text my-2 px-3"
           >
             Уже зарегистрированы?
-            <a href="#" class="text-primary change-form-link">
+            <a href="#" class="text-primary change-form-link font-weight-bolder">
               Войти
             </a>
           </p>
@@ -85,7 +92,7 @@ export default function createAuthorizationForm() {
           <button type="submit" class="btn btn-primary btn-lg btn-block">
             ВОЙТИ
           </button>
-          <p class="display-6 text-center font-weight-light sign-in-text my-2">
+          <p class="display-6 text-center font-weight-light sign-in-text my-2 px-3">
             Не зарегистрированы?
             <a href="#" class="text-primary  change-form-link">
               Создать аккаунт
