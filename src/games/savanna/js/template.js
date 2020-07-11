@@ -109,20 +109,20 @@ export default function showTemplate() {
       </div>
       <div class="container main-game">
         <div class="row text-xs-left text-sm-center">
-          <div class="col-7 col-sm-6 my-2">
-            <div class="btn btn-success w-75 savanna-answer-btn" data-savannaanswerbtn="btn0" id="savanna-answer-btn0">
+          <div class="col-12 col-sm-6 my-2">
+            <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn0" id="savanna-answer-btn0">
               word1</div>
           </div>
-          <div class="col-7 col-sm-6 my-2">
-            <div class="btn btn-success w-75 savanna-answer-btn" data-savannaanswerbtn="btn1" id="savanna-answer-btn1">
+          <div class="col-12 col-sm-6 my-2">
+            <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn1" id="savanna-answer-btn1">
               word2</div>
           </div>
-          <div class="col-7 col-sm-6 my-2">
-            <div class="btn btn-success w-75 savanna-answer-btn" data-savannaanswerbtn="btn2" id="savanna-answer-btn2">
+          <div class="col-12 col-sm-6 my-2">
+            <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn2" id="savanna-answer-btn2">
               word3</div>
           </div>
-          <div class="col-7 col-sm-6 my-2">
-            <div class="btn btn-success w-75 savanna-answer-btn" data-savannaanswerbtn="btn3" id="savanna-answer-btn3">
+          <div class="col-12 col-sm-6 my-2">
+            <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn3" id="savanna-answer-btn3">
               word4</div>
           </div>
         </div>
@@ -142,10 +142,10 @@ export default function showTemplate() {
           тренироваться!</h1>
         <ul class="nav nav-pills justify-content-center">
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#savannaLastGameStatistics">Статистика по последней игре</a>
+            <a class="nav-link active" id="savannaLastGameStatisticsNavLink" data-toggle="tab" href="#savannaLastGameStatistics">Статистика по последней игре</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#savannaLongtermStatistics">Статистика последних игр</a>
+            <a class="nav-link" id="savannaLongtermStatisticsNavLink" data-toggle="tab" href="#savannaLongtermStatistics">Статистика последних игр</a>
           </li>
         </ul>
         <div id="myTabContent" class="tab-content col-11">
@@ -321,19 +321,19 @@ export default function showTemplate() {
                 <li class="d-flex justify-content-around align-items-center flex-wrap mb-3">
                   <div class="statistics-icon mb-2"></div>
                   <ul class="statistics-info col-12 col-sm-8">
-                    <li class="statistics-info-item">08/07/2020 - 2:09:48 (UTC +3:00);</li>
+                    <li class="statistics-info-item">08/07/2020 - 2:15:27 (UTC +3:00);</li>
                     <li class="statistics-info-item">Результат игры - Победа</li>
-                    <li class="statistics-info-item">Правильных ответов -27</li>
-                    <li class="statistics-info-item">Ошибок - 3</li>
+                    <li class="statistics-info-item">Правильных ответов -25</li>
+                    <li class="statistics-info-item">Ошибок - 0</li>
                   </ul>
                 </li>
                 <li class="d-flex justify-content-around align-items-center flex-wrap mb-3">
                   <div class="statistics-icon mb-2"></div>
                   <ul class="statistics-info col-12 col-sm-8">
-                    <li class="statistics-info-item">08/07/2020 - 2:09:48 (UTC +3:00);</li>
+                    <li class="statistics-info-item">08/07/2020 - 2:24:56 (UTC +3:00);</li>
                     <li class="statistics-info-item">Результат игры - Поражение</li>
-                    <li class="statistics-info-item">Правильных ответов -27</li>
-                    <li class="statistics-info-item">Ошибок - 3</li>
+                    <li class="statistics-info-item">Правильных ответов -20</li>
+                    <li class="statistics-info-item">Ошибок - 5</li>
                   </ul>
                 </li>
               </ul>

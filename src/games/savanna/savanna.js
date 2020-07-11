@@ -7,9 +7,9 @@ import createEssence from './js/createEssence';
 import showTemplate from './js/template';
 import './sass/style.scss';
 
-const gameFailHeaderText = 'В этот раз всё великолепно';
-const gameWinWithErrorHeaderText = 'В этот раз не получилось, но продолжай тренироваться!';
-const gameWinHeaderText = 'В этот раз неплохо, но можно и лучше!';
+const gameWinHeaderText = 'В этот раз всё великолепно';
+const gameFailHeaderText = 'В этот раз не получилось, но продолжай тренироваться!';
+const gameWinWithErrorHeaderText = 'В этот раз неплохо, но можно и лучше!';
 const showConsoleLog = false;
 
 export default class Savannah {
@@ -26,18 +26,8 @@ export default class Savannah {
     if (showConsoleLog) console.log(options);
 
     const { statistics, settings } = this.options.dataForApp;
-    // const gameNameLongStats = [
-    //   { data: 123, round: '2-18', result: '16-4' },
-    //   // ... всего 10 раундов-объектов, если нужно больше - делаем больше
-    // ];
 
     if (showConsoleLog) console.log(statistics, settings);
-
-    //   const newStats = {
-    //     ...stats,
-    //     gameNameLong: JSON.stringify(gameNameLongStats),
-    //     gameNameMain: JSON.stringify(gameNameMainStats),
-    // };
 
     this.gameState = {};
     this.gameState.wordArrays = {
@@ -48,7 +38,6 @@ export default class Savannah {
       5: null,
       6: null,
     };
-
     if (settings.optional.savannaSettings) {
       const savannaSettings = JSON.parse(settings.optional.savannaSettings);
       if (showConsoleLog) console.log('savanna settings from API', savannaSettings);
@@ -86,16 +75,12 @@ export default class Savannah {
       // this.localSettings.gameIrregularVerbs = savannaSettings.gameIrregularVerbs || false;
       if ((savannaSettings.gameIrregularVerbs !== null)
         && ((typeof savannaSettings.gameIrregularVerbs) === 'boolean')) {
-        this.localSettings.gameIrregularVerbs = false; // savannaSettings.gameIrregularVerbs;
+        this.localSettings.gameIrregularVerbs = false;
       } else {
         this.localSettings.gameIrregularVerbs = false;
       }
 
       if (showConsoleLog) console.log('this.localSettings', this.localSettings);
-      // gameLevel: 1,
-      // gameWithLearnedWords: true,
-      // gameInvert: false,
-      // gameIrregularVerbs: false,
     } else {
       this.localSettings = {
         gameLevel: 1,
@@ -106,9 +91,34 @@ export default class Savannah {
       if (showConsoleLog) console.log('else this.localSettings', this.localSettings);
     }
 
-    // TODO: remove after debugging
-    // window.savannaLocalSettings = this.localSettings;
-    // window.savannaGameState = this.gameState;
+    const longStatsJson = statistics.optional.SavannahLong;
+    if (longStatsJson) {
+      this.statsSavannahLong = JSON.parse(longStatsJson);
+    } else {
+      this.statsSavannahLong = [];
+    }
+    const mainStatsJson = statistics.optional.SavannaMain;
+    if (mainStatsJson) {
+      this.statsSavannaMain = JSON.parse(mainStatsJson);
+    } else {
+      this.statsSavannaMain = {
+        totalGame: 0,
+        totalWords: 0,
+        totalWordsTrue: 0,
+        totalWordsFalse: 0,
+        totalWins: 0,
+        totalWinsWithErr: 0,
+        totalLose: 0,
+        roundsForTeamLead: {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+        },
+      };
+    }
   }
 
   render() {
@@ -163,6 +173,19 @@ export default class Savannah {
       'savannaStatisticHeadingElement',
     );
     this.savannaStatisticContent = document.getElementById('savannaStatisticContent');
+
+    this.savannaLastGameStatistics = document.getElementById(
+      'savannaLastGameStatistics',
+    );
+    this.savannaLastGameStatisticsNavLink = document.getElementById(
+      'savannaLastGameStatisticsNavLink',
+    );
+    this.savannaLongtermStatistics = document.getElementById(
+      'savannaLongtermStatistics',
+    );
+    this.savannaLongtermStatisticsNavLink = document.getElementById(
+      'savannaLongtermStatisticsNavLink',
+    );
     // Create Binded LISTENERS
     this.onClick = this._resolveClicks.bind(this);
     this.onAnimationEnd = this._resolveAnimationEnd.bind(this);
@@ -396,6 +419,14 @@ export default class Savannah {
       this.options.observer.emit('selectPage', 'MainPage');
     } else if (event.target === this.startSavannaGameButton) {
       this._startGame();
+
+      this.savannaLastGameStatistics.classList.add('active', 'show');
+      this.savannaLastGameStatisticsNavLink.classList.add('active');
+
+      this.savannaLongtermStatistics.classList.remove('active', 'show');
+      this.savannaLongtermStatisticsNavLink.classList.remove('active');
+
+      this.gemeSettingsCard.classList.remove('setting-card-opened');
     } else if (event.target.classList.contains('savanna-statistic-sound-button')) {
       const savannaStatSoundID = event.target.dataset.soundID;
       document.getElementById(savannaStatSoundID).play().catch(() => true);
@@ -658,17 +689,17 @@ export default class Savannah {
     const statObj = this.gameState.statisticObj;
 
     if (this.gameState.isWordsFromBackend) {
-      this.gameState.statisticCorrectAnswers.forEach((e) => {
-        const el = e;
-        if (el.userWord) {
-          el.userWord.optional.gameError = false;
-          // todo Send word to backand;
-          this.options.api.updateUserWord(el._id, el.userWord).catch((err) => {
-            if (showConsoleLog) console.log('ошибка при работе с апи', err);
-            if (showConsoleLog) console.log('Update UserWord', el);
-          });
-        }
-      });
+      // this.gameState.statisticCorrectAnswers.forEach((e) => {
+      //   const el = e;
+      //   if (el.userWord) {
+      //     el.userWord.optional.gameError = false;
+      //     // todo Send word to backand;
+      //     this.options.api.updateUserWord(el._id, el.userWord).catch((err) => {
+      //       if (showConsoleLog) console.log('ошибка при работе с апи', err);
+      //       if (showConsoleLog) console.log('Update UserWord', el);
+      //     });
+      //   }
+      // });
       this.gameState.statisticWrongAnswers.forEach((e) => {
         const el = e;
         if (el.userWord) {
@@ -682,13 +713,45 @@ export default class Savannah {
       });
     }
 
-    if (this.gameState.statisticWrongAnswers.length === 0) {
-      this.savannaStatisticHeadingElement.textContent = gameFailHeaderText;
-    } else if (this.gameState.statisticWrongAnswers.length === 5) {
-      this.savannaStatisticHeadingElement.textContent = gameWinWithErrorHeaderText;
-    } else {
+    const correctCount = this.gameState.statisticCorrectAnswers.length;
+    const wrongCount = this.gameState.statisticWrongAnswers.length;
+    const roundMain = this.localSettings.gameLevel;
+    this.statsSavannaMain.totalGame += 1;
+    this.statsSavannaMain.totalWordsTrue += correctCount;
+    this.statsSavannaMain.totalWordsFalse += wrongCount;
+    this.statsSavannaMain.roundsForTeamLead[`${roundMain}`] += 1;
+    const roundSecond = this.statsSavannaMain.roundsForTeamLead[`${roundMain}`];
+
+    const toBackend = {};
+    toBackend.correctAnswer = correctCount;
+    toBackend.wrongAnswer = wrongCount;
+    toBackend.data = Date.now();
+    toBackend.round = `${roundMain}-${roundSecond}`;
+    if (wrongCount === 0) {
       this.savannaStatisticHeadingElement.textContent = gameWinHeaderText;
+      this.statsSavannaMain.totalWins += 1;
+      toBackend.result = 'Победа';
+    } else if (wrongCount === 5) {
+      this.savannaStatisticHeadingElement.textContent = gameFailHeaderText;
+      this.statsSavannaMain.totalLose += 1;
+      toBackend.result = 'Поражение';
+    } else {
+      toBackend.result = 'Победа со штрафом';
+      this.savannaStatisticHeadingElement.textContent = gameWinWithErrorHeaderText;
+      this.statsSavannaMain.totalWinsWithErr += 1;
     }
+    this.statsSavannahLong.push(toBackend);
+    if (this.statsSavannahLong.length > 20) {
+      this.statsSavannahLong = this.statsSavannahLong.splice(-20, 20);
+    }
+    const stat = this.options.dataForApp.statistics;
+    stat.optional.SavannahLong = JSON.stringify(this.statsSavannahLong);
+    stat.optional.SavannaMain = JSON.stringify(this.statsSavannaMain);
+    this.options.api.updateStatistics(stat).then((e) => {
+      console.log('updateStatistics', e);
+    }).catch((e) => {
+      console.log('catch', e);
+    });
 
     this.savannaStatisticContent.innerHTML = '';
     if (this.gameState.statisticWrongAnswers.length > 0) {
@@ -779,6 +842,36 @@ export default class Savannah {
       }
       this.savannaStatisticContent.append(statObj.CUl);
     }
+
+    statObj.LTDiv = createEssence('div', 'statistics-content', null, null);
+    statObj.LTUl = createEssence('ul', 'word-list', null, statObj.LTDiv);
+    statObj.LTLi = [];
+    for (let i = this.statsSavannahLong.length - 1; i >= 0; i -= 1) {
+      const tmpData = new Date(this.statsSavannahLong[i].data);
+      statObj.LTLi[i] = {};
+      statObj.LTLi[i].li = createEssence(
+        'li', 'd-flex justify-content-around align-items-center flex-wrap mb-3',
+        null, statObj.LTUl,
+      );
+      statObj.LTLi[i].div1 = createEssence('div', 'statistics-icon mb-2',
+        null, statObj.LTLi[i].li);
+      statObj.LTLi[i].ul = createEssence('ul', 'statistics-info col-12 col-sm-8',
+        null, statObj.LTLi[i].li);
+      statObj.LTLi[i].li1 = createEssence('li', 'statistics-info-item',
+        `${tmpData.toLocaleString()}`,
+        statObj.LTLi[i].ul);
+      statObj.LTLi[i].li2 = createEssence('li', 'statistics-info-item',
+        `Результат игры - ${this.statsSavannahLong[i].result}`,
+        statObj.LTLi[i].ul);
+      statObj.LTLi[i].li3 = createEssence('li', 'statistics-info-item',
+        `Правильных ответов - ${this.statsSavannahLong[i].correctAnswer}`,
+        statObj.LTLi[i].ul);
+      statObj.LTLi[i].li3 = createEssence('li', 'statistics-info-item',
+        `Ошибок -  ${this.statsSavannahLong[i].wrongAnswer}`,
+        statObj.LTLi[i].ul);
+    }
+    this.savannaLongtermStatistics.innerHTML = '';
+    this.savannaLongtermStatistics.append(statObj.LTDiv);
   }
 
   _returnStartGamePage() {

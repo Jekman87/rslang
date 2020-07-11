@@ -3,9 +3,9 @@
 // @import "base/footer";
 // @import "base/main";
 // @import "base/modal";
-
+$enable-hover-media-query: true;
 .savanna-main-container {
-  background-image: url(../assets/img/background.svg);
+  background-image: url("/assets/savanna/img/background.svg");
   background-position: bottom 0vh center;
 
   .savanna-audioSource,
@@ -80,7 +80,7 @@
       // top: 0px;
       width: 50px;
       height: 80px;
-      background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 75%);
+      background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 75%);
       background-size: contain;
       background-repeat: no-repeat;
       transition-property: width, height;
@@ -118,8 +118,10 @@
 
   .word-container,
   .energy-container {
+    z-index: 5;
+    pointer-events: none;
     position: absolute;
-    top: 100px;
+    top: 25%;
     left: 50%;
     display: flex;
     justify-content: center;
@@ -128,7 +130,7 @@
     // width: 100px;
     height: 100px;
     border-radius: 50%;
-    font-size: 2rem;
+    font-size: 3rem;
     color: whitesmoke;
     // transition-property: top;
     // transition-duration: 0.75s;
@@ -149,7 +151,7 @@
   .energy-rotate {
     width: 40px;
     height: 40px;
-    background-image: url(../assets/img/energy.png), radial-gradient(#9100ff, #00a9b500 25%);
+    background-image: url("/assets/savanna/img/energy.png"), radial-gradient(#9100ff, #00a9b500 25%);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -159,6 +161,7 @@
   }
 
   .gaming-word-guess {
+    pointer-events: none;
     display: flex;
     border-radius: 4px;
     height: 36px;
@@ -352,11 +355,12 @@
   //     border-radius: 10px;
   //   }
   // }
-  .savanna-statistic-sound-button{
-    &:hover{
-      color:rgb(0, 0, 0)!important;
-    }::after {
-      color:rgb(0, 0, 0);
+  .savanna-statistic-sound-button {
+    &:hover {
+      color: rgb(0, 0, 0) !important;
+    }
+    ::after {
+      color: rgb(0, 0, 0);
     }
   }
   .statistics-content {
@@ -395,7 +399,7 @@
   .statistics-icon {
     width: 3rem;
     height: 2rem;
-    background: url("../assets/img/savanna.svg") no-repeat 50%;
+    background: url("/assets/savanna/img/savanna.svg") no-repeat 50%;
     background-size: cover;
   }
 
@@ -440,15 +444,15 @@
 @keyframes savannaMyAnimation {
   0% {
     top: 0px;
-    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 0%);
+    background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 0%);
   }
   50% {
     top: -20px;
-    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 75%);
+    background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 75%);
   }
   100% {
     top: 0px;
-    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 0%);
+    background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 0%);
   }
 }
 
@@ -461,3 +465,28 @@
     transform: rotate(360deg);
   }
 }
+// @media (hover:hover) {
+//   .savanna-answer-btn {
+//     transform: scale(0.9);
+//     opacity: 0.8;
+//     color: #005986;
+//     background-color: #faffcd;
+//     box-shadow: 1px 1px 1px black;
+//     transition: all 0.8s;
+//     cursor: pointer;
+//   }
+// }
+
+@media (hover: none) {
+  .savanna-answer-btn:hover {
+    color: #fff;
+    background-color: #18BC9C;
+    border-color: #18BC9C;
+
+  }
+}
+.savanna-answer-btn{
+  font-size: 1.25rem;
+  width:90%;
+}
+
