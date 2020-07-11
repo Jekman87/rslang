@@ -1,7 +1,8 @@
 import DICTIONARY from './sprint.data';
 
+import './scss/sprint.scss';
+
 const state = {
-  currentTime: 60,
   roundStatus: '',
   userAnswer: '',
   word: '',
@@ -28,20 +29,33 @@ function hideCountdown() {
 }
 
 function hideShortTimeStatistic() {
-  document.querySelector('.statistic-screen').style.display = 'none';
+  document.querySelector('.sprint-statistic-screen').style.display = 'none';
 }
 
 function showCountdown() {
   document.querySelector('.main-sp').style.display = 'flex';
 }
 
-function showLongTimeStatistic() {
-  const games = JSON.parse(localStorage.getItem('arrayWithGames'));
+function rewriteLongTimeStatistic() {
+  const currentDate = Date.now();
+  const currentGameResults = {
+    date: '',
+    result: '',
+    correctAnswers: '',
+    wrongAnswers: '',
+  };
 
-  document.querySelector('.games').innerHTML = '';
+  currentGameResults.date = currentDate;
+  currentGameResults.result = state.points;
+  currentGameResults.correctAnswers = state.correctAnswers;
+  currentGameResults.wrongAnswers = state.wrongAnswers;
 
-  games.forEach((el) => document.querySelector('.games')
-    .insertAdjacentHTML('beforeend', `${prepareLongTimeStatistic(el)}`));
+  return currentGameResults;
+}
+
+function resetLongTimeStatistic() {
+  localStorage.removeItem('arrayWithGames');
+  document.querySelector('.sprint-games').innerHTML = '';
 }
 
 function showBestIndicator() {
@@ -53,7 +67,7 @@ function showBestIndicator() {
 }
 
 function showShortTimeStatistic() {
-  document.querySelector('.statistic-screen').style.display = 'flex';
+  document.querySelector('.sprint-statistic-screen').style.display = 'flex';
 }
 
 function opacityOn() {
@@ -64,28 +78,24 @@ function opacityOff() {
   document.querySelector('.countdown').style.opacity = '0';
 }
 
-function Ready() {
+function ready() {
   document.querySelector('.countdown').innerHTML = 'На старт ...';
 }
 
-function Set() {
+function set() {
   document.querySelector('.countdown').innerHTML = 'Внимание ...';
 }
 
-function Go() {
+function go() {
   document.querySelector('.countdown').innerHTML = 'Марш!';
 }
 
 function markRightAnswer() {
-  document.querySelector('.game-block').classList.toggle('correct-color');
+  document.querySelector('.sprint-game-block').classList.toggle('correct-color');
 }
 
 function markWrongAnswer() {
-  document.querySelector('.game-block').classList.toggle('wrong-color');
-}
-
-function restartTimer() {
-  state.currentTime = 60;
+  document.querySelector('.sprint-game-block').classList.toggle('sprint-wrong-color');
 }
 
 function removeShortTimeStatistic() {
@@ -95,44 +105,6 @@ function removeShortTimeStatistic() {
   document.querySelector('.mistake-block').innerHTML = '';
   document.querySelector('.correct-block').innerHTML = '';
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
-}
-
-function restartGame() {
-  restartTimer();
-  removeShortTimeStatistic();
-  hideBestIndicator();
-  resetProgress();
-  hideShortTimeStatistic();
-  showCountdown();
-  readySetGo();
-  callRandomFunction();
-  showWordsInThePage();
-  keyDownListener();
-}
-
-function countdown() {
-  let timer;
-
-  if (document.querySelector('.timer') === null) {
-    clearTimeout(timer);
-    return false;
-  }
-
-  state.currentTime -= 1;
-  document.querySelector('.timer').innerHTML = state.currentTime;
-
-  if (state.currentTime < 1) {
-    clearTimeout(timer);
-    rewritePointsResult();
-    rewriteCorrectAndWrongAnswers();
-    rewriteLongTimeStatistic();
-    showShortTimeStatistic();
-    showLongTimeStatistic();
-    removeKeyDownListeners();
-  } else {
-    timer = setTimeout(countdown, 1000);
-  }
-  return true;
 }
 
 function changeLevelAndPage(answerFromHandler) {
@@ -147,24 +119,6 @@ function changeLevelAndPage(answerFromHandler) {
     default:
       break;
   }
-}
-
-function readySetGo() {
-  setTimeout(Ready, 500);
-  setTimeout(opacityOn, 500);
-  setTimeout(playTickAudio, 1000);
-  setTimeout(opacityOff, 1500);
-  setTimeout(Set, 2000);
-  setTimeout(opacityOn, 2000);
-  setTimeout(playTickAudio, 2500);
-  setTimeout(opacityOff, 3000);
-  setTimeout(Go, 3500);
-  setTimeout(opacityOn, 3500);
-  setTimeout(playTickAudio, 4000);
-  setTimeout(opacityOff, 4500);
-  setTimeout(playStartAudio, 5000);
-  setTimeout(hideCountdown, 5000);
-  setTimeout(countdown, 5000);
 }
 
 function playTickAudio() {
@@ -234,7 +188,7 @@ function generateWrongWordCouple() {
 function addAnswerToStatistic(answer) {
   const url = `https://raw.githubusercontent.com/Alexandr-Voytekhovich/rslang-data/master/data/${state.audioWord}`;
   const currentAnswer = `
-  <div class="statistic-block" id="statistic-block-${state.wordCount}">
+  <div class="sprint-statistic-block" id="statistic-block-${state.wordCount}">
     <span>
       <i class="fa fa-volume-down icon-parameters" aria-hidden="true" data-statistic="statistic-${state.wordCount}"></i>
       <audio id="statistic-audio-${state.wordCount}" src="${url}"></i>
@@ -253,7 +207,7 @@ function addAnswerToStatistic(answer) {
 }
 
 function rewritePointsResult() {
-  document.querySelector('.points-result').innerHTML = `Результат раунда: ${state.points} очков.`;
+  document.querySelector('.sprint-points-result').innerHTML = `Результат раунда: ${state.points} очков.`;
 }
 
 function rewriteCorrectAndWrongAnswers() {
@@ -263,62 +217,28 @@ function rewriteCorrectAndWrongAnswers() {
   state.correctAnswers = correctAnswers;
   state.wrongAnswers = wrongAnswers;
 
-  document.querySelector('.mistake-answer').innerHTML = wrongAnswers;
-  document.querySelector('.correct-answer').innerHTML = correctAnswers;
+  document.querySelector('.sprint-mistake-answer').innerHTML = wrongAnswers;
+  document.querySelector('.sprint-correct-answer').innerHTML = correctAnswers;
 }
 
-function getDate() {
-  const Data = new Date();
-  const Year = Data.getFullYear();
-  const Month = Data.getMonth() + 1 < 10 ? `0${Data.getMonth() + 1}` : Data.getMonth();
-  const Day = Data.getDate() < 10 ? `0${Data.getDate()}` : Data.getDate();
-  const Hours = Data.getHours();
-  const Minutes = Data.getMinutes() < 10 ? `0${Data.getMinutes()}` : Data.getMinutes();
-  const Seconds = Data.getSeconds();
+function convertDate(time) {
+  const currentDate = new Date(time);
+  const Year = currentDate.getFullYear();
+  const Month = currentDate.getMonth() + 1 < 10
+    ? `0${currentDate.getMonth() + 1}`
+    : currentDate.getMonth();
+  const Day = currentDate.getDate() < 10
+    ? `0${currentDate.getDate()}`
+    : currentDate.getDate();
+  const Hours = currentDate.getHours();
+  const Minutes = currentDate.getMinutes() < 10
+    ? `0${currentDate.getMinutes()}`
+    : currentDate.getMinutes();
+  const Seconds = currentDate.getSeconds() < 10
+    ? `0${currentDate.getSeconds()}`
+    : currentDate.getSeconds();
+
   return `${Day}/${Month}/${Year} - ${Hours}:${Minutes}:${Seconds} (UTC +3:00);`;
-}
-
-function rewriteLongTimeStatistic() {
-  if (localStorage.getItem('arrayWithGames') === null) {
-    const games = [];
-    const currentGame = [
-      getDate(),
-      `результат игры - ${state.points};`,
-      `правильных ответов - ${state.correctAnswers};`,
-      `ошибок - ${state.wrongAnswers}.`];
-    games.push(currentGame);
-    localStorage.setItem('arrayWithGames', JSON.stringify(games));
-  } else {
-    const games = JSON.parse(localStorage.getItem('arrayWithGames'));
-    const currentGame = [
-      getDate(),
-      `результат игры - ${state.points};`,
-      `правильных ответов - ${state.correctAnswers};`,
-      `ошибок - ${state.wrongAnswers}.`];
-    games.push(currentGame);
-    localStorage.setItem('arrayWithGames', JSON.stringify(games));
-  }
-}
-
-function prepareLongTimeStatistic(arrayWithStatistic) {
-  return `
-    <div class="statistic-block long-time">
-    <span><i class="fas fa-rabbit"></i></span>
-    <div class="information-block">
-      <span>
-        ${arrayWithStatistic[0]}
-      </span>
-      <span>${arrayWithStatistic[1]}</span>
-      <span>${arrayWithStatistic[2]}</span>
-      <span>${arrayWithStatistic[3]}</span>
-    </div>
-  </div>
-  `.trim();
-}
-
-function resetLongTimeStatistic() {
-  localStorage.removeItem('arrayWithGames');
-  document.querySelector('.games').innerHTML = '';
 }
 
 function writeUserAnswer(answer) {
@@ -334,11 +254,11 @@ function resetProgress() {
   state.comboAnswers = 0;
   state.colorCount = 0;
   state.pointsWeigth = 10;
-  document.querySelectorAll('.progress-place div').forEach((el) => {
+  document.querySelectorAll('.sprint-progress-place div').forEach((el) => {
     const element = el;
     element.style.backgroundColor = 'transparent';
   });
-  document.querySelectorAll('.progress-place div').forEach((el) => {
+  document.querySelectorAll('.sprint-progress-place div').forEach((el) => {
     const element = el;
     element.innerHTML = '';
   });
@@ -371,11 +291,11 @@ function compareAnswers() {
 }
 
 function resetBonusPlaces() {
-  document.querySelectorAll('.progress-place div').forEach((el) => {
+  document.querySelectorAll('.sprint-progress-place div').forEach((el) => {
     const element = el;
     element.style.backgroundColor = 'transparent';
   });
-  document.querySelectorAll('.progress-place div').forEach((el) => {
+  document.querySelectorAll('.sprint-progress-place div').forEach((el) => {
     const element = el;
     element.innerHTML = '';
   });
@@ -450,51 +370,51 @@ function showWordsInThePage() {
 }
 
 function muteGameVoice() {
-  document.querySelector('.mute').style.display = 'none';
+  document.querySelector('.sprint-mute').style.display = 'none';
   document.querySelector('.click-voice').src = '';
   document.querySelector('.wrong-voice').src = '';
   document.querySelector('.gong-voice').src = '';
 
-  document.querySelector('.unmute').style.display = 'flex';
+  document.querySelector('.sprint-unmute').style.display = 'flex';
 }
 
 function onGameVoice() {
-  document.querySelector('.mute').style.display = 'flex';
+  document.querySelector('.sprint-mute').style.display = 'flex';
   document.querySelector('.click-voice').src = 'assets/voices/pew.mp3';
   document.querySelector('.wrong-voice').src = 'assets/voices/wrong.mp3';
   document.querySelector('.gong-voice').src = 'assets/voices/gong.mp3';
 
-  document.querySelector('.unmute').style.display = 'none';
+  document.querySelector('.sprint-unmute').style.display = 'none';
 }
 
 function markLeftKeys() {
-  document.querySelector('.wrong').style.opacity = 0.3;
-  document.querySelector('.left-arrow').style.opacity = 0.3;
+  document.querySelector('.sprint-wrong').style.opacity = 0.3;
+  document.querySelector('.sprint-left-arrow').style.opacity = 0.3;
 }
 
 function unmarkLeftKeys() {
-  document.querySelector('.wrong').style.opacity = 1.0;
-  document.querySelector('.left-arrow').style.opacity = 1.0;
+  document.querySelector('.sprint-wrong').style.opacity = 1.0;
+  document.querySelector('.sprint-left-arrow').style.opacity = 1.0;
 }
 
 function markRightKeys() {
-  document.querySelector('.correct').style.opacity = 0.5;
-  document.querySelector('.right-arrow').style.opacity = 0.5;
+  document.querySelector('.sprint-correct').style.opacity = 0.5;
+  document.querySelector('.sprint-right-arrow').style.opacity = 0.5;
 }
 
 function unmarkRightKeys() {
-  document.querySelector('.correct').style.opacity = 1.0;
-  document.querySelector('.right-arrow').style.opacity = 1.0;
+  document.querySelector('.sprint-correct').style.opacity = 1.0;
+  document.querySelector('.sprint-right-arrow').style.opacity = 1.0;
 }
 
 function switchToLongTimeStatistic() {
-  document.querySelector('.statistic-blocks').style.display = 'none';
-  document.querySelector('.game-history').style.display = 'inline';
+  document.querySelector('.sprint-statistic-blocks').style.display = 'none';
+  document.querySelector('.sprint-game-history').style.display = 'inline';
 }
 
 function switchToRoundStatistic() {
-  document.querySelector('.statistic-blocks').style.display = 'inline';
-  document.querySelector('.game-history').style.display = 'none';
+  document.querySelector('.sprint-statistic-blocks').style.display = 'inline';
+  document.querySelector('.sprint-game-history').style.display = 'none';
 }
 
 function keyUp(event) {
@@ -546,11 +466,15 @@ function removeKeyDownListeners() {
 }
 
 export {
-  hideIntro, readySetGo, callRandomFunction, showWordsInThePage, writeUserAnswer,
+  hideIntro, callRandomFunction, showWordsInThePage,
   playWordAudio, playStatisticAudio, changeLevelAndPage,
   compareAnswers, rewriteStatistic, resetLongTimeStatistic,
-  muteGameVoice, onGameVoice,
+  muteGameVoice, onGameVoice, rewriteCorrectAndWrongAnswers,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic, restartGame,
-  keyDownListener, removeKeyDownListeners,
+  switchToLongTimeStatistic, switchToRoundStatistic,
+  removeKeyDownListeners, convertDate, showCountdown,
+  ready, set, go, hideCountdown, keyDownListener, resetProgress,
+  opacityOn, opacityOff, playTickAudio, playStartAudio, writeUserAnswer,
+  removeShortTimeStatistic, hideBestIndicator, hideShortTimeStatistic,
+  rewritePointsResult, rewriteLongTimeStatistic, showShortTimeStatistic,
 };
