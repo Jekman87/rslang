@@ -71,6 +71,16 @@ export default class Vocabulary extends Component {
     this.settings = this.options.dataForApp.settings.optional;
   }
 
+  selectAndDecodeDataFromBackend(criterionOfSelection, dataArr) {
+    const decodedArr = [];
+    for (let i = 0; i < dataArr.length; i += 1) {
+      if (dataArr[i].userWord.optional.status === criterionOfSelection) {
+        decodedArr.push(this.decodeDataFromBackend(dataArr[i]));
+      }
+    }
+    return decodedArr;
+  }
+
   decodeDataFromBackend(obj) {
     return {
       progressColor: this.defineProgressBarBgColor(obj.userWord.optional.progress),
@@ -226,8 +236,8 @@ export default class Vocabulary extends Component {
       this.words = e[0].paginatedResults;
       const end = Date.now();
       console.log('words', end - start, this.words);
-      const test1 = (this.words).map((el) => this.decodeDataFromBackend(el));
-      this.createListOfWords('active-words', test1, activeWordsConfig, false);
+      // const test1 = (this.words).map((el) => this.decodeDataFromBackend(el));
+      this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig, false);
     }).catch((e) => {
       console.log('catch', e);
     });
@@ -245,7 +255,9 @@ export default class Vocabulary extends Component {
         if (PrefixOfTypeOfConfig === 'deleted') {
           typeOfConfig = deletedWordsConfig;
         }
-        this.createListOfWords(typeOfWordsId, test, typeOfConfig, isDeleted);
+        this.createListOfWords(typeOfWordsId,
+          this.selectAndDecodeDataFromBackend(PrefixOfTypeOfConfig, this.words),
+          typeOfConfig, isDeleted);
         this.typeOfWordsId = typeOfWordsId;
       }
     }
