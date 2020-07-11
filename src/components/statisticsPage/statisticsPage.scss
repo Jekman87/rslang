@@ -1,0 +1,45 @@
+.Statistics {
+  .stat-header {
+    margin-top: 30px;
+  }
+
+  h3 {
+    @media (max-width: 767px) {
+      font-size: 1.5rem;
+    }
+    @media (max-width: 575px) {
+      font-size: 1rem;
+    }
+  }
+
+  tr, th {
+    text-align: center;
+    @media (max-width: 575px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  tr:nth-child(1),
+  tr:nth-child(2),
+  th:nth-child(1),
+  th:nth-child(2) {
+    width: 15%;
+  }
+
+  .chart-container {
+    position: relative;
+    margin: auto;
+    width: 700px;
+    height: 350px;
+    @media (max-width: 1199px) {
+      width: 625px;
+    }
+    @media (max-width: 1023px) {
+      width: 525px;
+    }
+    @media (max-width: 575px) {
+      width: 90vw;
+      height: 60vw;
+    }
+  }
+}
