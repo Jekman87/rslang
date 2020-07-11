@@ -216,7 +216,7 @@ export default class SprintGame extends Component {
   }
 
   restartTimer() {
-    this.currentTime = 2;
+    this.currentTime = 60;
   }
 
   restartGame() {
