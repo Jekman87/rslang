@@ -1,4 +1,4 @@
-.statistic-screen {
+.riddle-statistic-screen {
   @include flexible();
   flex-direction: column;
   position: fixed;
@@ -15,9 +15,9 @@
   display: none;
 }
 
-.statistic-blocks,
-.statistic-blocks-correct,
-.statistic-blocks-wrong {
+.riddle-statistic-blocks,
+.riddle-statistic-blocks-correct,
+.riddle-statistic-blocks-wrong {
   width: 90%;
   max-width: 700px;
   max-height: 80vh;
@@ -34,12 +34,12 @@
   z-index: 5;
 }
 
-.statistic-blocks-correct,
-.statistic-blocks-wrong {
+.riddle-statistic-blocks-correct,
+.riddle-statistic-blocks-wrong {
   display: none;
 }
 
-.progress {
+.riddle-progress {
   border: 1px solid #005e8d;
   background-color: #ecf0f180;
 
@@ -63,84 +63,61 @@
   }
 }
 
-.level-1 span {
+.riddle-level-1 span {
   color: #7b8a8b;
 }
 
-.level-2 span {
+.riddle-level-2 span {
   color: #3498db;
 }
 
-.level-3 span {
+.riddle-level-3 span {
   color: #005e8d;
 }
 
-.level-4 span {
+.riddle-level-4 span {
   color: #119443;
 }
 
-.level-5 span {
+.riddle-level-5 span {
   color: #da786e;
 }
 
-.level-6 span {
+.riddle-level-6 span {
   color: #e42e1b;
 }
 
-.mistake-container,
-.correct-container {
+.riddle-mistake-container,
+.riddle-correct-container {
   display: flex;
   text-align: left;
   margin: 20px 0 20px;
 }
 
-.game-history {
-  width: 90%;
-  max-width: 700px;
-  max-height: 80vh;
-  padding: 20px 20px;
-  text-align: left;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ebebeba8;
-  border: 2px solid #2d303a;
-  border-radius: 10px;
-  overflow: auto;
-  z-index: 5;
-}
-
-.statistic-blocks {
+.riddle-statistic-blocks {
   display: inline;
 }
 
-.game-history {
-  z-index: 5;
-  display: none;
-}
-
-.points-result,
-.history {
+.riddle-points-result {
   @include flexible();
   color: $fontColor;
   font-size: 1.5rem;
   margin-bottom: 2%;
 }
 
-.level-info {
+.riddle-level-info {
   display: flex;
   text-align: left;
   margin: 20px 0 20px;
 }
 
-.answers-progress {
+.riddle-answers-progress {
   @include flexible();
   padding: 0 14px;
   margin-left: 5px;
 }
 
-.correct-answer {
+.riddle-correct-answer {
   @include flexible();
   background-color: #01AF61;
   color: #fff;
@@ -149,7 +126,7 @@
   margin-left: 5px;
 }
 
-.mistake-answer {
+.riddle-mistake-answer {
   @include flexible();
   background-color: #da5b4c;
   color: #fff;
@@ -158,7 +135,7 @@
   margin-left: 5px;
 }
 
-.statistic-block {
+.riddle-statistic-block {
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -170,23 +147,15 @@
   padding: 0 0 0 20px;
 }
 
-.correct {
+.riddle-correct {
   border-left: 2px solid #01af61;
 }
 
-.wrong {
+.riddle-wrong {
   border-left: 2px solid #da5b4c;
 }
 
-.games {
-  padding: 0 0 0 10px;
-}
-
-.hide-statistic {
-  display: none;
-}
-
-.statistic-buttons {
+.riddle-statistic-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -195,34 +164,11 @@
   min-height: 110px;
   margin: auto;
 
-  .statistic-button {
+  .riddle-statistic-button {
     @include flexible;
     margin: 4% auto;
     box-shadow: 6px 6px 10px #7b8a8b;
     border: 1px solid #005e8d;
     transition: all 0.8s;
-  }
-}
-
-.long-time span i{
-    font-size: 2rem;
-    color: #7b8a8b;
-    margin: 10px;
-    border-bottom: 2px solid #9e8256;
-}
-
-.information-block {
-  width: 87%;
-  display: flex;
-  flex-direction: column;
-  margin: 0 0 10px 20px;
-  border-left: 2px solid #005e8d;
-
-  span {
-    margin-left: 20px;
-  }
-
-  span:first-child {
-    font-weight: bold;
   }
 }
