@@ -49,6 +49,10 @@
     @media (orientation: portrait) {
       background-position: left bottom;
     }
+    @media (max-height: 640px) {
+      bottom: auto;
+      padding-bottom: 20px;
+    }
   }
 
   .h1 {
