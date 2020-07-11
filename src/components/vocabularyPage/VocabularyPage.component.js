@@ -3,6 +3,7 @@ import $$ from '../../core/domManipulation';
 import createVocabularyHTML from './vocabulary.template';
 import './scss/style.scss';
 import { FILE_URL } from '../../constants/constants';
+import progressConfig from '../../constants/progress-config.constants';
 
 const test = [
   {
@@ -53,11 +54,6 @@ const deletedWordsConfig = {
   wordColor: 'text-secondary',
   systemBottonColor: 'btn-outline-success',
   systemBottonIcon: 'fas fa-trash-restore',
-};
-const progressConfig = {
-  bgColor: ['bg-dark', 'bg-danger', 'bg-warning', 'bg-info', 'bg-success'],
-  barWidth: ['20', '40', '60', '80', '100'],
-  text: ['Я это точно учил?', 'Где-то уже слышал!', 'Нужно еще потренироваться!', 'Ну ещё немножечко...', 'Знаю!'],
 };
 
 export default class Vocabulary extends Component {
@@ -256,7 +252,6 @@ export default class Vocabulary extends Component {
 
     if (clickedElement.hasClass('audio-btn')) {
       const audioTagId = clickedElement.$el.id.slice(0, clickedElement.$el.id.indexOf('Button'));
-      console.log(clickedElement.$el.id, audioTagId, clickedElement.$el.id.indexOf('Button'));
       document.getElementById(audioTagId).play().catch(() => true);
     }
   }
