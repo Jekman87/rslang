@@ -2,7 +2,7 @@ export default function createStartPage() {
   return `
   <div class="container d-flex flex-column">
     <div class="row" style="padding-top: 5%;">
-        <div class="col-10 col-sm-11"></div>
+        <div class="col-7 col-sm-9 col-md-10 col-lg-11"></div>
         <div class="col d-flex">
             <button class="btn btn-settings mr-3" type="button" data-event="settings">
                 <i class="fas fa-cogs" data-event="settings"></i>
@@ -56,7 +56,7 @@ export default function createStartPage() {
             </p>
         </div>
     </div>
-    <div class="row my-5 d-flex flex-wrap">
+    <div class="row mt-5 d-flex flex-wrap">
         <div class="col-3"></div>
         <div class="col-12">
             <button type="button" 
