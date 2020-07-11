@@ -4,22 +4,40 @@ import createVocabularyHTML from './vocabulary.template';
 import './scss/style.scss';
 // import { FILE_URL } from '../../constants/constants';
 
-const test = {
-  progressColor: 'bg-danger',
-  progressWidth: '40%',
-  progressText: 'Знакомое слово',
-  lastTraining: '07.07.2020',
-  nextTraining: '08.08.2020',
-  counter: '6',
-  word: 'agree',
-  wordImage: 'https://raw.githubusercontent.com/jekman87/rslang-data/master/files/01_0002.jpg',
-  textMeaning: 'To agree is to have the same opinion or belief as another person',
-  textExample: 'The students agree they have too much homework',
-  transcription: '[əgríː]',
-  wordTranslate: 'согласна',
-  textMeaningTranslate: 'Согласиться - значит иметь то же мнение или убеждение, что и другой человек',
-  textExampleTranslate: 'Студенты согласны, что у них слишком много домашней работы',
-};
+const test = [
+  {
+    progressColor: 'bg-danger',
+    progressWidth: '40%',
+    progressText: 'Знакомое слово',
+    lastTraining: '07.07.2020',
+    nextTraining: '08.08.2020',
+    counter: '6',
+    word: 'agree',
+    wordImage: 'https://raw.githubusercontent.com/jekman87/rslang-data/master/files/01_0002.jpg',
+    textMeaning: 'To agree is to have the same opinion or belief as another person',
+    textExample: 'The students agree they have too much homework',
+    transcription: '[əgríː]',
+    wordTranslate: 'согласна',
+    textMeaningTranslate: 'Согласиться - значит иметь то же мнение или убеждение, что и другой человек',
+    textExampleTranslate: 'Студенты согласны, что у них слишком много домашней работы',
+  },
+  {
+    progressColor: 'bg-warning',
+    progressWidth: '60%',
+    progressText: 'Нужно еще потренироваться!',
+    lastTraining: '07.07.2020',
+    nextTraining: '08.08.2020',
+    counter: '2',
+    word: 'agree',
+    wordImage: 'https://raw.githubusercontent.com/jekman87/rslang-data/master/files/01_0002.jpg',
+    textMeaning: 'To agree is to have the same opinion or belief as another person',
+    textExample: 'The students agree they have too much homework',
+    transcription: '[əgríː]',
+    wordTranslate: 'согласна',
+    textMeaningTranslate: 'Согласиться - значит иметь то же мнение или убеждение, что и другой человек',
+    textExampleTranslate: 'Студенты согласны, что у них слишком много домашней работы',
+  },
+];
 
 const activeWordsConfig = {
   wordColor: 'text-success',
@@ -53,21 +71,23 @@ export default class Vocabulary extends Component {
   }
 
   createCard(dataObj, config, deletedConfig) {
-    {/* <li class="list-group-item"></li> */ }
+    { /* <li class="list-group-item"></li> */ }
     let additionalInfoOff = false;
     let additionalFieldsOff = false;
     if (this.settings.vocabularyExample === false
-        && this.settings.vocabularyExplanation === false) {
+      && this.settings.vocabularyExplanation === false) {
       additionalInfoOff = true;
     }
     if (this.settings.vocabularyExample === false
-        && this.settings.vocabularyExplanation === false
-        && this.settings.vocabularyImage === false) {
+      && this.settings.vocabularyExplanation === false
+      && this.settings.vocabularyImage === false) {
       additionalFieldsOff = true;
     }
-    const li = document.createElement('li');
-    li.classList.add('list-group-item');
-    li.innerHTML = `<div class="d-flex flex-column-reverse align-items-center justify-content-between flex-sm-row">
+    // const ul = document.createElement('ul');
+    // ul.classList.add('list-group');
+    // ul.innerHTML =
+    return `<li class="list-group-item">
+    <div class="d-flex flex-column-reverse align-items-center justify-content-between flex-sm-row">
     <div class="progress-wrapper d-flex  flex-sm-column flex-lg-row col-12 col-sm-4 ml-md-3 mb-1 justify-content-between align-items-center">
       <div class="progress">
         <div class="progress-bar progress-bar-striped ${dataObj.progressColor}" role="progressbar" style="width: ${dataObj.progressWidth}"
@@ -151,28 +171,55 @@ export default class Vocabulary extends Component {
     </div>
   </div>
 </div>
+</li>
 `.trim();
 
     // </li>
-    return li;
+    // return ul;
   }
 
+  createListOfWords(tabId, decodedDataArr, wordsConfig, isDeletedConfig) {
+    const container = document.createElement('ul');
+    for (let i = 0; i < decodedDataArr.length; i += 1) {
+      container.innerHTML += (this.createCard(decodedDataArr[i], wordsConfig, isDeletedConfig));
+    }
+    container.classList.add('list-group');
+    const parentContainer = document.getElementById(tabId);
+    parentContainer.innerHTML = '';
+    return parentContainer.append(container);
+  }
+  // const inputDataTemplate = inputData.map((el, i) => {
+  //   return `
+
+  // ${inputData .text}
+  // `; }) .... mainTemplate() { return
+  // ${inputDataTemplate}
+  // ; }
   init() {
     super.init();
-    document.getElementById('active-words').append(this.createCard(test, activeWordsConfig, false));
-    document.getElementById('active-words').append(this.createCard(test, difficultWordsConfig, false));
-    document.getElementById('active-words').append(this.createCard(test, deletedWordsConfig, true));
-    document.getElementById('active-words').append(this.createCard(test, activeWordsConfig, false));
-    document.getElementById('active-words').append(this.createCard(test, activeWordsConfig, false));
+    this.createListOfWords('active-words', test, activeWordsConfig, false);
     // подписка на события внутри компонента
   }
 
   onClick(event) {
     const clickedElement = $$(event.target);
 
-    if (clickedElement.hasClass('btn')) {
-      const pageName = clickedElement.data.name;
-      this.emit('selectPage', pageName);
+    if (clickedElement.hasClass('nav-link')) {
+      // console.log(clickedElement.$el.href);
+      const typeOfWordsId = clickedElement.$el.href.slice((clickedElement.$el.href.indexOf('#')) + 1);
+      if (this.typeOfWordsId !== typeOfWordsId) {
+        // console.log(typeOfWordsId);
+        const PrefixOfTypeOfConfig = typeOfWordsId.slice(0, typeOfWordsId.indexOf('-'));
+        const isDeleted = PrefixOfTypeOfConfig === 'deleted';
+        let typeOfConfig = PrefixOfTypeOfConfig === 'active' ? activeWordsConfig : difficultWordsConfig;
+        if (PrefixOfTypeOfConfig === 'deleted') {
+          typeOfConfig = deletedWordsConfig;
+        }
+        this.createListOfWords(typeOfWordsId, test, typeOfConfig, isDeleted);
+        this.typeOfWordsId = typeOfWordsId;
+      }
+      // const pageName = clickedElement.data.name;
+      // this.emit('selectPage', pageName);
     }
   }
 
