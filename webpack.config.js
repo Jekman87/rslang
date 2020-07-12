@@ -5,7 +5,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -104,10 +103,6 @@ const plugins = () => {
     new MiniCssExtractPlugin({ filename: filename('css') }),
   ];
 
-  if (isProd) {
-    base.push(new BundleAnalyzerPlugin());
-  }
-
   return base;
 };
 
@@ -154,7 +149,7 @@ module.exports = {
       },
       {
         test: /\.(ttf|woff|woff2|eot)$/,
-        use: ['file-loader'],
+        use: [`file-loader?name=${PATHS.assets}fonts/[name].[ext]`],
       },
       {
         test: /\.js$/,

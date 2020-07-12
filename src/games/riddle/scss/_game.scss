@@ -14,7 +14,7 @@
 }
 
 .riddle-block,
-.translate-block {
+.riddle-translate-block {
   width: 90%;
   max-width: 700px;
   max-height: 80vh;
@@ -27,7 +27,7 @@
   overflow: auto;
 }
 
-.hide-prompt {
+.riddle-hide-prompt {
   display: none !important;
 }
 
@@ -59,13 +59,26 @@
   }
 }
 
-.answer-form {
+.riddle-answer-form {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 90%;
   opacity: 0;
   transition: all 0.8s;
+
+  .riddle-answer-input {
+    width: 100%;
+    min-height: 40px;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    background-color: #ffffff5c;
+    border: 1px solid #2d303a;
+    border-radius: 5px;
+    animation: blink 0.7s infinite;
+    transition: all 0.4s;
+  }
 
   button {
     min-width: 110px;
@@ -74,244 +87,27 @@
   }
 }
 
-.answer-input {
-  width: 100%;
-  min-height: 40px;
-  margin: 10px;
-  padding: 5px;
-  text-align: center;
-  background-color: #ffffff5c;
-  border: 1px solid #2d303a;
-  border-radius: 5px;
-  animation: blink 0.7s infinite;
-  transition: all 0.4s;
-}
-
-.answer-blocks {
+.riddle-answer-blocks {
   width: 90%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: auto;
   padding: 10px;
-}
 
-.answer-block {
-  @include flexible;
-  width: 40%;
-  min-height: 30px;
-  margin: 10px;
-  background-color: #ffffff5c;
-  border: 1px solid #2d303a;
-  border-radius: 5px;
-  transition: all 0.4s;
-}
-
-.game-block {
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto 10%;
-  padding: 2%;
-  overflow: hidden;
-  border-radius: 5px;
-  border: 1px solid #005e8d;
-  background-color: #ffffff5c;
-  transition: all 0.2s;
-}
-
-.correct-color {
-  background-color: #18bc9c4d;
-  transition: all 0.2s;
-}
-
-.wrong-color {
-  background-color: #d1343463;
-  transition: all 0.2s;
-}
-
-.sprint-score {
-  width: 380px;
-  min-height: 10vh;
-  @include flexible;
-  margin: auto;
-  margin-bottom: 3%;
-  background-color: transparent;
-  position: relative;
-  border: none;
-
-  .score {
-    font-size: 2.4rem;
-    color: $fontColor;
-  }
-
-  .mute {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .note {
-      transition: all 0.8s;
-    }
-  }
-}
-
-.unmute {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-
-
-  .crossed-note {
-    color: red;
-    transition: all 0.8s;
-  }
-
-  .cross-line {
-    position: absolute;
-    transform: rotate(126deg);
-    top: 4%;
-    color: red;
-    transition: all 0.8s;
-  }
-}
-
-.progress-place {
-  width: 90%;
-  @include flexible;
-  position: relative;
-  margin: auto;
-  margin-bottom: 7%;
-
-    div {
-    width: 25px;
-    height: 25px;
+  .answer-block {
     @include flexible;
-    border-radius: 50%;
-    margin-right: 4%;
-    border: 1px solid #005e8d;
-
-    i {
-      color: white;
-    }
-  }
-
-  .audio-icon {
-    position: absolute;
-    right: 0;
-
-    i {
-      transition: all 0.6s;
-    }
-  }
-}
-
-.birds,
-.language-eng,
-.language-rus {
-  @include flexible;
-  margin: 3%;
-  font-size: 1.6rem;
-}
-
-.birds {
-  min-height: 80px;
-}
-
-.language-eng,
-.language-rus {
-  min-height: 50px;
-  text-align: center;
-}
-
-.points-progress {
-  @include flexible;
-  font-size: 0.9rem;
-  color: $fontColor;
-}
-
-.birds {
-  position: relative;
-
-  span {
-    width: 80%;
-    height: 5px;
-    position: absolute;
-    bottom: 2%;
-    background-color: #6a6e71;
-    z-index: 2;
-  }
-
-  img {
-    z-index: 1;
-  }
-
-  .bird-1 {
-    position: absolute;
-    width: 88px;
-    height: 96px;
-    top: 26%;
-    left: 5%;
-  }
-
-  .bird-2 {
-    position: absolute;
-    width: 73px;
-    height: 60px;
-    top: 41%;
-    left: 27%;
-  }
-
-  .bird-3 {
-    position: absolute;
-    width: 76px;
-    height: 68px;
-    top: 33%;
-    left: 47%;
-  }
-
-  .bird-4 {
-    position: absolute;
-    width: 73px;
-    height: 75px;
-    top: 32%;
-    left: 68%;
-  }
-}
-
-
-.click-buttons,
-.press-buttons {
-  width: 70%;
-  @include flexibleSpace;
-  margin: auto;
-
-  button,
-  span {
-    @include flexible;
-    margin: 3%;
     width: 40%;
-    min-height: 40px;
-
-    i {
-      font-size: 2rem;
-      color: $fontColor;
-    }
+    min-height: 30px;
+    margin: 10px;
+    background-color: #ffffff5c;
+    border: 1px solid #2d303a;
+    border-radius: 5px;
+    transition: all 0.4s;
   }
 }
 
-.click-buttons button {
-  box-shadow: 6px 6px 10px #7b8a8b;
-  transition: all 0.2s;
-}
-
-.button {
+.riddle-button {
   @include flexible;
   min-width: 40px;
   min-height: 40px;
@@ -322,22 +118,7 @@
   box-shadow: 6px 6px 10px #7b8a8b;
 }
 
-.icon-parameters {
+.riddle-icon-parameters {
   font-size: 1.5rem;
   color: $fontColor;
-}
-
-.right-arrow,
-.left-arrow {
-  transition: all 0.2s;
-}
-
-.right-arrow i,
-.left-arrow i {
-  transition: all 0.8s;
-}
-
-.active-key {
-  opacity: 0.5;
-  transition: all 0.5s;
 }
