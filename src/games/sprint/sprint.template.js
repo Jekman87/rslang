@@ -13,7 +13,7 @@ export default function createGameField() {
         </div>
       </div>
 
-      <button type="button" class="btn btn-outline-success" data-button="start">Начать забег</button>
+      <button type="button" class="btn" data-button="start">Начать забег</button>
     </div>
 
     <div class="main-sp">
@@ -56,7 +56,7 @@ export default function createGameField() {
         <span class="points-progress">+10 очков за слово.</span>
 
         <div class="birds">
-          <img class="bird-1" src="assets/img/bird-1.png" alt="bird" />
+          <img class="bird-1" src="assets/sprint/bird-1.png" alt="bird" />
           <span></span>
         </div>
         <div class="language-eng"></div>
