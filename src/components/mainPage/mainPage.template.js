@@ -1,41 +1,135 @@
 import { MAIN_MENU_TITLES } from '../../constants/menu.constants';
+import gamesCard from './gameCards';
 
-export default function createMainPageHTML() {
+function createGameCard(data) {
+  const html = data.map((member) => {
+    const {
+      dataAttr, title, img, preview,
+    } = member;
+    return `
+    <div class="training-card m-2">
+    <div class="training-card-img" style="background-image:url('${img}');">
+      <div class="training-card-overlay">
+        <div class="overlay-content">
+        <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-game="${dataAttr}">Играть <i class="fas fa-gamepad"></i></a>
+        </div>
+      </div>
+    </div>        
+    <div class="training-card-content">
+      <h4>${title}</h4>
+      <p>${preview}</p>
+    </div>
+  </div>
+    `;
+  });
+  return html.join('');
+}
+
+export default function createMainPageHTML(data) {
+  const {
+    username,
+    wordsToday,
+    wordsPerDay,
+    cardsToday,
+    cardsPerDay,
+    learnedWords,
+    allWords = 3600,
+    cardsLearned,
+  } = data;
   return `
     <div class="container mt-3">
-      <div class="jumbotron">
-        <h1 class="display-4">RS Lang</h1>
-        <p class="lead">Выучи английский или умри!</p>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Статистика за сегодня</h5>
-                <p class="card-text">Слов на сегодня: 15 из 30</p>
-                <p class="card-text">Карточек на сегодня: 30 из 50</p>
-                <a href="#" class="btn btn-primary" data-name="${MAIN_MENU_TITLES[4].data}">Подробнее</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Общая статистика</h5>
-                <p class="card-text">Всего выучено слов: 550 из 3600</p>
-                <p class="card-text">Всего карточек пройдено: 1256</p>
-                <a href="#" class="btn btn-primary" data-name="${MAIN_MENU_TITLES[4].data}">Подробнее</a>
-              </div>
-            </div>
-          </div>
+      <div class="jumbotron pt-4">
+        <div class="logo-head bg-primary border border-secondary mb-4 mx-auto rounded text-center text-light">
+          <h1 class="display-4 mb-0">RS Lang 
+          <img class="logo img-fluid" src="/assets/main-page/logo.png" alt="RS Lang"></h1>
+          <p class="lead">Изучай английский язык - время не ждет!</p>
         </div>
-        <div class="progress bg-secondary mt-3">
-          <div class="progress-bar bg-info" role="progressbar" style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="greeting mb-3">
+          <h5 class="greeting-text">Добро пожаловать, <i class="fas fa-user-graduate"></i> ${username}!</h5>
+        </div>
+        <div class="statistics bg-white p-2 rounded">
+          <h5 class="region-title"><i class="fas fa-user-chart"></i> Статистика</h5>
+          <div class="row">
+            <div class="col-sm-6 mb-1">
+              <div class="card bg-light">
+                <div class="stats-card-body card-body">
+                  <h5 class="card-title">Сегодня</h5>
+                  <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Слов на сегодня
+                        <div class="progress-container rounded">
+                          <div class="progress-tiny bg-info" 
+                          style="width:${Math.ceil((wordsToday / wordsPerDay) * 100)}%"></div>
+                        </div>
+                      <span class="stats badge badge-info badge-pill">${wordsToday} из ${wordsPerDay}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Карточек на сегодня
+                      <div class="progress-container rounded">
+                        <div class="progress-tiny bg-info" 
+                        style="width:${Math.ceil((cardsToday / cardsPerDay) * 100)}%"></div>
+                      </div>
+                      <span class="stats badge badge-info badge-pill">${cardsToday} из ${cardsPerDay}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 mb-1">
+              <div class="card bg-light">
+                <div class="stats-card-body card-body">
+                  <h5 class="card-title">Общая</h5>
+                  <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Всего выучено слов
+                      <div class="progress-container rounded">
+                        <div class="progress-tiny bg-info" 
+                        style="width:${Math.ceil((learnedWords / allWords) * 100)}%"></div>
+                      </div>
+                      <span class="stats badge badge-info badge-pill">${learnedWords} из ${allWords}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                       Всего карточек пройдено
+                      <span class="stats badge badge-info badge-pill">${cardsLearned}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--<div class="progress bg-secondary my-3">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+          </div> -->
+          <a href="#" class="btn btn-light" 
+          data-name="${MAIN_MENU_TITLES[4].data}">Подробнее...</a>
         </div>
         <hr class="my-4">
-        <p>Тренировка слов - это отличная возможность потренировать слова!)</p>
-        <p class="lead">
-          <a class="btn btn-primary btn-lg" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировка <i class="fas fa-long-arrow-alt-right"></i></a>
-        </p>
+        <div class="bg-white p-2 rounded">
+          <h5 class="region-title"><i class="fas fa-graduation-cap"></i> Тренировка</h5>
+          <div class="d-flex justify-content-center">
+          <div class="training-card my-2 w-100">
+            <div class="training-card-img" style="background-size: contain;
+                    background-image: url('/assets/main-page/training.jpg');">
+                <div class="training-card-overlay">
+                  <div class="overlay-content">
+                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" 
+                  data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+                  </div>
+                </div>
+              </div>        
+              <div class="training-card-content">
+                <p>Этот тренажёр создан специально для тех, кто хочет пополнить свой словарный запас английского языка в удобной игровой форме.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-4">
+        <div class="bg-white p-2 rounded">
+          <h5 class="region-title"><i class="fas fa-dice"></i> Игры</h5>
+          <div class="d-flex flex-wrap justify-content-center">
+          ${createGameCard(gamesCard)}
+          </div>
+        </div>
       </div>
     </div>
   `;
