@@ -9,7 +9,7 @@ import {
   muteGameVoice, onGameVoice, rewriteCorrectAndWrongAnswers,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
   switchToLongTimeStatistic, switchToRoundStatistic,
-  removeKeyDownListeners, convertDate, showCountdown,
+  removeKeyDownListeners, convertDate, showCountdown, rememberLevel,
   ready, set, go, hideCountdown, keyDownListener, resetProgress,
   opacityOn, opacityOff, playTickAudio, playStartAudio, writeUserAnswer,
   removeShortTimeStatistic, hideBestIndicator, hideShortTimeStatistic,
@@ -41,6 +41,7 @@ export default class SprintGame extends Component {
     switch (event.target.dataset.button) {
       case 'start':
         hideIntro();
+        rememberLevel();
         this.restartGame();
         break;
       case 'Wrong':
@@ -165,13 +166,13 @@ export default class SprintGame extends Component {
 
   prepareLongTimeStatistic(objectWithStatistic) {
     return `
-      <div class="sprint-statistic-block long-time">
+      <div class="sprint-statistic-block sprint-long-time">
       <span><i class="fas fa-rabbit"></i></span>
       <div class="sprint-information-block">
         <span>${convertDate(objectWithStatistic.date)}</span>
-        <span>результат игры - ${objectWithStatistic.result};</span>
-        <span>правильных ответов - ${objectWithStatistic.correctAnswers};</span>
-        <span>ошибок - ${objectWithStatistic.wrongAnswers}.</span>
+        <span>результат игры - ${objectWithStatistic.points};</span>
+        <span>правильных ответов - ${objectWithStatistic.result.split('-')[0]};</span>
+        <span>ошибок - ${objectWithStatistic.result.split('-')[1]}.</span>
       </div>
     </div>
     `.trim();
