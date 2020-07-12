@@ -1,7 +1,7 @@
 export default function createGameField() {
   return `
     <div class="intro__sprint">
-      <h1><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
+      <h2><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
       <p>Истинная гонка на проверку знаний.<br> Укажите верно ли указан перевод слова?</p>
 
       <div class="sprint-difficulty-level">
@@ -94,9 +94,9 @@ export default function createGameField() {
         <div class='correct-block'></div>
 
         <div class='sprint-statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="return">Новая игра</button>
-          <button class="btn btn-success statistic-button" data-click="long-time-statistic">История игр</button>
-          <button class="btn btn-success statistic-button" data-click="home">На главную</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="return">Новая игра</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="long-time-statistic">История игр</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="home">На главную</button>
         </div>
       </div>
 
@@ -107,8 +107,8 @@ export default function createGameField() {
         <div class='sprint-games'></div>
 
         <div class='sprint-statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="destroy">Очистить историю</button>
-          <button class="btn btn-success statistic-button" data-click="round-statistic">Вернуться</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="destroy">Очистить историю</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="round-statistic">Вернуться</button>
         </div>
 
       </div>
