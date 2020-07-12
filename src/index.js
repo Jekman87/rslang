@@ -14,6 +14,7 @@ import Vocabulary from './components/vocabularyPage';
 import Settings from './components/settingsPage';
 import Promo from './components/promoPage';
 import Team from './components/teamPage';
+import Statistics from './components/statisticsPage';
 
 // games
 import AudioCall from './games/audioCall/index';
@@ -37,6 +38,7 @@ const pages = {
   Savannah,
   SpeakIt,
   Sprint,
+  Statistics,
 };
 
 const mainApp = new MainApp('#app', {
