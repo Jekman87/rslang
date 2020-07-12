@@ -95,7 +95,7 @@ function go() {
 }
 
 function markRightAnswer() {
-  document.querySelector('.sprint-game-block').classList.toggle('correct-color');
+  document.querySelector('.sprint-game-block').classList.toggle('sprint-correct-color');
 }
 
 function markWrongAnswer() {
