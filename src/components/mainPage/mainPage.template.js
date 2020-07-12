@@ -4,10 +4,7 @@ import gamesCard from './gameCards';
 function createGameCard(data) {
   const html = data.map((member) => {
     const {
-      dataAttr,
-      title,
-      img,
-      preview,
+      dataAttr, title, img, preview,
     } = member;
     return `
     <div class="training-card m-2">
@@ -29,12 +26,22 @@ function createGameCard(data) {
 }
 
 export default function createMainPageHTML(data) {
-  const { username } = data;
+  const {
+    username,
+    wordsToday,
+    wordsPerDay,
+    cardsToday,
+    cardsPerDay,
+    learnedWords,
+    allWords = 3600,
+    cardsLearned,
+  } = data;
   return `
     <div class="container mt-3">
       <div class="jumbotron pt-4">
-        <div class="logo-head bg-primary border border-secondary  mb-4 mx-auto rounded text-center text-light">
-          <h1 class="display-4 mb-0">RS Lang <img class="logo img-fluid" src="/assets/main-page/logo.png" alt="RS Lang"></h1>
+        <div class="logo-head bg-primary border border-secondary mb-4 mx-auto rounded text-center text-light">
+          <h1 class="display-4 mb-0">RS Lang 
+          <img class="logo img-fluid" src="/assets/main-page/logo.png" alt="RS Lang"></h1>
           <p class="lead">Изучай английский язык - время не ждет!</p>
         </div>
         <div class="greeting mb-3">
@@ -51,16 +58,18 @@ export default function createMainPageHTML(data) {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Слов на сегодня
                         <div class="progress-container rounded">
-                          <div class="progress-tiny bg-info" style="width:50%"></div>
+                          <div class="progress-tiny bg-info" 
+                          style="width:${Math.ceil((wordsToday / wordsPerDay) * 100)}%"></div>
                         </div>
-                      <span class="stats badge badge-info badge-pill">15 из 30</span>
+                      <span class="stats badge badge-info badge-pill">${wordsToday} из ${wordsPerDay}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       Карточек на сегодня
                       <div class="progress-container rounded">
-                        <div class="progress-tiny bg-info" style="width:60%"></div>
+                        <div class="progress-tiny bg-info" 
+                        style="width:${Math.ceil((cardsToday / cardsPerDay) * 100)}%"></div>
                       </div>
-                      <span class="stats badge badge-info badge-pill">30 из 50</span>
+                      <span class="stats badge badge-info badge-pill">${cardsToday} из ${cardsPerDay}</span>
                     </li>
                   </ul>
                 </div>
@@ -74,26 +83,25 @@ export default function createMainPageHTML(data) {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       Всего выучено слов
                       <div class="progress-container rounded">
-                        <div class="progress-tiny bg-info" style="width:10%"></div>
+                        <div class="progress-tiny bg-info" 
+                        style="width:${Math.ceil((learnedWords / allWords) * 100)}%"></div>
                       </div>
-                      <span class="stats badge badge-info badge-pill">550 из 3600</span>
+                      <span class="stats badge badge-info badge-pill">${learnedWords} из ${allWords}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                        Всего карточек пройдено
-                       <div class="progress-container rounded">
-                        <div class="progress-tiny bg-info" style="width:20%"></div>
-                      </div>
-                      <span class="stats badge badge-info badge-pill">1256</span>
+                      <span class="stats badge badge-info badge-pill">${cardsLearned}</span>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
-          <div class="progress bg-secondary my-3">
+          <!--<div class="progress bg-secondary my-3">
             <div class="progress-bar bg-info" role="progressbar" style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <a href="#" class="btn btn-light" data-name="${MAIN_MENU_TITLES[4].data}">Подробнее...</a>
+          </div> -->
+          <a href="#" class="btn btn-light" 
+          data-name="${MAIN_MENU_TITLES[4].data}">Подробнее...</a>
         </div>
         <hr class="my-4">
         <div class="bg-white p-2 rounded">
@@ -104,7 +112,8 @@ export default function createMainPageHTML(data) {
                     background-image: url('/assets/main-page/training.jpg');">
                 <div class="training-card-overlay">
                   <div class="overlay-content">
-                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
+                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" 
+                  data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
                   </div>
                 </div>
               </div>        
