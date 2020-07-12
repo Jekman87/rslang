@@ -22,10 +22,10 @@ const perDayChartData = {
 };
 
 const allDaysChartData = {
-  labels: ['1 день', '2 день', '3 день', '4 день', '5 день', '6 день'],
+  labels: ['', '1 день', '2 день', '3 день', '4 день', '5 день', '6 день'],
   datasets: [{
     label: 'Выучено слов всего',
-    data: [12, 27, 34, 43, 43, 56],
+    data: [0, 12, 27, 34, 43, 43, 56],
     backgroundColor: 'rgba(252, 173, 3, 0.2)',
     borderColor: 'rgba(252, 173, 3, 1)',
     borderWidth: 1,
@@ -36,7 +36,6 @@ const popularityChartData = {
   labels: ['SpeakIt', 'English Puzzle', 'Саванна', 'Аудиовызов', 'Спринт', 'Riddle'],
   datasets: [{
     label: 'Сыграно раз',
-    data: [7, 0, 4, 2, 5, 1],
     backgroundColor: [
       'rgba(255, 99, 132, 0.4)',
       'rgba(54, 162, 235, 0.4)',

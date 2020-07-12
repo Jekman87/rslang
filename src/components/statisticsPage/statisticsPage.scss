@@ -8,18 +8,33 @@
     }
   }
 
-  tr, th {
+  .my-custom-scrollbar {
+    position: relative;
+    max-height: 425px;
+    overflow: auto;
+  }
+
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+
+  th, td {
+    width: 15%;
     text-align: center;
     @media (max-width: 575px) {
       font-size: 0.8rem;
     }
   }
 
-  tr:nth-child(1),
-  tr:nth-child(2),
   th:nth-child(1),
-  th:nth-child(2) {
-    width: 15%;
+  td:nth-child(1) {
+    min-width: 120px;
+    width: 35%;
+  }
+
+  th:nth-child(5),
+  td:nth-child(5) {
+    width: 20%;
   }
 
   .chart-container {
