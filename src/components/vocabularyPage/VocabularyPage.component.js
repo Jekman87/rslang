@@ -70,7 +70,6 @@ export default class Vocabulary extends Component {
       audioTagId: `${obj.word}Audio`,
       audioButtonId: `${obj.word}AudioButton`,
       audioSrc: `${FILE_URL}/${obj.audio}`,
-      // eslint-disable-next-line no-underscore-dangle
       id: obj._id,
       arrPosition: i,
     };
@@ -88,7 +87,7 @@ export default class Vocabulary extends Component {
     return progressConfig.text[userWordProgress - 1];
   }
 
-  createCard(dataObj, config, deletedConfig) {
+  createCard(dataObj, config) {
     let additionalInfoOff = false;
     let additionalFieldsOff = false;
     if (this.settings.vocabularyExample === false
@@ -111,10 +110,10 @@ export default class Vocabulary extends Component {
       <small class="progress-info text-nowrap text-muted ml-2 ml-sm-0 ml-lg-2">${dataObj.progressText}</small>
     </div>
 
-    <ol class="d-lg-flex col-12 col-sm-7 col-md-5 mb-1 ${deletedConfig ? 'col-lg-5 col-xl-4' : 'col-lg-8 col-xl-7'}">
+    <ol class="d-lg-flex col-12 col-sm-7 col-md-5 mb-1 ${config.name === 'deleted' ? 'col-lg-5 col-xl-4' : 'col-lg-8 col-xl-7'}">
       <li class="breadcrumb-item align-items-lg-center"><small class="text-muted">Последняя тренировка: ${dataObj.lastTraining}</small></li>
       <li class="breadcrumb-item align-items-lg-center"><small class="text-muted">Повторов:${dataObj.counter}</small></li>
-      <li class="${deletedConfig ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small class="text-muted">Следующая тренировка:${dataObj.nextTraining}</small></li>
+      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small class="text-muted">Следующая тренировка:${dataObj.nextTraining}</small></li>
     </ol>
   </div>
 
@@ -191,10 +190,10 @@ export default class Vocabulary extends Component {
 `.trim();
   }
 
-  createListOfWords(tabId, decodedDataArr, wordsConfig, isDeletedConfig) {
+  createListOfWords(tabId, decodedDataArr, wordsConfig) {
     const container = document.createElement('ul');
     for (let i = 0; i < decodedDataArr.length; i += 1) {
-      container.innerHTML += (this.createCard(decodedDataArr[i], wordsConfig, isDeletedConfig));
+      container.innerHTML += (this.createCard(decodedDataArr[i], wordsConfig));
     }
     container.classList.add('list-group');
     const parentContainer = document.getElementById(tabId);
@@ -204,24 +203,22 @@ export default class Vocabulary extends Component {
 
   init() {
     super.init();
-    this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig, false);
+    this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig);
   }
 
   onClick(event) {
     const clickedElement = $$(event.target);
-    // console.log(clickedElement);
     if (clickedElement.hasClass('nav-link')) {
       const typeOfWordsId = clickedElement.$el.href.slice((clickedElement.$el.href.indexOf('#')) + 1);
       if (this.typeOfWordsId !== typeOfWordsId) {
         const PrefixOfTypeOfConfig = typeOfWordsId.slice(0, typeOfWordsId.indexOf('-'));
-        const isDeleted = PrefixOfTypeOfConfig === 'deleted';
         let typeOfConfig = PrefixOfTypeOfConfig === 'active' ? activeWordsConfig : difficultWordsConfig;
         if (PrefixOfTypeOfConfig === 'deleted') {
           typeOfConfig = deletedWordsConfig;
         }
         this.createListOfWords(typeOfWordsId,
           this.selectAndDecodeDataFromBackend(PrefixOfTypeOfConfig, this.words),
-          typeOfConfig, isDeleted);
+          typeOfConfig);
         this.typeOfWordsId = typeOfWordsId;
       }
     }
