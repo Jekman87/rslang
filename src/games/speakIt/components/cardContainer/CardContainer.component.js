@@ -57,6 +57,12 @@ export default class CardContainer extends Component {
     this.subscribe('cardsDesk:finishGame', () => {
       resetCard.call(this);
     });
+    this.subscribe('header:rules', () => {
+      this.$root.addClass('none');
+    });
+    this.subscribe('rules:rulesreturn', () => {
+      this.$root.removeClass('none');
+    });
   }
 
   toHTML() {

@@ -81,6 +81,9 @@ export default class Header extends Component {
       restart.call(this);
       stopSpeak.call(this);
     });
+    this.subscribe('rules:rulesreturn', () => {
+      this.$root.removeClass('none');
+    });
   }
 
   async onClick(event) {
@@ -120,6 +123,10 @@ export default class Header extends Component {
       stopSpeak.call(this);
       saveGameHistory.call(this);
       this.emit('header:finishRound', '');
+    }
+    if (clickedElement.data.type === 'rules') {
+      this.$root.addClass('none');
+      this.emit('header:rules', '');
     }
   }
 

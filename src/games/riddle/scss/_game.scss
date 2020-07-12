@@ -115,10 +115,43 @@
   transition: all 0.8s;
   background-color: #ffffff5c;
   border: 1px solid #005e8d;
-  box-shadow: 6px 6px 10px #7b8a8b;
+  box-shadow: 6px 6px 10px #000000a6;
+
+  i {
+    color: $fontColor;
+  }
 }
 
 .riddle-icon-parameters {
   font-size: 1.5rem;
   color: $fontColor;
+}
+
+.riddle-mute {
+  i {
+    color: $fontColor;
+    transition: all 0.8s;
+  }
+
+  .riddle-line {
+    position: absolute;
+    transform: rotate(126deg);
+    top: 21%;
+  }
+}
+
+.riddle-unmute {
+  position: relative;
+  display: none;
+
+  i {
+    color: #e74c3c;
+    transition: all 0.8s;
+  }
+
+  .riddle-line {
+    position: absolute;
+    transform: rotate(126deg);
+    top: 21%;
+  }
 }
