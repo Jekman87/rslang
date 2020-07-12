@@ -33,7 +33,7 @@ export default class SpeakIt {
       if (['intro'].includes(Component.className)) {
         element.addClass('h-100');
       }
-      if (['header', 'card-container', 'score', 'cards-desk'].includes(Component.className)) {
+      if (['header', 'card-container', 'score', 'cards-desk', 'rules'].includes(Component.className)) {
         element.addClass('d-none');
       }
       const component = new Component(element, componentOptions);
@@ -50,6 +50,7 @@ export default class SpeakIt {
     $body.css({
       background: `linear-gradient(rgba(0,0,0,.67) 0%, rgba(0,0,0,.67) 100%), 
       url("/assets/speakit/img/bg.jpg") no-repeat center center / cover`,
+      opacity: 0,
     });
 
     this.$el.append(this.getRoot());

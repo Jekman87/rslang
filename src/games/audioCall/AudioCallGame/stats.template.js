@@ -2,7 +2,7 @@ export default function createAudioCallStats() {
   return `
   
     <div class="container bg-light py-4 stat-container">
-      <h5 class="d-flex justify-content-center mb-4">Результат раунда</h5>
+      <h5 class="d-flex justify-content-center mb-5">Результат раунда</h5>
       <div class="container mistake-container">
         <p class="font-weight-bolder">Ошибся <span class="badge badge-danger ml-1 span-mistakes"></span></p>
       </div>

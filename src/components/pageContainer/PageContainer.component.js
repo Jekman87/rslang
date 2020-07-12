@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import { storage } from '../../core/utils';
@@ -5,7 +6,10 @@ import { storage } from '../../core/utils';
 import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 import BASE_SETTINGS from '../../constants/settings.constants';
 import BASE_STATS from '../../constants/stats.constants';
-import BASE_DATA_FOR_APP from '../../constants/data-for-app.constants';
+
+const WORDS_PER_STEP = 10;
+const ALL_WORDS = 3600;
+const RESET_HOUR = 4;
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -22,7 +26,17 @@ export default class PageContainer extends Component {
     this.options = options;
     this.pages = options.pages;
     this.component = options.startPage;
-    this.dataForApp = { ...BASE_DATA_FOR_APP };
+    this.dataForApp = null;
+
+    this.settings = null;
+    this.statistics = null;
+    this.shortTermStats = null;
+    this.longTermStats = null;
+
+    this.newWords = [];
+    this.wordsToRepeatToday = [];
+    this.userWords = [];
+    this.userCards = [];
   }
 
   init() {
@@ -34,6 +48,7 @@ export default class PageContainer extends Component {
 
     this.subscribe('changePage', (pageName) => {
       if (this.pages[pageName]) {
+        console.log('this.component.', this.component);
         this.component.destroy();
         storage('currentPage', pageName);
         this.renderPage(this.pages[pageName]);
@@ -55,8 +70,17 @@ export default class PageContainer extends Component {
 
     this.subscribe('mainLogout', () => {
       this.component.destroy();
-      this.dataForApp = { ...BASE_DATA_FOR_APP };
-      this.options.dataForApp = this.dataForApp;
+
+      this.dataForApp = null;
+      this.settings = null;
+      this.statistics = null;
+      this.shortTermStats = null;
+      this.longTermStats = null;
+      this.newWords = [];
+      this.wordsToRepeatToday = [];
+      this.userWords = [];
+      this.userCards = [];
+      this.options.dataForApp = null;
       this.options.api.clearUserLog();
 
       this.emit('hideHeader');
@@ -65,14 +89,23 @@ export default class PageContainer extends Component {
   }
 
   async renderPage(NewPage) {
-    if (
-      NewPage.className !== AUTH_PAGE_NAME &&
-      (!this.dataForApp.settings || !this.dataForApp.statistics)
-    ) {
-      // add loader?
+    if (NewPage.className !== AUTH_PAGE_NAME
+      && (!this.settings || !this.statistics)) {
+      this.emit('mainAppSpinner', true);
+
       await this.initSettingsAndStats();
-      await this.initWords();
-      // remove loader?
+      await this.loadWords();
+      this.createUserCards();
+      this.dataForApp = {
+        settings: this.settings,
+        statistics: this.statistics,
+        newWords: this.newWords,
+        wordsToRepeatToday: this.wordsToRepeatToday,
+        userWords: this.userWords,
+        userCards: this.userCards,
+        shortTermStats: this.shortTermStats,
+        longTermStats: this.longTermStats,
+      };
     }
 
     const componentOptions = { ...this.options, dataForApp: this.dataForApp };
@@ -81,6 +114,7 @@ export default class PageContainer extends Component {
     element.html(this.component.toHTML());
     this.$root.clear().append(element.$el);
     this.component.init();
+    this.emit('mainAppSpinner', false);
   }
 
   renderGame(NewGame) {
@@ -89,58 +123,85 @@ export default class PageContainer extends Component {
     this.component = new NewGame('.PageContainer', componentOptions);
 
     this.component.render();
-
-    // одинаковый интерфейс для всех игр
-    // this.component = new NewGame('.PageContainer', this.options);
-    // this.component.render();
-    // .PageContainer - в этот контейнер рендерится ваша игра
-    // в this.options содержатся observer и api
-    // чтобы вернуться в главное приложение вы можете вызвать событие
-    // this.options.observer.emit('selectPage', 'MainPage');
-    // чтобы выйти на страницу авторизации используйте
-    // this.options.observer.emit('mainLogout');
-    // в this.options.api уже содержатся token and userId
-    // также в этом объекте есть все необходимые методы
-    // чтобы раборало меню, поправьте название вашего класса в
-    // /constants/menu.constants
+    this.emit('mainAppSpinner', false);
   }
 
   async initSettingsAndStats() {
     try {
-      // переделать в promise.all
-      this.dataForApp.settings = await this.options.api.getSettings();
-      this.dataForApp.statistics = await this.options.api.getStatistics();
+      const data = await Promise.all([
+        this.options.api.getSettings(),
+        this.options.api.getStatistics(),
+      ]);
+
+      [this.settings, this.statistics] = data;
+
+      console.log('this.settings', this.settings);
+      console.log('this.statistics', this.statistics);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
         this.emit('mainLogout');
       } else if (error.message === '404') {
         // если настроек и статистики нету - устанавливаем стандартные
-        // переделать в promise.all
-        this.dataForApp.settings = await this.options.api.updateSettings(BASE_SETTINGS);
-        this.dataForApp.statistics = await this.options.api.updateStatistics(BASE_STATS);
+        const data = await Promise.all([
+          this.options.api.updateSettings(BASE_SETTINGS),
+          this.options.api.updateStatistics(BASE_STATS),
+        ]);
+
+        [this.settings, this.statistics] = data;
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
     }
+
+    const shortStatsJson = this.statistics.optional.MainGameShort;
+
+    if (shortStatsJson) {
+      this.shortTermStats = JSON.parse(shortStatsJson);
+    }
+
+    const longStatsJson = this.statistics.optional.MainGameLong;
+
+    if (longStatsJson) {
+      this.longTermStats = JSON.parse(longStatsJson);
+    }
   }
 
-  async initWords() {
+  async loadWords() {
     try {
-      // загружать все слова пользователя?
-      // по ним смотреть что нужно повторить
-      // 10-20 повторений, затем новых 20, затем повторения новых
+      const newWordsFilter = '{"userWord":null}';
+      // определяем время ресета - след день 4 утра
+      const time = new Date();
+      const hour = time.getHours();
+      if (hour >= RESET_HOUR) time.setDate(time.getDate() + 1);
+      const resetDayTime = time.setHours(RESET_HOUR, 0);
 
-      // подгрузка слов в зависимости от статистики и алгоритма
-      // первым делом идут карты на повторение, затем новые слова
-      // нет на повторении - начинаем с новых
-      // преобразуем порядок слов? Составляем карточки? AggregatedWords
-      const page = 0;
-      const group = 0;
-      this.dataForApp.userCards = await this.options.api.getWords(page, group);
-      this.dataForApp.userWords = await this.options.api.getAllUserWords();
-      console.log('userCards', this.dataForApp.userCards);
-      console.log('userWords', this.dataForApp.userWords);
+      const wordsToRepeatTodayFilter = `{"$and":[
+        {"userWord":{"$ne":null}},
+        {"userWord.optional.status":{"$ne":"deleted"}},
+        {"userWord.optional.nextRepeat":{"$lt":${resetDayTime}}}
+      ]}`;
+
+      const userWordsFilter = '{"userWord":{"$ne":null}}';
+
+      const data = await Promise.all([
+        this.options.api.getAllUserAggregatedWords(null, this.settings.wordsPerDay, newWordsFilter),
+        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, wordsToRepeatTodayFilter),
+        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, userWordsFilter),
+      ]);
+
+      const [newWords, wordsToRepeatToday, userWords] = data;
+
+      this.newWords = newWords[0].paginatedResults;
+      this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults.sort((wordA, wordB) => {
+        const result = wordA.userWord.optional.nextRepeat - wordB.userWord.optional.nextRepeat;
+        return result;
+      });
+      this.userWords = userWords[0].paginatedResults;
+
+      console.log('newWords', this.newWords);
+      console.log('wordsToRepeatToday', this.wordsToRepeatToday);
+      console.log('userWords', this.userWords);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);
@@ -149,6 +210,25 @@ export default class PageContainer extends Component {
         console.log('Другая ошибка: ', error.message);
       }
     }
+  }
+
+  // подготовка массива карт: 10 слов на повторение, 10 новых и т.д.
+  createUserCards() {
+    let index = 0;
+
+    while (this.wordsToRepeatToday.length > index || this.newWords.length > index) {
+      if (this.wordsToRepeatToday.length > index) {
+        this.userCards.push(...this.wordsToRepeatToday.slice(index, index + WORDS_PER_STEP));
+      }
+
+      if (this.newWords.length > index) {
+        this.userCards.push(...this.newWords.slice(index, index + WORDS_PER_STEP));
+      }
+
+      index += WORDS_PER_STEP;
+    }
+
+    console.log('this.userCards', this.userCards);
   }
 
   destroy() {
