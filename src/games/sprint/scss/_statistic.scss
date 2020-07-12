@@ -62,8 +62,8 @@
   margin-bottom: 2%;
 }
 
-.mistake-container,
-.correct-container {
+.sprint-mistake-container,
+.sprint-correct-container {
   display: flex;
   text-align: left;
   margin: 20px 0 20px;
@@ -96,6 +96,17 @@
   min-height: 40px;
   border: 0;
   box-shadow: none;
+
+  span {
+    @include flexible();
+    min-height: 40px;
+  }
+
+  p {
+    @include flexible();
+    margin-left: 15px;
+    margin-bottom: 0;
+  }
 }
 
 .sprint-statistic-block {
@@ -104,11 +115,6 @@
 
 .sprint-games {
   padding: 0 0 0 10px;
-}
-
-.sprint-statistic-block p {
-  margin-left: 15px;
-  margin-bottom: 10px;
 }
 
 .hide-statistic {

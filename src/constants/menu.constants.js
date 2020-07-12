@@ -12,7 +12,7 @@ const MAIN_MENU_TITLES = [
 const GAME_MENU_TITLES = [
   { data: 'AudioCall', title: 'Аудиовызов' },
   { data: 'Puzzle', title: 'English puzzle' },
-  { data: 'Riddle', title: 'Своя игра' },
+  { data: 'Riddle', title: 'Загадка-отгадка' },
   { data: 'Savannah', title: 'Саванна' },
   { data: 'SpeakIt', title: 'SpeakIt' },
   { data: 'Sprint', title: 'Спринт' },
