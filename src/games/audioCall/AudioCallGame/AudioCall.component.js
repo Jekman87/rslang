@@ -1,5 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable object-curly-newline */
 import $$ from '../../../core/domManipulation';
 import { FILE_URL } from '../../../constants/constants';
 import Component from '../../../core/Component';
@@ -107,14 +105,12 @@ export default class AudioCall extends Component {
 
   playWinSound() {
     const audio = new Audio();
-    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/pew.mp3';
     audio.src = '/assets/audio/pew.mp3';
     audio.play().catch((err) => console.log(err));
   }
 
   playWrongSound() {
     const audio = new Audio();
-    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/wrong.mp3';
     audio.src = '/assets/audio/wrong.mp3';
     audio.play().catch((err) => console.log(err));
   }
