@@ -34,6 +34,7 @@ function checkRound() {
 
 function prepareLongTimeStatistic() {
   let correctAnswers = 0;
+  let wrongAnswers = 0;
   const currentDate = Date.now();
 
   const currentGameResults = {
@@ -44,11 +45,12 @@ function prepareLongTimeStatistic() {
 
   for (let i = 0; i < 6; i += 1) {
     correctAnswers += state.lvlStatistic[i].filter((el) => el !== 0).length;
+    wrongAnswers += state.lvlStatistic[i].filter((el) => el === 0).length;
   }
 
   currentGameResults.date = currentDate;
   currentGameResults.round = state.round;
-  currentGameResults.result = correctAnswers;
+  currentGameResults.result = `${correctAnswers}-${wrongAnswers}`;
 
   return currentGameResults;
 }
@@ -221,17 +223,17 @@ function rewriteRiddleOptions() {
   state.riddleOptions.forEach((el) => {
     if (el === state.riddleAnswer) {
       document.querySelector('.riddle-answer-blocks').insertAdjacentHTML('beforeend',
-        `<button type="button" class="btn btn-outline-success riddle-button answer-block">${el}</button>`);
+        `<button type="button" class="btn btn-outline-secondary riddle-button answer-block">${el}</button>`);
       return true;
     }
     document.querySelector('.riddle-answer-blocks').insertAdjacentHTML('beforeend',
-      `<button type="button" class="btn btn-outline-success riddle-button answer-block wa">${el}</button>`);
+      `<button type="button" class="btn btn-outline-secondary riddle-button answer-block wa">${el}</button>`);
     return true;
   });
 }
 
 function showGameFields() {
-  document.querySelector('.riddle-container').style.border = '2px solid #005e8d';
+  document.querySelector('.riddle-container').style.border = '2px solid #7b8a8b80;';
   document.querySelector('.riddle-answer-form').style.opacity = '100';
   document.querySelector('.riddle-prompts').style.position = 'static';
   document.querySelector('.riddle-prompts').style.opacity = '100';
@@ -247,24 +249,42 @@ function fillGameFields() {
 function markAnswer(answerStatus) {
   const answerBlock = document.querySelector('.riddle-container');
   if (answerStatus) {
-    answerBlock.style.backgroundColor = '#04930430';
-    answerBlock.style.border = '2px solid #079816';
+    answerBlock.style.backgroundColor = '#0c851e54';
+    answerBlock.style.border = '2px solid #0c851e';
   } else {
     answerBlock.style.backgroundColor = '#ff000054';
     answerBlock.style.border = '2px solid #d24c3e';
   }
   setTimeout(() => {
     answerBlock.style.backgroundColor = 'transparent';
-    answerBlock.style.border = '2px solid #005e8d';
+    answerBlock.style.border = '2px solid #7b8a8b80';
   }, 300);
 }
 
 function playCorrectAudio() {
-  document.querySelector('.correct-voice').play();
+  document.querySelector('.riddle-correct-voice').play().catch(() => true);
 }
 
 function playWrongAudio() {
-  document.querySelector('.wrong-voice').play().catch(() => true);
+  document.querySelector('.riddle-wrong-voice').play().catch(() => true);
+}
+
+function swithchOffVoice() {
+  document.querySelector('.riddle-mute').style.display = 'none';
+  document.querySelector('.riddle-unmute').style.display = 'flex';
+
+  document.querySelector('.riddle-correct-voice').src = '';
+  document.querySelector('.riddle-wrong-voice').src = '';
+  document.querySelector('.riddle-pass-voice').src = '';
+}
+
+function swithchOnVoice() {
+  document.querySelector('.riddle-mute').style.display = 'flex';
+  document.querySelector('.riddle-unmute').style.display = 'none';
+
+  document.querySelector('.riddle-correct-voice').src = 'assets/voices/pew.mp3';
+  document.querySelector('.riddle-wrong-voice').src = 'assets/voices/wrong.mp3';
+  document.querySelector('.riddle-pass-voice').src = 'assets/voices/pass.mp3';
 }
 
 function upLevel() {
@@ -344,7 +364,7 @@ function passHandler() {
   const level = document.querySelector('.input-level');
   const page = document.querySelector('.input-page');
 
-  document.querySelector('.pass-voice').play().catch(() => true);
+  document.querySelector('.riddle-pass-voice').play().catch(() => true);
   markAnswer();
   upLevel();
 
@@ -379,8 +399,8 @@ export {
   hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput, passHandler,
-  showStatistic, recountStatistic, removeStatistic,
+  compareAnswers, moveAnswerIntoInput, passHandler, swithchOffVoice,
+  showStatistic, recountStatistic, removeStatistic, swithchOnVoice,
   showCorrectPartOfStatistic, showWrongPartOfStatistic,
   backToStatisticScreen, backToGameFromStatistic, state,
   prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
