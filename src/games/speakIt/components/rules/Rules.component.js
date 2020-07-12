@@ -31,7 +31,6 @@ export default class Rules extends Component {
     }
     if (clickedElement.hasClass('play-sound')) {
       const { sound } = clickedElement.data;
-      console.log(sound);
       playAudio.apply(this, [sound, PRONOUNCE_URL]);
     }
   }
