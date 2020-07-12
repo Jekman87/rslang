@@ -19,6 +19,24 @@ function storage(key, data) {
   return true;
 }
 
+const getResetDayTime = (resetHour) => {
+  const time = new Date();
+  const hour = time.getHours();
+  if (hour >= resetHour) time.setDate(time.getDate() + 1);
+  const resetDayTime = time.setHours(resetHour, 0);
+
+  return resetDayTime;
+};
+
+const getStartDayTime = (resetHour) => {
+  const time = new Date();
+  const hour = time.getHours();
+  if (hour <= resetHour) time.setDate(time.getDate() - 1);
+  const resetDayTime = time.setHours(resetHour, 0);
+
+  return resetDayTime;
+};
+
 export {
-  capitalize, delay, storage,
+  capitalize, delay, storage, getResetDayTime, getStartDayTime,
 };
