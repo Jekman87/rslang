@@ -156,6 +156,18 @@
     .icon-container{
         min-width: 3rem;
     }
+    .list-group-error-window{
+        position: absolute;
+        border-radius: inherit;
+        z-index: 100;
+        width: 100%;
+        height: 100%;
+        background-color: #c9d2d28f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       
+    }
     .hidden{
         display: none;
     }

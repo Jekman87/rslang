@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createVocabularyHTML from './vocabulary.template';
@@ -5,52 +6,20 @@ import './scss/style.scss';
 import { FILE_URL } from '../../constants/constants';
 import progressConfig from '../../constants/progress-config.constants';
 
-const test = [
-  {
-    progressColor: 'bg-danger',
-    progressWidth: '40%',
-    progressText: 'Знакомое слово',
-    lastTraining: '07.07.2020',
-    nextTraining: '08.08.2020',
-    counter: '6',
-    word: 'agree',
-    wordImage: 'https://raw.githubusercontent.com/jekman87/rslang-data/master/files/01_0002.jpg',
-    textMeaning: 'To agree is to have the same opinion or belief as another person',
-    textExample: 'The students agree they have too much homework',
-    transcription: '[əgríː]',
-    wordTranslate: 'согласна',
-    textMeaningTranslate: 'Согласиться - значит иметь то же мнение или убеждение, что и другой человек',
-    textExampleTranslate: 'Студенты согласны, что у них слишком много домашней работы',
-  },
-  {
-    progressColor: 'bg-warning',
-    progressWidth: '60%',
-    progressText: 'Нужно еще потренироваться!',
-    lastTraining: '07.07.2020',
-    nextTraining: '08.08.2020',
-    counter: '2',
-    word: 'agree',
-    wordImage: 'https://raw.githubusercontent.com/jekman87/rslang-data/master/files/01_0002.jpg',
-    textMeaning: 'To agree is to have the same opinion or belief as another person',
-    textExample: 'The students agree they have too much homework',
-    transcription: '[əgríː]',
-    wordTranslate: 'согласна',
-    textMeaningTranslate: 'Согласиться - значит иметь то же мнение или убеждение, что и другой человек',
-    textExampleTranslate: 'Студенты согласны, что у них слишком много домашней работы',
-  },
-];
-
 const activeWordsConfig = {
+  name: 'active',
   wordColor: 'text-success',
   systemBottonColor: 'btn-outline-danger',
   systemBottonIcon: 'fas fa-trash',
 };
 const difficultWordsConfig = {
+  name: 'difficult',
   wordColor: 'text-danger',
   systemBottonColor: 'btn-outline-success',
   systemBottonIcon: 'fas fa-file-export',
 };
 const deletedWordsConfig = {
+  name: 'deleted',
   wordColor: 'text-secondary',
   systemBottonColor: 'btn-outline-success',
   systemBottonIcon: 'fas fa-trash-restore',
@@ -75,13 +44,13 @@ export default class Vocabulary extends Component {
     const decodedArr = [];
     for (let i = 0; i < dataArr.length; i += 1) {
       if (dataArr[i].userWord.optional.status === criterionOfSelection) {
-        decodedArr.push(this.decodeDataFromBackend(dataArr[i]));
+        decodedArr.push(this.decodeDataFromBackend(dataArr[i], i));
       }
     }
     return decodedArr;
   }
 
-  decodeDataFromBackend(obj) {
+  decodeDataFromBackend(obj, i) {
     return {
       progressColor: this.defineProgressBarBgColor(obj.userWord.optional.progress),
       progressWidth: `${this.defineProgressBarWidth(obj.userWord.optional.progress)}%`,
@@ -100,6 +69,9 @@ export default class Vocabulary extends Component {
       audioTagId: `${obj.word}Audio`,
       audioButtonId: `${obj.word}AudioButton`,
       audioSrc: `${FILE_URL}/${obj.audio}`,
+      // eslint-disable-next-line no-underscore-dangle
+      id: obj._id,
+      arrPosition: i,
     };
   }
 
@@ -127,7 +99,8 @@ export default class Vocabulary extends Component {
       && this.settings.vocabularyImage === false) {
       additionalFieldsOff = true;
     }
-    return `<li class="list-group-item">
+    return `<li class="list-group-item" data-arrposition=${dataObj.arrPosition} id="${dataObj.id}">
+    <div class="list-group-error-window d-none"><button type="button" class="accept-error-btn btn btn-danger">Что-то пошло не так... Попробуйте еще раз.</button></div>
     <div class="d-flex flex-column-reverse align-items-center justify-content-between flex-sm-row">
     <div class="progress-wrapper d-flex  flex-sm-column flex-lg-row col-12 col-sm-4 ml-md-3 mb-1 justify-content-between align-items-center">
       <div class="progress">
@@ -183,7 +156,7 @@ export default class Vocabulary extends Component {
     <button type="button" class="audio-btn btn btn-outline-info px-1  ${additionalFieldsOff ? 'mr-2' : ''}" style="border-color:transparent" id="${dataObj.audioButtonId}"><i class="fas fa-volume-up sound-button"></i>
     </button>
     <audio id="${dataObj.audioTagId}" src="${dataObj.audioSrc}"></audio>
-    <button type="button" class="btn ${config.systemBottonColor} px-1" style="border-color:transparent"><i class="${config.systemBottonIcon} retrieval-button"></i>
+    <button type="button" class="btn ${config.systemBottonColor} px-1" data-systembutton="${config.name}"  style="border-color:transparent"><i class="${config.systemBottonIcon} retrieval-button"></i>
     </button>
   </div>
   
@@ -245,7 +218,7 @@ export default class Vocabulary extends Component {
 
   onClick(event) {
     const clickedElement = $$(event.target);
-    console.log(clickedElement);
+    // console.log(clickedElement);
     if (clickedElement.hasClass('nav-link')) {
       const typeOfWordsId = clickedElement.$el.href.slice((clickedElement.$el.href.indexOf('#')) + 1);
       if (this.typeOfWordsId !== typeOfWordsId) {
@@ -265,6 +238,30 @@ export default class Vocabulary extends Component {
     if (clickedElement.hasClass('audio-btn')) {
       const audioTagId = clickedElement.$el.id.slice(0, clickedElement.$el.id.indexOf('Button'));
       document.getElementById(audioTagId).play().catch(() => true);
+    }
+
+    if (event.target.dataset.systembutton) {
+      const currentCard = event.target.closest('.list-group-item');
+      const el = this.words[currentCard.dataset.arrposition];
+      if (event.target.dataset.systembutton === 'active') {
+        el.userWord.optional.status = 'deleted';
+      } else {
+        el.userWord.optional.status = 'active';
+      }
+      this.options.api.updateUserWord(el._id, el.userWord)
+        .then(() => {
+          currentCard.classList.add('d-none');
+          currentCard.classList.remove('list-group-item');
+        })
+        .catch(() => {
+          currentCard.classList.add('p-0');
+          currentCard.firstChild.nextElementSibling.classList.remove('d-none');
+        });
+    }
+
+    if (clickedElement.hasClass('accept-error-btn')) {
+      clickedElement.closest('.list-group-error-window').classList.add('d-none');
+      clickedElement.closest('.list-group-item').classList.remove('p-0');
     }
   }
 
