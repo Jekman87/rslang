@@ -187,17 +187,20 @@ function generateWrongWordCouple() {
 
 function addAnswerToStatistic(answer) {
   const url = `https://raw.githubusercontent.com/Alexandr-Voytekhovich/rslang-data/master/data/${state.audioWord}`;
+  const dataAtribute = `data-statistic="statistic-${state.wordCount}"`;
+
   const currentAnswer = `
-  <div class="sprint-statistic-block" id="statistic-block-${state.wordCount}">
-    <span>
-      <i class="fa fa-volume-down icon-parameters" aria-hidden="true" data-statistic="statistic-${state.wordCount}"></i>
+  <div class="sprint-statistic-block" id="statistic-block-${state.wordCount}" ${dataAtribute}>
+    <span ${dataAtribute}>
+      <i class="fa fa-volume-down icon-parameters" aria-hidden="true" ${dataAtribute}></i>
       <audio id="statistic-audio-${state.wordCount}" src="${url}"></i>
     </span>
-    <p>${state.word}</p>
-    <p>[${state.word}]</p>
-    <p>[${state.correctTranslateWord}]</p>
+    <p ${dataAtribute}>${state.word}</p>
+    <p ${dataAtribute}>[${state.word}]</p>
+    <p ${dataAtribute}>[${state.correctTranslateWord}]</p>
   </div>
   `;
+
   if (answer === 'correct') {
     document.querySelector('.correct-block').insertAdjacentHTML('beforeend', currentAnswer);
   }
