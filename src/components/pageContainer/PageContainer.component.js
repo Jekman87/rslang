@@ -1,15 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
-import { storage } from '../../core/utils';
+import { storage, getResetDayTime } from '../../core/utils';
 
 import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 import BASE_SETTINGS from '../../constants/settings.constants';
 import BASE_STATS from '../../constants/stats.constants';
+import { RESET_HOUR } from '../../constants/constants';
 
 const WORDS_PER_STEP = 10;
 const ALL_WORDS = 3600;
-const RESET_HOUR = 4;
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -170,12 +170,8 @@ export default class PageContainer extends Component {
   async loadWords() {
     try {
       const newWordsFilter = '{"userWord":null}';
-      // определяем время ресета - след день 4 утра
-      const time = new Date();
-      const hour = time.getHours();
-      if (hour >= RESET_HOUR) time.setDate(time.getDate() + 1);
-      const resetDayTime = time.setHours(RESET_HOUR, 0);
 
+      const resetDayTime = getResetDayTime(RESET_HOUR);
       const wordsToRepeatTodayFilter = `{"$and":[
         {"userWord":{"$ne":null}},
         {"userWord.optional.status":{"$ne":"deleted"}},
