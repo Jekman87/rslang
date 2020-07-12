@@ -744,7 +744,12 @@
 
   .th:nth-child(3),
   .td:nth-child(3) {
-    width: 40%;
+    width: 35%;
+  }
+
+  .th:nth-child(5),
+  .td:nth-child(5) {
+    width: 20%;
   }
 
   // REPORT MESSAGE
