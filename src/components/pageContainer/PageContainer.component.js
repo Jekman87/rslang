@@ -6,7 +6,6 @@ import { storage } from '../../core/utils';
 import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 import BASE_SETTINGS from '../../constants/settings.constants';
 import BASE_STATS from '../../constants/stats.constants';
-import BASE_DATA_FOR_APP from '../../constants/data-for-app.constants';
 
 const WORDS_PER_STEP = 10;
 const ALL_WORDS = 3600;
@@ -33,12 +32,12 @@ export default class PageContainer extends Component {
 
     this.settings = null;
     this.statistics = null;
-    this.longTermStats = null;
     this.shortTermStats = null;
+    this.longTermStats = null;
 
-    this.newWords = null;
-    this.wordsToRepeatToday = null;
-    this.userWords = null;
+    this.newWords = [];
+    this.wordsToRepeatToday = [];
+    this.userWords = [];
     this.userCards = [];
   }
 
@@ -73,8 +72,17 @@ export default class PageContainer extends Component {
 
     this.subscribe('mainLogout', () => {
       this.component.destroy();
-      this.dataForApp = { ...BASE_DATA_FOR_APP };
-      this.options.dataForApp = this.dataForApp;
+
+      this.dataForApp = null;
+      this.settings = null;
+      this.statistics = null;
+      this.shortTermStats = null;
+      this.longTermStats = null;
+      this.newWords = [];
+      this.wordsToRepeatToday = [];
+      this.userWords = [];
+      this.userCards = [];
+      this.options.dataForApp = null;
       this.options.api.clearUserLog();
 
       this.emit('hideHeader');
@@ -86,7 +94,7 @@ export default class PageContainer extends Component {
     if (NewPage.className !== AUTH_PAGE_NAME
       && (!this.settings || !this.statistics)) {
       this.emit('mainAppSpinner', true);
-      // add loader?
+
       await this.initSettingsAndStats();
       await this.loadWords();
       this.createUserCards();
@@ -97,8 +105,8 @@ export default class PageContainer extends Component {
         wordsToRepeatToday: this.wordsToRepeatToday,
         userWords: this.userWords,
         userCards: this.userCards,
-        longTermStats: this.longTermStats,
         shortTermStats: this.shortTermStats,
+        longTermStats: this.longTermStats,
       };
     }
 
@@ -129,18 +137,6 @@ export default class PageContainer extends Component {
 
       [this.settings, this.statistics] = data;
 
-      const longStatsJson = this.statistics.optional.MainGameLong;
-
-      if (longStatsJson) {
-        this.longTermStats = JSON.parse(longStatsJson);
-      }
-
-      const shortStatsJson = this.statistics.optional.MainGameShort;
-
-      if (shortStatsJson) {
-        this.shortTermStats = JSON.parse(shortStatsJson);
-      }
-
       console.log('this.settings', this.settings);
       console.log('this.statistics', this.statistics);
     } catch (error) {
@@ -158,6 +154,18 @@ export default class PageContainer extends Component {
       } else {
         console.log('Ошибка соединения: ', error.message);
       }
+    }
+
+    const shortStatsJson = this.statistics.optional.MainGameShort;
+
+    if (shortStatsJson) {
+      this.shortTermStats = JSON.parse(shortStatsJson);
+    }
+
+    const longStatsJson = this.statistics.optional.MainGameLong;
+
+    if (longStatsJson) {
+      this.longTermStats = JSON.parse(longStatsJson);
     }
   }
 
@@ -187,9 +195,12 @@ export default class PageContainer extends Component {
       // this.options.api.getAllUserWords(),
 
       const [newWords, wordsToRepeatToday, userWords] = data;
+
       this.newWords = newWords[0].paginatedResults;
-      this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults
-        .sort((wordA, wordB) => wordA.optional.nextRepeat - wordB.optional.nextRepeat);
+      this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults.sort((wordA, wordB) => {
+        const result = wordA.userWord.optional.nextRepeat - wordB.userWord.optional.nextRepeat;
+        return result;
+      });
       this.userWords = userWords[0].paginatedResults;
 
       console.log('newWords', this.newWords);
@@ -207,21 +218,18 @@ export default class PageContainer extends Component {
 
   // подготовка массива карт: 10 слов на повторение, 10 новых и т.д.
   createUserCards() {
-    while (this.wordsToRepeatToday.length || this.newWords.length) {
-      if (this.wordsToRepeatToday.length) {
-        if (this.wordsToRepeatToday.length > WORDS_PER_STEP) {
-          this.userCards.push(...this.wordsToRepeatToday.splice(0, WORDS_PER_STEP));
-          // карточки еще останутся и перейдут либо в конец либо на след тренировку
-        } else {
-          this.userCards.push(...this.wordsToRepeatToday.splice(0));
-        }
+    let index = 0;
+
+    while (this.wordsToRepeatToday.length > index || this.newWords.length > index) {
+      if (this.wordsToRepeatToday.length > index) {
+        this.userCards.push(...this.wordsToRepeatToday.slice(index, index + WORDS_PER_STEP));
       }
-      // далее добавляем новые слова
-      if (this.newWords.length > WORDS_PER_STEP) {
-        this.userCards.push(...this.newWords.splice(0, WORDS_PER_STEP));
-      } else {
-        this.userCards.push(...this.newWords.splice(0));
+
+      if (this.newWords.length > index) {
+        this.userCards.push(...this.newWords.slice(index, index + WORDS_PER_STEP));
       }
+
+      index += WORDS_PER_STEP;
     }
 
     console.log('this.userCards', this.userCards);
