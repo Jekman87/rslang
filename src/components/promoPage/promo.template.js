@@ -6,39 +6,39 @@ function createMembersHTML(data) {
       id, name, img, preview, description,
     } = info;
     return `
-    <div class="promo__game-description promo__developer-${id}">
-    <h3>${name}</h3>
-    <span class="promo__preview">${preview}</span>
-      <div class="promo__slider">
-        <div id="carouselExampleControls_${id}" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img class="d-block w-100 h-800px" src="${img[0]}" alt="First slide">
+      <div class="promo__game-description promo__developer-${id}">
+        <h3>${name}</h3>
+        <span class="promo__preview">${preview}</span>
+        <div class="promo__slider">
+          <div id="carouselExampleControls_${id}" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img class="d-block w-100 h-800px" src="${img[0]}" alt="First slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 h-800px" src="${img[1]}" alt="Second slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 h-800px" src="${img[2]}" alt="Third slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 h-800px" src="${img[3]}" alt="Fourth slide">
+              </div>
             </div>
-            <div class="carousel-item">
-              <img class="d-block w-100 h-800px" src="${img[1]}" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100 h-800px" src="${img[2]}" alt="Third slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100 h-800px" src="${img[3]}" alt="Fourth slide">
-            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls_${id}" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls_${id}" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-          <a class="carousel-control-prev" href="#carouselExampleControls_${id}" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleControls_${id}" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
         </div>
+
+        <span class="promo__description">${description}</span>
+
       </div>
-
-      <span class="promo__description">${description}</span>
-
-    </div>
     `;
   });
   return html.join('');
@@ -64,7 +64,6 @@ export default function createPromoPageLayout() {
 
       </div>
       ${createMembersHTML(promoGames)}
-
       </div>
     </div>
   `;

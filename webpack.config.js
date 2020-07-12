@@ -100,10 +100,6 @@ const plugins = () => {
     new MiniCssExtractPlugin({ filename: filename('css') }),
   ];
 
-  if (isProd) {
-    base.push(new BundleAnalyzerPlugin());
-  }
-
   return base;
 };
 
