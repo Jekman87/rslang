@@ -130,6 +130,7 @@ export default class RiddleGame extends Component {
 
     this.statistic.optional.RiddleLong = JSON.stringify(longTimeStatisic);
     this.statistic.optional.RiddleShort = JSON.stringify(shortTimeStatisic);
+    console.log(this.statistic);
     this.mainApi.updateStatistics(this.statistic);
   }
 
