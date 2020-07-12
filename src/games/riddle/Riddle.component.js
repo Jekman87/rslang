@@ -6,10 +6,11 @@ import {
   hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput, passHandler,
-  showStatistic, removeStatistic, recountStatistic,
-  showCorrectPartOfStatistic, showWrongPartOfStatistic, prepareLongTimeStatistic,
-  backToStatisticScreen, backToGameFromStatistic, state, checkRound, rewriteLevelStatistic,
+  compareAnswers, moveAnswerIntoInput, passHandler, swithchOffVoice,
+  showStatistic, recountStatistic, removeStatistic, swithchOnVoice,
+  showCorrectPartOfStatistic, showWrongPartOfStatistic,
+  backToStatisticScreen, backToGameFromStatistic, state,
+  prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
 } from './riddle.functions';
 
 export default class RiddleGame extends Component {
@@ -58,13 +59,18 @@ export default class RiddleGame extends Component {
       case 'show-options':
         showOrHideOptionsPrompt();
         break;
+      case 'riddle-mute':
+        swithchOffVoice();
+        break;
+      case 'riddle-unmute':
+        swithchOnVoice();
+        break;
       case 'show-translate':
         showOrHideTranslatePrompt();
         break;
       case 'check':
         compareAnswers();
         this.prepareStatisticForSend(prepareLongTimeStatistic());
-        console.log(this.statistic);
         break;
       case 'pass':
         passHandler();
@@ -124,6 +130,7 @@ export default class RiddleGame extends Component {
 
     this.statistic.optional.RiddleLong = JSON.stringify(longTimeStatisic);
     this.statistic.optional.RiddleShort = JSON.stringify(shortTimeStatisic);
+    console.log(this.statistic);
     this.mainApi.updateStatistics(this.statistic);
   }
 
