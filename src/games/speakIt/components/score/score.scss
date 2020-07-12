@@ -1,8 +1,12 @@
-.score {
-  height: 31px;
-  .correct {
-    font-size: 14px;
-    background: rgba(0,0,0,.67);
-    border-radius: 50%;
+.speakit{
+  .score {
+    transition: .8s;
+    height: 31px;
+    .correct {
+      font-size: 14px;
+      background: rgba(0,0,0,.67);
+      border-radius: 50%;
+    }
   }
 }
+
