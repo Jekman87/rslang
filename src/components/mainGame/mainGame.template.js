@@ -5,6 +5,11 @@ export default function createMainGameHTML(dataForApp) {
   const { studiedСardNum } = dataForApp.state;
   const word = dataForApp.userCards[studiedСardNum];
   const settingsOptional = dataForApp.settings.optional;
+  let progress = 1;
+
+  if (word.userWord) {
+    progress = word.userWord.optional.progress;
+  }
 
   return `
     <div class="container mt-3">
@@ -17,16 +22,16 @@ export default function createMainGameHTML(dataForApp) {
         <div class="col-10 col-md-8">
           <div class="card">
             <div class="card-header">
-              <button type="button" class="btn btn-secondary m-2" data-name="volume-btn">
+              <button type="button" class="btn btn-info m-2" data-name="volume-btn">
                 <i class="fas fa-volume-up ${settingsOptional.autoSound ? '' : 'd-none'}"></i>
                 <i class="fas fa-volume-mute ${!settingsOptional.autoSound ? '' : 'd-none'}"></i>
               </button>
-              <button type="button" class="btn btn-primary m-2 ${settingsOptional.deleteButton ? '' : 'd-none'}" data-name="delete-btn">Удалить</button>
-              <button type="button" class="btn btn-primary m-2 ${settingsOptional.difficultWordsButton ? '' : 'd-none'}" data-name="difficult-btn">Сложные</button>
-              <button type="button" class="btn btn-danger m-2 float-right ${settingsOptional.answerButton ? '' : 'd-none'}" data-name="show-answer-btn">Показать ответ</button>
+              <button type="button" class="btn btn-secondary m-2 ${settingsOptional.deleteButton ? '' : 'd-none'}" data-name="delete-btn">Удалить</button>
+              <button type="button" class="btn btn-secondary m-2 ${settingsOptional.difficultWordsButton ? '' : 'd-none'}" data-name="difficult-btn">Сложное</button>
+              <button type="button" class="btn btn-secondary m-2 float-right ${settingsOptional.answerButton ? '' : 'd-none'}" data-name="show-answer-btn">Показать ответ</button>
             </div>
             <div class="card-header">
-              <span>Уровень сложности слова: <span id="word-difficult">0</span></span>
+              <span>Прогресс слова: <span id="word-progress">${progress}</span></span>
             </div>
             <div class="card-body">
               <div class="card mb-3">
@@ -57,10 +62,10 @@ export default function createMainGameHTML(dataForApp) {
               <p class="card-text font-weight-light ${settingsOptional.cardExplanationTranslation ? '' : 'd-none'}" id="word-meaning-translate">${word.textMeaningTranslate}</p>
             </div>
             <div class="card-footer d-flex justify-content-center invisible">
-              <button type="button" class="btn btn-secondary m-2" data-name="again-btn">Снова (1 мин)</button>
-              <button type="button" class="btn btn-success m-2" data-name="hard-btn">Трудно (10 мин)</button>
-              <button type="button" class="btn btn-info m-2" data-name="good-btn">Хорошо (1 день)</button>
-              <button type="button" class="btn btn-warning m-2" data-name="easy-btn">Легко (4 дня)</button>
+              <button type="button" class="btn btn-danger m-2 text-nowrap" data-name="again-btn">Снова (1 мин)</button>
+              <button type="button" class="btn btn-warning m-2 text-nowrap" data-name="hard-btn">Трудно (10 мин)</button>
+              <button type="button" class="btn btn-success m-2 text-nowrap" data-name="good-btn">Хорошо (1 день)</button>
+              <button type="button" class="btn btn-info m-2 text-nowrap" data-name="easy-btn">Легко (4 дня)</button>
             </div>
           </div>
         </div>

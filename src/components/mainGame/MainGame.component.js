@@ -3,23 +3,15 @@ import $$ from '../../core/domManipulation';
 import createMainGameHTML from './mainGame.template';
 
 import { delay } from '../../core/utils';
+import { getIntervalsOfRepeat } from './mainGame.utils';
 
 import {
-  FILE_URL, ONE_MINUTE, TEN_MINUTES, ONE_DAY, MULTIPLIER_GOOD, MULTIPLIER_EASY,
+  FILE_URL, ONE_MINUTE, ONE_DAY, WORD_PARAM,
 } from '../../constants/constants';
 
 import UserWord from '../../core/UserWord';
 // import BASE_USER_WORD from '../../constants/user-word.constants';
-const WORD_PARAM = {
-  again: 'again',
-  hard: 'hard',
-  good: 'good',
-  easy: 'easy',
-  new: 'new',
-  active: 'active',
-  deleted: 'deleted',
-  difficult: 'difficult',
-};
+
 const AGAIN_STEP = 4;
 
 export default class MainGame extends Component {
@@ -61,7 +53,7 @@ export default class MainGame extends Component {
 
   getCardElements() {
     this.elements = {
-      $wordDifficult: this.$root.find('#word-difficult'),
+      $wordProgress: this.$root.find('#word-progress'),
       $wordImage: this.$root.find('#word-image'),
       $wordEn: this.$root.find('#word-en'),
       $wordInput: this.$root.find('#word-input'),
@@ -143,6 +135,7 @@ export default class MainGame extends Component {
         // убираем из карточек
         // айди слова - сохраняем персональную? статистику - в удаленные
         // переход на след карту
+        this.setDifficulty(WORD_PARAM.deleted);
         this.changeCard();
         break;
 
@@ -152,8 +145,7 @@ export default class MainGame extends Component {
         // статистика по слову меняется
         // переход на след карту
         // кнопку открывать только после угадывания!!
-        // difficulty: hard
-        // status: hard
+        this.setDifficulty(WORD_PARAM.difficult);
         this.changeCard();
         break;
 
@@ -164,12 +156,14 @@ export default class MainGame extends Component {
         // аудио
         // переходим автоматом или пользователю нужно ввести слово?
         // переход на след карту
+
+        // this.setDifficulty(WORD_PARAM.again, false);
         this.changeCard();
         break;
 
       case 'volume-btn':
-        // сделать прерывание звука
         this.settingsOptional.autoSound = !this.settingsOptional.autoSound;
+        this.audio.pause();
         this.elements.$volumeUp.toggle('d-none');
         this.elements.$volumeMute.toggle('d-none');
         break;
@@ -201,7 +195,6 @@ export default class MainGame extends Component {
     const currentWordStats = this.elements.$wordEn.text();
 
     // проверяем инпут на соответствие
-    // проверка на текущее изучаемое слово для листания
     if (inputText === currentWordStats) {
       // отметка ок в статистике слова
       // статистика пользователя дневная и долгосрочная
@@ -216,7 +209,6 @@ export default class MainGame extends Component {
         this.elements.$cardFooter.removeClass('invisible');
       }
 
-      // статистика слова
       // статистика пользователя
       // считаем карту изученной до всех задержек
       this.state.studiedСardNum += 1;
@@ -224,7 +216,7 @@ export default class MainGame extends Component {
       // воспроизведение аудио в зависимости от настроек +
       if (this.settingsOptional.autoSound) {
         await this.speakText();
-      } else if (this.settingsOptional.feedbackButtons) { // добавить '!'
+      } else if (!this.settingsOptional.feedbackButtons) { // добавить '!'
         // небольшая задержка если звук отключен
         // чтобы пользователь увидел слово
         // возможно анимация правильного ответа?
@@ -233,7 +225,7 @@ export default class MainGame extends Component {
 
       // после аудио либо автоматом на след слово
       // либо ждем реакции через кнопки фидбэка, если они включены
-      if (!this.settingsOptional.feedbackButtons) { // добавить '!'
+      if (!this.settingsOptional.feedbackButtons) {
         // переход на след карту
         // если кнопки выкючены - сами определяем алгоритм
         this.setDifficulty(WORD_PARAM.good);
@@ -247,14 +239,13 @@ export default class MainGame extends Component {
       // алгоритм показа ошибок
       // показываем ответ как по кнопке "показать ответ"?
       // или просто на время показываем слово в инпуте?
-      this.setDifficulty(WORD_PARAM.hard, false);
+      this.setDifficulty(WORD_PARAM.again, false);
       console.log('не верно');
     }
 
     this.state.isChecking = false;
   }
 
-  // проблемы при переключении далее между вызовами
   async speakText() {
     const currentCard = this.userCards[this.state.currentCardNum];
 
@@ -307,10 +298,16 @@ export default class MainGame extends Component {
     this.elements.$progressBar.css({ width: `${percent}%` });
 
     const word = this.userCards[nextCandNum];
-    // из статистики берем иначе 0?
-    const wordDifficult = 0;
 
-    this.elements.$wordDifficult.text(wordDifficult);
+    let progress = 1;
+
+    if (word.userWord) {
+      progress = word.userWord.optional.progress;
+    }
+
+    const wordDifficult = progress;
+
+    this.elements.$wordProgress.text(wordDifficult);
     this.elements.$wordImage.$el.src = `${FILE_URL}/${word.image}`;
     // предзагрузка картинки следующей карты?
     this.elements.$wordEn.text(word.word);
@@ -349,6 +346,10 @@ export default class MainGame extends Component {
     }
 
     let {
+      timeAgain,
+      timeHard,
+      timeGood,
+      timeEasy,
       lastRepeat,
       nextRepeat,
       counter,
@@ -362,82 +363,64 @@ export default class MainGame extends Component {
 
     lastRepeat = Date.now();
 
-    // intervalAgain: ONE_MINUTE,
-    // intervalHard: TEN_MINUTES,
-    // intervalGood: TEN_MINUTES,
-    // intervalEasy: ONE_DAY,
+    switch (wordDifficulty) {
+      case WORD_PARAM.again:
+        difficulty = WORD_PARAM.again;
+        nextRepeat = lastRepeat + timeAgain;
 
-    if (wordDifficulty === WORD_PARAM.again) {
-      difficulty = WORD_PARAM.again;
+        if (timeAgain === ONE_MINUTE) {
+          const nextRepeatCardNum = this.state.currentCardNum + AGAIN_STEP;
 
-      if (status === WORD_PARAM.new) {
-        nextRepeat = lastRepeat + (60 * 1000);
-
-        const nextRepeatCardNum = this.state.currentCardNum + AGAIN_STEP;
-
-        if (nextRepeatCardNum > this.userCards.length) {
-          this.userCards.push(currentWord);
+          if (nextRepeatCardNum > this.userCards.length - 1) {
+            this.userCards.push(currentWord);
+          } else {
+            this.userCards.splice(nextRepeatCardNum, 0, currentWord);
+          }
         } else {
-          this.userCards.splice(nextRepeatCardNum, 0, currentWord);
+          this.userCards.push(currentWord);
         }
-      } else {
-        // для остальных 10 мин
-        nextRepeat = lastRepeat + (10 * 60 * 1000);
-        this.userCards.push(currentWord);
-      }
 
-      // пометка статистики
-      // в конец user card если меньше 50ти (настройки)
-      // иначе в начало массива повторений
-    }
+        // пометка статистики
+        // в конец user card если меньше 50ти (настройки)
+        break;
 
-    if (wordDifficulty === WORD_PARAM.hard) {
-      difficulty = WORD_PARAM.hard;
+      case WORD_PARAM.hard:
+        difficulty = WORD_PARAM.hard;
+        nextRepeat = lastRepeat + timeHard;
 
-      if (status === WORD_PARAM.new) {
-        nextRepeat = lastRepeat + (10 * 60 * 1000);
-        this.userCards.push(currentWord);
-      } else {
-        // след время высчита в зависимости от слова
+        if (timeHard < ONE_DAY) {
+          this.userCards.push(currentWord);
+        }
 
-      }
+        // пометка статистики
+        break;
 
-      // пометка статистики
-    }
+      case WORD_PARAM.good:
+        difficulty = WORD_PARAM.good;
+        nextRepeat = lastRepeat + timeGood;
 
-    if (wordDifficulty === WORD_PARAM.good) {
-      difficulty = WORD_PARAM.good;
-      nextRepeat = lastRepeat + (10 * 60 * 1000);
+        if (timeGood < ONE_DAY) {
+          this.userCards.push(currentWord);
+        }
 
-      if (status === WORD_PARAM.new) {
-        nextRepeat = lastRepeat + (24 * 60 * 60 * 1000); // 1 день
-      } else {
-        // след время высчита в зависимости от слова
+        // пометка статистики
+        break;
 
-      }
-      // пометка статистики
-      // если в первый раз - на повторение тоже
-      if (this.state.currentWordStats.difficulty === 'new') {
-        this.userCards.push(currentWord);
-      }
-    }
+      case WORD_PARAM.easy:
+        difficulty = WORD_PARAM.easy;
+        nextRepeat = lastRepeat + timeEasy;
 
-    if (wordDifficulty === WORD_PARAM.easy) {
-      // пометка статистики
-      difficulty = WORD_PARAM.easy;
+        // пометка статистики
+        break;
 
-      if (status === WORD_PARAM.new) {
-        nextRepeat = lastRepeat + (4 * 24 * 60 * 60 * 1000); // 4 дня
-      } else {
-        // след время высчита в зависимости от слова
-
-      }
+      default:
+        break;
     }
 
     counter += 1;
     success = isSuccess ? (success + 1) : success;
 
-    if (status === WORD_PARAM.new && isSuccess) {
+    if (isNewWord && isSuccess) {
       progress = 5;
     } else {
       progress = (progress < 5) ? (progress + 1) : progress;
@@ -447,25 +430,42 @@ export default class MainGame extends Component {
       gameError = false;
     }
 
-    // доработать перевод в сложные
-    if (wordDifficulty === WORD_PARAM.deleted || wordDifficulty === WORD_PARAM.difficult) {
+    if (wordDifficulty === WORD_PARAM.deleted) {
+      difficulty = WORD_PARAM.good;
+      nextRepeat = lastRepeat + timeGood;
       status = wordDifficulty;
-      difficulty = wordDifficulty;
+    } else if (wordDifficulty === WORD_PARAM.difficult) {
+      difficulty = WORD_PARAM.hard;
+      nextRepeat = lastRepeat + timeHard;
+      status = wordDifficulty;
+
+      if (timeHard < ONE_DAY) {
+        this.userCards.push(currentWord);
+      }
     } else {
       status = WORD_PARAM.active;
     }
 
+    const intervalParams = {
+      timeAgain, timeHard, timeGood, timeEasy, difficulty,
+    };
+
     const {
       again, hard, good, easy,
-    } = this.getIntervalsOfRepeat(currentWord.userWord);
+    } = getIntervalsOfRepeat(intervalParams);
+
+    timeAgain = again;
+    timeHard = hard;
+    timeGood = good;
+    timeEasy = easy;
 
     this.state.currentWordStats = {
       difficulty,
       optional: {
-        intervalAgain: again,
-        intervalHard: hard,
-        intervalGood: good,
-        intervalEasy: easy,
+        timeAgain,
+        timeHard,
+        timeGood,
+        timeEasy,
         lastRepeat,
         nextRepeat,
         counter,
@@ -477,10 +477,8 @@ export default class MainGame extends Component {
     };
 
     // если слово новое - добавить в массив this.userWords.push(currentWord);
-
     // word.userWord = this.state.currentWordStats;
     // сохраняем слово this.options.api.updateUserWord(this.state.currentWordStats, currentWord._id);
-    console.log('setDif', this.userCards);
     console.log('currentWordStats', this.state.currentWordStats);
   }
 
@@ -511,52 +509,6 @@ export default class MainGame extends Component {
   // если нет, значит пользователь играет в первый раз
   // либо на сегодня нет слов для повторения
   // берем с бекенда с самого начала или с последней точки
-
-  getIntervalsOfRepeat(userWord) {
-    let again = ONE_MINUTE;
-    let hard = ONE_MINUTE;
-    let good = TEN_MINUTES;
-    let easy = ONE_DAY * 4;
-
-    if (userWord) {
-      const { difficulty } = userWord;
-      const {
-        intervalAgain, intervalHard, intervalGood, intervalEasy,
-      } = userWord.optional;
-
-      if (difficulty === WORD_PARAM.again) {
-        again = intervalAgain;
-        hard = intervalHard;
-        good = intervalGood;
-        easy = intervalEasy;
-      }
-
-      if (difficulty === WORD_PARAM.hard) {
-        again = intervalAgain;
-        hard = intervalHard;
-        good = intervalGood;
-        easy = intervalEasy;
-      }
-
-      if (difficulty === WORD_PARAM.good) {
-        again = TEN_MINUTES;
-        hard = intervalGood;
-        good = intervalGood === TEN_MINUTES ? ONE_DAY : (intervalGood * MULTIPLIER_GOOD);
-        easy = intervalGood === TEN_MINUTES ? ONE_DAY * 4 : (intervalGood * MULTIPLIER_EASY);
-      }
-
-      if (difficulty === WORD_PARAM.easy) {
-        again = TEN_MINUTES;
-        hard = intervalEasy;
-        good = intervalEasy * MULTIPLIER_GOOD;
-        easy = intervalEasy * MULTIPLIER_EASY;
-      }
-    }
-
-    return {
-      again, hard, good, easy,
-    };
-  }
 
   destroy() {
     super.destroy();

@@ -1,13 +1,13 @@
-import { ONE_MINUTE, TEN_MINUTES, ONE_DAY } from '../constants/constants';
+import { ONE_MINUTE, TEN_MINUTES, FOUR_DAYS } from '../constants/constants';
 
 export default class UserWord {
   constructor() {
     this.difficulty = 'new';
     this.optional = {
-      intervalAgain: ONE_MINUTE,
-      intervalHard: ONE_MINUTE,
-      intervalGood: TEN_MINUTES,
-      intervalEasy: ONE_DAY * 4,
+      timeAgain: ONE_MINUTE,
+      timeHard: ONE_MINUTE,
+      timeGood: TEN_MINUTES,
+      timeEasy: FOUR_DAYS,
       lastRepeat: 0,
       nextRepeat: 0,
       counter: 0,
