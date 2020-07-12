@@ -84,6 +84,12 @@ export default class CardsDesk extends Component {
       prepareCardsDataHTML.call(this);
       this.emit('cardsDesk:finishGame', '');
     });
+    this.subscribe('header:rules', () => {
+      this.$root.addClass('none');
+    });
+    this.subscribe('rules:rulesreturn', () => {
+      this.$root.removeClass('none');
+    });
   }
 
   onClick(event) {
