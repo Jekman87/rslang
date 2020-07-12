@@ -10,8 +10,6 @@ import BASE_STATS from '../../constants/stats.constants';
 const WORDS_PER_STEP = 10;
 const ALL_WORDS = 3600;
 const RESET_HOUR = 4;
-// const WORDS_PER_PAGE = 20;
-// const LAST_PAGE_NUM = 29;
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -191,8 +189,6 @@ export default class PageContainer extends Component {
         this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, wordsToRepeatTodayFilter),
         this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, userWordsFilter),
       ]);
-
-      // this.options.api.getAllUserWords(),
 
       const [newWords, wordsToRepeatToday, userWords] = data;
 
