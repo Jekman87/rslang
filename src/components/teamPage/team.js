@@ -1,6 +1,6 @@
 const team = [
   {
-    name: 'Юрий Пляшков',
+    name: 'Юрий Плешков',
     title: 'Mentor',
     location: {
       city: 'Минск',
