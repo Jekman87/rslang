@@ -1,7 +1,7 @@
 export default function createGameField() {
   return `
     <div class="intro__sprint">
-      <h1><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
+      <h2><i class="fas fa-running"></i>СПРИНТ<i class="fas fa-rabbit-fast rabbit"></i></h1>
       <p>Истинная гонка на проверку знаний.<br> Укажите верно ли указан перевод слова?</p>
 
       <div class="sprint-difficulty-level">
@@ -13,7 +13,7 @@ export default function createGameField() {
         </div>
       </div>
 
-      <button type="button" class="btn btn-outline-success" data-button="start">Начать забег</button>
+      <button type="button" class="btn" data-button="start">Начать забег</button>
     </div>
 
     <div class="main-sp">
@@ -56,7 +56,7 @@ export default function createGameField() {
         <span class="points-progress">+10 очков за слово.</span>
 
         <div class="birds">
-          <img class="bird-1" src="assets/img/bird-1.png" alt="bird" />
+          <img class="bird-1" src="assets/sprint/bird-1.png" alt="bird" />
           <span></span>
         </div>
         <div class="language-eng"></div>
@@ -94,9 +94,9 @@ export default function createGameField() {
         <div class='correct-block'></div>
 
         <div class='sprint-statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="return">Новая игра</button>
-          <button class="btn btn-success statistic-button" data-click="long-time-statistic">История игр</button>
-          <button class="btn btn-success statistic-button" data-click="home">На главную</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="return">Новая игра</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="long-time-statistic">История игр</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="home">На главную</button>
         </div>
       </div>
 
@@ -107,8 +107,8 @@ export default function createGameField() {
         <div class='sprint-games'></div>
 
         <div class='sprint-statistic-buttons'>
-          <button class="btn btn-success statistic-button" data-click="destroy">Очистить историю</button>
-          <button class="btn btn-success statistic-button" data-click="round-statistic">Вернуться</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="destroy">Очистить историю</button>
+          <button class="btn btn-success sprint-statistic-button" data-click="round-statistic">Вернуться</button>
         </div>
 
       </div>
