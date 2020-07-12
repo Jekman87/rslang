@@ -56,8 +56,8 @@ export default class Vocabulary extends Component {
       progressColor: this.defineProgressBarBgColor(obj.userWord.optional.progress),
       progressWidth: `${this.defineProgressBarWidth(obj.userWord.optional.progress)}%`,
       progressText: this.defineProgressText(obj.userWord.optional.progress),
-      lastTraining: '07.07.2020',
-      nextTraining: '08.08.2020',
+      lastTraining: this.defineTraining(obj.userWord.optional.lastRepeat),
+      nextTraining: this.defineTraining(obj.userWord.optional.nextRepeat),
       counter: obj.userWord.optional.counter,
       word: obj.word,
       wordImage: `${FILE_URL}/${obj.image}`,
@@ -73,6 +73,11 @@ export default class Vocabulary extends Component {
       id: obj._id,
       arrPosition: i,
     };
+  }
+
+  defineTraining(timestamp) {
+    const TrainingData = new Date(timestamp);
+    return TrainingData.toLocaleDateString();
   }
 
   defineProgressBarBgColor(userWordProgress) {
@@ -204,6 +209,7 @@ export default class Vocabulary extends Component {
   init() {
     super.init();
     this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig);
+    // console.log(this.words);
   }
 
   onClick(event) {
