@@ -3,7 +3,8 @@ export default function createStatisticsHTML() {
   <div class="container mt-3">
     <div class="jumbotron mb-0">
       <h3 class="stat-header">Статистика за сегодня:</h3>
-      <p>Пока непонятно, что тут будет</p>
+      <div class="today-stats-wrapper">
+      </div>
 
       <h3 class="stat-header">Визуальная статистика:</h3>
       <div class="charts-tab-wrapper">

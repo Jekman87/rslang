@@ -1,6 +1,7 @@
 import Chart from 'chart.js';
 import Component from '../../core/Component';
 import createStatisticsHTML from './statisticsPage.template';
+import { fieldsMap, feilds } from './current';
 import { tablesMarkUpData, monthNames } from './table';
 import {
   chartOptions, perDayChartData, allDaysChartData, popularityChartData, chartsMarkUpData,
@@ -16,6 +17,7 @@ export default class Statistics extends Component {
       ...options,
     });
     this.statistics = options.dataForApp.statistics.optional;
+    this.mainAppShortStat = options.dataForApp.shortTermStats;
   }
 
   toHTML() {
@@ -25,6 +27,7 @@ export default class Statistics extends Component {
   init() {
     super.init();
     this.setStatistics();
+    this.renderTodayStat();
     this.renderTables();
     this.renderCharts();
   }
@@ -38,6 +41,46 @@ export default class Statistics extends Component {
       JSON.parse(this.statistics.SprintLong || '[]'),
       JSON.parse(this.statistics.RiddleLong || '[]'),
     ];
+
+    this.todayStat = [...feilds];
+    if (!this.mainAppShortStat) return;
+
+    this.todayStat[fieldsMap.wordsToday].data = this.mainAppShortStat.wordsToday;
+    this.todayStat[fieldsMap.cardsToday].data = this.mainAppShortStat.cardsToday;
+    this.todayStat[fieldsMap.cardsToday].progressValue = this.calcProgress();
+    this.todayStat[fieldsMap.cardsLeftToday].data = this.mainAppShortStat.cardsLeftToday;
+    this.todayStat[fieldsMap.cardsLeftToday].progressValue = 100 - this.calcProgress();
+    this.todayStat[fieldsMap.answerRatio].data = this.calcRatio();
+    this.todayStat[fieldsMap.longestSeries].data = this.mainAppShortStat.longestSeries;
+  }
+
+  calcRatio() {
+    const correct = this.mainAppShortStat.correctAnswersToday;
+    const incorrect = this.mainAppShortStat.errorAnswersToday;
+    return `${Math.round((correct / (correct + incorrect)) * 100)}%`;
+  }
+
+  calcProgress() {
+    const learned = this.mainAppShortStat.cardsToday;
+    const left = this.mainAppShortStat.cardsLeftToday;
+    return Math.round((learned / (learned + left)) * 100);
+  }
+
+  renderTodayStat() {
+    const statContainer = document.querySelector('div.today-stats-wrapper');
+    const liElems = [];
+    this.todayStat.forEach((item) => {
+      const li = `
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        ${item.text}${item.progress ? `<div class="progress">
+          <div class="progress-bar progress-bar-striped ${item.progress}" role="progressbar" style="width: ${item.progressValue}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+          </div></div>` : ''}
+        <span class="badge badge-info badge-pill">${item.data}</span>
+      </li>
+      `;
+      liElems.push(li);
+    });
+    statContainer.innerHTML = `<ul class="list-group">${liElems.join('')}</ul>`;
   }
 
   renderTables() {

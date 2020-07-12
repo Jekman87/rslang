@@ -8,6 +8,36 @@
     }
   }
 
+  .today-stats-wrapper {
+    margin: 0 auto;
+    width: 80%;
+    & li{
+      @media (max-width: 474px) {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .badge {
+    font-size: inherit;
+    @media (max-width: 474px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .progress {
+    width: 200px;
+    @media (max-width: 1023px) {
+      width: 150px;
+    }
+    @media (max-width: 767px) {
+      width: 75px;
+    }
+    @media (max-width: 474px) {
+      display: none;
+    }
+  }
+
   .my-custom-scrollbar {
     position: relative;
     max-height: 425px;
@@ -48,9 +78,13 @@
     @media (max-width: 1023px) {
       width: 525px;
     }
+    @media (max-width: 767px) {
+      width: 450px;
+      height: 300px;
+    }
     @media (max-width: 575px) {
-      width: 90vw;
-      height: 60vw;
+      width: 82.5vw;
+      height: 55vw;
     }
   }
 }
