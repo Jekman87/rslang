@@ -46,13 +46,17 @@ function createMembersHTML(data) {
 
 export default function createPromoPageLayout() {
   return `
-    <div class="promo__main-container">
+    <div class="container mt-3">
+      <div class="jumbotron mb-0">
+
       <div class="promo__training-description">
 
         <h2>RSLang</h2>
 
+        <div class="promo__video-container">
         <div class="my_video">
           <iframe width="560" height="315" src="https://www.youtube.com/embed/l0dWFPbf28A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         </div>
 
         <span>
@@ -63,6 +67,7 @@ export default function createPromoPageLayout() {
       </div>
       ${createMembersHTML(promoGames)}
 
+      </div>
     </div>
   `;
 }

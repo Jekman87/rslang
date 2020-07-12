@@ -20,10 +20,19 @@
     font-size: 1.3rem;
   }
 
+  .my_video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+  }
+
   .my_video iframe {
-    display: block;
-    width: 60%;
-    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
 }
@@ -75,7 +84,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
 
   .promo__training-description h2 {
     text-align: center;
