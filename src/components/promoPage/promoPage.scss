@@ -20,10 +20,20 @@
     font-size: 1.3rem;
   }
 
+  .my_video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    box-shadow: 8px 11px 15px #00000085;
+  }
+
   .my_video iframe {
-    display: block;
-    width: 60%;
-    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
 }
@@ -75,11 +85,55 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
 
   .promo__training-description h2 {
     text-align: center;
     margin: 20px auto 30px;
+  }
+
+  .promo__game-description{
+    max-height: 600px;
+    overflow: auto;
+    margin: 50px auto;
+    padding: 20px 0;
+  }
+
+  .promo__game-description .promo__preview {
+    font-size: 1.0rem;
+    margin: 20px auto;
+  }
+
+  .promo__game-description .promo__description {
+    margin: 20px auto;
+  }
+
+  .promo__training-description span {
+    display: block;
+    width: 80%;
+    margin: 40px auto 2%;
+    font-size: 1.3rem;
+  }
+
+  .promo__container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo__game-description {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+
+  .promo__game-description .promo__preview {
+    font-size: 0.9rem;
+    margin: 20px auto;
+  }
+
+  .promo__game-description .promo__description {
+    margin: 20px auto;
   }
 
   .promo__game-description{
@@ -94,5 +148,14 @@
     width: 80%;
     margin: 40px auto 2%;
     font-size: 1.3rem;
+  }
+
+  .promo__container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo__game-description {
+    width: 100%;
   }
 }

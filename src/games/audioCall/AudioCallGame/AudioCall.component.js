@@ -1,5 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable object-curly-newline */
 import $$ from '../../../core/domManipulation';
 import { FILE_URL } from '../../../constants/constants';
 import Component from '../../../core/Component';
@@ -45,16 +43,9 @@ export default class AudioCall extends Component {
     const userWords = await this.mainApi.getAllUserWords();
     const page = Math.floor(Math.random() * (30 - 0 + 1));
 
-    if (userWords.length < 70 || this.gameWithNewWords) {
+    if (userWords.length < 50 || this.gameWithNewWords) {
       roundWordsArr = await this.mainApi.getWords(page, this.gameLevel, 10, 5);
     } else {
-      // for (let i = 0; i < 5; i += 1) {
-      // const wordNumber = Math.floor(Math.random() * (userWords.length - 0 + 1));
-      // const { wordId } = userWords[wordNumber];
-
-      // const word = await this.mainApi.getWordById(wordId);
-      // roundWordsArr.push(word);
-      // }
       const filter = '{"userWord":{"$ne":null}}';
       const words = await this.mainApi.getAllUserAggregatedWords(null, 60, filter);
       roundWordsArr = words[0].paginatedResults
@@ -62,10 +53,6 @@ export default class AudioCall extends Component {
           return Math.random() - 0.5;
         })
         .slice(0, 5);
-      // for (let i = 0; i < 5; i += 1) {
-      //   const wordNumber = Math.floor(Math.random() * (words[0].paginatedResults.length - 0 + 1));
-      //   roundWordsArr.push(words[0].paginatedResults[wordNumber]);
-      // }
     }
 
     this.spanRoundWords = document.querySelectorAll('.round-word');
@@ -118,14 +105,12 @@ export default class AudioCall extends Component {
 
   playWinSound() {
     const audio = new Audio();
-    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/pew.mp3';
     audio.src = '/assets/audio/pew.mp3';
     audio.play().catch((err) => console.log(err));
   }
 
   playWrongSound() {
     const audio = new Audio();
-    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/wrong.mp3';
     audio.src = '/assets/audio/wrong.mp3';
     audio.play().catch((err) => console.log(err));
   }
@@ -150,16 +135,23 @@ export default class AudioCall extends Component {
   }
 
   sendStatistic(roundResult) {
-    const audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats) || [];
-
-    if (audiocallLongStats.length < 20) {
-      audiocallLongStats.push(roundResult);
-    } else {
-      audiocallLongStats.shift();
-      audiocallLongStats.push(roundResult);
+    let AudioCallLongStats = [];
+    try {
+      if (JSON.parse(this.statistic.optional.AudioCallLongStats)) {
+        AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
+      }
+    } catch {
+      console.log('Запись в пустой объект статистики');
     }
 
-    this.statistic.optional.audiocallLongStats = JSON.stringify(audiocallLongStats);
+    if (AudioCallLongStats.length < 20) {
+      AudioCallLongStats.push(roundResult);
+    } else {
+      AudioCallLongStats.shift();
+      AudioCallLongStats.push(roundResult);
+    }
+
+    this.statistic.optional.AudioCallLongStats = JSON.stringify(AudioCallLongStats);
     this.mainApi.updateStatistics(this.statistic);
   }
 
@@ -203,7 +195,7 @@ export default class AudioCall extends Component {
           this.fillRoundWords();
         } else {
           const gameResult = {
-            data: Date.now(),
+            date: Date.now(),
             result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
 
@@ -313,7 +305,7 @@ export default class AudioCall extends Component {
             this.fillRoundWords();
           } else {
             const gameResult = {
-              data: Date.now(),
+              date: Date.now(),
               result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
 
@@ -424,11 +416,11 @@ export default class AudioCall extends Component {
   }
 
   appendStats() {
-    const audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats);
-    audiocallLongStats.forEach((stat) => {
+    const AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
+    AudioCallLongStats.forEach((stat) => {
       this.longStatResults.insertAdjacentHTML(
         'afterbegin',
-        insertLongStats(stat.data, stat.result)
+        insertLongStats(stat.date, stat.result)
       );
     });
 

@@ -31,27 +31,41 @@ export default class Authorization extends Component {
     }
   }
 
+  checkPasswordValidity(password) {
+    const pass = password.trim();
+    const SYMBOLS_REGEX = /[-+_@$!%*?&#.,;:[\]{}]/;
+
+    if (!SYMBOLS_REGEX.test(pass)) {
+      return false;
+    }
+
+    return true;
+  }
+
   async onSubmitRegisterForm(event) {
     event.preventDefault();
 
     const userName = document.getElementById('userName').value;
     const userEmail = document.getElementById('registerName').value;
-    const password = document.getElementById('registerPassword').value;
+    const password = document.getElementById('registerPassword').value.trim();
 
-    try {
-      const userData = {
-        name: `${userName}`,
-        email: `${userEmail}`,
-        password,
-      };
+    const isPasswordValid = this.checkPasswordValidity(password);
+    if (isPasswordValid) {
+      try {
+        const userData = {
+          name: `${userName}`,
+          email: `${userEmail}`,
+          password,
+        };
 
-      await this.api.createUser(userData);
-      await this.api.loginUser(userData);
+        await this.api.createUser(userData);
+        await this.api.loginUser(userData);
 
-      this.emit('selectPage', 'MainPage');
-    } catch {
-      document.querySelector('.alert-error-register').classList.remove('d-none');
-    }
+        this.emit('selectPage', 'MainPage');
+      } catch {
+        document.querySelector('.alert-error-register').classList.remove('d-none');
+      }
+    } else document.querySelector('.alert-error-register').classList.remove('d-none');
   }
 
   async onSubmitLoginForm(event) {

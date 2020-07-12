@@ -10,7 +10,7 @@ export default function createAuthorizationForm() {
             Успешно!
           </div>
           <div class="alert alert-danger text-center alert-error-register d-none" role="alert">
-            Пользователь уже существует.
+            Возникла ошибка. Убедитесь в правильности данных и попробуйте еще раз.
           </div>
           <div class="form-group">
             <input

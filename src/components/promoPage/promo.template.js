@@ -6,39 +6,39 @@ function createMembersHTML(data) {
       id, name, img, preview, description,
     } = info;
     return `
-    <div class="promo__game-description promo__developer-${id}">
-    <h3>${name}</h3>
-    <span class="promo__preview">${preview}</span>
-      <div class="promo__slider">
-        <div id="carouselExampleControls_${id}" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img class="d-block w-100 h-800px" src="${img[0]}" alt="First slide">
+      <div class="promo__game-description promo__developer-${id}">
+        <h3>${name}</h3>
+        <span class="promo__preview">${preview}</span>
+        <div class="promo__slider">
+          <div id="carouselExampleControls_${id}" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img class="d-block w-100 h-800px" src="${img[0]}" alt="First slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 h-800px" src="${img[1]}" alt="Second slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 h-800px" src="${img[2]}" alt="Third slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 h-800px" src="${img[3]}" alt="Fourth slide">
+              </div>
             </div>
-            <div class="carousel-item">
-              <img class="d-block w-100 h-800px" src="${img[1]}" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100 h-800px" src="${img[2]}" alt="Third slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100 h-800px" src="${img[3]}" alt="Fourth slide">
-            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls_${id}" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls_${id}" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-          <a class="carousel-control-prev" href="#carouselExampleControls_${id}" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleControls_${id}" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
         </div>
+
+        <span class="promo__description">${description}</span>
+
       </div>
-
-      <span class="promo__description">${description}</span>
-
-    </div>
     `;
   });
   return html.join('');
@@ -46,7 +46,9 @@ function createMembersHTML(data) {
 
 export default function createPromoPageLayout() {
   return `
-    <div class="promo__main-container">
+    <div class="promo__container container mt-3">
+      <div class="jumbotron mb-0">
+
       <div class="promo__training-description">
 
         <h2>RSLang</h2>
@@ -56,13 +58,13 @@ export default function createPromoPageLayout() {
         </div>
 
         <span>
-          Рады приветствовать всех, кто заглянул в RSLang - добро пожаловать на маленький островок во вселенной лингвистики. Наше приложение направлено на изучение английского языка, улучшения навыков произношения и восприятия на слух, обновления существующих знаний и развития кругозора. В базовой основе нашего приложения лежит методика интервального повторения, суть которой заключается ...будет дополнено.<br>
-          Не смотря на всю серьёзность научного подхохода изучения языка по этому принципу, в арсенале нашего приложения имеются мини-игры, которые дадут возможность провести время с пользой, закрепить и обновить ваши лингвистические навыки, а также не дадут заскучать и сохранить мотивацию к изучению языка. Ниже вы можете ознакомиться со всеми дополнительными составляющими нашего приложения.
+          Рады приветствовать всех, кто заглянул в RSLang - добро пожаловать на маленький островок во вселенной лингвистики. Наше приложение направлено на изучение английского языка, улучшения навыков произношения и восприятия на слух, обновления существующих знаний и развития кругозора. В базовой основе нашего приложения лежит методика интервального повторения.<br>
+          Не смотря на всю серьёзность научного подхода изучения языка по этому принципу, в арсенале нашего приложения имеются мини-игры, которые дадут возможность провести время с пользой, закрепить и обновить ваши лингвистические навыки, а также не дадут заскучать и сохранить мотивацию к изучению языка. Ниже вы можете ознакомиться со всеми дополнительными составляющими нашего приложения.
         </span>
 
       </div>
       ${createMembersHTML(promoGames)}
-
+      </div>
     </div>
   `;
 }

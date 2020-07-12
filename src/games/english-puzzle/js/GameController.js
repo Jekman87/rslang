@@ -424,7 +424,7 @@ export default class GameController {
     const roundResult = {
       date: Date.now(),
       round: `${this.get('currentLevel')}-${this.get('currentRound')}`,
-      result: `${this.correctCounter} / 10`,
+      result: `${this.correctCounter}-${10 - this.correctCounter}`,
     };
     const statistics = this.get('statistics');
 
@@ -549,14 +549,14 @@ export default class GameController {
     statistics.forEach((mark) => {
       const [level, round] = mark.round.split('-');
       const date = new Date(mark.date);
-      const score = mark.result;
+      const [score] = mark.result.split('-');
       const tr = `
       <tr class="tr">
         <td class="td">${level}</td>
         <td class="td">${round}</td>
         <td class="td">${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}</td>
         <td class="td">${date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
-        <td class="td">${score}</td>
+        <td class="td">${score} из 10</td>
       </tr>`;
       rows.push(tr);
     });

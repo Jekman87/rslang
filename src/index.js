@@ -10,9 +10,11 @@ import PageContainer from './components/pageContainer';
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
+import Vocabulary from './components/vocabularyPage';
 import Settings from './components/settingsPage';
 import Promo from './components/promoPage';
 import Team from './components/teamPage';
+import Statistics from './components/statisticsPage';
 
 // games
 import AudioCall from './games/audioCall/index';
@@ -26,6 +28,7 @@ const pages = {
   Authorization,
   MainPage,
   MainGame,
+  Vocabulary,
   Settings,
   Promo,
   Team,
@@ -35,6 +38,7 @@ const pages = {
   Savannah,
   SpeakIt,
   Sprint,
+  Statistics,
 };
 
 const mainApp = new MainApp('#app', {
