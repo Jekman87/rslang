@@ -42,6 +42,12 @@ export default class Score extends Component {
     this.subscribe('cardsDesk:finishGame', () => {
       this.$scoreContainer.clear();
     });
+    this.subscribe('header:rules', () => {
+      this.$root.addClass('d-none');
+    });
+    this.subscribe('rules:rulesreturn', () => {
+      this.$root.removeClass('none');
+    });
   }
 
   toHTML() {

@@ -6,32 +6,34 @@ import MainApp from './components/mainApp';
 import Header from './components/header';
 import PageContainer from './components/pageContainer';
 
-// pages and games
+// pages
 import Authorization from './components/authorization';
 import MainPage from './components/mainPage';
 import MainGame from './components/mainGame';
-
-import { AudioCall } from './games/audioCall/index';
-import Team from './components/teamPage';
 import Settings from './components/settingsPage';
+import Promo from './components/promoPage';
+import Team from './components/teamPage';
 
-import Riddle from './games/riddle/Riddle.render';
-import SpeakIt from './games/speakIt/index';
+// games
+import AudioCall from './games/audioCall/index';
 import Puzzle from './games/english-puzzle/index';
-import Sprint from './games/sprint/Sprint.render';
+import Riddle from './games/riddle/Riddle.render';
 import Savannah from './games/savanna/savanna';
+import SpeakIt from './games/speakIt/index';
+import Sprint from './games/sprint/Sprint.render';
 
 const pages = {
   Authorization,
   MainPage,
   MainGame,
-  Team,
   Settings,
-  SpeakIt,
+  Promo,
+  Team,
   AudioCall,
-  Riddle,
   Puzzle,
+  Riddle,
   Savannah,
+  SpeakIt,
   Sprint,
 };
 

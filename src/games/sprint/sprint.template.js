@@ -81,13 +81,13 @@ export default function createGameField() {
 
         <div class="sprint-points-result"></div>
 
-        <div class="mistake-container">
+        <div class="sprint-mistake-container">
           <span>Ошибся:</span>
           <span class='sprint-mistake-answer'>0</span>
         </div>
         <div class='mistake-block'></div>
 
-        <div class="correct-container">
+        <div class="sprint-correct-container">
           <span>Ответил верно:</span>
           <span class='sprint-correct-answer'>0</span>
         </div>
