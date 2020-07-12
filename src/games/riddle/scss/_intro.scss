@@ -10,9 +10,6 @@
   background-size: cover;
   z-index: 4;
 
-  // dev
-  /* display: none; */
-
   .riddle__name {
     @include flexible();
     width: 80%;
@@ -52,9 +49,9 @@
     min-width: 190px;
     padding: 10px 20px;
     font-size: 1.5rem;
-    color: #fff;
+    color: #212529;
     opacity: 0.8;
-    background-color: #005986;
+    background-color: #e0d6cee6;
     border-radius: 5px;
     transition: all 0.8s;
     border: 1px solid #ecf0f180;
