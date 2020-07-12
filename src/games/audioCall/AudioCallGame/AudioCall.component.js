@@ -135,23 +135,23 @@ export default class AudioCall extends Component {
   }
 
   sendStatistic(roundResult) {
-    let audiocallLongStats = [];
+    let AudioCallLongStats = [];
     try {
-      if (JSON.parse(this.statistic.optional.audiocallLongStats)) {
-        audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats);
+      if (JSON.parse(this.statistic.optional.AudioCallLongStats)) {
+        AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
       }
     } catch {
       console.log('Запись в пустой объект статистики');
     }
 
-    if (audiocallLongStats.length < 20) {
-      audiocallLongStats.push(roundResult);
+    if (AudioCallLongStats.length < 20) {
+      AudioCallLongStats.push(roundResult);
     } else {
-      audiocallLongStats.shift();
-      audiocallLongStats.push(roundResult);
+      AudioCallLongStats.shift();
+      AudioCallLongStats.push(roundResult);
     }
 
-    this.statistic.optional.audiocallLongStats = JSON.stringify(audiocallLongStats);
+    this.statistic.optional.AudioCallLongStats = JSON.stringify(AudioCallLongStats);
     this.mainApi.updateStatistics(this.statistic);
   }
 
@@ -195,7 +195,7 @@ export default class AudioCall extends Component {
           this.fillRoundWords();
         } else {
           const gameResult = {
-            data: Date.now(),
+            date: Date.now(),
             result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
 
@@ -305,7 +305,7 @@ export default class AudioCall extends Component {
             this.fillRoundWords();
           } else {
             const gameResult = {
-              data: Date.now(),
+              date: Date.now(),
               result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
 
@@ -416,11 +416,11 @@ export default class AudioCall extends Component {
   }
 
   appendStats() {
-    const audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats);
-    audiocallLongStats.forEach((stat) => {
+    const AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
+    AudioCallLongStats.forEach((stat) => {
       this.longStatResults.insertAdjacentHTML(
         'afterbegin',
-        insertLongStats(stat.data, stat.result)
+        insertLongStats(stat.date, stat.result)
       );
     });
 
