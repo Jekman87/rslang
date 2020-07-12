@@ -29,6 +29,24 @@ export default class Header extends Component {
     this.subscribe('hideHeader', () => {
       header.addClass('d-none');
     });
+
+    this.subscribe('hideMenu', () => {
+      const mobileMenu = this.$root.find('#navbarColor01');
+
+      if (mobileMenu.hasClass('show')) {
+        const navbarToggler = this.$root.find('.navbar-toggler');
+        navbarToggler.$el.click();
+      }
+    });
+
+    this.subscribe('mainAppSpinner', (isShow) => {
+      const spinner = this.$root.find('.main-app-sp');
+      if (isShow) {
+        spinner.removeClass('d-none');
+      } else {
+        spinner.addClass('d-none');
+      }
+    });
   }
 
   onClick(event) {
@@ -48,6 +66,8 @@ export default class Header extends Component {
           this.emit('playGame', pageName);
         }
       }
+
+      this.emit('hideMenu');
     } else if (clickedElement.$el.id === 'logout') {
       this.emit('mainLogout');
     }
