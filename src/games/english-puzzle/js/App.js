@@ -31,6 +31,7 @@ export default class App {
     this.startPageBg = new Image();
     this.startPageBg.onload = () => document.querySelector('div.start-page').classList.remove('invisible');
     this.startPageBg.src = '/assets/puzzle/img/start-page.jpg';
+    document.body.style.background = 'none';
   }
 
   destoy() {
@@ -41,5 +42,6 @@ export default class App {
     this.lvlController.destroy();
     this.gameController.destroy();
     this.startPageBg.onload = '';
+    document.body.style.background = '';
   }
 }
