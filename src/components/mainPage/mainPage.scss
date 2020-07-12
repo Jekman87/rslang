@@ -29,6 +29,7 @@
       .progress-tiny {
         color: #fff !important;
         height: 4px;
+        max-width: 100%;
         &::before,
         ::after {
           content: "";

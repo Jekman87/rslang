@@ -40,7 +40,7 @@ export default function createMainPageHTML(data) {
     <div class="container mt-3">
       <div class="jumbotron pt-4">
         <div class="logo-head bg-primary border border-secondary mb-4 mx-auto rounded text-center text-light">
-          <h1 class="display-4 mb-0">RS Lang 
+          <h1 class="display-4 mb-0 mt-4">RS Lang 
           <img class="logo img-fluid" src="/assets/main-page/logo.png" alt="RS Lang"></h1>
           <p class="lead">Изучай английский язык - время не ждет!</p>
         </div>
