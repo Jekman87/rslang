@@ -48,7 +48,7 @@ export default function showTemplate() {
       </div>
       <div class="jumbotron d-flex flex-column justify-content-center align-items-center"
         style="background-color:transparent;">
-        <h1 class="h1 heading text-light">Саванна</h1>
+        <h2 class="h1 heading text-light">Саванна</h2>
         <p class="lead text-light">Тренировка Саванна развивает словарный запас.
           Чем больше слов ты знаешь, тем легче тебе будет общаться.</p>
         <div class="btn btn-primary btn-lg" id="startSavannaGameButton">Начать</div>
@@ -56,9 +56,9 @@ export default function showTemplate() {
       <div class="balasned_element"></div>
     </div>
     <div class="savanna-main-spinner savanna-display-none" id="savanna-main-spinner">
-      <h1 class="statistics-heading" id="savannaMainSpinnerHeader">
+      <h2 class="statistics-heading" id="savannaMainSpinnerHeader">
         Ищем оазис!
-      </h1>
+      </h2>
       <div class="savanna-preloader">
         <div class="savanna-preloader-internal"></div>
         <div class="savanna-preloader-countdown" id="savanna-preloader-countdown"></div>
@@ -105,6 +105,11 @@ export default function showTemplate() {
               <span class="fas fa-times"></span>
             </div> -->
           </div>
+          <div class="col-12 d-flex justify-content-end h3">
+            <div class="savanna-abort-game-button p-1 ml-3">
+              <span class="fas fa-times"></span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="container main-game">
@@ -138,8 +143,8 @@ export default function showTemplate() {
     <div class="savanna-game-statistic savanna-display-none" id="savanna-game-statistic">
       <div class="jumbotron mb-0 container d-flex flex-column justify-content-center align-items-center"
         style="max-width: 900px;">
-        <h1 class="statistics-heading" id="savannaStatisticHeadingElement">В этот раз не получилось, но продолжай
-          тренироваться!</h1>
+        <h2 class="statistics-heading" id="savannaStatisticHeadingElement">В этот раз не получилось, но продолжай
+          тренироваться!</h2>
         <ul class="nav nav-pills justify-content-center">
           <li class="nav-item">
             <a class="nav-link active" id="savannaLastGameStatisticsNavLink" data-toggle="tab" href="#savannaLastGameStatistics">Статистика по последней игре</a>
@@ -342,6 +347,25 @@ export default function showTemplate() {
         </div>
 
         <div class="btn btn-primary btn-lg" id="savanna-to-game-start-page">В начало</div>
+      </div>
+    </div>
+
+    <div class="savanna-game-modal savanna-display-none" id="savannaGameModal">
+      <div class="jumbotron mb-0 container d-flex flex-column justify-content-center align-items-center"
+        style="max-width: 900px;">
+        <h2 class="savanna-modal-heading" >Вы действительно хотите покинуть игру? Результаты не сохранятся.</h2>
+        <div class="container">
+          <div class="row text-xs-left text-sm-center">
+            <div class="col-12 col-sm-6 my-2">
+              <div class="btn btn-warning w-75" id="savannaGameAbortYes">
+                Да</div>
+            </div>
+            <div class="col-12 col-sm-6 my-2">
+              <div class="btn btn-info w-75" id="savannaGameAbortNo">
+                Нет</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
