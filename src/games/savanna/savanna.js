@@ -5,6 +5,7 @@
 import book1 from './js/book1';
 import createEssence from './js/createEssence';
 import showTemplate from './js/template';
+import { FILE_URL } from '../../constants/constants';
 import './sass/style.scss';
 
 const gameWinHeaderText = 'В этот раз всё великолепно';
@@ -38,13 +39,13 @@ export default class Savannah {
       5: null,
       6: null,
     };
+    this.gameState.timers = {};
     if (settings.optional.savannaSettings) {
       const savannaSettings = JSON.parse(settings.optional.savannaSettings);
       if (showConsoleLog) console.log('savanna settings from API', savannaSettings);
       window.savannaSettings = savannaSettings;
       this.localSettings = {};
 
-      // mod variant of this.localSettings.gameLevel = savannaSettings.gameLevel || 1;
       if ((savannaSettings.gameLevel !== null)
         && ((typeof savannaSettings.gameLevel) === 'number')
         && (savannaSettings.gameLevel >= 1)
@@ -54,8 +55,6 @@ export default class Savannah {
         this.localSettings.gameLevel = 1;
       }
 
-      // mod variant of
-      // this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords || true;
       if ((savannaSettings.gameWithLearnedWords !== null)
         && ((typeof savannaSettings.gameWithLearnedWords) === 'boolean')) {
         this.localSettings.gameWithLearnedWords = savannaSettings.gameWithLearnedWords;
@@ -63,7 +62,6 @@ export default class Savannah {
         this.localSettings.gameWithLearnedWords = true;
       }
 
-      // mod variant of this.localSettings.gameInvert = savannaSettings.gameInvert || false;
       if ((savannaSettings.gameInvert !== null)
         && ((typeof savannaSettings.gameInvert) === 'boolean')) {
         this.localSettings.gameInvert = savannaSettings.gameInvert;
@@ -71,8 +69,6 @@ export default class Savannah {
         this.localSettings.gameInvert = true;
       }
 
-      // mod variant of
-      // this.localSettings.gameIrregularVerbs = savannaSettings.gameIrregularVerbs || false;
       if ((savannaSettings.gameIrregularVerbs !== null)
         && ((typeof savannaSettings.gameIrregularVerbs) === 'boolean')) {
         this.localSettings.gameIrregularVerbs = false;
@@ -119,6 +115,7 @@ export default class Savannah {
         },
       };
     }
+    window.savanna = this;
   }
 
   render() {
@@ -155,7 +152,7 @@ export default class Savannah {
     this.soundOffIcon.classList.add('savanna-display-none');
     this.soundContainers = this.rootTag.querySelectorAll('.savanna-audioSource');
     this.gameLives = this.rootTag.querySelectorAll('.savanna-lives');
-
+    this.savannaMainContainer = this.rootTag.querySelector('.savanna-main-container');
     this.startSavannaGameButton = document.getElementById('startSavannaGameButton');
     this.savannaMainSpinnerHeader = document.getElementById('savannaMainSpinnerHeader');
 
@@ -185,6 +182,15 @@ export default class Savannah {
     );
     this.savannaLongtermStatisticsNavLink = document.getElementById(
       'savannaLongtermStatisticsNavLink',
+    );
+    this.savannaGameAbortYes = document.getElementById(
+      'savannaGameAbortYes',
+    );
+    this.savannaGameAbortNo = document.getElementById(
+      'savannaGameAbortNo',
+    );
+    this.savannaGameModal = document.getElementById(
+      'savannaGameModal',
     );
     // Create Binded LISTENERS
     this.onClick = this._resolveClicks.bind(this);
@@ -258,35 +264,32 @@ export default class Savannah {
   }
 
   _prepareWords() {
+    const timer = this.gameState.timers;
     this.savannaMainSpinnerHeader.textContent = 'Организуем стоянку';
     this._gameDataPrepare();
     this.savannaMainSpinnerHeader.textContent = 'Усаживаемся поудобнее';
-    setTimeout(() => {
+    timer.startGameTimer = setTimeout(() => {
       document.getElementById('savanna-preloader-countdown').textContent = '3';
       document.getElementById('SavannaAudioBip').play().catch(() => true);
-    }, 500);
-    setTimeout(() => {
-      document.getElementById('savanna-preloader-countdown').textContent = '2';
-      document.getElementById('SavannaAudioBip').play().catch(() => true);
-    }, 1500);
-    setTimeout(() => {
-      document.getElementById('savanna-preloader-countdown').textContent = '1';
-      document.getElementById('SavannaAudioBip').play().catch(() => true);
-    }, 2500);
-    setTimeout(() => {
-      document.getElementById('savanna-preloader-countdown').textContent = 'Поехали';
-      document.getElementById('SavannaAudioGong').play().catch(() => true);
-    }, 3500);
-    setTimeout(() => {
-      // document.getElementById('savanna-main-spinner').classList.add('savanna-display-none');
-      // document.getElementById('savanna-game-page').classList.remove('savanna-display-none');
-    }, 4500);
-    setTimeout(() => {
-      document.getElementById('SavannaAudioGong').pause();
-      document.getElementById('SavannaAudioGong').currentTime = 0;
-      document.getElementById('savanna-main-spinner').classList.add('savanna-display-none');
-      document.getElementById('savanna-game-page').classList.remove('savanna-display-none');
-    }, 5500);
+      timer.startGameTimer = setTimeout(() => {
+        document.getElementById('savanna-preloader-countdown').textContent = '2';
+        document.getElementById('SavannaAudioBip').play().catch(() => true);
+        timer.startGameTimer = setTimeout(() => {
+          document.getElementById('savanna-preloader-countdown').textContent = '1';
+          document.getElementById('SavannaAudioBip').play().catch(() => true);
+          timer.startGameTimer = setTimeout(() => {
+            document.getElementById('savanna-preloader-countdown').textContent = 'Поехали';
+            document.getElementById('SavannaAudioGong').play().catch(() => true);
+            timer.startGameTimer = setTimeout(() => {
+              document.getElementById('SavannaAudioGong').pause();
+              document.getElementById('SavannaAudioGong').currentTime = 0;
+              document.getElementById('savanna-main-spinner').classList.add('savanna-display-none');
+              document.getElementById('savanna-game-page').classList.remove('savanna-display-none');
+            }, 2000);
+          }, 1000);
+        }, 1000);
+      }, 1000);
+    }, 1000);
   }
 
   _audioStopAllSound() {
@@ -316,8 +319,6 @@ export default class Savannah {
   }
 
   _gameDataPrepare() {
-    // this.gameState.wordArrays[this.localSettings.gameLevel] = e[0].paginatedResults;
-    // this.gameState.isWordsFromBackend = true;
     let tmpArray = [];
     if (this.localSettings.gameWithLearnedWords) {
       if (this.gameState.isWordsFromBackend) {
@@ -343,9 +344,8 @@ export default class Savannah {
           if (showConsoleLog) console.log('learned words sorting', tmpArray);
           tmpArray = tmpArray.concat(tmpArray2.slice(0, 30 - tmpArray.length));
           if (showConsoleLog) console.log('learned words sorting', tmpArray.slice(0, 30));
-          // if (showConsoleLog) console.log('tmpArray2:', tmpArray2);
         } else {
-          // TODO: сделать шафл  части без ошибок.
+          // TODO: возможно нужно сделать шафл части без ошибок.
           tmpArray = tmpArray.slice(0, 30);
         }
         if (showConsoleLog) console.log('learned words sorting', tmpArray);
@@ -386,10 +386,10 @@ export default class Savannah {
 
     this.gameWordArray = tmpArray;
     if (showConsoleLog) console.log(this.gameWordArray);
-    setTimeout(() => {
+    this.gameState.timers.prepareDataTimer = setTimeout(() => {
       this.gameState.currentState = 'gameStart';
       this._gameResolve();
-    }, 5500);
+    }, 6000);
   }
 
   _resolveClicks(event) {
@@ -398,12 +398,10 @@ export default class Savannah {
       if (showConsoleLog) console.log(event.target.dataset.savannaanswerbtn);
       this.gameState.answerButton = event.target.dataset.savannaanswerbtn;
       this.fallingWordContainer.classList.remove('word-container-piupiu');
-      setTimeout(this._gameResolve.bind(this, 'gameTakeAnswer'), 0);
+      this.gameState.timers.resolveClicks = setTimeout(this._gameResolve.bind(this, 'gameTakeAnswer'), 0);
     } else if (event.target.id === 'savanna-to-game-start-page') {
       if (showConsoleLog) console.log('na glavnuyu');
       this._returnStartGamePage();
-      // } else if (event.target.classList.contains('soundOnOff')) {
-      // document.querySelectorAll('soundOnOff').forEach((element))
     } else if (event.target === this.soundOnIcon) {
       this.soundOffIcon.classList.remove('savanna-display-none');
       this._audioMute();
@@ -430,6 +428,15 @@ export default class Savannah {
     } else if (event.target.classList.contains('savanna-statistic-sound-button')) {
       const savannaStatSoundID = event.target.dataset.soundID;
       document.getElementById(savannaStatSoundID).play().catch(() => true);
+    } else if (event.target.closest('.savanna-abort-game-button')) {
+      this._gamePause('yes');
+      this.savannaGameModal.classList.remove('savanna-display-none');
+    } else if (event.target === this.savannaGameAbortYes) {
+      this._gameAbort();
+      this.savannaGameModal.classList.add('savanna-display-none');
+    } else if (event.target === this.savannaGameAbortNo) {
+      this._gamePause('no');
+      this.savannaGameModal.classList.add('savanna-display-none');
     }
   }
 
@@ -479,9 +486,35 @@ export default class Savannah {
       if (this.gameState.currentState === 'waitAnswer') {
         this.gameState.answerButton = `btn${Number(event.code.slice(-1)) - 1}`;
         this.fallingWordContainer.classList.remove('word-container-piupiu');
-        setTimeout(this._gameResolve.bind(this, 'gameTakeAnswer'), 0);
+        this.gameState.timers.resolveKeyDown = setTimeout(this._gameResolve.bind(this, 'gameTakeAnswer'), 0);
       }
     }
+  }
+
+  _gamePause(status) {
+    if (status === 'yes') {
+      this.fallingWordContainer.classList.add('savanna-animation-pause');
+      this.fallingEnergyContainer.classList.add('savanna-animation-pause');
+    } else {
+      this.fallingWordContainer.classList.remove('savanna-animation-pause');
+      this.fallingEnergyContainer.classList.remove('savanna-animation-pause');
+    }
+    if (showConsoleLog) console.log('pause');
+  }
+
+  _gameAbort() {
+    if (showConsoleLog) console.log('abort');
+
+    this._clearSavannaTimeouts();
+    document.getElementById('savanna-start-page').classList.remove('savanna-display-none');
+    document.getElementById('savanna-game-page').classList.add('savanna-display-none');
+    this.savannaGameModal.classList.add('savanna-display-none');
+    this.gameState.currentState = '';
+    this.fallingWordContainer.classList.remove('word-container-piupiu');
+    this.fallingEnergyContainer.classList.remove('energy-container-piupiupiu');
+    this.fallingWordContainer.classList.remove('savanna-animation-pause');
+    this.fallingEnergyContainer.classList.remove('savanna-animation-pause');
+    this.savannaMainContainer.style.backgroundPositionY = 'calc(((4272px - 100vh)/30) * -30)';
   }
 
   _gameResolve(event = '') {
@@ -534,17 +567,17 @@ export default class Savannah {
         this.answbtnArray.forEach((el) => {
           el.classList.remove('savannaWrongAnswerBtn', 'savannaCorrectAnswerBtn');
         });
-        setTimeout(this._gameResolve.bind(this), 0);
+        this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         break;
 
       case 'waitAnswer':
         if (showConsoleLog) console.log('waitAnswer');
         if (event === 'gameAnimationEnd') {
           this.gameState.currentState = 'takeAnswer';
-          setTimeout(this._gameResolve.bind(this, 'gameAnimationEnd'), 0);
+          this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this, 'gameAnimationEnd'), 0);
         } else if (event === 'gameTakeAnswer') {
           this.gameState.currentState = 'takeAnswer';
-          setTimeout(this._gameResolve.bind(this), 0);
+          this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         }
         break;
 
@@ -553,7 +586,7 @@ export default class Savannah {
         this.fallingWordContainer.classList.remove('word-container-piupiu');
         if ((this.gameState.answerButton) === (this.gameState.answerCorrectButton)) {
           this.gameState.currentState = 'correctAnswer';
-          setTimeout(this._gameResolve.bind(this), 0);
+          this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         } else {
           this.gameState.currentState = 'incorrectAnswer';
           if (this.gameState.answerButton) {
@@ -565,7 +598,7 @@ export default class Savannah {
               el.classList.add('savannaWrongAnswerBtn');
             });
           }
-          setTimeout(this._gameResolve.bind(this), 0);
+          this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         }
         this.answbtnArray[this.gameState.questionWordBias].classList.add(
           'savannaCorrectAnswerBtn',
@@ -575,7 +608,7 @@ export default class Savannah {
         if (showConsoleLog) console.log('correct Answer');
         this.gameState.statisticCorrectAnswers.push(this.gameState.questionWordLink);
         this.gameState.currentState = 'correctPause';
-        setTimeout(this._gameResolve.bind(this), 0);
+        this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         this.gamePauseState = true;
         this._audioStopAllSound();
         this.audioCorrect.play().catch(() => true);
@@ -586,6 +619,8 @@ export default class Savannah {
           this.gamePauseState = false;
           this.fallingEnergyContainer.classList.add('energy-container-piupiupiu');
           this.gameState.rightAnswersCounter += 1;
+          const postion = `calc(((4272px - 100vh)/30) * ${this.gameState.rightAnswersCounter - 30})`;
+          this.savannaMainContainer.style.backgroundPositionY = postion;
         }
         if (event === 'fallingEnergyAnimationEnd') {
           if ((this.gameState.rightAnswersCounter % 5) === 0) {
@@ -593,7 +628,7 @@ export default class Savannah {
               `crystall-stage${Math.round(this.gameState.rightAnswersCounter / 5)}`,
             );
           }
-          setTimeout(() => {
+          this.gameState.timers.gameResolve = setTimeout(() => {
             this.gameState.currentState = 'nextQuestion';
             this._gameResolve();
           }, 2500);
@@ -609,7 +644,7 @@ export default class Savannah {
           }
         });
         this.gameState.currentState = 'incorrectPause';
-        setTimeout(this._gameResolve.bind(this), 0);
+        this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         this.gamePauseState = true;
         this._audioStopAllSound();
         this.audioWrong.play().catch(() => true);
@@ -621,12 +656,12 @@ export default class Savannah {
           this.gamePauseState = false;
 
           if (this.gameState.lives > 0) {
-            setTimeout(() => {
+            this.gameState.timers.gameResolve = setTimeout(() => {
               this.gameState.currentState = 'nextQuestion';
               this._gameResolve();
             }, 2500);
           } else {
-            setTimeout(() => {
+            this.gameState.timers.gameResolve = setTimeout(() => {
               this.gameState.currentState = 'gameLose';
               this._gameResolve();
             }, 2500);
@@ -660,10 +695,10 @@ export default class Savannah {
           this.gameState.answerCorrectButton = `btn${this.gameState.questionWordBias}`;
           this.gameState.currentState = 'waitAnswer';
           this.fallingWordContainer.classList.add('word-container-piupiu');
-          setTimeout(this._gameResolve.bind(this), 0);
+          this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         } else {
           this.gameState.currentState = 'endGame';
-          setTimeout(this._gameResolve.bind(this), 0);
+          this.gameState.timers.gameResolve = setTimeout(this._gameResolve.bind(this), 0);
         }
         break;
       case 'endGame':
@@ -689,6 +724,7 @@ export default class Savannah {
     const statObj = this.gameState.statisticObj;
 
     if (this.gameState.isWordsFromBackend) {
+      // temporarily disabled to match logic
       // this.gameState.statisticCorrectAnswers.forEach((e) => {
       //   const el = e;
       //   if (el.userWord) {
@@ -725,7 +761,7 @@ export default class Savannah {
     const toBackend = {};
     toBackend.correctAnswer = correctCount;
     toBackend.wrongAnswer = wrongCount;
-    toBackend.data = Date.now();
+    toBackend.date = Date.now();
     toBackend.round = `${roundMain}-${roundSecond}`;
     if (wrongCount === 0) {
       this.savannaStatisticHeadingElement.textContent = gameWinHeaderText;
@@ -781,12 +817,14 @@ export default class Savannah {
           [statObj.WLi[i].span1, statObj.WLi[i].span2, statObj.WLi[i].span3], null,
         );
         statObj.WLi[i].div1 = createEssence(
-          'div', 'text-secondary fas fa-volume-up savanna-statistic-sound-button h5 mr-2', null, null, ['soundID', `savannaAudioWrongStatistic${i}`],
+          'div', 'text-secondary fas fa-volume-up savanna-statistic-sound-button h5 mr-2',
+          null, null, ['soundID', `savannaAudioWrongStatistic${i}`],
         );
         statObj.WLi[i].audio = createEssence(
           'audio', 'savanna-audio-source-statistic', null, statObj.WLi[i].div1,
           ['id', `savannaAudioWrongStatistic${i}`],
-          ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticWrongAnswers[i].audio}`],
+          ['src', `${FILE_URL}/${this.gameState.statisticWrongAnswers[i].audio}`],
+          // ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticWrongAnswers[i].audio}`],
         );
         statObj.WLi[i].li = createEssence(
           'li', 'statistics-word',
@@ -828,12 +866,14 @@ export default class Savannah {
           [statObj.CLi[i].span1, statObj.CLi[i].span2, statObj.CLi[i].span3], null,
         );
         statObj.CLi[i].div1 = createEssence(
-          'div', 'text-secondary fas fa-volume-up savanna-statistic-sound-button h5 mr-2', null, null, ['soundID', `savannaAudioCorrectStatistic${i}`],
+          'div', 'text-secondary fas fa-volume-up savanna-statistic-sound-button h5 mr-2',
+          null, null, ['soundID', `savannaAudioCorrectStatistic${i}`],
         );
         statObj.CLi[i].audio = createEssence(
           'audio', 'savanna-audio-source-statistic', null, statObj.CLi[i].div1,
           ['id', `savannaAudioCorrectStatistic${i}`],
-          ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticCorrectAnswers[i].audio}`],
+          ['src', `${FILE_URL}/${this.gameState.statisticCorrectAnswers[i].audio}`],
+          // ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticCorrectAnswers[i].audio}`],
         );
         statObj.CLi[i].li = createEssence(
           'li', 'statistics-word',
@@ -847,7 +887,7 @@ export default class Savannah {
     statObj.LTUl = createEssence('ul', 'word-list', null, statObj.LTDiv);
     statObj.LTLi = [];
     for (let i = this.statsSavannahLong.length - 1; i >= 0; i -= 1) {
-      const tmpData = new Date(this.statsSavannahLong[i].data);
+      const tmpData = new Date(this.statsSavannahLong[i].date);
       statObj.LTLi[i] = {};
       statObj.LTLi[i].li = createEssence(
         'li', 'd-flex justify-content-around align-items-center flex-wrap mb-3',
@@ -877,6 +917,7 @@ export default class Savannah {
   _returnStartGamePage() {
     document.getElementById('savanna-game-statistic').classList.add('savanna-display-none');
     document.getElementById('savanna-start-page').classList.remove('savanna-display-none');
+    this.savannaMainContainer.style.backgroundPositionY = 'calc(((4272px - 100vh)/30) * -30)';
   }
 
   shuffle(marr) {
@@ -892,11 +933,21 @@ export default class Savannah {
     return arr;
   }
 
+  _clearSavannaTimeouts() {
+    const keys = Object.keys(this.gameState.timers);
+    keys.forEach((el) => {
+      clearTimeout(this.gameState.timers[el]);
+    });
+  }
+
   destroy() {
     // REMOVE LISTENERS
     this.rootTag.removeEventListener('click', this.onClick);
     this.rootTag.removeEventListener('animationend', this.onAnimationEnd);
     this.rootTag.removeEventListener('change', this.onChange);
     document.removeEventListener('keydown', this.onKeyDown);
+
+    // REMOVE TIMEOUTS
+    this._clearSavannaTimeouts();
   }
 }
