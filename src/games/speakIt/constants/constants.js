@@ -6,7 +6,7 @@ const MAX_WORDS_PAGES = 29;
 const MAX_WORDS_LEVEL = 5;
 
 const PER_GAME_WORDS = 10;
-const MAX_HISTORY_LIST_COUNT = 10;
+const MAX_HISTORY_LIST_COUNT = 20;
 
 const GAME_DEFAULT_STATE = {
   gameLevel: {
