@@ -1,6 +1,6 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
-import createRulesHTML from './Rules.template';
+import createRulesHTML from './rules.template';
 import { PRONOUNCE_URL } from '../../constants/constants';
 
 export default class Rules extends Component {
