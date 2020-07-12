@@ -784,9 +784,9 @@ export default class Savannah {
     stat.optional.SavannahLong = JSON.stringify(this.statsSavannahLong);
     stat.optional.SavannaMain = JSON.stringify(this.statsSavannaMain);
     this.options.api.updateStatistics(stat).then((e) => {
-      console.log('updateStatistics', e);
+      if (showConsoleLog) console.log('updateStatistics', e);
     }).catch((e) => {
-      console.log('catch', e);
+      if (showConsoleLog) console.log('catch', e);
     });
 
     this.savannaStatisticContent.innerHTML = '';
