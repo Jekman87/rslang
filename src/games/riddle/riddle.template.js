@@ -52,7 +52,15 @@ export default function createGameField() {
               <i class="fas fa-language" data-click="show-translate"></i>
             </button>
           </div>
-          <button type="button" class="btn btn-outline-success riddle-button" data-click="statistic">Статистика</button>
+          <button type="button" class="btn btn-outline-success riddle-button riddle-mute" data-click="riddle-mute">
+            <i class="fas fa-music sprint-icon-parameters riddle-mute" data-click="riddle-mute"></i>
+          </button>
+          <button type="button" class="btn btn-outline-success riddle-button riddle-unmute" data-click="riddle-unmute">
+            <i class="fas fa-music sprint-icon-parameters" data-click="riddle-unmute"></i>
+            <i class="fas fa-slash sprint-icon-parameters riddle-line" data-click="riddle-unmute"></i>
+          </button>
+
+          <button type="button" class="btn btn-outline-success riddle-button riddle-stats" data-click="statistic">Статистика</button>
         </div>
 
         <div class="riddle-container">
@@ -233,8 +241,8 @@ export default function createGameField() {
 
     </div>
 
-    <audio class="correct-voice" src="assets/voices/pew.mp3"></audio>
-    <audio class="wrong-voice" src="assets/voices/wrong.mp3"></audio>
-    <audio class="pass-voice" src="assets/voices/pass.mp3"></audio>
+    <audio class="riddle-correct-voice" src="assets/voices/pew.mp3"></audio>
+    <audio class="riddle-wrong-voice" src="assets/voices/wrong.mp3"></audio>
+    <audio class="riddle-pass-voice" src="assets/voices/pass.mp3"></audio>
   `;
 }

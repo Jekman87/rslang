@@ -260,11 +260,29 @@ function markAnswer(answerStatus) {
 }
 
 function playCorrectAudio() {
-  document.querySelector('.correct-voice').play();
+  document.querySelector('.riddle-correct-voice').play().catch(() => true);
 }
 
 function playWrongAudio() {
-  document.querySelector('.wrong-voice').play().catch(() => true);
+  document.querySelector('.riddle-wrong-voice').play().catch(() => true);
+}
+
+function swithchOffVoice() {
+  document.querySelector('.riddle-mute').style.display = 'none';
+  document.querySelector('.riddle-unmute').style.display = 'flex';
+
+  document.querySelector('.riddle-correct-voice').src = '';
+  document.querySelector('.riddle-wrong-voice').src = '';
+  document.querySelector('.riddle-pass-voice').src = '';
+}
+
+function swithchOnVoice() {
+  document.querySelector('.riddle-mute').style.display = 'flex';
+  document.querySelector('.riddle-unmute').style.display = 'none';
+
+  document.querySelector('.riddle-correct-voice').src = 'assets/voices/pew.mp3';
+  document.querySelector('.riddle-wrong-voice').src = 'assets/voices/wrong.mp3';
+  document.querySelector('.riddle-pass-voice').src = 'assets/voices/pass.mp3';
 }
 
 function upLevel() {
@@ -344,7 +362,7 @@ function passHandler() {
   const level = document.querySelector('.input-level');
   const page = document.querySelector('.input-page');
 
-  document.querySelector('.pass-voice').play().catch(() => true);
+  document.querySelector('.riddle-pass-voice').play().catch(() => true);
   markAnswer();
   upLevel();
 
@@ -379,8 +397,8 @@ export {
   hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput, passHandler,
-  showStatistic, recountStatistic, removeStatistic,
+  compareAnswers, moveAnswerIntoInput, passHandler, swithchOffVoice,
+  showStatistic, recountStatistic, removeStatistic, swithchOnVoice,
   showCorrectPartOfStatistic, showWrongPartOfStatistic,
   backToStatisticScreen, backToGameFromStatistic, state,
   prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
