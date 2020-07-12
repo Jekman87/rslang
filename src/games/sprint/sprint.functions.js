@@ -95,7 +95,7 @@ function go() {
 }
 
 function markRightAnswer() {
-  document.querySelector('.sprint-game-block').classList.toggle('correct-color');
+  document.querySelector('.sprint-game-block').classList.toggle('sprint-correct-color');
 }
 
 function markWrongAnswer() {
@@ -312,7 +312,7 @@ function resetBonusPlaces() {
 
 function addBirdsPicture(birdNumber) {
   document.querySelector('.birds').insertAdjacentHTML('afterbegin',
-    `<img class="bird bird-${birdNumber}" src="assets/img/bird-${birdNumber}.png" alt="bird" />`);
+    `<img class="bird bird-${birdNumber}" src="assets/sprint/bird-${birdNumber}.png" alt="bird" />`);
 }
 
 function resetPointsPlaces() {

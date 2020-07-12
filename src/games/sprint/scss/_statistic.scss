@@ -6,11 +6,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(to right, #faffc4, #d5f1b7, #b0e3b0, #89d4ac, #5fc4ab, #39b0ab, #149ba8, #0086a1, #006890, #004a7b, #002c62, #090e44);
-  background-attachment: fixed;
+  background: url('/assets/sprint/intro.jpg') bottom no-repeat;
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top center;
   z-index: 4;
   display: none;
 }
@@ -25,7 +22,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ebebeba8;
+  background-color: #ffffff99;
   border: 2px solid #2d303a;
   border-radius: 10px;
   overflow: auto;
