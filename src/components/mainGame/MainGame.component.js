@@ -2,11 +2,11 @@ import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createMainGameHTML from './mainGame.template';
 
-import { delay } from '../../core/utils';
+import { delay, getResetDayTime, getStartDayTime } from '../../core/utils';
 import { getIntervalsOfRepeat } from './mainGame.utils';
 
 import {
-  FILE_URL, ONE_MINUTE, ONE_DAY, WORD_PARAM,
+  FILE_URL, ONE_MINUTE, ONE_DAY, RESET_HOUR, WORD_PARAM,
 } from '../../constants/constants';
 
 import UserWord from '../../core/UserWord';
@@ -50,8 +50,9 @@ export default class MainGame extends Component {
       seriesOfCorrectAnswers: 0,
       longestSeriesOfCorrectAnswers: 0,
       allCardsLearned: 0,
+      resetDayTime: 0,
     };
-    this.dataForApp.state = this.state;
+    this.updateStatistics();
 
     this.elements = null;
     this.audio = new Audio();
@@ -61,7 +62,6 @@ export default class MainGame extends Component {
     super.init();
     this.getCardElements();
     this.elements.$wordInput.$el.focus();
-    this.updateState();
   }
 
   getCardElements() {
@@ -87,8 +87,13 @@ export default class MainGame extends Component {
     };
   }
 
-  updateState() {
-    if (this.shortTermStats) {
+  updateStatistics() {
+    this.state.resetDayTime = getResetDayTime(RESET_HOUR);
+    const startDayTime = getStartDayTime(RESET_HOUR);
+
+    if (this.shortTermStats
+      && this.shortTermStats.today < this.state.resetDayTime
+      && this.shortTermStats.today > startDayTime) {
       const {
         wordsToday,
         cardsToday,
@@ -107,6 +112,16 @@ export default class MainGame extends Component {
         errorAnswers: errorAnswersToday,
         longestSeriesOfCorrectAnswers: longestSeries,
       };
+    } else {
+      this.state = {
+        ...this.state,
+        newWordsCount: 0,
+        cardsCount: 0,
+        cardsLeft: this.userCards.length,
+        correctAnswers: 0,
+        errorAnswers: 0,
+        longestSeriesOfCorrectAnswers: 0,
+      };
     }
 
     if (this.longTermStats) {
@@ -114,6 +129,8 @@ export default class MainGame extends Component {
       const { cardsLearned } = this.longTermStats;
       this.state.allCardsLearned = cardsLearned;
     }
+
+    this.dataForApp.state = this.state;
   }
 
   async onClick(event) {
@@ -396,7 +413,6 @@ export default class MainGame extends Component {
 
   setDifficulty(wordDifficulty, isSuccess = true) {
     const currentWord = this.userCards[this.state.currentCardNum];
-    console.log('setDifficulty word', currentWord);
 
     this.state.isNewWord = true;
 
@@ -550,7 +566,7 @@ export default class MainGame extends Component {
 
     this.createUserStats(isSuccess);
 
-    console.log('this.dataForApp', this.dataForApp);
+    console.log('setDifficulty this.dataForApp', this.dataForApp);
   }
 
   createUserStats(isSuccess) {
@@ -563,6 +579,7 @@ export default class MainGame extends Component {
       errorAnswers,
       seriesOfCorrectAnswers,
       longestSeriesOfCorrectAnswers,
+      allCardsLearned,
     } = this.state;
 
     newWordsCount += this.state.isNewWord ? 1 : 0;
@@ -585,23 +602,45 @@ export default class MainGame extends Component {
       seriesOfCorrectAnswers = 0;
     }
 
-    this.shortTermStats = {
-      wordsToday: newWordsCount,
-      cardsToday: cardsCount,
-      cardsLeftToday: cardsLeft,
-      correctAnswersToday: correctAnswers,
-      errorAnswersToday: errorAnswers,
-      longestSeries: longestSeriesOfCorrectAnswers,
-    };
+    const timeNow = Date.now();
 
-    console.log('shortTermStats', this.shortTermStats);
+    if (timeNow < this.state.resetDayTime) {
+      this.shortTermStats = {
+        wordsToday: newWordsCount,
+        cardsToday: cardsCount,
+        cardsLeftToday: cardsLeft,
+        correctAnswersToday: correctAnswers,
+        errorAnswersToday: errorAnswers,
+        longestSeries: longestSeriesOfCorrectAnswers,
+        today: timeNow,
+      };
+    } else {
+      this.updateStatistics();
+    }
 
     // долгосрочная статистика
     // сохранение по дням сделать
-    this.state.allCardsLearned += cardsCount;
-    this.longTermStats = { cardsLearned: this.state.allCardsLearned };
-    this.statistics.learnedWords += newWordsCount;
-    console.log('newWordsCount', newWordsCount);
+    allCardsLearned += 1;
+
+    this.longTermStats = { cardsLearned: allCardsLearned };
+    this.statistics.learnedWords += this.state.isNewWord ? 1 : 0;
+    this.dataForApp.longTermStats = this.longTermStats;
+
+    this.state = {
+      ...this.state,
+      newWordsCount,
+      cardsCount,
+      cardsLeft,
+      correctAnswers,
+      errorAnswers,
+      seriesOfCorrectAnswers,
+      longestSeriesOfCorrectAnswers,
+      allCardsLearned,
+    };
+
+    this.dataForApp.shortTermStats = this.shortTermStats;
+    this.dataForApp.shortTermStats = this.shortTermStats;
+    this.dataForApp.state = this.state;
 
     this.statistics.optional.MainGameShort = JSON.stringify(this.shortTermStats);
     this.statistics.optional.MainGameLong = JSON.stringify(this.longTermStats);
