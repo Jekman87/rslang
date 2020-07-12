@@ -45,16 +45,9 @@ export default class AudioCall extends Component {
     const userWords = await this.mainApi.getAllUserWords();
     const page = Math.floor(Math.random() * (30 - 0 + 1));
 
-    if (userWords.length < 70 || this.gameWithNewWords) {
+    if (userWords.length < 50 || this.gameWithNewWords) {
       roundWordsArr = await this.mainApi.getWords(page, this.gameLevel, 10, 5);
     } else {
-      // for (let i = 0; i < 5; i += 1) {
-      // const wordNumber = Math.floor(Math.random() * (userWords.length - 0 + 1));
-      // const { wordId } = userWords[wordNumber];
-
-      // const word = await this.mainApi.getWordById(wordId);
-      // roundWordsArr.push(word);
-      // }
       const filter = '{"userWord":{"$ne":null}}';
       const words = await this.mainApi.getAllUserAggregatedWords(null, 60, filter);
       roundWordsArr = words[0].paginatedResults
@@ -62,10 +55,6 @@ export default class AudioCall extends Component {
           return Math.random() - 0.5;
         })
         .slice(0, 5);
-      // for (let i = 0; i < 5; i += 1) {
-      //   const wordNumber = Math.floor(Math.random() * (words[0].paginatedResults.length - 0 + 1));
-      //   roundWordsArr.push(words[0].paginatedResults[wordNumber]);
-      // }
     }
 
     this.spanRoundWords = document.querySelectorAll('.round-word');
@@ -150,7 +139,14 @@ export default class AudioCall extends Component {
   }
 
   sendStatistic(roundResult) {
-    const audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats) || [];
+    let audiocallLongStats = [];
+    try {
+      if (JSON.parse(this.statistic.optional.audiocallLongStats)) {
+        audiocallLongStats = JSON.parse(this.statistic.optional.audiocallLongStats);
+      }
+    } catch {
+      console.log('Запись в пустой объект статистики');
+    }
 
     if (audiocallLongStats.length < 20) {
       audiocallLongStats.push(roundResult);
