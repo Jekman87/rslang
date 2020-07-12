@@ -18,15 +18,20 @@ export default class MainPage extends Component {
 
   init() {
     super.init();
-    // подписка на события внутри компонента
   }
 
   onClick(event) {
     const clickedElement = $$(event.target);
 
     if (clickedElement.hasClass('btn')) {
-      const pageName = clickedElement.data.name;
-      this.emit('selectPage', pageName);
+      if (clickedElement.data.name) {
+        const pageName = clickedElement.data.name;
+        this.emit('selectPage', pageName);
+      }
+      if (clickedElement.data.game) {
+        const { game } = clickedElement.data;
+        this.emit('playGame', game);
+      }
     }
   }
 
