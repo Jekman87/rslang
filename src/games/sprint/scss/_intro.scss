@@ -16,12 +16,13 @@
 
   h1 {
     font-size: 3rem;
-    margin: -100px auto 40px;
+    margin: 40px auto 40px;
     color: #212529;
     opacity: 0.9;
     letter-spacing: 13px;
     font-weight: 300;
     text-align: center;
+    font-weight: bold;
 
     .rabbit {
       font-size: 1.5rem;
@@ -37,6 +38,7 @@
     color: #212529;
     opacity: 0.9;
     font-size: 1.2rem;
+    font-weight: bold;
   }
 
   input {
