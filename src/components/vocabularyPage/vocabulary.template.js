@@ -2,7 +2,7 @@ export default function createVocabularyHTML() {
   return `
   <div class="container mt-3">
     <div class="jumbotron vocabulary-wrapper">
-      <h1 class="display-4 text-primary mb-4"><i class="fas fa-book mr-3"></i>Мой словарь
+      <h1 class="display-4 mb-4"><i class="fas fa-book mr-3"></i>Мой словарь
       </h1>
       <ul class="nav nav-tabs justify-content-center">
         <li class="nav-item col-4 p-0 justify-content-center">

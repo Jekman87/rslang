@@ -20,7 +20,7 @@ const difficultWordsConfig = {
 };
 const deletedWordsConfig = {
   name: 'deleted',
-  wordColor: 'text-secondary',
+  wordColor: 'text-dark',
   systemBottonColor: 'btn-outline-success',
   systemBottonIcon: 'fas fa-trash-restore',
 };
@@ -112,13 +112,13 @@ export default class Vocabulary extends Component {
         <div class="progress-bar progress-bar-striped ${dataObj.progressColor}" role="progressbar" style="width: ${dataObj.progressWidth}"
           aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
-      <small class="progress-info text-nowrap text-muted ml-2 ml-sm-0 ml-lg-2">${dataObj.progressText}</small>
+      <small class="progress-info ml-2 ml-sm-0 ml-lg-2">${dataObj.progressText}</small>
     </div>
 
     <ol class="d-lg-flex col-12 col-sm-7 col-md-5 mb-1 ${config.name === 'deleted' ? 'col-lg-5 col-xl-4' : 'col-lg-8 col-xl-7'}">
-      <li class="breadcrumb-item align-items-lg-center"><small class="text-muted">Последняя тренировка: ${dataObj.lastTraining}</small></li>
-      <li class="breadcrumb-item align-items-lg-center"><small class="text-muted">Повторов:${dataObj.counter}</small></li>
-      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small class="text-muted">Следующая тренировка:${dataObj.nextTraining}</small></li>
+      <li class="breadcrumb-item align-items-lg-center"><small>Последняя тренировка: ${dataObj.lastTraining}</small></li>
+      <li class="breadcrumb-item align-items-lg-center"><small>Повторов:${dataObj.counter}</small></li>
+      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small>Следующая тренировка:${dataObj.nextTraining}</small></li>
     </ol>
   </div>
 
@@ -209,7 +209,6 @@ export default class Vocabulary extends Component {
   init() {
     super.init();
     this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig);
-    // console.log(this.words);
   }
 
   onClick(event) {
