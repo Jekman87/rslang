@@ -41,7 +41,7 @@ export default class MainPage extends Component {
       wordsToday: this.dataForApp.shortTermStats ? this.dataForApp.shortTermStats.wordsToday : 0,
       wordsPerDay: this.dataForApp.settings ? this.dataForApp.settings.wordsPerDay : 0,
       cardsToday: this.dataForApp.shortTermStats ? this.dataForApp.shortTermStats.cardsToday : 0,
-      cardsPerDay: this.dataForApp.shortTermStats ? this.dataForApp.shortTermStatss.cardsToday : 0,
+      cardsPerDay: this.dataForApp.shortTermStats ? this.dataForApp.settings.optional.cardsPerDay : 0,
       learnedWords: this.dataForApp.statistics ? this.dataForApp.statistics.learnedWords : 0,
       allWords: 3600,
       cardsLearned: this.dataForApp.longTermStats ? this.dataForApp.longTermStats.cardsLearned : 0,
