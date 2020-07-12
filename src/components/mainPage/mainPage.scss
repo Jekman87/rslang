@@ -140,9 +140,6 @@
     .logo {
       width: 70px;
     }
-    .list-group-item {
-      flex-direction: row;
-    }
     .stats-card-body {
       padding: 1.25rem;
     }
@@ -159,6 +156,11 @@
     }
     .progress-container {
       top: 42px;
+    }
+  }
+  @media (min-width: 992px) {
+    .list-group-item {
+      flex-direction: row;
     }
   }
 }
