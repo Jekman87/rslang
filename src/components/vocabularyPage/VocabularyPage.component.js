@@ -38,6 +38,7 @@ export default class Vocabulary extends Component {
     this.pages = options.pages;
     this.options = options;
     this.settings = this.options.dataForApp.settings.optional;
+    this.words = this.options.dataForApp.userWords;
   }
 
   selectAndDecodeDataFromBackend(criterionOfSelection, dataArr) {
@@ -203,17 +204,7 @@ export default class Vocabulary extends Component {
 
   init() {
     super.init();
-    // otladka
-    const start = Date.now();
-    this.options.api.getAllUserAggregatedWords(null, 3600, '{"userWord":{"$ne":null}}').then((e) => {
-      this.words = e[0].paginatedResults;
-      const end = Date.now();
-      console.log('words', end - start, this.words);
-      // const test1 = (this.words).map((el) => this.decodeDataFromBackend(el));
-      this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig, false);
-    }).catch((e) => {
-      console.log('catch', e);
-    });
+    this.createListOfWords('active-words', this.selectAndDecodeDataFromBackend('active', this.words), activeWordsConfig, false);
   }
 
   onClick(event) {

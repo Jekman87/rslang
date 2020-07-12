@@ -5,6 +5,7 @@ import CardContainer from './components/cardContainer/index';
 import Score from './components/score/index';
 import CardsDesk from './components/cardsDesk/index';
 import Results from './components/results/index';
+import Rules from './components/rules/index';
 
 class Speakit {
   constructor(elem, options) {
@@ -14,7 +15,7 @@ class Speakit {
 
   render() {
     this.speakitGame = new SpeakIt(this.app, {
-      components: [Intro, Header, CardContainer, Score, CardsDesk, Results],
+      components: [Intro, Header, CardContainer, Score, CardsDesk, Results, Rules],
       options: this.options,
     });
     this.speakitGame.render();

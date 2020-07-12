@@ -1,4 +1,4 @@
-import './scss/sprint.scss';
+import './scss/riddle.scss';
 
 import Component from '../../core/Component';
 import createGameField from './riddle.template';
@@ -6,10 +6,11 @@ import {
   hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
   showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput, passHandler,
-  showStatistic, recountStatistic, removeStatistic,
+  compareAnswers, moveAnswerIntoInput, passHandler, swithchOffVoice,
+  showStatistic, recountStatistic, removeStatistic, swithchOnVoice,
   showCorrectPartOfStatistic, showWrongPartOfStatistic,
-  backToStatisticScreen, backToGameFromStatistic,
+  backToStatisticScreen, backToGameFromStatistic, state,
+  prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
 } from './riddle.functions';
 
 export default class RiddleGame extends Component {
@@ -22,11 +23,16 @@ export default class RiddleGame extends Component {
       ...options,
     });
     this.options = options;
+    this.statistic = this.options.dataForApp.statistics;
+    this.mainApi = this.options.api;
   }
 
   init() {
     super.init();
-    restartStatistic();
+    this.unpackStatistics();
+    rewriteLevelStatistic();
+    checkRound();
+    recountStatistic();
   }
 
   onClick(event) {
@@ -53,11 +59,18 @@ export default class RiddleGame extends Component {
       case 'show-options':
         showOrHideOptionsPrompt();
         break;
+      case 'riddle-mute':
+        swithchOffVoice();
+        break;
+      case 'riddle-unmute':
+        swithchOnVoice();
+        break;
       case 'show-translate':
         showOrHideTranslatePrompt();
         break;
       case 'check':
         compareAnswers();
+        this.prepareStatisticForSend(prepareLongTimeStatistic());
         break;
       case 'pass':
         passHandler();
@@ -81,6 +94,8 @@ export default class RiddleGame extends Component {
       case 'remove-statistic':
         removeStatistic();
         recountStatistic();
+        this.statistic.optional.RiddleLong = JSON.stringify([]);
+        this.statistic.optional.RiddleShort = JSON.stringify([]);
         break;
       case 'return':
         backToGameFromStatistic();
@@ -98,9 +113,40 @@ export default class RiddleGame extends Component {
     }
   }
 
+  prepareStatisticForSend(roundResult) {
+    let longTimeStatisic = [];
+    const shortTimeStatisic = [state.lvlStatistic, state.round];
+
+    if (this.statistic.optional.RiddleLong) {
+      longTimeStatisic = JSON.parse(this.statistic.optional.RiddleLong);
+    }
+
+    if (longTimeStatisic.length < 15) {
+      longTimeStatisic.push(roundResult);
+    } else {
+      longTimeStatisic.shift();
+      longTimeStatisic.push(roundResult);
+    }
+
+    this.statistic.optional.RiddleLong = JSON.stringify(longTimeStatisic);
+    this.statistic.optional.RiddleShort = JSON.stringify(shortTimeStatisic);
+    console.log(this.statistic);
+    this.mainApi.updateStatistics(this.statistic);
+  }
+
+  unpackStatistics() {
+    if (this.statistic.optional.RiddleShort) {
+      const shortTimeStatisic = JSON.parse(this.statistic.optional.RiddleShort);
+      [state.lvlStatistic, state.round] = shortTimeStatisic;
+    } else {
+      restartStatistic();
+    }
+  }
+
   onSubmit(event) {
     event.preventDefault();
     compareAnswers();
+    this.prepareStatisticForSend(prepareLongTimeStatistic());
   }
 
   toHTML() {
