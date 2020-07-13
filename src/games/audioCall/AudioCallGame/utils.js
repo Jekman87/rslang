@@ -49,9 +49,9 @@ function insertStats(word, translate, audio) {
   `;
 }
 
-function insertLongStats(data, result) {
+function insertLongStats(date, result) {
   const [correct, wrong] = result.split('-');
-  const Data = new Date(data);
+  const Data = new Date(date);
   const Year = Data.getFullYear();
   const Month = Data.getMonth() + 1 < 10 ? `0${Data.getMonth() + 1}` : Data.getMonth();
   const Day = Data.getDate() < 10 ? `0${Data.getDate()}` : Data.getDate();
