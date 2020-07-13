@@ -1,0 +1,10 @@
+.speakit {
+  .alert {
+    position: absolute;
+    top: 10px;
+    width: 310px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+  }
+}

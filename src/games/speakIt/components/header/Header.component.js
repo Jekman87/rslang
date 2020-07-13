@@ -5,6 +5,7 @@ import SpeechRecognition from '../../utils/SpeechRecognition.api';
 import {
   MAX_WORDS_PAGES, MAX_WORDS_LEVEL, PER_GAME_WORDS, MAX_HISTORY_LIST_COUNT,
 } from '../../constants/constants';
+import { delay } from '../../../../core/utils';
 
 export default class Header extends Component {
   static className = 'header';
@@ -183,10 +184,18 @@ async function changeGameRoundWords() {
     this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
   } catch (e) {
     if (e.message === '401') {
+      this.emit('alert:open', {
+        type: 'danger',
+        text: 'Ошибка авторизации.',
+      });
+      await delay(1500);
       this.mainObserver.emit('mainLogout');
-    } else {
-      console.error(`${e.message}: something went wrong`);
+      return;
     }
+    this.emit('alert:open', {
+      type: 'danger',
+      text: 'Ошибка связи с сервером, попробуйте позже.',
+    });
   }
 }
 
@@ -229,10 +238,18 @@ async function saveGameHistory() {
     await this.mainApi.updateStatistics(this.mainStatistic);
   } catch (e) {
     if (e.message === '401') {
+      this.emit('alert:open', {
+        type: 'danger',
+        text: 'Ошибка авторизации.',
+      });
+      await delay(1500);
       this.mainObserver.emit('mainLogout');
-    } else {
-      console.error(`${e.message}: something went wrong`);
+      return;
     }
+    this.emit('alert:open', {
+      type: 'danger',
+      text: 'Ошибка связи с сервером, статистика не записалась, попробуйте позже.',
+    });
   }
 }
 

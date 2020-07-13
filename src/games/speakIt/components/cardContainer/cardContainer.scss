@@ -8,6 +8,8 @@
       &__img{
         object-fit: cover;
         height: 223px;
+        min-height: 223px;
+        min-width: 318px;
       }
     }
     .card-text{

@@ -74,16 +74,23 @@ function checkSpeechWord(word) {
   return this.dataForApp.state.gameWords.find((el) => el.word.toLowerCase() === word.toLowerCase());
 }
 
-function updateWordCard(data) {
+async function updateWordCard(data) {
   const {
     image, wordTranslate, word,
   } = data;
-  this.$wordCardImg.attr(
-    'src',
-    `${ASSETS_URL}/${image.replace('files/', '')}`,
-  );
-  this.$wordCardTranslation.removeClass('d-none').text(wordTranslate);
-  this.$wordCardInput.text(word);
+  try {
+    this.$wordCardImg.attr(
+      'src',
+      `${ASSETS_URL}/${image.replace('files/', '')}`,
+    );
+    this.$wordCardTranslation.removeClass('d-none').text(wordTranslate);
+    this.$wordCardInput.text(word);
+  } catch {
+    this.emit('alert:open', {
+      type: 'danger',
+      text: 'Ошибка связи с сервером, попробуйте позже.',
+    });
+  }
 }
 
 function changeStateWordsArrays(word) {

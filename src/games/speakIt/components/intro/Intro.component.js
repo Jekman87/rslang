@@ -34,20 +34,31 @@ export default class Intro extends Component {
   async onClick(event) {
     const clickedElement = $$(event.target);
     if (clickedElement.data.action === 'start') {
+      const startButtonHtml = clickedElement.html();
       clickedElement.html(createButtonSpinnerHTML().trim()).attr('disabled', true);
       await delay(1500);
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       try {
         this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
-        this.$root.addClass('none');
-        this.emit('intro:start', '');
       } catch (e) {
         if (e.message === '401') {
+          this.emit('alert:open', {
+            type: 'danger',
+            text: 'Ошибка авторизации.',
+          });
+          await delay(1500);
           this.mainObserver.emit('mainLogout');
-        } else {
-          console.error(`${e.message}: something went wrong`);
+          return;
         }
+        clickedElement.html(startButtonHtml).removeAttr('disabled');
+        this.emit('alert:open', {
+          type: 'danger',
+          text: 'Ошибка связи с сервером, попробуйте позже.',
+        });
       }
+      this.$root.addClass('none');
+      this.emit('intro:start', '');
+      this.emit('alert:close', '');
     }
     if (clickedElement.data.action === 'exit') {
       this.dataForApp.destroy();

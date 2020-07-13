@@ -52,6 +52,7 @@ export default class CardsDesk extends Component {
 
     this.subscribe('header:changeGameRound', () => {
       const cardsData = prepareCardsDataHTML.apply(this);
+      preloadCradsMedia.call(this);
       const cardsRow = this.$root.find('.row');
       cardsRow.html(cardsData);
     });
@@ -76,12 +77,14 @@ export default class CardsDesk extends Component {
     this.subscribe('header:finishRound', () => {
       unSelectCards.call(this);
       prepareCardsDataHTML.call(this);
+      preloadCradsMedia.call(this);
     });
     this.subscribe('score:finishGame', async () => {
       await delay(1500);
       playAudio.apply(this, ['success.mp3', `${LOCAL_ASSETS_URL}/voices/`]);
       unSelectCards.call(this);
       prepareCardsDataHTML.call(this);
+      preloadCradsMedia.call(this);
       this.emit('cardsDesk:finishGame', '');
     });
     this.subscribe('header:rules', () => {
@@ -140,6 +143,20 @@ function prepareCardsDataHTML() {
   return cards.join('');
 }
 
+function preloadCradsMedia() {
+  const images = this.dataForApp.state.words.map((word, i) => {
+    const image = `
+    <img src="${ASSETS_URL}/${word.image.replace('files/', '')}" width="1" height="1" alt="Image ${i}" />
+    <audio src="${ASSETS_URL}/${word.audio.replace('files/', '')}"></audio>
+    `;
+    return image;
+  });
+  const $preload = $$.create('div', 'preload');
+  $preload.addClass('d-none');
+  $preload.html(images.join(''));
+  this.$root.append($preload);
+}
+
 function playAudio(file, url) {
   if (file) {
     this.$audio.attr(
@@ -155,6 +172,7 @@ function toCardHTML() {
   const cardsData = prepareCardsDataHTML.apply(this);
   const cardsRow = this.$root.find('.row');
   cardsRow.html(cardsData);
+  preloadCradsMedia.call(this);
 }
 
 function unSelectCards() {

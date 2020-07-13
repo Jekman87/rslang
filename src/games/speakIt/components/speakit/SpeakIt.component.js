@@ -1,6 +1,7 @@
 import $$ from '../../../../core/domManipulation';
 import Observer from '../../../../core/Observer';
 import { delay } from '../../../../core/utils';
+
 export default class SpeakIt {
   constructor(selector, options) {
     this.$el = $$(selector);
