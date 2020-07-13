@@ -6,7 +6,18 @@ body {
   width: 100vw;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-y: auto;
   background-attachment: fixed;
+  &::-webkit-scrollbar {
+    width: 0.7rem;
+    background: transparent;
+    // background: #2c3e50;
+    border-radius: 0 0 5px 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccd4d8d9;
+    border-radius: 10px;
+  }
 }
 
 .sign-in-text {
