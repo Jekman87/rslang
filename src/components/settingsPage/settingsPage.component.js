@@ -88,7 +88,7 @@ export default class Settings extends Component {
     if (this.el.$cardTranslationAfter.$el.checked === true) {
       this.el.$cardTranslationAfter.$el.disabled = false;
     }
-    this.el.$cardExplTranslation.$el.checked = this.optional.cardExplTranslation === true;
+    this.el.$cardExplTranslation.$el.checked = this.optional.cardExplanationTranslation === true;
     if (this.el.$cardExplTranslation.$el.checked === true) {
       this.el.$cardExplTranslation.$el.disabled = false;
     }
@@ -123,7 +123,7 @@ export default class Settings extends Component {
     this.optional.cardTranscription = this.el.$cardTranscription.$el.checked === true;
     this.optional.cardImage = this.el.$cardImage.$el.checked === true;
     this.optional.cardTranslationAfter = this.el.$cardTranslationAfter.$el.checked === true;
-    this.optional.cardExplTranslation = this.el.$cardExplTranslation.$el.checked === true;
+    this.optional.cardExplanationTranslation = this.el.$cardExplTranslation.$el.checked === true;
     this.optional.cardExampleTranslation = this.el.$cardExampleTranslation.$el.checked === true;
     this.optional.autoSound = this.el.$cardAutoSound.$el.checked === true;
     this.optional.answerButton = this.el.$cardAnswerButton.$el.checked === true;
@@ -184,7 +184,7 @@ export default class Settings extends Component {
     this.optional.cardTranscription = BASE_SETTINGS.optional.cardTranscription;
     this.optional.cardImage = BASE_SETTINGS.optional.cardImage;
     this.optional.cardTranslationAfter = BASE_SETTINGS.optional.cardTranslationAfterSuccess;
-    this.optional.cardExplTranslation = BASE_SETTINGS.optional.cardExplanationTranslation;
+    this.optional.cardExplanationTranslation = BASE_SETTINGS.optional.cardExplanationTranslation;
     this.optional.cardExampleTranslation = BASE_SETTINGS.optional.cardExampleTranslation;
     this.optional.autoSound = BASE_SETTINGS.optional.autoSound;
     this.optional.answerButton = BASE_SETTINGS.optional.answerButton;
@@ -281,6 +281,7 @@ export default class Settings extends Component {
     this.getSettingsElements();
     this.setCheckboxFields();
     this.watchDependenceOfThreeMainCardsField();
+    console.log('this.settings', this.settings);
   }
 
   destroy() {
@@ -299,6 +300,7 @@ export default class Settings extends Component {
           setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
           setTimeout(() => this.$root.find('#settingsPageApplyButton').text(buttonsText.applyButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
+          console.log('this.settings', this.settings);
         })
         .catch(() => {
           this.isClickAble = false;
@@ -324,6 +326,7 @@ export default class Settings extends Component {
           setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
           setTimeout(() => this.$root.find('#settingsPageResetButton').text(buttonsText.standardSettingsButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
+          console.log('this.settings', this.settings);
         })
         .catch(() => {
           this.isClickAble = false;
