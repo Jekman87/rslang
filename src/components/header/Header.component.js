@@ -18,7 +18,7 @@ export default class Header extends Component {
 
   init() {
     super.init();
-    const header = $$('header');
+    const header = $$('nav.navbar');
 
     this.subscribe('selectPage', (pageName) => {
       header.removeClass('d-none');

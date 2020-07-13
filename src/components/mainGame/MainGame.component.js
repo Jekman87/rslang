@@ -126,24 +126,12 @@ export default class MainGame extends Component {
 
     switch (buttonName) {
       case 'prev-btn':
+        // пофиксить перелистывание назад перед когда идет ожидание статистики
         this.changeCard(-1);
         break;
 
       case 'next-btn':
-        if (this.state.currentCardNum === this.state.studiedСardNum) {
-          this.checkWord();
-        } else {
-          const switchWord = this.userCards[this.state.currentCardNum - 1];
-
-          if (this.state.currentWord === null
-            || this.state.currentWord._id === switchWord._id) {
-            this.setDifficulty(WORD_PARAM.good);
-            this.changeCard();
-            this.createUserStats();
-          } else {
-            this.changeCard();
-          }
-        }
+        this.nextBtnHandler();
 
         break;
 
@@ -187,7 +175,6 @@ export default class MainGame extends Component {
       case 'delete-btn':
         // перенос слова в удаленные
         // убираем из карточек
-        // айди слова - сохраняем персональную? статистику - в удаленные
         // переход на след карту
         this.setDifficulty(WORD_PARAM.deleted);
         this.changeCard();
@@ -233,20 +220,20 @@ export default class MainGame extends Component {
     const keyEnter = 'Enter';
 
     if (event.key === keyEnter) {
-      if (this.state.currentCardNum === this.state.studiedСardNum) {
-        this.checkWord();
-      } else {
-        const switchWord = this.userCards[this.state.currentCardNum - 1];
+      this.nextBtnHandler();
+    }
+  }
 
-        if (this.state.currentWord === null
-          || this.state.currentWord._id === switchWord._id) {
-          this.setDifficulty(WORD_PARAM.good);
-          this.changeCard();
-          this.createUserStats();
-        } else {
-          this.changeCard();
-        }
-      }
+  nextBtnHandler() {
+    if (this.state.currentCardNum === this.state.studiedСardNum) {
+      this.checkWord();
+    } else if (this.state.currentWord
+      && this.userCards[this.state.currentCardNum]._id === this.state.currentWord._id) {
+      this.changeCard();
+    } else {
+      this.setDifficulty(WORD_PARAM.good);
+      this.changeCard();
+      this.createUserStats();
     }
   }
 
@@ -300,22 +287,24 @@ export default class MainGame extends Component {
 
       // через кнопки сложности переход на след слово
     } else {
-      // отметка не ок в статистике
+      // отметка не ок в статистике слова
+
       // если не соответствует - показываем ошибки
       // алгоритм показа ошибок
+
       // показываем ответ как по кнопке "показать ответ"?
       // или просто на время показываем слово в инпуте?
-      // const switchWord = this.userCards[this.state.currentCardNum - 1];
 
-      // if (this.state.currentWord === null
-      //   || this.state.currentWord._id === switchWord._id) {
-      //   this.setDifficulty(WORD_PARAM.again, false);
-      // }
-
-      console.log('не верно');
+      this.setDifficulty(WORD_PARAM.again, false);
+      this.showWordErrors(inputText);
     }
 
     this.state.isChecking = false;
+  }
+
+  showWordErrors(word) {
+    console.log('ошибочка', word);
+    // подготовить блок со словом где каждая буква разбира на спаны
   }
 
   async speakText() {
@@ -405,6 +394,14 @@ export default class MainGame extends Component {
 
   setDifficulty(wordDifficulty, isSuccess = true) {
     const currentWord = this.userCards[this.state.currentCardNum];
+
+    console.log('test do', this.state.currentWord, currentWord);
+
+    if (this.state.currentWord && this.state.currentWord._id === currentWord._id) {
+      return;
+    }
+
+    console.log('test posle');
 
     this.state.isNewWord = true;
 
@@ -550,8 +547,6 @@ export default class MainGame extends Component {
       this.options.api.updateUserWord(currentWord._id, currentWord.userWord);
     }
 
-    // this.createUserStats(isSuccess);
-
     console.log('setDifficulty this.dataForApp', this.dataForApp);
   }
 
@@ -659,10 +654,11 @@ export default class MainGame extends Component {
     this.dataForApp.longTermStats = this.longTermStats;
     this.dataForApp.state = this.state;
 
-    this.statistics.optional.MainGameShort = JSON.stringify(this.shortTermStats);
-    this.statistics.optional.MainGameLong = JSON.stringify(this.longTermStats);
+    this.settingsOptional.MainGameShort = JSON.stringify(this.shortTermStats);
+    this.settingsOptional.MainGameLong = JSON.stringify(this.longTermStats);
 
-    this.options.api.updateStatistics(this.statistics);
+    this.options.api.updateSettings(this.dataForApp.settings);
+    console.log('createUserStats', this.shortTermStats, this.longTermStats);
   }
 
   destroy() {
