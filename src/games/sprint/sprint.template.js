@@ -27,7 +27,7 @@ export default function createGameField() {
     <div class="sprint-app">
     <div class="sprint-main-container">
       <header class="sprint-header">
-        <div class="timer">Время</div>
+        <div class="sprint-timer">Время</div>
         <button class="btn btn-outline-danger button" data-click="home">
           <i class="fa fa-times sprint-icon-parameters" aria-hidden="true" data-click="home"></i>
         </button>
