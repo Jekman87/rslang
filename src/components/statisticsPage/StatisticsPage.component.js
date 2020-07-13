@@ -45,24 +45,24 @@ export default class Statistics extends Component {
     this.todayStat = [...feilds];
     if (!this.mainAppShortStat) return;
 
-    this.todayStat[fieldsMap.wordsToday].data = this.mainAppShortStat.wordsToday;
-    this.todayStat[fieldsMap.cardsToday].data = this.mainAppShortStat.cardsToday;
+    this.todayStat[fieldsMap.wordsToday].data = this.mainAppShortStat.newWordsCount;
+    this.todayStat[fieldsMap.cardsToday].data = this.mainAppShortStat.cardsCount;
     this.todayStat[fieldsMap.cardsToday].progressValue = this.calcProgress();
-    this.todayStat[fieldsMap.cardsLeftToday].data = this.mainAppShortStat.cardsLeftToday;
+    this.todayStat[fieldsMap.cardsLeftToday].data = this.mainAppShortStat.cardsLeft;
     this.todayStat[fieldsMap.cardsLeftToday].progressValue = 100 - this.calcProgress();
     this.todayStat[fieldsMap.answerRatio].data = this.calcRatio();
-    this.todayStat[fieldsMap.longestSeries].data = this.mainAppShortStat.longestSeries;
+    this.todayStat[fieldsMap.longestSeries].data = this.mainAppShortStat.bestSeries;
   }
 
   calcRatio() {
-    const correct = this.mainAppShortStat.correctAnswersToday;
-    const incorrect = this.mainAppShortStat.errorAnswersToday;
+    const correct = this.mainAppShortStat.correctAnswers;
+    const incorrect = this.mainAppShortStat.errorAnswers;
     return `${Math.round((correct / (correct + incorrect)) * 100)}%`;
   }
 
   calcProgress() {
-    const learned = this.mainAppShortStat.cardsToday;
-    const left = this.mainAppShortStat.cardsLeftToday;
+    const learned = this.mainAppShortStat.cardsCount;
+    const left = this.mainAppShortStat.cardsLeft;
     return Math.round((learned / (learned + left)) * 100);
   }
 
