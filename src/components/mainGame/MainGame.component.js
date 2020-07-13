@@ -644,10 +644,10 @@ export default class MainGame extends Component {
     this.dataForApp.longTermStats = this.longTermStats;
     this.dataForApp.state = this.state;
 
-    this.statistics.optional.MainGameShort = JSON.stringify(this.shortTermStats);
-    this.statistics.optional.MainGameLong = JSON.stringify(this.longTermStats);
+    this.settingsOptional.MainGameShort = JSON.stringify(this.shortTermStats);
+    this.settingsOptional.MainGameLong = JSON.stringify(this.longTermStats);
 
-    this.options.api.updateStatistics(this.statistics);
+    this.options.api.updateSettings(this.dataForApp.settings);
     console.log('createUserStats', this.shortTermStats, this.longTermStats);
   }
 
