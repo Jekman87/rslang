@@ -14,7 +14,7 @@ function createGameCard(data) {
         <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-game="${dataAttr}">Играть <i class="fas fa-gamepad"></i></a>
         </div>
       </div>
-    </div>        
+    </div>
     <div class="training-card-content">
       <h4>${title}</h4>
       <p>${preview}</p>
@@ -34,13 +34,13 @@ export default function createMainPageHTML(data) {
     cardsPerDay,
     learnedWords,
     allWords = 3600,
-    cardsLearned,
+    learnedCards,
   } = data;
   return `
     <div class="container mt-3">
       <div class="jumbotron pt-4">
         <div class="logo-head bg-primary border border-secondary mb-4 mx-auto rounded text-center text-light">
-          <h1 class="display-4 mb-0 mt-4">RS Lang 
+          <h1 class="display-4 mb-0 mt-4">RS Lang
           <img class="logo img-fluid" src="/assets/main-page/logo.png" alt="RS Lang"></h1>
           <p class="lead">Изучай английский язык - время не ждет!</p>
         </div>
@@ -58,7 +58,7 @@ export default function createMainPageHTML(data) {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Слов на сегодня
                         <div class="progress-container rounded">
-                          <div class="progress-tiny bg-info" 
+                          <div class="progress-tiny bg-info"
                           style="width:${Math.ceil((wordsToday / wordsPerDay) * 100)}%"></div>
                         </div>
                       <span class="stats badge badge-info badge-pill">${wordsToday} из ${wordsPerDay}</span>
@@ -66,7 +66,7 @@ export default function createMainPageHTML(data) {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       Карточек на сегодня
                       <div class="progress-container rounded">
-                        <div class="progress-tiny bg-info" 
+                        <div class="progress-tiny bg-info"
                         style="width:${Math.ceil((cardsToday / cardsPerDay) * 100)}%"></div>
                       </div>
                       <span class="stats badge badge-info badge-pill">${cardsToday} из ${cardsPerDay}</span>
@@ -83,14 +83,14 @@ export default function createMainPageHTML(data) {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       Всего выучено слов
                       <div class="progress-container rounded">
-                        <div class="progress-tiny bg-info" 
+                        <div class="progress-tiny bg-info"
                         style="width:${Math.ceil((learnedWords / allWords) * 100)}%"></div>
                       </div>
                       <span class="stats badge badge-info badge-pill">${learnedWords} из ${allWords}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                        Всего карточек пройдено
-                      <span class="stats badge badge-info badge-pill">${cardsLearned}</span>
+                      <span class="stats badge badge-info badge-pill">${learnedCards}</span>
                     </li>
                   </ul>
                 </div>
@@ -100,7 +100,7 @@ export default function createMainPageHTML(data) {
           <!--<div class="progress bg-secondary my-3">
             <div class="progress-bar bg-info" role="progressbar" style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
           </div> -->
-          <a href="#" class="btn btn-light" 
+          <a href="#" class="btn btn-light"
           data-name="${MAIN_MENU_TITLES[4].data}">Подробнее...</a>
         </div>
         <hr class="my-4">
@@ -112,11 +112,11 @@ export default function createMainPageHTML(data) {
                     background-image: url('/assets/main-page/training.jpg');">
                 <div class="training-card-overlay">
                   <div class="overlay-content">
-                  <a class="btn btn-primary btn-lg text-center" href="#" role="button" 
+                  <a class="btn btn-primary btn-lg text-center" href="#" role="button"
                   data-name="${MAIN_MENU_TITLES[1].data}">Тренировать <i class="fas fa-graduation-cap"></i></a>
                   </div>
                 </div>
-              </div>        
+              </div>
               <div class="training-card-content">
                 <p>Этот тренажёр создан специально для тех, кто хочет пополнить свой словарный запас английского языка в удобной игровой форме.</p>
               </div>
