@@ -11,7 +11,9 @@ function createGameCard(data) {
     <div class="training-card-img" style="background-image:url('${img}');">
       <div class="training-card-overlay">
         <div class="overlay-content">
-        <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-game="${dataAttr}">Играть <i class="fas fa-gamepad"></i></a>
+        <a class="btn btn-primary btn-lg text-center" href="#" role="button" data-game="${dataAttr}">
+        Играть <i class="fas fa-gamepad"></i>
+        </a>
         </div>
       </div>
     </div>
@@ -33,7 +35,7 @@ export default function createMainPageHTML(data) {
     cardsToday,
     cardsPerDay,
     learnedWords,
-    allWords = 3600,
+    allWords,
     learnedCards,
   } = data;
   return `
@@ -45,7 +47,9 @@ export default function createMainPageHTML(data) {
           <p class="lead">Изучай английский язык - время не ждет!</p>
         </div>
         <div class="greeting mb-3">
-          <h5 class="greeting-text">Добро пожаловать, <i class="fas fa-user-graduate"></i> ${username}!</h5>
+          <h5 class="greeting-text">Добро пожаловать, <i class="fas fa-user-graduate"></i> 
+            <span class="text-warning">${username}</span>!
+          </h5>
         </div>
         <div class="statistics bg-white p-2 rounded">
           <h5 class="region-title"><i class="fas fa-user-chart"></i> Статистика</h5>

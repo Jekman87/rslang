@@ -44,7 +44,6 @@ export default class MainPage extends Component {
     let cardsToday = 0;
     let cardsPerDay = 0;
 
-
     if (this.dataForApp.longTermStats) {
       const lastIndex = this.dataForApp.longTermStats.length - 1;
       learnedWords = this.dataForApp.longTermStats[lastIndex].learnedWords;
@@ -56,6 +55,10 @@ export default class MainPage extends Component {
       cardsToday = this.dataForApp.shortTermStats.cardsCount;
       cardsPerDay = this.dataForApp.settings.optional.cardsPerDay;
     }
+
+    // cardsPerDay = this.dataForApp.userCards.length > cardsPerDay
+    //   ? cardsPerDay
+    //   : this.dataForApp.userCards.length;
 
     const data = {
       wordsPerDay: this.dataForApp.settings ? this.dataForApp.settings.wordsPerDay : 0,
