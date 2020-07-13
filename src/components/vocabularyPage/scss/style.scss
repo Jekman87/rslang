@@ -3,7 +3,7 @@
         background-color: #ffffff;
         padding: 2rem 0;
         @media (min-width: 576px) {
-            padding: 4rem 2rem;
+            padding: 4rem 2rem 2rem;
         }
     }
     .display-4 {
@@ -35,7 +35,6 @@
         color: #ffffff !important;
         background-color: #7b8a8b;
     }
-
     .nav-link {
         padding: 0;
 
@@ -50,7 +49,9 @@
 
     .tab-content {
         padding-top: 4rem;
-        height: 60vh;
+        // min-height: 60vh;
+        height: 58vh;
+        // max-height: 100%;
         overflow-y: auto;
         &::-webkit-scrollbar {
             width: 0.5rem;
@@ -63,7 +64,8 @@
         }
     }
     .tab-pane {
-        width: 98%;
+        // width: 98%;
+        width: 100%;
         margin: 0 auto;
     }
     // карточка
