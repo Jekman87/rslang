@@ -3,7 +3,7 @@ function setRoundWord(roundWordsArr) {
   const wordsCopy = roundWordsArr.concat();
   const [roundWord] = wordsCopy.splice(Math.floor(Math.random() * wordsCopy.length), 1);
 
-  arrCopy.find((word) => word.id === roundWord.id).isAnswer = true;
+  arrCopy.find((word) => word.word === roundWord.word).isAnswer = true;
 
   return roundWord;
 }
@@ -49,9 +49,9 @@ function insertStats(word, translate, audio) {
   `;
 }
 
-function insertLongStats(data, result) {
+function insertLongStats(date, result) {
   const [correct, wrong] = result.split('-');
-  const Data = new Date(data);
+  const Data = new Date(date);
   const Year = Data.getFullYear();
   const Month = Data.getMonth() + 1 < 10 ? `0${Data.getMonth() + 1}` : Data.getMonth();
   const Day = Data.getDate() < 10 ? `0${Data.getDate()}` : Data.getDate();
@@ -75,7 +75,14 @@ function insertLongStats(data, result) {
 }
 
 function getTip() {
-  alert('Здесь будет подсказка');
+  const bulb = document.querySelector('.fa-lightbulb');
+  let words = [...document.querySelectorAll('.btn-word')];
+
+  words = words.filter((item) => item.dataset.answer === 'false');
+  words[1].classList.add('text-muted', 'isTipped');
+  words[3].classList.add('text-muted', 'isTipped');
+
+  bulb.classList.add('text-muted');
 }
 
 export {

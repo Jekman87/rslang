@@ -92,6 +92,10 @@ const plugins = () => {
         to: `${PATHS.assets}`,
       },
       {
+        from: `${PATHS.src}/games/savanna/assets`,
+        to: `${PATHS.assets}savanna`,
+      },
+      {
         from: `${PATHS.src}/assets/voices`,
         to: `${PATHS.assets}voices`,
       },
@@ -145,7 +149,7 @@ module.exports = {
       },
       {
         test: /\.(ttf|woff|woff2|eot)$/,
-        use: ['file-loader'],
+        use: [`file-loader?name=${PATHS.assets}fonts/[name].[ext]`],
       },
       {
         test: /\.js$/,

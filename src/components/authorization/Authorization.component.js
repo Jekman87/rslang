@@ -31,28 +31,41 @@ export default class Authorization extends Component {
     }
   }
 
+  checkPasswordValidity(password) {
+    const pass = password.trim();
+    const SYMBOLS_REGEX = /[-+_@$!%*?&#.,;:[\]{}]/;
+
+    if (!SYMBOLS_REGEX.test(pass)) {
+      return false;
+    }
+
+    return true;
+  }
+
   async onSubmitRegisterForm(event) {
     event.preventDefault();
 
-    // взять из поля юзернейм
-    const userName = 'Julia\'s cat';
+    const userName = document.getElementById('userName').value;
     const userEmail = document.getElementById('registerName').value;
-    const password = document.getElementById('registerPassword').value;
+    const password = document.getElementById('registerPassword').value.trim();
 
-    try {
-      const userData = {
-        name: `${userName}`,
-        email: `${userEmail}`,
-        password,
-      };
+    const isPasswordValid = this.checkPasswordValidity(password);
+    if (isPasswordValid) {
+      try {
+        const userData = {
+          name: `${userName}`,
+          email: `${userEmail}`,
+          password,
+        };
 
-      await this.api.createUser(userData);
-      await this.api.loginUser(userData);
+        await this.api.createUser(userData);
+        await this.api.loginUser(userData);
 
-      this.emit('selectPage', 'MainPage');
-    } catch {
-      document.querySelector('.alert-error-register').classList.remove('d-none');
-    }
+        this.emit('selectPage', 'MainPage');
+      } catch {
+        document.querySelector('.alert-error-register').classList.remove('d-none');
+      }
+    } else document.querySelector('.alert-error-register').classList.remove('d-none');
   }
 
   async onSubmitLoginForm(event) {
@@ -82,6 +95,13 @@ export default class Authorization extends Component {
     document.querySelector('.register-form').classList.toggle('d-none');
   }
 
+  onClickRegisterEye() {
+    const inputPassword = document.getElementById('registerPassword');
+    if (inputPassword.type === 'password') {
+      inputPassword.type = 'text';
+    } else inputPassword.type = 'password';
+  }
+
   init() {
     super.init();
     this.registerForm = document.querySelector('.register-form');
@@ -94,6 +114,9 @@ export default class Authorization extends Component {
     this.changeFormLinks.forEach((link) => {
       link.addEventListener('click', this.onClickChangeFormLink);
     });
+
+    this.registerEye = document.getElementById('register-eye');
+    this.registerEye.addEventListener('click', this.onClickRegisterEye);
   }
 
   toHTML() {

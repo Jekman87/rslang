@@ -29,6 +29,24 @@ export default class Header extends Component {
     this.subscribe('hideHeader', () => {
       header.addClass('d-none');
     });
+
+    this.subscribe('hideMenu', () => {
+      const mobileMenu = this.$root.find('#navbarColor01');
+
+      if (mobileMenu.hasClass('show')) {
+        const navbarToggler = this.$root.find('.navbar-toggler');
+        navbarToggler.$el.click();
+      }
+    });
+
+    this.subscribe('mainAppSpinner', (isShow) => {
+      const spinner = this.$root.find('.main-app-sp');
+      if (isShow) {
+        spinner.removeClass('d-none');
+      } else {
+        spinner.addClass('d-none');
+      }
+    });
   }
 
   onClick(event) {
@@ -41,11 +59,13 @@ export default class Header extends Component {
 
       if (isMainMenuEl && pageName !== 'games') {
         this.emit('selectPage', pageName);
+        this.emit('hideMenu');
       } else {
         const isGameMenuEl = GAME_MENU_TITLES.some((title) => title.data === pageName);
 
         if (isGameMenuEl) {
           this.emit('playGame', pageName);
+          this.emit('hideMenu');
         }
       }
     } else if (clickedElement.$el.id === 'logout') {

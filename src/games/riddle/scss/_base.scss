@@ -1,0 +1,18 @@
+.riddle-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, #ffffff, #fff5ff, #ffe9ed, #ffe4c8, #ffe9a8, #f2d58f, #e5c076, #d9ac5e, #ae774f, #774a3f, #3d2727, #000000);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  font-family: 'Roboto', Helvetica, sans-serif;
+
+  .riddle-main-container {
+    max-width: 1280px;
+    margin: auto;
+  }
+}
