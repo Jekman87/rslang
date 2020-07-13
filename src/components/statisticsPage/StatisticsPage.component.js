@@ -1,10 +1,12 @@
 import Chart from 'chart.js';
 import Component from '../../core/Component';
 import createStatisticsHTML from './statisticsPage.template';
-import { fieldsMap, feilds } from './current';
+import {
+  feildsAllMap, fieldsAll, feildsTodayMap, feildsToday,
+} from './stat';
 import { tablesMarkUpData, monthNames } from './table';
 import {
-  chartOptions, perDayChartData, allDaysChartData, popularityChartData, chartsMarkUpData,
+  chartOptions, perDayChartDataObj, allDaysChartDataObj, popularityChartData, chartsMarkUpData,
 } from './chart';
 
 export default class Statistics extends Component {
@@ -18,6 +20,7 @@ export default class Statistics extends Component {
     });
     this.statistics = options.dataForApp.statistics.optional;
     this.mainAppShortStat = options.dataForApp.shortTermStats;
+    this.mainAppLongStat = options.dataForApp.longTermStats || [];
   }
 
   toHTML() {
@@ -28,11 +31,39 @@ export default class Statistics extends Component {
     super.init();
     this.setStatistics();
     this.renderTodayStat();
+    this.renderAllStat();
     this.renderTables();
     this.renderCharts();
   }
 
   setStatistics() {
+    this.setTodayStat();
+    this.setAllStat();
+    this.setMiniGamesStat();
+  }
+
+  setTodayStat() {
+    this.todayStat = [...feildsToday];
+    if (!this.mainAppShortStat) return;
+
+    this.todayStat[feildsTodayMap.wordsToday].data = this.mainAppShortStat.newWordsCount;
+    this.todayStat[feildsTodayMap.cardsToday].data = this.mainAppShortStat.cardsCount;
+    this.todayStat[feildsTodayMap.cardsToday].progressValue = this.calcProgress();
+    this.todayStat[feildsTodayMap.cardsLeftToday].data = this.mainAppShortStat.cardsLeft;
+    this.todayStat[feildsTodayMap.cardsLeftToday].progressValue = 100 - this.calcProgress();
+    this.todayStat[feildsTodayMap.answerRatio].data = this.calcRatio();
+    this.todayStat[feildsTodayMap.longestSeries].data = this.mainAppShortStat.bestSeries;
+  }
+
+  setAllStat() {
+    this.allStat = [...fieldsAll];
+    if (!this.mainAppLongStat[0]) return;
+
+    this.allStat[feildsAllMap.words].data = `${this.mainAppLongStat[this.mainAppLongStat.length - 1].learnedWords} из 3600`;
+    this.allStat[feildsAllMap.cards].data = `${this.mainAppLongStat[this.mainAppLongStat.length - 1].learnedCards}`;
+  }
+
+  setMiniGamesStat() {
     this.miniGames = [
       JSON.parse(this.statistics.SpeakItLong || '[]'),
       JSON.parse(this.statistics.PuzzleLong || '[]'),
@@ -41,17 +72,6 @@ export default class Statistics extends Component {
       JSON.parse(this.statistics.SprintLong || '[]'),
       JSON.parse(this.statistics.RiddleLong || '[]'),
     ];
-
-    this.todayStat = [...feilds];
-    if (!this.mainAppShortStat) return;
-
-    this.todayStat[fieldsMap.wordsToday].data = this.mainAppShortStat.newWordsCount;
-    this.todayStat[fieldsMap.cardsToday].data = this.mainAppShortStat.cardsCount;
-    this.todayStat[fieldsMap.cardsToday].progressValue = this.calcProgress();
-    this.todayStat[fieldsMap.cardsLeftToday].data = this.mainAppShortStat.cardsLeft;
-    this.todayStat[fieldsMap.cardsLeftToday].progressValue = 100 - this.calcProgress();
-    this.todayStat[fieldsMap.answerRatio].data = this.calcRatio();
-    this.todayStat[fieldsMap.longestSeries].data = this.mainAppShortStat.bestSeries;
   }
 
   calcRatio() {
@@ -64,6 +84,20 @@ export default class Statistics extends Component {
     const learned = this.mainAppShortStat.cardsCount;
     const left = this.mainAppShortStat.cardsLeft;
     return Math.round((learned / (learned + left)) * 100);
+  }
+
+  renderAllStat() {
+    const statContainer = document.querySelector('div.all-stats-wrapper');
+    const liElems = [];
+    this.allStat.forEach((item) => {
+      const li = `
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        ${item.text}<span class="badge badge-info badge-pill">${item.data}</span>
+      </li>
+      `;
+      liElems.push(li);
+    });
+    statContainer.innerHTML = `<ul class="list-group">${liElems.join('')}</ul>`;
   }
 
   renderTodayStat() {
@@ -196,16 +230,21 @@ export default class Statistics extends Component {
   }
 
   drawCharts() {
+    const [perDayChartData, allDaysChartData] = this.collectWordsData();
+
+    this.defineScaleStep(perDayChartData.datasets[0].data);
     Chart.Line('perDayChart', {
       options: chartOptions,
       data: perDayChartData,
     });
+
+    this.defineScaleStep(allDaysChartData.datasets[0].data);
     Chart.Line('allDaysChart', {
       options: chartOptions,
       data: allDaysChartData,
     });
-    this.defineScaleStep();
 
+    this.defineScaleStep(this.miniGames);
     popularityChartData.datasets[0].data = this.collectPopularityData();
     Chart.Bar('popularityChart', {
       options: chartOptions,
@@ -213,14 +252,46 @@ export default class Statistics extends Component {
     });
   }
 
+  collectWordsData() {
+    const data = this.mainAppLongStat;
+    const perDay = JSON.parse(perDayChartDataObj);
+    const allDays = JSON.parse(allDaysChartDataObj);
+
+    let previousDaysWordsCounter = 0;
+    data.forEach((mark) => {
+      const date = new Date(mark.date);
+      let day = date.getDate();
+      day = day < 10 ? `0${day}` : day;
+      let month = date.getMonth() + 1;
+      month = month < 10 ? `0${month}` : month;
+
+      perDay.labels.push(`${day}.${month}`);
+      perDay.datasets[0].data.push(mark.learnedWords - previousDaysWordsCounter);
+      previousDaysWordsCounter = mark.learnedWords;
+
+      allDays.labels.push(`${day}.${month}`);
+      allDays.datasets[0].data.push(mark.learnedWords);
+    });
+
+    return [perDay, allDays];
+  }
+
   collectPopularityData() {
     return this.miniGames.map((resultArr) => resultArr.length);
   }
 
-  defineScaleStep() {
-    const maxValue = this.miniGames.map((item) => item.length).sort((a, b) => b - a)[0];
+  defineScaleStep(data) {
+    let maxValue = 0;
+    if (data[0] && Array.isArray(data[0])) {
+      [maxValue] = data.map((item) => item.length).sort((a, b) => b - a);
+    } else if (data[0]) {
+      [maxValue] = [...data].sort((a, b) => b - a);
+    }
+
     if (maxValue < 6) {
       chartOptions.scales.yAxes[0].ticks.stepSize = 1;
+    } else {
+      delete chartOptions.scales.yAxes[0].ticks.stepSize;
     }
   }
 
