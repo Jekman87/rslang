@@ -4,7 +4,7 @@ import createStatisticsHTML from './statisticsPage.template';
 import { fieldsMap, feilds } from './current';
 import { tablesMarkUpData, monthNames } from './table';
 import {
-  chartOptions, perDayChartData, allDaysChartData, popularityChartData, chartsMarkUpData,
+  chartOptions, perDayChartDataObj, allDaysChartDataObj, popularityChartData, chartsMarkUpData,
 } from './chart';
 
 export default class Statistics extends Component {
@@ -18,6 +18,7 @@ export default class Statistics extends Component {
     });
     this.statistics = options.dataForApp.statistics.optional;
     this.mainAppShortStat = options.dataForApp.shortTermStats;
+    this.mainAppLongStat = options.dataForApp.longTermStats || [];
   }
 
   toHTML() {
@@ -196,16 +197,21 @@ export default class Statistics extends Component {
   }
 
   drawCharts() {
+    const [perDayChartData, allDaysChartData] = this.collectWordsData();
+
+    this.defineScaleStep(perDayChartData.datasets[0].data);
     Chart.Line('perDayChart', {
       options: chartOptions,
       data: perDayChartData,
     });
+
+    this.defineScaleStep(allDaysChartData.datasets[0].data);
     Chart.Line('allDaysChart', {
       options: chartOptions,
       data: allDaysChartData,
     });
-    this.defineScaleStep();
 
+    this.defineScaleStep(this.miniGames);
     popularityChartData.datasets[0].data = this.collectPopularityData();
     Chart.Bar('popularityChart', {
       options: chartOptions,
@@ -213,14 +219,46 @@ export default class Statistics extends Component {
     });
   }
 
+  collectWordsData() {
+    const data = this.mainAppLongStat;
+    const perDay = JSON.parse(perDayChartDataObj);
+    const allDays = JSON.parse(allDaysChartDataObj);
+
+    let previousDaysWordsCounter = 0;
+    data.forEach((mark) => {
+      const date = new Date(mark.date);
+      let day = date.getDate();
+      day = day < 10 ? `0${day}` : day;
+      let month = date.getMonth() + 1;
+      month = month < 10 ? `0${month}` : month;
+
+      perDay.labels.push(`${day}.${month}`);
+      perDay.datasets[0].data.push(mark.learnedWords - previousDaysWordsCounter);
+      previousDaysWordsCounter = mark.learnedWords;
+
+      allDays.labels.push(`${day}.${month}`);
+      allDays.datasets[0].data.push(mark.learnedWords);
+    });
+
+    return [perDay, allDays];
+  }
+
   collectPopularityData() {
     return this.miniGames.map((resultArr) => resultArr.length);
   }
 
-  defineScaleStep() {
-    const maxValue = this.miniGames.map((item) => item.length).sort((a, b) => b - a)[0];
+  defineScaleStep(data) {
+    let maxValue = 0;
+    if (data[0] && Array.isArray(data[0])) {
+      [maxValue] = data.map((item) => item.length).sort((a, b) => b - a);
+    } else if (data[0]) {
+      [maxValue] = [...data].sort((a, b) => b - a);
+    }
+
     if (maxValue < 6) {
       chartOptions.scales.yAxes[0].ticks.stepSize = 1;
+    } else {
+      delete chartOptions.scales.yAxes[0].ticks.stepSize;
     }
   }
 
