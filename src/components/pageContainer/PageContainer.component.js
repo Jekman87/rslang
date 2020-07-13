@@ -6,10 +6,9 @@ import { storage, getResetDayTime } from '../../core/utils';
 import { AUTH_PAGE_NAME } from '../../constants/menu.constants';
 import BASE_SETTINGS from '../../constants/settings.constants';
 import BASE_STATS from '../../constants/stats.constants';
-import { RESET_HOUR } from '../../constants/constants';
+import { RESET_HOUR, ALL_WORDS } from '../../constants/constants';
 
 const WORDS_PER_STEP = 10;
-const ALL_WORDS = 3600;
 
 export default class PageContainer extends Component {
   static tagName = 'main';
@@ -154,13 +153,13 @@ export default class PageContainer extends Component {
       }
     }
 
-    const shortStatsJson = this.statistics.optional.MainGameShort;
+    const shortStatsJson = this.settings.optional.MainGameShort;
 
     if (shortStatsJson) {
       this.shortTermStats = JSON.parse(shortStatsJson);
     }
 
-    const longStatsJson = this.statistics.optional.MainGameLong;
+    const longStatsJson = this.settings.optional.MainGameLong;
 
     if (longStatsJson) {
       this.longTermStats = JSON.parse(longStatsJson);
@@ -169,35 +168,34 @@ export default class PageContainer extends Component {
 
   async loadWords() {
     try {
-      const newWordsFilter = '{"userWord":null}';
-
       const resetDayTime = getResetDayTime(RESET_HOUR);
-      const wordsToRepeatTodayFilter = `{"$and":[
-        {"userWord":{"$ne":null}},
-        {"userWord.optional.status":{"$ne":"deleted"}},
-        {"userWord.optional.nextRepeat":{"$lt":${resetDayTime}}}
-      ]}`;
-
+      const newWordsFilter = '{"userWord":null}';
       const userWordsFilter = '{"userWord":{"$ne":null}}';
 
       const data = await Promise.all([
         this.options.api.getAllUserAggregatedWords(null, this.settings.wordsPerDay, newWordsFilter),
-        this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, wordsToRepeatTodayFilter),
         this.options.api.getAllUserAggregatedWords(null, ALL_WORDS, userWordsFilter),
       ]);
 
-      const [newWords, wordsToRepeatToday, userWords] = data;
+      const [newWords, userWords] = data;
 
       this.newWords = newWords[0].paginatedResults;
-      this.wordsToRepeatToday = wordsToRepeatToday[0].paginatedResults.sort((wordA, wordB) => {
-        const result = wordA.userWord.optional.nextRepeat - wordB.userWord.optional.nextRepeat;
-        return result;
-      });
       this.userWords = userWords[0].paginatedResults;
 
+      this.wordsToRepeatToday = this.userWords.filter((word) => {
+        const isWordToRepeat = (word.userWord.optional.nextRepeat < resetDayTime)
+          && (word.userWord.optional.status !== 'deleted');
+
+        return isWordToRepeat;
+      }).sort((wordA, wordB) => {
+        const result = wordA.userWord.optional.nextRepeat - wordB.userWord.optional.nextRepeat;
+
+        return result;
+      });
+
       console.log('newWords', this.newWords);
-      console.log('wordsToRepeatToday', this.wordsToRepeatToday);
       console.log('userWords', this.userWords);
+      console.log('wordsToRepeatToday', this.wordsToRepeatToday);
     } catch (error) {
       if (error.message === '401') {
         console.log('Логаут ', error.message);

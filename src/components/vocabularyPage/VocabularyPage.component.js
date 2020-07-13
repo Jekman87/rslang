@@ -116,9 +116,9 @@ export default class Vocabulary extends Component {
     </div>
 
     <ol class="d-lg-flex col-12 col-sm-7 col-md-5 mb-1 ${config.name === 'deleted' ? 'col-lg-5 col-xl-4' : 'col-lg-8 col-xl-7'}">
-      <li class="breadcrumb-item align-items-lg-center"><small>Последняя тренировка: ${dataObj.lastTraining}</small></li>
-      <li class="breadcrumb-item align-items-lg-center"><small>Повторов:${dataObj.counter}</small></li>
-      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small>Следующая тренировка:${dataObj.nextTraining}</small></li>
+      <li class="breadcrumb-item align-items-lg-center"><small>Последняя тренировка:&nbsp;&nbsp;${dataObj.lastTraining}</small></li>
+      <li class="breadcrumb-item align-items-lg-center"><small>Повторов:&nbsp;&nbsp;${dataObj.counter}</small></li>
+      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small>Следующая тренировка:&nbsp;&nbsp;${dataObj.nextTraining}</small></li>
     </ol>
   </div>
 
@@ -195,14 +195,25 @@ export default class Vocabulary extends Component {
 `.trim();
   }
 
+  createNoWordsWindow(inputId) {
+    const parentContainer = document.getElementById(inputId);
+    const emptyList = document.createElement('div');
+    emptyList.classList.add('no-words-yet', 'display-3', 'text-muted');
+    emptyList.append('Здесь нет слов');
+    return parentContainer.append(emptyList);
+  }
+
   createListOfWords(tabId, decodedDataArr, wordsConfig) {
+    const parentContainer = document.getElementById(tabId);
+    parentContainer.innerHTML = '';
+    if (decodedDataArr.length === 0) {
+      this.createNoWordsWindow(tabId);
+    }
     const container = document.createElement('ul');
     for (let i = 0; i < decodedDataArr.length; i += 1) {
       container.innerHTML += (this.createCard(decodedDataArr[i], wordsConfig));
     }
     container.classList.add('list-group');
-    const parentContainer = document.getElementById(tabId);
-    parentContainer.innerHTML = '';
     return parentContainer.append(container);
   }
 
@@ -245,6 +256,12 @@ export default class Vocabulary extends Component {
         .then(() => {
           currentCard.classList.add('d-none');
           currentCard.classList.remove('list-group-item');
+          // вставка окна "нет слов"
+          const currentParentContainer = event.target.closest('.tab-pane');
+          const allLiShown = currentParentContainer.querySelectorAll('.list-group-item');
+          if (allLiShown.length === 0) {
+            this.createNoWordsWindow(currentParentContainer.id);
+          }
         })
         .catch(() => {
           currentCard.classList.add('p-0');

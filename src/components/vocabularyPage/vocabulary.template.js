@@ -2,7 +2,7 @@ export default function createVocabularyHTML() {
   return `
   <div class="container mt-3">
     <div class="jumbotron vocabulary-wrapper">
-      <h1 class="display-4 mb-4"><i class="fas fa-book mr-3"></i>Мой словарь
+      <h1 class="display-4 mb-4 px-3 px-sm-0"><i class="fas fa-book mr-3"></i>Мой словарь
       </h1>
       <ul class="nav nav-tabs justify-content-center">
         <li class="nav-item col-4 p-0 justify-content-center">
@@ -19,12 +19,15 @@ export default function createVocabularyHTML() {
       <div id="myTabContent" class="tab-content">
 
         <div class="tab-pane fade show active" id="active-words">
+          <div class="no-words-yet">Нет изучаемых слов</div>
         </div>
 
         <div class="tab-pane fade" id="difficult-words">
+        <div class="no-words-yet">Нет сложных слов слов</div>
         </div>
 
         <div class="tab-pane fade" id="deleted-words">
+        <div class="no-words-yet">Нет удаленныт слов</div>
         </div>
       </div>
     </div>
