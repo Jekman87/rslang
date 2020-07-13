@@ -2,7 +2,7 @@ export default function createSettingsHTML() {
   return `
   <div class="container mt-3">
   <div class="jumbotron mb-0">
-    <h1 class="display-4 text-primary mb-3"><i class="fas fa-cog mr-3"></i>Мои настройки</h1>
+    <h1 class="display-4 mb-3"><i class="fas fa-cog mr-2"></i>Мои настройки</h1>
     <div class="row d-flex flex-column flex-md-row mb-3">
       <div class="col-12 col-md-6 d-flex flex-column justify-content-between px-md-2 px-lg-3">
         <div class="card border-primary mb-2 mb-md-0">

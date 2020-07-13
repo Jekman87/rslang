@@ -1,6 +1,7 @@
 import Component from '../../core/Component';
 import createSettingsHTML from './settingsPage.template';
 import BASE_SETTINGS from '../../constants/settings.constants';
+import './settings.scss';
 
 const maxCardsPerDay = 500;
 const minCardsPerDay = 3;
