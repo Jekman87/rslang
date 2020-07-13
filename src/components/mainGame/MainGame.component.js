@@ -126,24 +126,12 @@ export default class MainGame extends Component {
 
     switch (buttonName) {
       case 'prev-btn':
+        // пофиксить перелистывание назад перед когда идет ожидание статистики
         this.changeCard(-1);
         break;
 
       case 'next-btn':
-        if (this.state.currentCardNum === this.state.studiedСardNum) {
-          this.checkWord();
-        } else {
-          const switchWord = this.userCards[this.state.currentCardNum - 1];
-
-          if (this.state.currentWord === null
-            || this.state.currentWord._id === switchWord._id) {
-            this.setDifficulty(WORD_PARAM.good);
-            this.changeCard();
-            this.createUserStats();
-          } else {
-            this.changeCard();
-          }
-        }
+        this.nextBtnHandler();
 
         break;
 
@@ -187,7 +175,6 @@ export default class MainGame extends Component {
       case 'delete-btn':
         // перенос слова в удаленные
         // убираем из карточек
-        // айди слова - сохраняем персональную? статистику - в удаленные
         // переход на след карту
         this.setDifficulty(WORD_PARAM.deleted);
         this.changeCard();
@@ -233,20 +220,20 @@ export default class MainGame extends Component {
     const keyEnter = 'Enter';
 
     if (event.key === keyEnter) {
-      if (this.state.currentCardNum === this.state.studiedСardNum) {
-        this.checkWord();
-      } else {
-        const switchWord = this.userCards[this.state.currentCardNum - 1];
+      this.nextBtnHandler();
+    }
+  }
 
-        if (this.state.currentWord === null
-          || this.state.currentWord._id === switchWord._id) {
-          this.setDifficulty(WORD_PARAM.good);
-          this.changeCard();
-          this.createUserStats();
-        } else {
-          this.changeCard();
-        }
-      }
+  nextBtnHandler() {
+    if (this.state.currentCardNum === this.state.studiedСardNum) {
+      this.checkWord();
+    } else if (this.state.currentWord
+      && this.userCards[this.state.currentCardNum]._id === this.state.currentWord._id) {
+      this.changeCard();
+    } else {
+      this.setDifficulty(WORD_PARAM.good);
+      this.changeCard();
+      this.createUserStats();
     }
   }
 
@@ -550,8 +537,6 @@ export default class MainGame extends Component {
       this.options.api.updateUserWord(currentWord._id, currentWord.userWord);
     }
 
-    // this.createUserStats(isSuccess);
-
     console.log('setDifficulty this.dataForApp', this.dataForApp);
   }
 
@@ -663,6 +648,7 @@ export default class MainGame extends Component {
     this.statistics.optional.MainGameLong = JSON.stringify(this.longTermStats);
 
     this.options.api.updateStatistics(this.statistics);
+    console.log('createUserStats', this.shortTermStats, this.longTermStats);
   }
 
   destroy() {

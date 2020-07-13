@@ -44,7 +44,6 @@ export default class MainPage extends Component {
     let cardsToday = 0;
     let cardsPerDay = 0;
 
-
     if (this.dataForApp.longTermStats) {
       const lastIndex = this.dataForApp.longTermStats.length - 1;
       learnedWords = this.dataForApp.longTermStats[lastIndex].learnedWords;
