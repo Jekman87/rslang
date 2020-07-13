@@ -287,22 +287,24 @@ export default class MainGame extends Component {
 
       // через кнопки сложности переход на след слово
     } else {
-      // отметка не ок в статистике
+      // отметка не ок в статистике слова
+
       // если не соответствует - показываем ошибки
       // алгоритм показа ошибок
+
       // показываем ответ как по кнопке "показать ответ"?
       // или просто на время показываем слово в инпуте?
-      // const switchWord = this.userCards[this.state.currentCardNum - 1];
 
-      // if (this.state.currentWord === null
-      //   || this.state.currentWord._id === switchWord._id) {
-      //   this.setDifficulty(WORD_PARAM.again, false);
-      // }
-
-      console.log('не верно');
+      this.setDifficulty(WORD_PARAM.again, false);
+      this.showWordErrors(inputText);
     }
 
     this.state.isChecking = false;
+  }
+
+  showWordErrors(word) {
+    console.log('ошибочка', word);
+    // подготовить блок со словом где каждая буква разбира на спаны
   }
 
   async speakText() {
@@ -392,6 +394,14 @@ export default class MainGame extends Component {
 
   setDifficulty(wordDifficulty, isSuccess = true) {
     const currentWord = this.userCards[this.state.currentCardNum];
+
+    console.log('test do', this.state.currentWord, currentWord);
+
+    if (this.state.currentWord && this.state.currentWord._id === currentWord._id) {
+      return;
+    }
+
+    console.log('test posle');
 
     this.state.isNewWord = true;
 
