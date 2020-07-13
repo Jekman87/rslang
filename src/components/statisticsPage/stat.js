@@ -1,4 +1,9 @@
-const fieldsMap = {
+const feildsAllMap = {
+  words: 0,
+  cards: 1,
+};
+
+const feildsTodayMap = {
   wordsToday: 0,
   cardsToday: 1,
   cardsLeftToday: 2,
@@ -6,7 +11,18 @@ const fieldsMap = {
   longestSeries: 4,
 };
 
-const feilds = [
+const fieldsAll = [
+  {
+    text: 'Всего выучено слов',
+    data: '0 из 3600',
+  },
+  {
+    text: 'Всего карточек пройдено',
+    data: 0,
+  },
+];
+
+const feildsToday = [
   {
     text: 'Новые слова:',
     data: 0,
@@ -33,4 +49,6 @@ const feilds = [
   },
 ];
 
-export { fieldsMap, feilds };
+export {
+  feildsAllMap, fieldsAll, feildsTodayMap, feildsToday,
+};
