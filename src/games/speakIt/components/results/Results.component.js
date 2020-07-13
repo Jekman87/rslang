@@ -18,6 +18,10 @@ export default class Results extends Component {
 
   init() {
     super.init();
+    const $body = $$(document).find('body');
+    $body.css({
+      opacity: 1,
+    });
     this.$resultsDialog = this.$root.find('#resultsDialog');
     this.$historyDialog = this.$root.find('#historyDialog');
     this.$errorItems = this.$root.find('.error-items');

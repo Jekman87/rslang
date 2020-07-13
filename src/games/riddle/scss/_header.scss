@@ -5,7 +5,7 @@
   width: 100%;
 
   button {
-    box-shadow: 6px 6px 10px #7b8a8b;
+    box-shadow: 6px 6px 10px #000000a6;
     transition: all 0.8s;
     font-size: 1rem;
     color: $fontColor;
@@ -23,21 +23,23 @@
   input::-webkit-inner-spin-button {
     display: none;
   }
-}
 
-.difficulty-level,
-.difficulty-page {
-  display: flex;
-  flex-direction: column;
-  margin: 0 10px 10px 10px;
-
-  div {
+  .difficulty-level,
+  .difficulty-page {
     display: flex;
-    justify-content: center;
-  }
-  span {
-    text-align: center;
-    color: $fontColor;
-    margin: 10px auto;
+    flex-direction: column;
+    margin: 0 10px 10px 10px;
+
+    div {
+      display: flex;
+      justify-content: center;
+    }
+    span {
+      text-align: center;
+      color: $fontColor;
+      margin: 10px auto;
+    }
   }
 }
+
+

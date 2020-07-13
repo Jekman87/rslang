@@ -1,12 +1,9 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable object-curly-newline */
 import $$ from '../../../core/domManipulation';
 import { FILE_URL } from '../../../constants/constants';
 import Component from '../../../core/Component';
 import createStartPage from '../StartPage/startPage.template';
 import createAudioCall from './audioCall.template';
 import createAudioCallStats from './stats.template';
-import getRoundWords from './asyncGetRoundWords';
 import {
   setRoundWord,
   setAnswerAttribute,
@@ -30,7 +27,9 @@ export default class AudioCall extends Component {
     this.app = document.querySelector($root);
     this.gameSound = true;
     this.statistics = [];
-    this.gamesStatistic = [];
+
+    this.statistic = this.options.dataForApp.statistics;
+    this.mainApi = this.options.api;
 
     this.onClick = this.onClick.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
@@ -40,9 +39,22 @@ export default class AudioCall extends Component {
   }
 
   async fillRoundWords() {
-    const roundWordsArr = await getRoundWords();
-    // const roundWordsArr = await this.options.api.getWords(0, 0, 10, 30);
-    // console.log(roundWordsArr);
+    let roundWordsArr = [];
+    const userWords = await this.mainApi.getAllUserWords();
+    const page = Math.floor(Math.random() * (30 - 0 + 1));
+
+    if (userWords.length < 50 || this.gameWithNewWords) {
+      roundWordsArr = await this.mainApi.getWords(page, this.gameLevel, 10, 5);
+    } else {
+      const filter = '{"userWord":{"$ne":null}}';
+      const words = await this.mainApi.getAllUserAggregatedWords(null, 60, filter);
+      roundWordsArr = words[0].paginatedResults
+        .sort(() => {
+          return Math.random() - 0.5;
+        })
+        .slice(0, 5);
+    }
+
     this.spanRoundWords = document.querySelectorAll('.round-word');
     this.spanRoundWordsNumbers = document.querySelectorAll('.round-word-number');
     this.btnsRoundWords = document.querySelectorAll('.btn-word');
@@ -53,10 +65,13 @@ export default class AudioCall extends Component {
     this.roundWord = setRoundWord(roundWordsArr);
     this.btnDontKnow.classList.remove('d-none');
     this.btnNext.classList.add('d-none');
+    document.querySelector('.fa-lightbulb').classList.remove('text-muted');
 
     for (let i = 0; i < this.spanRoundWords.length; i += 1) {
-      this.spanRoundWords[i].classList.remove('text-muted');
-      this.spanRoundWords[i].classList.remove('text-decoration');
+      this.spanRoundWords[i].classList.remove('text-muted', 'text-decoration');
+      this.spanRoundWords[i].previousElementSibling.classList.remove('text-muted');
+      this.btnsRoundWords[i].classList.remove('text-muted', 'isTipped');
+
       this.spanRoundWords[i].innerText = roundWordsArr[i].wordTranslate;
       this.spanRoundWordsNumbers[i].innerText = i + 1;
 
@@ -90,14 +105,12 @@ export default class AudioCall extends Component {
 
   playWinSound() {
     const audio = new Audio();
-    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/pew.mp3';
     audio.src = '/assets/audio/pew.mp3';
     audio.play().catch((err) => console.log(err));
   }
 
   playWrongSound() {
     const audio = new Audio();
-    // audio.src = 'https://raw.githubusercontent.com/Jekman87/rslang-data/master/voices/wrong.mp3';
     audio.src = '/assets/audio/wrong.mp3';
     audio.play().catch((err) => console.log(err));
   }
@@ -114,18 +127,49 @@ export default class AudioCall extends Component {
     this.btnDontKnow.classList.add('d-none');
     this.btnNext.classList.remove('d-none');
 
-    this.spanRoundWords.forEach((word) => word.classList.add('text-muted'));
+    this.spanRoundWords.forEach((word) => {
+      word.classList.add('text-muted');
+      word.previousElementSibling.classList.add('text-muted');
+    });
     this.rightAnswerSpan.classList.remove('text-muted');
+  }
+
+  sendStatistic(roundResult) {
+    let AudioCallLongStats = [];
+    try {
+      if (JSON.parse(this.statistic.optional.AudioCallLongStats)) {
+        AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
+      }
+    } catch {
+      console.log('Запись в пустой объект статистики');
+    }
+
+    if (AudioCallLongStats.length < 20) {
+      AudioCallLongStats.push(roundResult);
+    } else {
+      AudioCallLongStats.shift();
+      AudioCallLongStats.push(roundResult);
+    }
+
+    this.statistic.optional.AudioCallLongStats = JSON.stringify(AudioCallLongStats);
+    this.mainApi.updateStatistics(this.statistic);
   }
 
   onClick(event) {
     const { target } = event;
+    const isTipped =
+      target.classList.contains('isTipped') || target.parentNode.classList.contains('isTipped');
 
     switch (target.dataset.event) {
       case 'close':
         this.options.observer.emit('selectPage', 'MainPage');
         break;
+      case 'settings':
+        document.querySelector('.audiocall-setting-card').classList.toggle('setting-card-opened');
+        break;
       case 'startGame':
+        this.gameLevel = document.getElementById('audiocallGameLevel').value - 1;
+        this.gameWithNewWords = document.getElementById('audiocallisLearnedWords2').checked;
         this.app.innerHTML = '';
         this.renderGame();
         break;
@@ -151,15 +195,11 @@ export default class AudioCall extends Component {
           this.fillRoundWords();
         } else {
           const gameResult = {
-            data: Date.now(),
+            date: Date.now(),
             result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
-          this.gamesStatistic.push(gameResult);
 
-          this.longStatResults.insertAdjacentHTML(
-            'afterbegin',
-            insertLongStats(gameResult.data, gameResult.result)
-          );
+          this.sendStatistic(gameResult);
           this.appendStats();
         }
         break;
@@ -199,29 +239,37 @@ export default class AudioCall extends Component {
 
     switch (target.dataset.answer) {
       case 'true':
-        if (this.gameSound) {
-          this.playWinSound();
+        if (this.btnNext.classList.contains('d-none')) {
+          if (this.gameSound) {
+            this.playWinSound();
+          }
+          this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
+          this.onRightAnswer();
+          this.statistics[this.progress - 1].push('success');
+          this.correctContainer.insertAdjacentHTML(
+            'beforeend',
+            insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+          );
+        } else {
+          event.preventDefault();
         }
-        this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
-        this.onRightAnswer();
-        this.statistics[this.progress - 1].push('success');
-        this.correctContainer.insertAdjacentHTML(
-          'beforeend',
-          insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
-        );
         break;
       case 'false':
-        if (this.gameSound) {
-          this.playWrongSound();
+        if (this.btnNext.classList.contains('d-none') && !isTipped) {
+          if (this.gameSound) {
+            this.playWrongSound();
+          }
+          crossTheWord(target);
+          this.onRightAnswer();
+          this.statistics[this.progress - 1].push('failure');
+          this.mistakesCounter += 1;
+          this.mistakeContainer.insertAdjacentHTML(
+            'beforeend',
+            insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+          );
+        } else {
+          event.preventDefault();
         }
-        crossTheWord(target);
-        this.onRightAnswer();
-        this.statistics[this.progress - 1].push('failure');
-        this.mistakesCounter += 1;
-        this.mistakeContainer.insertAdjacentHTML(
-          'beforeend',
-          insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
-        );
         break;
       default:
         break;
@@ -230,11 +278,16 @@ export default class AudioCall extends Component {
 
   onKeyUp(event) {
     const { code } = event;
+    const wordIndex = code.substring(5);
     const dataAnswer = document.activeElement.getAttribute('data-answer');
+    const isButtonWord = document.activeElement.classList.contains('btn-word');
+    const isTipped =
+      document.activeElement.classList.contains('isTipped') ||
+      document.activeElement.parentNode.classList.contains('isTipped');
 
     switch (code) {
       case 'Enter':
-        if (dataAnswer === 'false') {
+        if (dataAnswer === 'false' && !isTipped) {
           if (this.gameSound) {
             this.playWrongSound();
           }
@@ -252,15 +305,11 @@ export default class AudioCall extends Component {
             this.fillRoundWords();
           } else {
             const gameResult = {
-              data: Date.now(),
+              date: Date.now(),
               result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
-            this.gamesStatistic.push(gameResult);
 
-            this.longStatResults.insertAdjacentHTML(
-              'afterbegin',
-              insertLongStats(gameResult.data, gameResult.result)
-            );
+            this.sendStatistic(gameResult);
             this.appendStats();
           }
         }
@@ -270,14 +319,49 @@ export default class AudioCall extends Component {
         this.btnsRoundWords[0].focus();
         break;
       case 'ArrowLeft':
-        if (document.activeElement.tagName === 'BODY') {
+        if (!isButtonWord) {
           this.btnsRoundWords[0].focus();
         } else onArrows('left');
         break;
       case 'ArrowRight':
-        if (document.activeElement.tagName === 'BODY') {
+        if (!isButtonWord) {
           this.btnsRoundWords[0].focus();
         } else onArrows('right');
+        break;
+      case 'Digit1':
+      case 'Digit2':
+      case 'Digit3':
+      case 'Digit4':
+      case 'Digit5':
+        if (this.btnNext.classList.contains('d-none')) {
+          if (this.btnsRoundWords[wordIndex - 1].dataset.answer === 'true') {
+            if (this.gameSound) {
+              this.playWinSound();
+            }
+            this.rightAnswerSpanNumber.innerHTML = '<i class="fas fa-check-circle"></i>';
+            this.onRightAnswer();
+            this.statistics[this.progress - 1].push('success');
+            this.correctContainer.insertAdjacentHTML(
+              'beforeend',
+              insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+            );
+          } else {
+            if (this.gameSound) {
+              this.playWrongSound();
+            }
+            crossTheWord(this.btnsRoundWords[wordIndex - 1]);
+            this.onRightAnswer();
+            this.statistics[this.progress - 1].push('failure');
+            this.mistakesCounter += 1;
+            this.mistakeContainer.insertAdjacentHTML(
+              'beforeend',
+              insertStats(this.roundWord.word, this.roundWord.wordTranslate, this.roundWord.audio)
+            );
+          }
+        } else {
+          event.preventDefault();
+        }
+
         break;
       default:
         break;
@@ -332,6 +416,14 @@ export default class AudioCall extends Component {
   }
 
   appendStats() {
+    const AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
+    AudioCallLongStats.forEach((stat) => {
+      this.longStatResults.insertAdjacentHTML(
+        'afterbegin',
+        insertLongStats(stat.date, stat.result)
+      );
+    });
+
     this.app.removeChild(this.app.firstChild);
     document.querySelector('.span-mistakes').innerText = this.mistakesCounter;
     document.querySelector('.span-correct').innerText = this.maxProgress - this.mistakesCounter;

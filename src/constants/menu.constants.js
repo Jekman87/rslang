@@ -10,12 +10,12 @@ const MAIN_MENU_TITLES = [
 ];
 
 const GAME_MENU_TITLES = [
-  { data: 'SpeakIt', title: 'SpeakIt' },
-  { data: 'Puzzle', title: 'English puzzle' },
-  { data: 'Savannah', title: 'Саванна' },
   { data: 'AudioCall', title: 'Аудиовызов' },
+  { data: 'Puzzle', title: 'English puzzle' },
+  { data: 'Riddle', title: 'Загадка-отгадка' },
+  { data: 'Savannah', title: 'Саванна' },
+  { data: 'SpeakIt', title: 'SpeakIt' },
   { data: 'Sprint', title: 'Спринт' },
-  { data: 'Riddle', title: 'Своя игра' },
 ];
 
 const AUTH_PAGE_NAME = 'Authorization';
