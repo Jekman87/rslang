@@ -4,15 +4,24 @@ import createMainGameHTML from './mainGame.template';
 
 import { delay, getResetDayTime, getStartDayTime } from '../../core/utils';
 import { getIntervalsOfRepeat } from './mainGame.utils';
+import UserWord from '../../core/UserWord';
 
 import {
   FILE_URL, ONE_MINUTE, ONE_DAY, RESET_HOUR, WORD_PARAM,
 } from '../../constants/constants';
 
-import UserWord from '../../core/UserWord';
-// import BASE_USER_WORD from '../../constants/user-word.constants';
-
 const AGAIN_STEP = 4;
+const BASE_STATE = {
+  currentCardNum: 0,
+  studiedСardNum: 0,
+  currentWord: null,
+  newWordsCount: 0,
+  cardsCount: 0,
+  correctAnswers: 0,
+  errorAnswers: 0,
+  currentSeries: 0,
+  bestSeries: 0,
+};
 
 export default class MainGame extends Component {
   static className = 'MainGame';
@@ -37,25 +46,45 @@ export default class MainGame extends Component {
     this.userCards = this.dataForApp.userCards;
 
     this.state = {
-      currentCardNum: 0,
-      studiedСardNum: 0,
       isChecking: false,
-      currentWord: null,
       isNewWord: true,
-      newWordsCount: 0,
-      cardsCount: 0,
-      cardsLeft: this.userCards.length,
-      correctAnswers: 0,
-      errorAnswers: 0,
-      seriesOfCorrectAnswers: 0,
-      longestSeriesOfCorrectAnswers: 0,
       allCardsLearned: 0,
+      allWordsLearned: 0,
       resetDayTime: 0,
+      startDayTime: 0,
     };
-    this.updateStatistics();
+    this.updateState();
 
     this.elements = null;
     this.audio = new Audio();
+  }
+
+  updateState() {
+    this.state.resetDayTime = getResetDayTime(RESET_HOUR);
+    this.state.startDayTime = getStartDayTime(RESET_HOUR);
+
+    if (this.longTermStats) {
+      const lastIndex = this.longTermStats.length - 1;
+      this.state.allCardsLearned = this.longTermStats[lastIndex].learnedCards;
+      this.state.allWordsLearned = this.longTermStats[lastIndex].learnedWords;
+    }
+
+    if (this.shortTermStats
+      && this.shortTermStats.timeNow < this.state.resetDayTime
+      && this.shortTermStats.timeNow > this.state.startDayTime) {
+      this.state = {
+        ...this.state,
+        ...this.shortTermStats,
+      };
+    } else {
+      this.state = {
+        ...this.state,
+        ...BASE_STATE,
+        cardsLeft: this.userCards.length,
+      };
+    }
+
+    this.dataForApp.state = this.state;
   }
 
   init() {
@@ -87,52 +116,6 @@ export default class MainGame extends Component {
     };
   }
 
-  updateStatistics() {
-    this.state.resetDayTime = getResetDayTime(RESET_HOUR);
-    const startDayTime = getStartDayTime(RESET_HOUR);
-
-    if (this.shortTermStats
-      && this.shortTermStats.today < this.state.resetDayTime
-      && this.shortTermStats.today > startDayTime) {
-      const {
-        wordsToday,
-        cardsToday,
-        cardsLeftToday,
-        correctAnswersToday,
-        errorAnswersToday,
-        longestSeries,
-      } = this.shortTermStats;
-
-      this.state = {
-        ...this.state,
-        newWordsCount: wordsToday,
-        cardsCount: cardsToday,
-        cardsLeft: cardsLeftToday,
-        correctAnswers: correctAnswersToday,
-        errorAnswers: errorAnswersToday,
-        longestSeriesOfCorrectAnswers: longestSeries,
-      };
-    } else {
-      this.state = {
-        ...this.state,
-        newWordsCount: 0,
-        cardsCount: 0,
-        cardsLeft: this.userCards.length,
-        correctAnswers: 0,
-        errorAnswers: 0,
-        longestSeriesOfCorrectAnswers: 0,
-      };
-    }
-
-    if (this.longTermStats) {
-      // сохранение по дням сделать
-      const { cardsLearned } = this.longTermStats;
-      this.state.allCardsLearned = cardsLearned;
-    }
-
-    this.dataForApp.state = this.state;
-  }
-
   async onClick(event) {
     const buttonName = $$(event.target).data.name;
 
@@ -155,10 +138,11 @@ export default class MainGame extends Component {
           if (this.state.currentWord === null
             || this.state.currentWord._id === switchWord._id) {
             this.setDifficulty(WORD_PARAM.good);
-            // статистика пользователя
+            this.changeCard();
+            this.createUserStats();
+          } else {
+            this.changeCard();
           }
-
-          this.changeCard();
         }
 
         break;
@@ -170,6 +154,7 @@ export default class MainGame extends Component {
         // переход на след карту
         this.setDifficulty(WORD_PARAM.again);
         this.changeCard();
+        this.createUserStats();
         break;
 
       case 'hard-btn':
@@ -178,6 +163,7 @@ export default class MainGame extends Component {
         // переход на след карту
         this.setDifficulty(WORD_PARAM.hard);
         this.changeCard();
+        this.createUserStats();
         break;
 
       case 'good-btn':
@@ -186,6 +172,7 @@ export default class MainGame extends Component {
         // переход на след карту
         this.setDifficulty(WORD_PARAM.good);
         this.changeCard();
+        this.createUserStats();
         break;
 
       case 'easy-btn':
@@ -194,6 +181,7 @@ export default class MainGame extends Component {
         // переход на след карту
         this.setDifficulty(WORD_PARAM.easy);
         this.changeCard();
+        this.createUserStats();
         break;
 
       case 'delete-btn':
@@ -203,6 +191,7 @@ export default class MainGame extends Component {
         // переход на след карту
         this.setDifficulty(WORD_PARAM.deleted);
         this.changeCard();
+        this.createUserStats();
         break;
 
       case 'difficult-btn':
@@ -213,6 +202,7 @@ export default class MainGame extends Component {
         // кнопку открывать только после угадывания!!
         this.setDifficulty(WORD_PARAM.difficult);
         this.changeCard();
+        this.createUserStats();
         break;
 
       case 'show-answer-btn':
@@ -251,10 +241,11 @@ export default class MainGame extends Component {
         if (this.state.currentWord === null
           || this.state.currentWord._id === switchWord._id) {
           this.setDifficulty(WORD_PARAM.good);
-          // статистика пользователя
+          this.changeCard();
+          this.createUserStats();
+        } else {
+          this.changeCard();
         }
-
-        this.changeCard();
       }
     }
   }
@@ -304,6 +295,7 @@ export default class MainGame extends Component {
         // если кнопки выкючены - сами определяем алгоритм
         this.setDifficulty(WORD_PARAM.good);
         this.changeCard();
+        this.createUserStats();
       }
 
       // через кнопки сложности переход на след слово
@@ -459,8 +451,6 @@ export default class MainGame extends Component {
           this.userCards.push(currentWord);
         }
 
-        // пометка статистики
-        // в конец user card если меньше 50ти (настройки)
         break;
 
       case WORD_PARAM.hard:
@@ -471,7 +461,6 @@ export default class MainGame extends Component {
           this.userCards.push(currentWord);
         }
 
-        // пометка статистики
         break;
 
       case WORD_PARAM.good:
@@ -482,14 +471,11 @@ export default class MainGame extends Component {
           this.userCards.push(currentWord);
         }
 
-        // пометка статистики
         break;
 
       case WORD_PARAM.easy:
         difficulty = WORD_PARAM.easy;
         nextRepeat = lastRepeat + timeEasy;
-
-        // пометка статистики
         break;
 
       default:
@@ -564,26 +550,32 @@ export default class MainGame extends Component {
       this.options.api.updateUserWord(currentWord._id, currentWord.userWord);
     }
 
-    this.createUserStats(isSuccess);
+    // this.createUserStats(isSuccess);
 
     console.log('setDifficulty this.dataForApp', this.dataForApp);
   }
 
-  createUserStats(isSuccess) {
+  createUserStats(isSuccess = true) {
     // краткосрочная статистика
     let {
       newWordsCount,
       cardsCount,
       cardsLeft,
+      allCardsLearned,
+      allWordsLearned,
       correctAnswers,
       errorAnswers,
-      seriesOfCorrectAnswers,
-      longestSeriesOfCorrectAnswers,
-      allCardsLearned,
+      currentSeries,
+      bestSeries,
     } = this.state;
 
-    newWordsCount += this.state.isNewWord ? 1 : 0;
+    if (this.state.isNewWord) {
+      newWordsCount += 1;
+      allWordsLearned += 1;
+    }
+
     cardsCount += 1;
+    allCardsLearned += 1;
     cardsLeft = this.userCards.length - (this.state.currentCardNum + 1);
 
     if (isSuccess) {
@@ -593,89 +585,85 @@ export default class MainGame extends Component {
     }
 
     if (isSuccess) {
-      seriesOfCorrectAnswers += 1;
+      currentSeries += 1;
 
-      if (longestSeriesOfCorrectAnswers < seriesOfCorrectAnswers) {
-        longestSeriesOfCorrectAnswers = seriesOfCorrectAnswers;
+      if (bestSeries < currentSeries) {
+        bestSeries = currentSeries;
       }
     } else {
-      seriesOfCorrectAnswers = 0;
+      currentSeries = 0;
     }
 
+    this.statistics.learnedWords = allWordsLearned;
     const timeNow = Date.now();
 
     if (timeNow < this.state.resetDayTime) {
       this.shortTermStats = {
-        wordsToday: newWordsCount,
-        cardsToday: cardsCount,
-        cardsLeftToday: cardsLeft,
-        correctAnswersToday: correctAnswers,
-        errorAnswersToday: errorAnswers,
-        longestSeries: longestSeriesOfCorrectAnswers,
-        today: timeNow,
+        currentCardNum: this.state.currentCardNum,
+        studiedСardNum: this.state.currentCardNum,
+        currentWord: this.state.currentWord,
+        newWordsCount,
+        cardsCount,
+        cardsLeft,
+        correctAnswers,
+        errorAnswers,
+        currentSeries,
+        bestSeries,
+        timeNow,
+      };
+
+      this.state = {
+        ...this.state,
+        ...this.shortTermStats,
+        allWordsLearned,
+        allCardsLearned,
       };
     } else {
-      this.updateStatistics();
+      this.state.resetDayTime = getResetDayTime(RESET_HOUR);
+      this.state.startDayTime = getStartDayTime(RESET_HOUR);
+
+      this.shortTermStats = {
+        ...BASE_STATE,
+        cardsLeft: this.userCards.length,
+        timeNow,
+      };
+
+      this.state = {
+        ...this.state,
+        ...BASE_STATE,
+        cardsLeft: this.userCards.length,
+      };
     }
 
-    // долгосрочная статистика
-    // сохранение по дням сделать
-    allCardsLearned += 1;
-
-    this.longTermStats = { cardsLearned: allCardsLearned };
-    this.statistics.learnedWords += this.state.isNewWord ? 1 : 0;
-    this.dataForApp.longTermStats = this.longTermStats;
-
-    this.state = {
-      ...this.state,
-      newWordsCount,
-      cardsCount,
-      cardsLeft,
-      correctAnswers,
-      errorAnswers,
-      seriesOfCorrectAnswers,
-      longestSeriesOfCorrectAnswers,
-      allCardsLearned,
+    const longStats = {
+      date: timeNow,
+      learnedWords: allWordsLearned,
+      learnedCards: allCardsLearned,
     };
 
+    if (this.longTermStats) {
+      const lastIndex = this.longTermStats.length - 1;
+      const lastDate = this.longTermStats[lastIndex].date;
+
+      if (lastDate > this.state.startDayTime) {
+        this.longTermStats[lastIndex].learnedWords = allWordsLearned;
+        this.longTermStats[lastIndex].learnedCards = allCardsLearned;
+      } else {
+        this.longTermStats.push(longStats);
+      }
+    } else {
+      this.longTermStats = [longStats];
+    }
+
     this.dataForApp.shortTermStats = this.shortTermStats;
-    this.dataForApp.shortTermStats = this.shortTermStats;
+    this.dataForApp.longTermStats = this.longTermStats;
     this.dataForApp.state = this.state;
 
     this.statistics.optional.MainGameShort = JSON.stringify(this.shortTermStats);
     this.statistics.optional.MainGameLong = JSON.stringify(this.longTermStats);
 
     this.options.api.updateStatistics(this.statistics);
-    console.log('this.statistics', this.statistics);
   }
-
-  /*
-  первым делом идут карты на повторение, затем новые слова
-  нет на повторении - начинаем с новых
-  сейчас 20 карточек, нужно добить до 50
-  изначальные 20 - новые слова - лучше увеличивать при  хорошем прогрессе
-  при угадывании/неугадывании - идет пометка в статистику слова
-
-  вначале 10 новых слов - 10 повторений
-  10 новых, 10 повторений - итого 40
-  еще 10 заполнить теми, где были ошибки/нажата кнопка "снова", из 1й партии
-  или сделать меньше карт? На сегодня карт больше нет...
-  динамическая смена количества карт??!
-  несколько прогрессбаров
-  новые слова, изучаемые на повторении
-
-  далее (след день) начать с повтора 20 карт? или части из них, которые сложные
-
-  */
-
-  // если есть слова для повторения на сегодня
-  // если на сегодня нет - берем с бекенда следующие
-  // в зависимости от последней карты, на которой остановились
-  // если есть карты на сегодня - в любом случае добираем
-  // новыми словами с последней карты
-  // если нет, значит пользователь играет в первый раз
-  // либо на сегодня нет слов для повторения
-  // берем с бекенда с самого начала или с последней точки
 
   destroy() {
     super.destroy();
@@ -686,34 +674,3 @@ export default class MainGame extends Component {
     return createMainGameHTML(this.dataForApp).trim();
   }
 }
-
-// возможность запустить след партию слов
-
-// let lastRepeat;
-// let nextRepeat;
-// let counter;
-// let success;
-// let progress;
-// let gameError;
-
-// изменить и сохранить слово
-/*
-this.difficulty = 'new';
-this.optional = {
-  lastRepeat: Date.now(),
-  nextRepeat: 0, посчитать в зависимости от сложности
-  counter: 0, показы? +1
-  success: 0, угадано-неугадано - если угадано +1 success?
-  progress: 1, если угадано сразу - 5? иначе 1
-  status: 'active', или др (active -- для изучаемых слов, difficult -- для сложных,
-    deleted -- для удаленных)
-  gameError: false, если ошибка - не трогаем, если ок - меняем на false
-};
-*/
-
-// определяем сложность для слова
-// сохраняем само слово
-// сохраняем статистику пользователя за день
-// долгосрочная статистика
-// если нужно добавляем в массив карточек
-// либо через одно либо в конец

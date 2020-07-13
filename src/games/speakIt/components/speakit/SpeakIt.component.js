@@ -1,9 +1,8 @@
 import $$ from '../../../../core/domManipulation';
 import Observer from '../../../../core/Observer';
-
+import { delay } from '../../../../core/utils';
 export default class SpeakIt {
   constructor(selector, options) {
-    // console.log(selector, typeof selector, $$(selector));
     this.$el = $$(selector);
     this.components = options.components || [];
     this.observer = new Observer();
@@ -45,14 +44,14 @@ export default class SpeakIt {
     return $root;
   }
 
-  render() {
+  async render() {
     const $body = $$(document).find('body');
     $body.css({
-      background: `linear-gradient(rgba(0,0,0,.67) 0%, rgba(0,0,0,.67) 100%), 
-      url("/assets/speakit/img/bg.jpg") no-repeat center center / cover`,
+      backgroundImage: `linear-gradient(rgba(0,0,0,.17) 0%, rgba(0,0,0,.17) 100%), 
+      url("/assets/speakit/img/bg_main.jpg")`,
       opacity: 0,
     });
-
+    await delay(500);
     this.$el.append(this.getRoot());
     this.components.forEach((component) => component.init());
   }

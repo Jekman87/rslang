@@ -59,15 +59,15 @@ export default class Header extends Component {
 
       if (isMainMenuEl && pageName !== 'games') {
         this.emit('selectPage', pageName);
+        this.emit('hideMenu');
       } else {
         const isGameMenuEl = GAME_MENU_TITLES.some((title) => title.data === pageName);
 
         if (isGameMenuEl) {
           this.emit('playGame', pageName);
+          this.emit('hideMenu');
         }
       }
-
-      this.emit('hideMenu');
     } else if (clickedElement.$el.id === 'logout') {
       this.emit('mainLogout');
     }

@@ -6,7 +6,12 @@
 $enable-hover-media-query: true;
 .savanna-main-container {
   background-image: url("/assets/savanna/img/background.svg");
-  background-position: bottom 0vh center;
+
+  background-position-x: center;
+  // background-position-y: bottom;
+  background-position-y: calc(((4272px - 100vh)/30) * -30);
+  background-attachment: fixed;
+  transition: background-position-y, linear, 1s;
 
   .savanna-audioSource,
   .savanna-audio-source-statistic,
@@ -135,6 +140,7 @@ $enable-hover-media-query: true;
     // transition-property: top;
     // transition-duration: 0.75s;
     // transition-timing-function: linear;
+    // transition: top, linear, 1s;
   }
   .energy-container {
     top: -100px;
@@ -178,7 +184,7 @@ $enable-hover-media-query: true;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #fffffff7;
+    background-color: #ffffff;
     z-index: 3;
   }
 
@@ -285,11 +291,11 @@ $enable-hover-media-query: true;
     }
   }
 
-  .savanna-abort-game {
+  .savanna-abort-game-button {
     color: rgb(220, 220, 220);
     transition: color, linear, 0, 5s;
     &:hover {
-      color: red;
+      color: rgb(255, 0, 0);
     }
   }
 
@@ -336,25 +342,7 @@ $enable-hover-media-query: true;
   .savanna-game-statistic {
     align-items: center;
   }
-  // .statistics-content {
-  //   max-height: 50vh;
-  //   width: 90%;
-  //   overflow: auto;
-  //   margin: 2rem auto;
-  //   @media (min-width: 576px) {
-  //     max-height: 40vh;
-  //     width: 80%;
-  //   }
-  //   &::-webkit-scrollbar {
-  //     width: 0.5rem;
-  //     background: transparent;
-  //     border-radius: 0 0 5px 0;
-  //   }
-  //   &::-webkit-scrollbar-thumb {
-  //     background: #ccd4d8d9;
-  //     border-radius: 10px;
-  //   }
-  // }
+
   .savanna-statistic-sound-button {
     &:hover {
       color: rgb(0, 0, 0) !important;
@@ -412,8 +400,27 @@ $enable-hover-media-query: true;
   .statistics-info-item:first-child {
     font-weight: 70;
   }
+
+  // modal
+  .savanna-game-modal {
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .savanna-modal-heading {
+      // text-align: center;
+      text-indent: 4rem;
+      font-size: 2rem;
+    }
+  }
+  .savanna-animation-pause {
+    animation-play-state: paused;
+  }
 }
-//statistics
 
 @keyframes savannaPiu {
   0% {
@@ -480,13 +487,11 @@ $enable-hover-media-query: true;
 @media (hover: none) {
   .savanna-answer-btn:hover {
     color: #fff;
-    background-color: #18BC9C;
-    border-color: #18BC9C;
-
+    background-color: #18bc9c;
+    border-color: #18bc9c;
   }
 }
-.savanna-answer-btn{
+.savanna-answer-btn {
   font-size: 1.25rem;
-  width:90%;
+  width: 90%;
 }
-

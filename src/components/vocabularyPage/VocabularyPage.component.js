@@ -195,14 +195,25 @@ export default class Vocabulary extends Component {
 `.trim();
   }
 
+  createNoWordsWindow(inputId) {
+    const parentContainer = document.getElementById(inputId);
+    const emptyList = document.createElement('div');
+    emptyList.classList.add('no-words-yet', 'display-3', 'text-muted');
+    emptyList.append('Здесь нет слов');
+    return parentContainer.append(emptyList);
+  }
+
   createListOfWords(tabId, decodedDataArr, wordsConfig) {
+    const parentContainer = document.getElementById(tabId);
+    parentContainer.innerHTML = '';
+    if (decodedDataArr.length === 0) {
+      this.createNoWordsWindow(tabId);
+    }
     const container = document.createElement('ul');
     for (let i = 0; i < decodedDataArr.length; i += 1) {
       container.innerHTML += (this.createCard(decodedDataArr[i], wordsConfig));
     }
     container.classList.add('list-group');
-    const parentContainer = document.getElementById(tabId);
-    parentContainer.innerHTML = '';
     return parentContainer.append(container);
   }
 
@@ -245,6 +256,12 @@ export default class Vocabulary extends Component {
         .then(() => {
           currentCard.classList.add('d-none');
           currentCard.classList.remove('list-group-item');
+          // вставка окна "нет слов"
+          const currentParentContainer = event.target.closest('.tab-pane');
+          const allLiShown = currentParentContainer.querySelectorAll('.list-group-item');
+          if (allLiShown.length === 0) {
+            this.createNoWordsWindow(currentParentContainer.id);
+          }
         })
         .catch(() => {
           currentCard.classList.add('p-0');

@@ -27,18 +27,18 @@ export default function createRulesHTML() {
           <h5 class="modal-title">Английское произношение <i class="fas fa-info-circle"></i></h5>
         </div>
         <div class="modal-body">
-          <ul class="sounds-list">
+          <ul class="sounds-list p-0">
             <li class="list__folder">
               <strong class="text-warning">Гласные</strong>
               <hr class="m-0">
-              <ul class="list" data-soundgroup="vowels">
+              <ul class="list p-0" data-soundgroup="vowels">
                 ${createListItemHTML(vowels, 'vowels')}
               </ul>
             </li>
             <li class="list__folder">
               <strong class="text-info">Согласные</strong>
               <hr class="m-0">
-              <ul class="list" data-soundsgroup="consonants">
+              <ul class="list p-0" data-soundsgroup="consonants">
               ${createListItemHTML(consonants, 'consonants')}
               </ul>
             </li>
