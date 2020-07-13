@@ -70,7 +70,7 @@
   }
 
   .riddle-prompts {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .riddle-answer-form button {
@@ -107,18 +107,33 @@
   .riddle-prompts div button {
     font-size: 0.8rem;
   }
+
+  .riddle-prompts {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .riddle-stats {
+    width: 40%;
+    margin: 20px 0;
+  }
 }
 
 
 @media (hover:hover) {
   .riddle__intro button:hover {
-    transform: scale(0.9);
+    transform: scale(0.96);
     opacity: 0.8;
-    color: #005986;
-    background-color: #faffcd;
+    color: black;
+    background-color: #ffffff73;
     box-shadow: 1px 1px 1px black;
     transition: all 0.8s;
     cursor: pointer;
+  }
+
+  .riddle-button:hover i {
+    color: rgba(255, 255, 255, 0.726);
+    transition: all 0.8s;
   }
 
   .riddle-answer-form button:hover {
@@ -132,12 +147,12 @@
   }
 
   .riddle-header button:hover {
-    box-shadow: 1px 1px 10px #7b8a8b;
+    box-shadow: 1px 1px 1px black;
     transition: all 0.8s;
   }
 
   .riddle-prompts button:hover {
-    box-shadow: 1px 1px 10px #7b8a8b;
+    box-shadow: 1px 1px 1px black;
     transition: all 0.8s;
   }
 
@@ -145,5 +160,26 @@
     color: white;
     transition: all 0.8s;
     transform: rotate(360deg);
+  }
+
+  .riddle-mute:hover i {
+    color: #e74c3c;
+    transition: all 0.8s;
+  }
+
+  .riddle-unmute:hover i {
+    color: $fontColor;
+      transition: all 0.8s;
+  }
+
+  .riddle-unmute:hover .riddle-line {
+      opacity: 0;
+      transition: all 0.8s;
+  }
+
+  .riddle-statistic-screen button:hover {
+    box-shadow: 1px 1px 1px black !important;
+    color: white !important;
+    transition: all 0.8s;
   }
 }

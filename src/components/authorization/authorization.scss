@@ -1,7 +1,12 @@
 body {
-  background: url('../../assets/img/authorizationBack.jpg');
+  background: url("/assets/img/authorizationBack.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  overflow-x: hidden;
+  background-attachment: fixed;
 }
 
 .sign-in-text {

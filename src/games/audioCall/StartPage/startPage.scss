@@ -57,3 +57,27 @@ i {
   // border: 1px solid #18bc9c !important;
   background-color: white !important;
 }
+
+@media only screen and (max-width: 926px) {
+  .audiocall-setting-card {
+    left: 53%;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .audiocall-setting-card {
+    left: 40%;
+  }
+}
+
+@media only screen and (max-width: 570px) {
+  .audiocall-setting-card {
+    left: 20%;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .audiocall-setting-card {
+    left: 5%;
+  }
+}
