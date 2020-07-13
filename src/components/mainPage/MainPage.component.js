@@ -2,6 +2,8 @@ import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createMainPageHTML from './mainPage.template';
 
+import { ALL_WORDS } from '../../constants/constants';
+
 export default class MainPage extends Component {
   static className = 'MainPage';
 
@@ -36,16 +38,36 @@ export default class MainPage extends Component {
   }
 
   toHTML() {
+    let learnedWords = 0;
+    let learnedCards = 0;
+    let wordsToday = 0;
+    let cardsToday = 0;
+    let cardsPerDay = 0;
+
+
+    if (this.dataForApp.longTermStats) {
+      const lastIndex = this.dataForApp.longTermStats.length - 1;
+      learnedWords = this.dataForApp.longTermStats[lastIndex].learnedWords;
+      learnedCards = this.dataForApp.longTermStats[lastIndex].learnedCards;
+    }
+
+    if (this.dataForApp.shortTermStats) {
+      wordsToday = this.dataForApp.shortTermStats.newWordsCount;
+      cardsToday = this.dataForApp.shortTermStats.cardsCount;
+      cardsPerDay = this.dataForApp.settings.optional.cardsPerDay;
+    }
+
     const data = {
-      username: this.api.userName,
-      wordsToday: this.dataForApp.shortTermStats ? this.dataForApp.shortTermStats.wordsToday : 0,
       wordsPerDay: this.dataForApp.settings ? this.dataForApp.settings.wordsPerDay : 0,
-      cardsToday: this.dataForApp.shortTermStats ? this.dataForApp.shortTermStats.cardsToday : 0,
-      cardsPerDay: this.dataForApp.shortTermStats ? this.dataForApp.settings.optional.cardsPerDay : 0,
-      learnedWords: this.dataForApp.statistics ? this.dataForApp.statistics.learnedWords : 0,
-      allWords: 3600,
-      cardsLearned: this.dataForApp.longTermStats ? this.dataForApp.longTermStats.cardsLearned : 0,
+      username: this.api.userName,
+      allWords: ALL_WORDS,
+      wordsToday,
+      cardsToday,
+      cardsPerDay,
+      learnedWords,
+      learnedCards,
     };
+
     return createMainPageHTML(data).trim();
   }
 }

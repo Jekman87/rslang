@@ -19,8 +19,8 @@ const BASE_STATE = {
   cardsCount: 0,
   correctAnswers: 0,
   errorAnswers: 0,
-  seriesOfCorrectAnswers: 0,
-  longestSeriesOfCorrectAnswers: 0,
+  currentSeries: 0,
+  bestSeries: 0,
 };
 
 export default class MainGame extends Component {
@@ -565,8 +565,8 @@ export default class MainGame extends Component {
       allWordsLearned,
       correctAnswers,
       errorAnswers,
-      seriesOfCorrectAnswers,
-      longestSeriesOfCorrectAnswers,
+      currentSeries,
+      bestSeries,
     } = this.state;
 
     if (this.state.isNewWord) {
@@ -585,13 +585,13 @@ export default class MainGame extends Component {
     }
 
     if (isSuccess) {
-      seriesOfCorrectAnswers += 1;
+      currentSeries += 1;
 
-      if (longestSeriesOfCorrectAnswers < seriesOfCorrectAnswers) {
-        longestSeriesOfCorrectAnswers = seriesOfCorrectAnswers;
+      if (bestSeries < currentSeries) {
+        bestSeries = currentSeries;
       }
     } else {
-      seriesOfCorrectAnswers = 0;
+      currentSeries = 0;
     }
 
     this.statistics.learnedWords = allWordsLearned;
@@ -607,8 +607,8 @@ export default class MainGame extends Component {
         cardsLeft,
         correctAnswers,
         errorAnswers,
-        seriesOfCorrectAnswers,
-        longestSeriesOfCorrectAnswers,
+        currentSeries,
+        bestSeries,
         timeNow,
       };
 
@@ -665,34 +665,6 @@ export default class MainGame extends Component {
     this.options.api.updateStatistics(this.statistics);
   }
 
-  /*
-  первым делом идут карты на повторение, затем новые слова
-  нет на повторении - начинаем с новых
-  сейчас 20 карточек, нужно добить до 50
-  изначальные 20 - новые слова - лучше увеличивать при  хорошем прогрессе
-  при угадывании/неугадывании - идет пометка в статистику слова
-
-  вначале 10 новых слов - 10 повторений
-  10 новых, 10 повторений - итого 40
-  еще 10 заполнить теми, где были ошибки/нажата кнопка "снова", из 1й партии
-  или сделать меньше карт? На сегодня карт больше нет...
-  динамическая смена количества карт??!
-  несколько прогрессбаров
-  новые слова, изучаемые на повторении
-
-  далее (след день) начать с повтора 20 карт? или части из них, которые сложные
-
-  */
-
-  // если есть слова для повторения на сегодня
-  // если на сегодня нет - берем с бекенда следующие
-  // в зависимости от последней карты, на которой остановились
-  // если есть карты на сегодня - в любом случае добираем
-  // новыми словами с последней карты
-  // если нет, значит пользователь играет в первый раз
-  // либо на сегодня нет слов для повторения
-  // берем с бекенда с самого начала или с последней точки
-
   destroy() {
     super.destroy();
     this.audio = null;
@@ -702,34 +674,3 @@ export default class MainGame extends Component {
     return createMainGameHTML(this.dataForApp).trim();
   }
 }
-
-// возможность запустить след партию слов
-
-// let lastRepeat;
-// let nextRepeat;
-// let counter;
-// let success;
-// let progress;
-// let gameError;
-
-// изменить и сохранить слово
-/*
-this.difficulty = 'new';
-this.optional = {
-  lastRepeat: Date.now(),
-  nextRepeat: 0, посчитать в зависимости от сложности
-  counter: 0, показы? +1
-  success: 0, угадано-неугадано - если угадано +1 success?
-  progress: 1, если угадано сразу - 5? иначе 1
-  status: 'active', или др (active -- для изучаемых слов, difficult -- для сложных,
-    deleted -- для удаленных)
-  gameError: false, если ошибка - не трогаем, если ок - меняем на false
-};
-*/
-
-// определяем сложность для слова
-// сохраняем само слово
-// сохраняем статистику пользователя за день
-// долгосрочная статистика
-// если нужно добавляем в массив карточек
-// либо через одно либо в конец
