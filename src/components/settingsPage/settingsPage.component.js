@@ -282,7 +282,6 @@ export default class Settings extends Component {
     this.getSettingsElements();
     this.setCheckboxFields();
     this.watchDependenceOfThreeMainCardsField();
-    console.log('this.settings', this.settings);
   }
 
   destroy() {
@@ -301,7 +300,6 @@ export default class Settings extends Component {
           setTimeout(() => this.$root.find('#settingsPageApplyButton').addClass('btn-primary'), 2000);
           setTimeout(() => this.$root.find('#settingsPageApplyButton').text(buttonsText.applyButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
-          console.log('this.settings', this.settings);
         })
         .catch(() => {
           this.isClickAble = false;
@@ -317,6 +315,7 @@ export default class Settings extends Component {
     if (event.target.id === 'settingsPageResetButton' && this.isClickAble) {
       this.setStandardSettings();
       this.setCheckboxFields();
+      this.watchThreeMainCardsField();
       this.options.api.updateSettings(this.settings)
         .then(() => {
           this.isClickAble = false;
@@ -327,7 +326,6 @@ export default class Settings extends Component {
           setTimeout(() => this.$root.find('#settingsPageResetButton').addClass('btn-danger'), 2000);
           setTimeout(() => this.$root.find('#settingsPageResetButton').text(buttonsText.standardSettingsButtonStandardText), 2000);
           setTimeout(() => { this.isClickAble = true; }, 2000);
-          console.log('this.settings', this.settings);
         })
         .catch(() => {
           this.isClickAble = false;
