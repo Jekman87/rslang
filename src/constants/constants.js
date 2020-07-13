@@ -8,6 +8,7 @@ export const FOUR_DAYS = (4 * 24 * 60 * 60 * 1000);
 export const RESET_HOUR = 4;
 export const MULTIPLIER_GOOD = 2.5;
 export const MULTIPLIER_EASY = 4;
+export const ALL_WORDS = 3600;
 
 export const WORD_PARAM = {
   again: 'again',
