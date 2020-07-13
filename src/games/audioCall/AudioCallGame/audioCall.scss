@@ -103,11 +103,13 @@
 
 .answer-col {
   display: flex;
+  max-height: 300px;
 }
 
 .question-col {
   padding-top: 8%;
   padding-bottom: 5%;
+  max-height: 300px;
 }
 
 .answer-pic {
@@ -121,6 +123,10 @@
   width: fit-content;
   margin: 0 auto;
   font-size: 3.5em;
+}
+
+.buttons-col {
+  height: 100px;
 }
 
 .audio-call-stats-wrapper {
@@ -212,6 +218,13 @@
   }
 }
 
+@media only screen and (max-width: 700px) {
+  .audio-call-stats-wrapper .stat-container,
+  .audio-call-stats-wrapper .long-stat-container {
+    width: 80%;
+  }
+}
+
 @media only screen and (max-width: 576px) {
   .audio-call-wrapper {
     i {
@@ -219,5 +232,11 @@
         font-size: 3em;
       }
     }
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .buttons-col {
+    height: 150px;
   }
 }
