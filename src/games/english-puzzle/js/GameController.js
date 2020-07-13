@@ -99,6 +99,7 @@ export default class GameController {
     this.audioHelp.removeEventListener('abort', this.bindedMethods.removePlayEffect);
 
     this.elems.imgHelp.onload = '';
+    this.audioHelp.pause();
     this.audioHelp.onplay = '';
     this.audioHelp.onended = '';
     document.removeEventListener('click', this.bindedFn);
