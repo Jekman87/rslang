@@ -14,7 +14,6 @@ export default function createAudioCall() {
     </div>
   </div>
 </div>
-
 <div class="container">
   <div class="row mt-5">
     <div class="col-2 d-flex">
@@ -25,7 +24,6 @@ export default function createAudioCall() {
         <i class="fas fa-music" data-event="soundOff"></i>
         <i class="fas fa-slash d-none" data-event="soundOff"></i>
       </button>
-
     </div>
     <div class="col-6 col-sm-9"></div>
     <div class="col">
@@ -45,12 +43,10 @@ export default function createAudioCall() {
       <button class="btn btn-repeat d-block ml-auto mr-auto on-answer" type="button" data-event="repeat">
         <i class="fas fa-volume-up" data-event="repeat"></i>
       </button>
-
       <div class ="answer">
         <img class= "answer-pic" src="">
         <p class="text-white answer-word"></p>
       </div>
-
     </div>
     <div class="col"></div>
   </div>
@@ -96,11 +92,3 @@ export default function createAudioCall() {
 </div>
     `;
 }
-
-/* <div class="answer-pic-wrap">
-          <div class="answer-pic"></div>
-        </div> */
-/* <div class="answer-pic-wrap ">
-          <div class="answer-pic"></div>
-        </div>
-        <p class="text-white align-self-center ml-4 answer-word ">already</p> */
