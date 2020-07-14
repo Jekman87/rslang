@@ -26,29 +26,44 @@ export default class SprintGame extends Component {
       ...options,
     });
     this.options = options;
+    this.settings = this.options.dataForApp.settings;
     this.statistic = this.options.dataForApp.statistics;
     this.mainApi = this.options.api;
     this.currentTime = 60;
   }
-
-  getResetDayTime = (resetHour) => {
-    const time = new Date();
-    const hour = time.getHours();
-    if (hour >= resetHour) time.setDate(time.getDate() + 1);
-    const resetDayTime = time.setHours(resetHour, 0);
-
-    return resetDayTime;
-  };
 
   init() {
     super.init();
     getWords(2, 13, 13);
   }
 
+  async loadUserWords() {
+    if (!document.querySelector('.sprint-check').checked) return;
+    if (!this.options.dataForApp.userWords) return;
+
+    const data = this.options.dataForApp.userWords;
+    const dataLength = Object.keys(data).length;
+
+    if (dataLength < 10) return;
+
+    for (let i = 0; i < dataLength; i += 1) {
+      state.dictionary[`${data[i].word}`] = {
+        word: data[i].word,
+        translate: data[i].wordTranslate,
+        transcription: data[i].transcription,
+        audio: data[i].audio,
+        id: data[i].id,
+      };
+    }
+    console.log(state.dictionary);
+    console.log(Object.keys(state.dictionary).length);
+  }
+
   onClick(event) {
     switch (event.target.dataset.button) {
       case 'start':
         rememberLevel();
+        this.loadUserWords();
         getWords(state.currentLevel);
         hideIntro();
         this.restartGame();
@@ -87,6 +102,7 @@ export default class SprintGame extends Component {
         playWordAudio();
         break;
       case 'home':
+        state.dictionary = {};
         this.destroy();
         removeKeyDownListeners.call(this);
         this.options.observer.emit('selectPage', 'MainPage');

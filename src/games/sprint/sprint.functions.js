@@ -44,7 +44,8 @@ async function getWords(level, page = 0, count = 60) {
       id: content[i].id,
     };
   }
-
+  console.log(state.dictionary)
+  console.log(Object.keys(state.dictionary).length);
   return content;
 }
 
@@ -68,7 +69,7 @@ function hideBestIndicator() {
 }
 
 function hideCountdown() {
-  document.querySelector('.main-sp').style.display = 'none';
+  document.querySelector('.sprint-spinner').style.display = 'none';
 }
 
 function hideShortTimeStatistic() {
@@ -76,7 +77,7 @@ function hideShortTimeStatistic() {
 }
 
 function showCountdown() {
-  document.querySelector('.main-sp').style.display = 'flex';
+  document.querySelector('.sprint-spinner').style.display = 'flex';
 }
 
 function rewriteLongTimeStatistic() {
@@ -114,23 +115,23 @@ function showShortTimeStatistic() {
 }
 
 function opacityOn() {
-  document.querySelector('.countdown').style.opacity = '100';
+  document.querySelector('.sprint-countdown').style.opacity = '100';
 }
 
 function opacityOff() {
-  document.querySelector('.countdown').style.opacity = '0';
+  document.querySelector('.sprint-countdown').style.opacity = '0';
 }
 
 function ready() {
-  document.querySelector('.countdown').innerHTML = 'На старт ...';
+  document.querySelector('.sprint-countdown').innerHTML = 'На старт ...';
 }
 
 function set() {
-  document.querySelector('.countdown').innerHTML = 'Внимание ...';
+  document.querySelector('.sprint-countdown').innerHTML = 'Внимание ...';
 }
 
 function go() {
-  document.querySelector('.countdown').innerHTML = 'Марш!';
+  document.querySelector('.sprint-countdown').innerHTML = 'Марш!';
 }
 
 function markRightAnswer() {
@@ -152,7 +153,7 @@ function showBonusTime(bonusTime) {
 function removeShortTimeStatistic() {
   state.points = 0;
   state.pointsWeigth = 10;
-  document.querySelector('.score').innerHTML = 0;
+  document.querySelector('.sprint-score-table').innerHTML = 0;
   document.querySelector('.mistake-block').innerHTML = '';
   document.querySelector('.correct-block').innerHTML = '';
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
@@ -369,7 +370,7 @@ function addBirdsPicture(birdNumber) {
 }
 
 function resetPointsPlaces() {
-  document.querySelector('.score').innerHTML = state.points;
+  document.querySelector('.sprint-score-table').innerHTML = state.points;
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
 }
 
@@ -409,7 +410,7 @@ function pointsCount() {
 }
 
 function rewriteStatistic() {
-  document.querySelector('.score').innerHTML = state.points;
+  document.querySelector('.sprint-score-table').innerHTML = state.points;
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
   pointsCount();
   callRandomFunction();

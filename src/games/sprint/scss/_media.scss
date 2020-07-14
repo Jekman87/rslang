@@ -1,5 +1,5 @@
 @media (max-width: 480px) {
-  .intro__sprint h1 {
+  .intro__sprint h2 {
     font-size: 2rem;
   }
 
@@ -10,8 +10,22 @@
   }
 
   .intro__sprint p {
-    font-size: 1.3rem;
+    width: 90%;
+    font-size: 1.0rem;
   }
+
+  .intro__sprint .sprint-difficulty-level span {
+    font-size: 0.9rem;
+  }
+
+  .intro__sprint .sprint-user-words span {
+    font-size: 0.9rem;
+  }
+
+  .intro__sprint .sprint-user-words input {
+    width: 20px;
+    height: 20px;
+}
 
   .sprint-game-block {
     width: 280px;

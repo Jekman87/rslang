@@ -13,13 +13,17 @@ export default function createGameField() {
         </div>
       </div>
 
+      <div class="sprint-user-words">
+        <span>Включить в игру мои слова<input type="checkbox" class="sprint-check" checked></span>
+      </div>
+
       <button type="button" class="btn" data-button="start">Начать забег</button>
     </div>
 
-    <div class="main-sp">
+    <div class="sprint-spinner">
       <div class="spinner">
         <div class="circle-1"></div>
-        <div class="countdown"></div>
+        <div class="sprint-countdown"></div>
         <div class="circle-2"></div>
       </div>
     </div>
@@ -34,7 +38,7 @@ export default function createGameField() {
       </header>
 
       <div class="sprint-score">
-        <div class="score">0</div>
+        <div class="sprint-score-table">0</div>
         <span class="sprint-mute">
           <i class="fas fa-music sprint-icon-parameters note" data-click="mute"></i>
         </span>
