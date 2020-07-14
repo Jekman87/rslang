@@ -10,27 +10,27 @@ const chartOptions = {
   },
 };
 
-const perDayChartData = {
-  labels: ['11.07', '12.07', '13.07', '14.07', '15.07', '16.07'],
+const perDayChartDataObj = JSON.stringify({
+  labels: [],
   datasets: [{
     label: 'Выучено слов за день',
-    data: [12, 15, 7, 9, 0, 13],
+    data: [],
     backgroundColor: 'rgba(2, 176, 48, 0.2)',
     borderColor: 'rgba(2, 176, 48, 1)',
     borderWidth: 1,
   }],
-};
+});
 
-const allDaysChartData = {
-  labels: ['', '1 день', '2 день', '3 день', '4 день', '5 день', '6 день'],
+const allDaysChartDataObj = JSON.stringify({
+  labels: [''],
   datasets: [{
     label: 'Выучено слов всего',
-    data: [0, 12, 27, 34, 43, 43, 56],
+    data: [0],
     backgroundColor: 'rgba(252, 173, 3, 0.2)',
     borderColor: 'rgba(252, 173, 3, 1)',
     borderWidth: 1,
   }],
-};
+});
 
 const popularityChartData = {
   labels: ['SpeakIt', 'English Puzzle', 'Саванна', 'Аудиовызов', 'Спринт', 'Riddle'],
@@ -106,8 +106,8 @@ const tablesMarkUpData = [
 
 export {
   chartOptions,
-  perDayChartData,
-  allDaysChartData,
+  perDayChartDataObj,
+  allDaysChartDataObj,
   popularityChartData,
   tablesMarkUpData,
   chartsMarkUpData,
