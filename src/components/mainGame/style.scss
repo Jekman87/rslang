@@ -1,4 +1,4 @@
-.main-app {
+.MainGame {
   .navigate-button {
     width: 100%;
     height: 100%;
@@ -52,4 +52,73 @@
     color: #0000ff;
     user-select: unset;
   }
+
+  .input-container {
+    display: inline-block;
+    position: relative;
+    padding: 0;
+    margin: .25rem 0;
+    white-space: nowrap;
+    font-size: 1.4rem;
+
+    .background {
+      background: #e0ebef;
+      margin: 0;
+      border-radius: 0.25rem;
+      padding: .25rem .25em;
+      user-select: none;
+
+      .hidden {
+        visibility: hidden;
+      }
+    }
+
+    .word-container {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      visibility: hidden;
+      transform-origin: 0 50%;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+      user-select: none;
+      margin: 0 .25em;
+    }
+
+    .animate-typing-container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: #338c99;
+      user-select: none;
+      margin: 0 .25em;
+
+      .hidden {
+        opacity: 0;
+      }
+    }
+
+    .answer-input {
+      background: transparent;
+      font: inherit;
+      outline: none;
+      resize: none;
+      -webkit-appearance: none;
+      -webkit-font-smoothing: antialiased;
+      display: inline;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: #338c99;
+      margin: 0;
+      padding: 0 .25em;
+      height: auto;
+    }
+  }
+
+
 }

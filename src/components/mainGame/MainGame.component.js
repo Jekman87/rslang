@@ -48,6 +48,7 @@ export default class MainGame extends Component {
     this.state = {
       isChecking: false,
       isNewWord: true,
+      isCorrect: true,
       allCardsLearned: 0,
       allWordsLearned: 0,
       resetDayTime: 0,
@@ -243,8 +244,8 @@ export default class MainGame extends Component {
     }
 
     this.state.isChecking = true;
-    const inputText = this.elements.$wordInput.text();
-    const currentWordStats = this.elements.$wordEn.text();
+    const inputText = this.elements.$wordInput.text().toLowerCase();
+    const currentWordStats = this.elements.$wordEn.text().toLowerCase();
 
     // проверяем инпут на соответствие
     if (inputText === currentWordStats) {
@@ -287,7 +288,7 @@ export default class MainGame extends Component {
 
       // через кнопки сложности переход на след слово
     } else {
-      // отметка не ок в статистике слова
+      this.isCorrect = false;
 
       // если не соответствует - показываем ошибки
       // алгоритм показа ошибок
@@ -295,7 +296,7 @@ export default class MainGame extends Component {
       // показываем ответ как по кнопке "показать ответ"?
       // или просто на время показываем слово в инпуте?
 
-      this.setDifficulty(WORD_PARAM.again, false);
+      this.setDifficulty(WORD_PARAM.again);
       this.showWordErrors(inputText);
     }
 
@@ -392,7 +393,7 @@ export default class MainGame extends Component {
     this.state.currentCardNum = nextCandNum;
   }
 
-  setDifficulty(wordDifficulty, isSuccess = true) {
+  setDifficulty(wordDifficulty) {
     const currentWord = this.userCards[this.state.currentCardNum];
 
     console.log('test do', this.state.currentWord, currentWord);
@@ -480,15 +481,15 @@ export default class MainGame extends Component {
     }
 
     counter += 1;
-    success = isSuccess ? (success + 1) : success;
+    success = this.isCorrect ? (success + 1) : success;
 
-    if (this.state.isNewWord && isSuccess) {
+    if (this.state.isNewWord && this.isCorrect) {
       progress = 5;
     } else {
       progress = (progress < 5) ? (progress + 1) : progress;
     }
 
-    if (isSuccess) {
+    if (this.isCorrect) {
       gameError = false;
     }
 
@@ -550,7 +551,7 @@ export default class MainGame extends Component {
     console.log('setDifficulty this.dataForApp', this.dataForApp);
   }
 
-  createUserStats(isSuccess = true) {
+  createUserStats() {
     // краткосрочная статистика
     let {
       newWordsCount,
@@ -573,13 +574,13 @@ export default class MainGame extends Component {
     allCardsLearned += 1;
     cardsLeft = this.userCards.length - (this.state.currentCardNum + 1);
 
-    if (isSuccess) {
+    if (this.isCorrect) {
       correctAnswers += 1;
     } else {
       errorAnswers += 1;
     }
 
-    if (isSuccess) {
+    if (this.isCorrect) {
       currentSeries += 1;
 
       if (bestSeries < currentSeries) {
@@ -658,6 +659,8 @@ export default class MainGame extends Component {
     this.settingsOptional.MainGameLong = JSON.stringify(this.longTermStats);
 
     this.options.api.updateSettings(this.dataForApp.settings);
+
+    this.isCorrect = true;
     console.log('createUserStats', this.shortTermStats, this.longTermStats);
   }
 

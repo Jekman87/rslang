@@ -41,14 +41,34 @@ export default function createMainGameHTML(dataForApp) {
               <div class="card-body">
                 <div class="card mb-3">
                   <div class="row no-gutters">
-                    <div class="col-md-4 image-container">
+                    <div class="col-lg-6 order-lg-2 image-container">
                       <img src="${FILE_URL}/${word.image}" class="card-img ${settingsOptional.cardImage ? '' : 'd-none'}" id="word-image" alt="img">
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-lg-6 order-lg-1">
                       <div class="card-body">
                         <p class="card-text">Введите слово на англ</p>
                         <p class="card-text" id="word-en">${word.word}</p>
-                        <input type="text" class="form-control" id="word-input" autocomplete="off">
+
+                        <span class="input-container">
+                          <span class="background">
+                            <span index="0" class="hidden">a</span>
+                            <span index="1" class="hidden">r</span>
+                            <span index="2" class="hidden">e</span>
+                          </span>
+                          <span class="word-container">
+                            <span index="0" class="hidden">a</span>
+                            <span index="1" class="hidden">r</span>
+                            <span index="2" class="hidden">e</span>
+                          </span>
+                          <span class="animate-typing-container">
+                            <span index="0" class="hidden">a</span>
+                            <span index="1" class="hidden">r</span>
+                            <span index="2" class="hidden">e</span>
+                          </span>
+                          <input class="answer-input form-control" type="text" maxlength="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        </span>
+
+                        <input type="text" class="form-control d-none" id="word-input" autocomplete="off">
                         <div class="row">
                           <div class="col-6">
                             <p class="card-text font-weight-bold ${settingsOptional.cardTranslation ? '' : 'd-none'}" id="word-translate">${word.wordTranslate}</p>
