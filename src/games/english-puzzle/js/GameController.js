@@ -439,6 +439,7 @@ export default class GameController {
     this.saveRoundResult();
     this.savePassedRound();
     this.saveGallery();
+    this.saveCommonProgress();
     document.dispatchEvent(new CustomEvent('userDataChange', { detail: 'statistics' }));
   }
 
@@ -479,6 +480,11 @@ export default class GameController {
         this.set('gallery', `${currentArt}`);
       }
     }
+  }
+
+  saveCommonProgress() {
+    const value = this.correctCounter;
+    this.externalObserver.emit('saveCommonProgress', value);
   }
 
   closePopUp() {
