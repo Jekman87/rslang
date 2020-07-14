@@ -1,4 +1,5 @@
 import { FILE_URL } from '../../constants/constants';
+import { getWordSpans } from './mainGame.utils';
 // высчитывать интервалы
 
 export default function createMainGameHTML(dataForApp) {
@@ -10,6 +11,9 @@ export default function createMainGameHTML(dataForApp) {
   if (word.userWord) {
     progress = word.userWord.optional.progress;
   }
+
+  const wordSpans = getWordSpans(word.word);
+  console.log('Подсказка: ', word.word);
 
   return `
     <div class="container mt-3">
@@ -47,28 +51,17 @@ export default function createMainGameHTML(dataForApp) {
                     <div class="col-lg-6 order-lg-1">
                       <div class="card-body">
                         <p class="card-text">Введите слово на англ</p>
+
                         <p class="card-text" id="word-en">${word.word}</p>
 
                         <span class="input-container">
-                          <span class="background">
-                            <span index="0" class="hidden">a</span>
-                            <span index="1" class="hidden">r</span>
-                            <span index="2" class="hidden">e</span>
+                          <span class="background hidden" id="word-background">
+                            ${wordSpans}
                           </span>
-                          <span class="word-container">
-                            <span index="0" class="hidden">a</span>
-                            <span index="1" class="hidden">r</span>
-                            <span index="2" class="hidden">e</span>
-                          </span>
-                          <span class="animate-typing-container">
-                            <span index="0" class="hidden">a</span>
-                            <span index="1" class="hidden">r</span>
-                            <span index="2" class="hidden">e</span>
-                          </span>
-                          <input class="answer-input form-control" type="text" maxlength="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                          <input class="answer-input form-control" id="word-input" type="text" maxlength="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         </span>
 
-                        <input type="text" class="form-control d-none" id="word-input" autocomplete="off">
+                        <input type="text" class="form-control d-none" autocomplete="off">
                         <div class="row">
                           <div class="col-6">
                             <p class="card-text font-weight-bold ${settingsOptional.cardTranslation ? '' : 'd-none'}" id="word-translate">${word.wordTranslate}</p>

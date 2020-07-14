@@ -3,7 +3,7 @@ import $$ from '../../core/domManipulation';
 import createMainGameHTML from './mainGame.template';
 
 import { delay, getResetDayTime, getStartDayTime } from '../../core/utils';
-import { getIntervalsOfRepeat } from './mainGame.utils';
+import { getIntervalsOfRepeat, findCommonSubstring, getWordSpans } from './mainGame.utils';
 import UserWord from '../../core/UserWord';
 
 import {
@@ -99,6 +99,8 @@ export default class MainGame extends Component {
       $wordProgress: this.$root.find('#word-progress'),
       $wordImage: this.$root.find('#word-image'),
       $wordEn: this.$root.find('#word-en'),
+      $wordBackground: this.$root.find('#word-background'),
+      $wordSpans: this.$root.findAll('#word-background span'),
       $wordInput: this.$root.find('#word-input'),
       $wordTranslate: this.$root.find('#word-translate'),
       $wordTranscription: this.$root.find('#word-transcription'),
@@ -222,6 +224,9 @@ export default class MainGame extends Component {
 
     if (event.key === keyEnter) {
       this.nextBtnHandler();
+    } else if (event.target.tagName === 'INPUT') {
+      this.elements.$wordBackground.addClass('hidden');
+      this.elements.$wordBackground.removeClass('opacity');
     }
   }
 
@@ -244,11 +249,11 @@ export default class MainGame extends Component {
     }
 
     this.state.isChecking = true;
-    const inputText = this.elements.$wordInput.text().toLowerCase();
-    const currentWordStats = this.elements.$wordEn.text().toLowerCase();
+    const inputWord = this.elements.$wordInput.text().toLowerCase();
+    const currentWord = this.elements.$wordEn.text().toLowerCase();
 
     // проверяем инпут на соответствие
-    if (inputText === currentWordStats) {
+    if (inputWord === currentWord) {
       // отметка ок в статистике слова
       // статистика пользователя дневная и долгосрочная
       // учесть окончание карточек
@@ -256,6 +261,7 @@ export default class MainGame extends Component {
       // перенести в функцию? showWordInSentence()
       this.elements.$wordExample.addClass('show-word');
       this.elements.$wordMeaning.addClass('show-word');
+      this.elements.$wordInput.addClass('underline');
 
       // повялвение кнопок сложности (если настроены) +
       if (this.settingsOptional.feedbackButtons) {
@@ -297,15 +303,38 @@ export default class MainGame extends Component {
       // или просто на время показываем слово в инпуте?
 
       this.setDifficulty(WORD_PARAM.again);
-      this.showWordErrors(inputText);
+      this.showWordErrors(inputWord, currentWord);
     }
 
     this.state.isChecking = false;
   }
 
-  showWordErrors(word) {
-    console.log('ошибочка', word);
-    // подготовить блок со словом где каждая буква разбира на спаны
+  async showWordErrors(inputWord, currentWord) {
+    console.log('ошибочка', inputWord, currentWord);
+    const commonSubstring = findCommonSubstring(inputWord, currentWord);
+    console.log('correctSubstr', commonSubstring);
+
+    this.elements.$wordInput.text('');
+
+    const substrlength = commonSubstring.length;
+    const wordlength = currentWord.length;
+    const errorClass = ((substrlength / wordlength) * 100) > 50 ? 'orange' : 'red';
+    const startIndex = currentWord.indexOf(commonSubstring);
+    const endIndex = startIndex + substrlength - 1;
+
+    this.elements.$wordSpans.forEach((element, idx) => {
+      const span = element;
+      span.className = '';
+
+      if (idx < startIndex || idx > endIndex) {
+        span.classList.add(errorClass);
+      }
+    });
+
+    this.elements.$wordBackground.removeClass('hidden');
+
+    await delay(1500);
+    this.elements.$wordBackground.addClass('opacity');
   }
 
   async speakText() {
@@ -340,6 +369,7 @@ export default class MainGame extends Component {
       return;
     }
 
+    this.elements.$wordInput.removeClass('underline');
     this.state.isChecking = false;
     this.audio.pause();
 
@@ -372,7 +402,13 @@ export default class MainGame extends Component {
     this.elements.$wordProgress.text(wordDifficult);
     this.elements.$wordImage.$el.src = `${FILE_URL}/${word.image}`;
     // предзагрузка картинки следующей карты?
+    // убрать подсказку
     this.elements.$wordEn.text(word.word);
+    console.log('Подсказка: ', word.word);
+
+    const wordSpans = getWordSpans(word.word);
+    this.elements.$wordBackground.html(wordSpans);
+
     this.elements.$wordTranslate.html(word.wordTranslate);
     this.elements.$wordTranscription.html(word.transcription);
     this.elements.$wordExample.html(word.textExample);
@@ -396,13 +432,9 @@ export default class MainGame extends Component {
   setDifficulty(wordDifficulty) {
     const currentWord = this.userCards[this.state.currentCardNum];
 
-    console.log('test do', this.state.currentWord, currentWord);
-
     if (this.state.currentWord && this.state.currentWord._id === currentWord._id) {
       return;
     }
-
-    console.log('test posle');
 
     this.state.isNewWord = true;
 
