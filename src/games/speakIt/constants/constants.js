@@ -8,6 +8,8 @@ const MAX_WORDS_LEVEL = 5;
 const PER_GAME_WORDS = 10;
 const MAX_HISTORY_LIST_COUNT = 20;
 
+const GAME_MODE = ['dictionary', 'rounds'];
+
 const GAME_DEFAULT_STATE = {
   gameLevel: {
     level: 0,
@@ -18,6 +20,8 @@ const GAME_DEFAULT_STATE = {
   correct: 0,
   successWords: [],
   words: [],
+  mode: GAME_MODE[0],
+  dictionaryCount: 0,
 };
 
 export {
@@ -29,4 +33,5 @@ export {
   MAX_HISTORY_LIST_COUNT,
   GAME_DEFAULT_STATE,
   PRONOUNCE_URL,
+  GAME_MODE,
 };

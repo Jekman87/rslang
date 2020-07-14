@@ -66,7 +66,7 @@ export default class CardsDesk extends Component {
     this.subscribe('results:playword', (wordId) => {
       if (wordId) {
         const data = this.dataForApp.state.words
-          .find((el) => el.id === wordId);
+          .find((el) => (el.id || el._id) === wordId);
         const { audio } = data;
         playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
       }
@@ -76,8 +76,21 @@ export default class CardsDesk extends Component {
     });
     this.subscribe('header:finishRound', () => {
       unSelectCards.call(this);
-      prepareCardsDataHTML.call(this);
-      preloadCradsMedia.call(this);
+      let wordsTen;
+      if (this.dataForApp.state.mode === 'rounds') {
+        const { group } = this.dataForApp.state.gameLevel;
+        wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
+          : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
+      }
+      if (this.dataForApp.state.mode === 'dictionary') {
+        const count = this.dataForApp.state.dictionaryCount;
+        wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+        this.dataForApp.state.dictionaryCount += 10;
+      }
+      this.dataForApp.state.gameWords = wordsTen;
+      this.dataForApp.state.successWords = [];
+      // prepareCardsDataHTML.call(this);
+      // preloadCradsMedia.call(this);
     });
     this.subscribe('score:finishGame', async () => {
       await delay(1500);
@@ -112,7 +125,7 @@ export default class CardsDesk extends Component {
         clickedElement.addClass('bg-success');
         cardBody.removeClass('bg-primary').addClass('bg-success');
         const data = this.dataForApp.state.gameWords
-          .find((el) => el.id === clickedElement.data.wordid);
+          .find((el) => (el.id || el._id) === clickedElement.data.wordid);
         const { audio } = data;
         this.emit('cardsDesk:clickOnCard', data);
         playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
@@ -126,15 +139,24 @@ export default class CardsDesk extends Component {
 }
 
 function prepareCardsDataHTML() {
-  const { group } = this.dataForApp.state.gameLevel;
-  const wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
-    : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
+  let wordsTen;
+  if (this.dataForApp.state.mode === 'rounds') {
+    const { group } = this.dataForApp.state.gameLevel;
+    wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
+      : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
+  }
+  if (this.dataForApp.state.mode === 'dictionary') {
+    const count = this.dataForApp.state.dictionaryCount;
+    wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+    this.dataForApp.state.dictionaryCount += 10;
+    debugger;
+  }
   const cards = wordsTen.map((name) => {
     const {
-      id, word: term, wordTranslate: translation, transcription,
+      id, _id, word: term, wordTranslate: translation, transcription,
     } = name;
     const card = createCardHTML({
-      id, term, translation, transcription,
+      id, _id, term, translation, transcription,
     });
     return card;
   });

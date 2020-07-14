@@ -42,8 +42,14 @@ export default class CardContainer extends Component {
     });
     this.subscribe('speech:recognition', (word) => {
       const wordObj = checkSpeechWord.call(this, word);
+      let id;
       if (wordObj) {
-        const { id } = wordObj;
+        if (this.dataForApp.state.mode === 'rounds') {
+          id = wordObj.id;
+        }
+        if (this.dataForApp.state.mode === 'dictionary') {
+          id = wordObj._id;
+        }
         updateWordCard.call(this, wordObj);
         changeStateWordsArrays.call(this, word);
         this.emit('cardContainer:findWord', id);
