@@ -106,6 +106,11 @@ export default function showTemplate() {
             </div> -->
           </div>
           <div class="col-12 d-flex justify-content-end h3">
+            <div class="p-1 ml-3">
+              <span class="savanna-step-word-counter" id="savannaStepWordCounter">12</span>
+              <span class="savanna-step-word-counter">/</span>
+              <span class="savanna-step-word-counter">30</span>
+            </div>
             <div class="savanna-abort-game-button p-1 ml-3">
               <span class="fas fa-times"></span>
             </div>
