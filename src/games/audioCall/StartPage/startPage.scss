@@ -1,6 +1,6 @@
 .audio-call-start-page {
   height: 100vh;
-  background: url('./startBAckground.jpg');
+  background: url("/assets/img/audioStart.jpg");
   background-size: cover;
 
   & .container {
@@ -40,8 +40,8 @@ i {
 
 .audiocall-setting-card {
   position: absolute;
-  left: 70%;
-  top: 12%;
+  right: 15px;
+  top: 140%;
   z-index: 4;
   max-height: 0rem;
   overflow: hidden;
@@ -49,35 +49,9 @@ i {
   max-width: 20rem;
   border: 1px solid transparent !important;
   background-color: rgba(0, 0, 0, 0) !important;
-  // box-shadow: none;
 }
 
 .audiocall-setting-card.setting-card-opened {
   max-height: 20rem;
-  // border: 1px solid #18bc9c !important;
   background-color: white !important;
-}
-
-@media only screen and (max-width: 926px) {
-  .audiocall-setting-card {
-    left: 53%;
-  }
-}
-
-@media only screen and (max-width: 750px) {
-  .audiocall-setting-card {
-    left: 40%;
-  }
-}
-
-@media only screen and (max-width: 570px) {
-  .audiocall-setting-card {
-    left: 20%;
-  }
-}
-
-@media only screen and (max-width: 380px) {
-  .audiocall-setting-card {
-    left: 5%;
-  }
 }

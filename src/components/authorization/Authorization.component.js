@@ -8,7 +8,6 @@ export default class Authorization extends Component {
   constructor($root, options) {
     super($root, {
       name: 'Authorization',
-      listeners: ['click'],
       ...options,
     });
 
@@ -16,19 +15,6 @@ export default class Authorization extends Component {
 
     this.onSubmitLoginForm = this.onSubmitLoginForm.bind(this);
     this.onSubmitRegisterForm = this.onSubmitRegisterForm.bind(this);
-    // бинды можно будет удалить после перехода на клик
-  }
-
-  onClick(event) {
-    const clickedElement = $$(event.target);
-    // тут делаем проверку на какой именно элемент кликнули
-    // например через дата атрибут, или через класс
-    // и в зависимости от этого вызываем нужную функцию
-    // this.submitForm например
-
-    if (clickedElement.hasClass('btn')) {
-      // console.log(clickedElement);
-    }
   }
 
   checkPasswordValidity(password) {
