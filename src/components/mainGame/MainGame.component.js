@@ -53,6 +53,7 @@ export default class MainGame extends Component {
       allWordsLearned: 0,
       resetDayTime: 0,
       startDayTime: 0,
+      commonProgress: 0,
     };
     this.updateState();
 
@@ -63,6 +64,7 @@ export default class MainGame extends Component {
   updateState() {
     this.state.resetDayTime = getResetDayTime(RESET_HOUR);
     this.state.startDayTime = getStartDayTime(RESET_HOUR);
+    this.state.commonProgress = this.settingsOptional.commonProgress;
 
     if (this.longTermStats) {
       const lastIndex = this.longTermStats.length - 1;
@@ -516,17 +518,17 @@ export default class MainGame extends Component {
     }
 
     counter += 1;
-    success = this.state.isCorrect ? (success + 1) : success;
-
-    if (this.state.isNewWord && this.state.isCorrect) {
-      progress = 5;
-    } else {
-      progress = (progress < 5) ? (progress + 1) : progress;
-    }
 
     if (this.state.isCorrect) {
+      success += 1;
+      this.state.commonProgress += 1;
       gameError = false;
-      this.emit('saveCommonProgress', 1);
+
+      if (this.state.isNewWord) {
+        progress = 5;
+      } else {
+        progress = (progress < 5) ? (progress + 1) : progress;
+      }
     }
 
     if (wordDifficulty === WORD_PARAM.deleted) {
@@ -695,11 +697,14 @@ export default class MainGame extends Component {
 
     this.settingsOptional.MainGameShort = JSON.stringify(this.shortTermStats);
     this.settingsOptional.MainGameLong = JSON.stringify(this.longTermStats);
+    this.settingsOptional.commonProgress = this.state.commonProgress;
 
     this.options.api.updateSettings(this.dataForApp.settings);
 
     this.state.isCorrect = true;
-    console.log('createUserStats', this.shortTermStats, this.longTermStats);
+    console.log('createUserStats shortTermStats', this.shortTermStats);
+    console.log('createUserStats longTermStats', this.longTermStats);
+    console.log('createUserStats commonProgress', this.settingsOptional.commonProgress);
   }
 
   destroy() {
