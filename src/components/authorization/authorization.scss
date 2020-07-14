@@ -1,3 +1,8 @@
+html {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+}
+
 body {
   background: url("/assets/img/authorizationBack.jpg");
   background-size: cover;
@@ -6,7 +11,21 @@ body {
   width: 100vw;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-y: auto;
   background-attachment: fixed;
+  &::-webkit-scrollbar {
+    width: 0.7rem;
+    background: transparent;
+    // background: #2c3e50;
+    border-radius: 0 0 5px 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccd4d8d9;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #98b7c7d9;
+  }
 }
 
 .sign-in-text {

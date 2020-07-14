@@ -20,6 +20,9 @@ const BASE_SETTINGS = {
     vocabularyExample: true,
     vocabularyTranscription: true,
     vocabularyImage: true,
+    MainGameShort: false,
+    MainGameLong: false,
+    commonProgress: 0,
   },
 };
 
