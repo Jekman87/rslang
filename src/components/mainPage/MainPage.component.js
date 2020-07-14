@@ -58,7 +58,7 @@ export default class MainPage extends Component {
       cardsPerDay = this.dataForApp.settings.optional.cardsPerDay;
     }
 
-    cardsPerDay = this.dataForApp.userCards.length < cardsPerDay
+    cardsPerDay = this.dataForApp.userCards.length > cardsPerDay
       ? cardsPerDay
       : this.dataForApp.userCards.length;
 
