@@ -38,6 +38,14 @@ export default function createMainPageHTML(data) {
     allWords,
     learnedCards,
   } = data;
+
+  let wordsTodayPercent = Math.ceil((wordsToday / wordsPerDay) * 100);
+  wordsTodayPercent = Number.isNaN(wordsTodayPercent) ? 0 : wordsTodayPercent;
+  let cardsTodayPercent = Math.ceil((cardsToday / cardsPerDay) * 100);
+  cardsTodayPercent = Number.isNaN(cardsTodayPercent) ? 0 : cardsTodayPercent;
+  let learnedWordsPercent = Math.ceil((learnedWords / allWords) * 100);
+  learnedWordsPercent = Number.isNaN(learnedWordsPercent) ? 0 : learnedWordsPercent;
+
   return `
     <div class="container mt-3">
       <div class="jumbotron pt-4">
@@ -63,7 +71,7 @@ export default function createMainPageHTML(data) {
                         Слов на сегодня
                         <div class="progress-container rounded">
                           <div class="progress-tiny bg-info"
-                          style="width:${Math.ceil((wordsToday / wordsPerDay) * 100)}%"></div>
+                          style="width:${wordsTodayPercent}%"></div>
                         </div>
                       <span class="stats badge badge-info badge-pill">${wordsToday} из ${wordsPerDay}</span>
                     </li>
@@ -71,7 +79,7 @@ export default function createMainPageHTML(data) {
                       Карточек на сегодня
                       <div class="progress-container rounded">
                         <div class="progress-tiny bg-info"
-                        style="width:${Math.ceil((cardsToday / cardsPerDay) * 100)}%"></div>
+                        style="width:${cardsTodayPercent}%"></div>
                       </div>
                       <span class="stats badge badge-info badge-pill">${cardsToday} из ${cardsPerDay}</span>
                     </li>
@@ -88,7 +96,7 @@ export default function createMainPageHTML(data) {
                       Всего выучено слов
                       <div class="progress-container rounded">
                         <div class="progress-tiny bg-info"
-                        style="width:${Math.ceil((learnedWords / allWords) * 100)}%"></div>
+                        style="width:${learnedWordsPercent}%"></div>
                       </div>
                       <span class="stats badge badge-info badge-pill">${learnedWords} из ${allWords}</span>
                     </li>
@@ -102,7 +110,9 @@ export default function createMainPageHTML(data) {
             </div>
           </div>
           <!--<div class="progress bg-secondary my-3">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-info" role="progressbar" 
+              style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+            </div>
           </div> -->
           <a href="#" class="btn btn-light"
           data-name="${MAIN_MENU_TITLES[4].data}">Подробнее...</a>
