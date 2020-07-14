@@ -153,13 +153,13 @@ export default class PageContainer extends Component {
       }
     }
 
-    const shortStatsJson = this.statistics.optional.MainGameShort;
+    const shortStatsJson = this.settings.optional.MainGameShort;
 
     if (shortStatsJson) {
       this.shortTermStats = JSON.parse(shortStatsJson);
     }
 
-    const longStatsJson = this.statistics.optional.MainGameLong;
+    const longStatsJson = this.settings.optional.MainGameLong;
 
     if (longStatsJson) {
       this.longTermStats = JSON.parse(longStatsJson);

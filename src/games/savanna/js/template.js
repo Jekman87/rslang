@@ -113,20 +113,20 @@ export default function showTemplate() {
         </div>
       </div>
       <div class="container main-game">
-        <div class="row text-xs-left text-sm-center">
-          <div class="col-12 col-sm-6 my-2">
+        <div class="row text-left text-sm-center" style="justify-content:space-evenly">
+          <div class="col-12 col-sm-auto my-2">
             <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn0" id="savanna-answer-btn0">
               word1</div>
           </div>
-          <div class="col-12 col-sm-6 my-2">
+          <div class="col-12 col-sm-auto my-2">
             <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn1" id="savanna-answer-btn1">
               word2</div>
           </div>
-          <div class="col-12 col-sm-6 my-2">
+          <div class="col-12 col-sm-auto my-2">
             <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn2" id="savanna-answer-btn2">
               word3</div>
           </div>
-          <div class="col-12 col-sm-6 my-2">
+          <div class="col-12 col-sm-auto my-2">
             <div class="btn btn-success w-100 savanna-answer-btn" data-savannaanswerbtn="btn3" id="savanna-answer-btn3">
               word4</div>
           </div>
@@ -355,7 +355,7 @@ export default function showTemplate() {
         style="max-width: 900px;">
         <h2 class="savanna-modal-heading" >Вы действительно хотите покинуть игру? Результаты не сохранятся.</h2>
         <div class="container">
-          <div class="row text-xs-left text-sm-center">
+          <div class="row text-center">
             <div class="col-12 col-sm-6 my-2">
               <div class="btn btn-warning w-75" id="savannaGameAbortYes">
                 Да</div>
