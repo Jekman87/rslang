@@ -85,12 +85,9 @@ export default class CardsDesk extends Component {
       if (this.dataForApp.state.mode === 'dictionary') {
         const count = this.dataForApp.state.dictionaryCount;
         wordsTen = this.dataForApp.state.words.slice(count, count + 10);
-        this.dataForApp.state.dictionaryCount += 10;
       }
       this.dataForApp.state.gameWords = wordsTen;
       this.dataForApp.state.successWords = [];
-      // prepareCardsDataHTML.call(this);
-      // preloadCradsMedia.call(this);
     });
     this.subscribe('score:finishGame', async () => {
       await delay(1500);
@@ -149,7 +146,6 @@ function prepareCardsDataHTML() {
     const count = this.dataForApp.state.dictionaryCount;
     wordsTen = this.dataForApp.state.words.slice(count, count + 10);
     this.dataForApp.state.dictionaryCount += 10;
-    debugger;
   }
   const cards = wordsTen.map((name) => {
     const {

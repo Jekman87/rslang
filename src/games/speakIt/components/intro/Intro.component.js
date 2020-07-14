@@ -36,16 +36,13 @@ export default class Intro extends Component {
         this.dataForApp.state.gameLevel = { ...lastRound };
       }
     }
-
-    console.log(this.mainUserWords);
-    console.log(this.dataForApp);
   }
 
   async onClick(event) {
     const clickedElement = $$(event.target);
     if (clickedElement.data.action === 'start') {
       const startButtonHtml = clickedElement.html();
-      clickedElement.html(createButtonSpinnerHTML().trim()).attr('disabled', true);
+      clickedElement.clear().html(createButtonSpinnerHTML().trim()).attr('disabled', true);
       await delay(1500);
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       if (this.dataForApp.state.mode === 'rounds') {
@@ -70,7 +67,6 @@ export default class Intro extends Component {
       }
       if (this.dataForApp.state.mode === 'dictionary') {
         this.dataForApp.state.words = this.mainUserWords;
-        this.dataForApp.state.gameLevel.group = 1;
       }
       this.$root.addClass('none');
       this.emit('intro:start', '');

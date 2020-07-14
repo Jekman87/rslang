@@ -24,6 +24,7 @@ export default class Results extends Component {
     });
     this.$resultsDialog = this.$root.find('#resultsDialog');
     this.$historyDialog = this.$root.find('#historyDialog');
+    this.$continueBtn = this.$root.find('[data-target="continue"');
     this.$errorItems = this.$root.find('.error-items');
     this.$errorNum = this.$root.find('.errors-num');
     this.$successNum = this.$root.find('.success-num');
@@ -45,6 +46,13 @@ export default class Results extends Component {
     });
     this.subscribe('cardsDesk:finishGame', () => {});
     this.subscribe('header:results', () => {
+      if (this.dataForApp.state.mode === 'dictionary') {
+        const count = this.dataForApp.state.dictionaryCount;
+        const wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+        if (wordsTen.length < 10) {
+          this.$continueBtn.addClass('d-none');
+        }
+      }
       this.$resultsDialog.$el.showModal();
     });
     this.subscribe('header:history', () => {
@@ -55,6 +63,13 @@ export default class Results extends Component {
       updateResults.call(this);
     });
     this.subscribe('header:finishRound', () => {
+      if (this.dataForApp.state.mode === 'dictionary') {
+        const count = this.dataForApp.state.dictionaryCount;
+        const wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+        if (wordsTen.length < 10) {
+          this.$continueBtn.addClass('d-none');
+        }
+      }
       this.$resultsDialog.$el.showModal();
     });
     this.subscribe('score:finishGame', () => {
