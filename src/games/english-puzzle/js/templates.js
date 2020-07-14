@@ -4,9 +4,6 @@ const puzzleGame = `
     <h1 class="h1">English Puzzle</h1>
     <p class="preview">Изучай английский и живопись вместе! Собери паззл правильно и получи произведение искусства в личную коллекцию!</p>
     <button class="btn btn-primary start-button visible">Старт</button>
-    <div class="pzl-spinner">
-      <div class="lds-hourglass"></div>
-    </div>
   </div>
   <p class="report-message report-message_hidden"></p>
   <div class="wrapper">

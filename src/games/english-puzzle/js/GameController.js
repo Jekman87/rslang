@@ -29,7 +29,6 @@ export default class GameController {
       playBtn: document.querySelector('button.play-pzl-btn'),
       startBtn: document.querySelector('button.start-button'),
       exitBtn: document.querySelector('button.exit-pzl-btn'),
-      spinner: document.querySelector('div.pzl-spinner'),
       popUp: document.querySelector('div.pop-up'),
       resultsBlock: document.querySelector('div.results-block'),
       statBlock: document.querySelector('div.statistics-block'),
@@ -114,7 +113,6 @@ export default class GameController {
   }
 
   startGame() {
-    this.elems.spinner.classList.add('visible');
     this.defineNextRound();
     document.dispatchEvent(new CustomEvent('dataRequired'));
   }
@@ -142,7 +140,7 @@ export default class GameController {
   }
 
   suggestExit() {
-    this.elems.spinner.classList.remove('visible');
+    this.externalObserver.emit('mainAppSpinner', false);
     this.elems.startBtn.textContent = 'Вернуться';
   }
 
@@ -175,6 +173,7 @@ export default class GameController {
   }
 
   switchPage() {
+    this.externalObserver.emit('mainAppSpinner', false);
     this.elems.startPage.classList.add('hidden');
     this.elems.mainPage.classList.add('visible');
   }
