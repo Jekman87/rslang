@@ -116,6 +116,13 @@ export default class Savannah {
       };
     }
     window.savanna = this;
+    // const tmp1 = Date.now();
+    // this.options.api.getAllUserAggregatedWords(null, 600, null).then((e) => {
+    //   console.log('then', e);
+    //   console.log('time =', Date.now() - tmp1);
+    // }).catch((e) => {
+    //   console.log('catch', e);
+    // });
   }
 
   render() {
@@ -759,20 +766,16 @@ export default class Savannah {
     const roundSecond = this.statsSavannaMain.roundsForTeamLead[`${roundMain}`];
 
     const toBackend = {};
-    toBackend.correctAnswer = correctCount;
-    toBackend.wrongAnswer = wrongCount;
     toBackend.date = Date.now();
     toBackend.round = `${roundMain}-${roundSecond}`;
+    toBackend.result = `${correctCount}-${wrongCount}`;
     if (wrongCount === 0) {
       this.savannaStatisticHeadingElement.textContent = gameWinHeaderText;
       this.statsSavannaMain.totalWins += 1;
-      toBackend.result = 'Победа';
     } else if (wrongCount === 5) {
       this.savannaStatisticHeadingElement.textContent = gameFailHeaderText;
       this.statsSavannaMain.totalLose += 1;
-      toBackend.result = 'Поражение';
     } else {
-      toBackend.result = 'Победа со штрафом';
       this.savannaStatisticHeadingElement.textContent = gameWinWithErrorHeaderText;
       this.statsSavannaMain.totalWinsWithErr += 1;
     }
@@ -900,14 +903,25 @@ export default class Savannah {
       statObj.LTLi[i].li1 = createEssence('li', 'statistics-info-item',
         `${tmpData.toLocaleString()}`,
         statObj.LTLi[i].ul);
+      let gameResult = 'Победа!';
+      const mySweetLittleTemporaryConstant = this.statsSavannahLong[i].result.split('-');
+      const gameCorrectAnswers = mySweetLittleTemporaryConstant[0];
+      const gameWrongAnswers = mySweetLittleTemporaryConstant[1];
+      if (gameWrongAnswers === '0') {
+        gameResult = 'Победа';
+      } else if (gameWrongAnswers === '5') {
+        gameResult = 'Поражение';
+      } else {
+        gameResult = 'Победа со штрафом';
+      }
       statObj.LTLi[i].li2 = createEssence('li', 'statistics-info-item',
-        `Результат игры - ${this.statsSavannahLong[i].result}`,
+        `Результат игры - ${gameResult}`,
         statObj.LTLi[i].ul);
       statObj.LTLi[i].li3 = createEssence('li', 'statistics-info-item',
-        `Правильных ответов - ${this.statsSavannahLong[i].correctAnswer}`,
+        `Правильных ответов - ${gameCorrectAnswers}`,
         statObj.LTLi[i].ul);
       statObj.LTLi[i].li3 = createEssence('li', 'statistics-info-item',
-        `Ошибок -  ${this.statsSavannahLong[i].wrongAnswer}`,
+        `Ошибок -  ${gameWrongAnswers}`,
         statObj.LTLi[i].ul);
     }
     this.savannaLongtermStatistics.innerHTML = '';
