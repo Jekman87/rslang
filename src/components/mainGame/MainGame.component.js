@@ -236,9 +236,6 @@ export default class MainGame extends Component {
   nextBtnHandler() {
     if (this.state.currentCardNum === this.state.studiedСardNum) {
       this.checkWord();
-    } else if (this.state.currentWord
-      && this.userCards[this.state.currentCardNum]._id === this.state.currentWord._id) {
-      this.changeCard();
     } else {
       this.setDifficulty(WORD_PARAM.good);
       this.changeCard();
@@ -255,59 +252,34 @@ export default class MainGame extends Component {
     const inputWord = this.elements.$wordInput.text().toLowerCase();
     const currentWord = this.elements.$wordEn.text().toLowerCase();
 
-    // проверяем инпут на соответствие
     if (inputWord === currentWord) {
-      // отметка ок в статистике слова
-      // статистика пользователя дневная и долгосрочная
       // учесть окончание карточек
 
-      // перенести в функцию? showWordInSentence()
       this.elements.$wordExample.addClass('show-word');
       this.elements.$wordMeaning.addClass('show-word');
       this.elements.$wordInput.addClass('underline');
       // зеленый цвет если с первого раза
       // this.state.isNewWord && this.state.isCorrect
 
-      // повялвение кнопок сложности (если настроены) +
       if (this.settingsOptional.feedbackButtons) {
         this.elements.$cardFooter.removeClass('invisible');
       }
 
-      // статистика пользователя
-      // считаем карту изученной до всех задержек
       this.state.studiedСardNum += 1;
 
-      // воспроизведение аудио в зависимости от настроек +
       if (this.settingsOptional.autoSound) {
         await this.speakText();
-      } else if (!this.settingsOptional.feedbackButtons) { // добавить '!'
-        // небольшая задержка если звук отключен
-        // чтобы пользователь увидел слово
-        // возможно анимация правильного ответа?
+      } else if (!this.settingsOptional.feedbackButtons) {
         await delay(1500);
       }
 
-      // после аудио либо автоматом на след слово
-      // либо ждем реакции через кнопки фидбэка, если они включены
       if (!this.settingsOptional.feedbackButtons) {
-        // переход на след карту
-        // если кнопки выкючены - сами определяем алгоритм
         this.setDifficulty(WORD_PARAM.good);
         this.changeCard();
         this.createUserStats();
       }
-
-      // через кнопки сложности переход на след слово
     } else {
       this.state.isCorrect = false;
-
-      // если не соответствует - показываем ошибки
-      // алгоритм показа ошибок
-
-      // показываем ответ как по кнопке "показать ответ"?
-      // или просто на время показываем слово в инпуте?
-
-      this.setDifficulty(WORD_PARAM.again);
       this.showWordErrors(inputWord, currentWord);
     }
 
@@ -587,6 +559,8 @@ export default class MainGame extends Component {
     }
 
     console.log('setDifficulty this.dataForApp', this.dataForApp);
+    console.log('setDifficulty cardsCount', this.state.cardsCount);
+    console.log('setDifficulty currentCardNum', this.state.currentCardNum);
   }
 
   createUserStats() {
@@ -702,9 +676,8 @@ export default class MainGame extends Component {
     this.options.api.updateSettings(this.dataForApp.settings);
 
     this.state.isCorrect = true;
-    console.log('createUserStats shortTermStats', this.shortTermStats);
-    console.log('createUserStats longTermStats', this.longTermStats);
-    console.log('createUserStats commonProgress', this.settingsOptional.commonProgress);
+    console.log('createUserStats cardsCount', this.state.cardsCount);
+    console.log('createUserStats currentCardNum', this.state.currentCardNum);
   }
 
   destroy() {

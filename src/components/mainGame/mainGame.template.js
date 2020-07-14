@@ -47,13 +47,15 @@ export default function createMainGameHTML(dataForApp) {
                   <div class="row no-gutters">
                     <div class="col-lg-6 order-lg-2 image-container">
                       <img src="${FILE_URL}/${word.image}" class="card-img ${settingsOptional.cardImage ? '' : 'd-none'}" id="word-image" alt="img">
+                      <img src="/assets/speakit/img/blank.jpg" class="card-img ${settingsOptional.cardImage ? 'd-none' : ''}" alt="img">
+
                     </div>
                     <div class="col-lg-6 order-lg-1">
                       <div class="card-body">
                         <p class="card-text">Введите слово на англ</p>
 
                         <p class="card-text" id="word-en">${word.word}</p>
-
+                        <i class="fas fa-keyboard"></i>
                         <span class="input-container">
                           <span class="background hidden" id="word-background">
                             ${wordSpans}

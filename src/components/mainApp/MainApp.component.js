@@ -30,7 +30,7 @@ export default class MainApp {
       // переделать на currentPage из LS?
       // this.startPage = this.pages[currentPage];
       this.startPage = this.pages[MAIN_MENU_TITLES[0].data].className;
-      // this.startPage = 'MainGame';
+      this.startPage = 'MainGame';
       expTime = this.api.tokenExpiresIn;
     } else {
       this.startPage = this.pages[AUTH_PAGE_NAME].className;
