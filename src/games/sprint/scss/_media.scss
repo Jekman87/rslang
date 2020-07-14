@@ -40,25 +40,56 @@
 
   .sprint-score {
     width: 270px;
+    height: 60px;
   }
 
-  .birds .bird-1 {
-    top: 26%;
-    left: 1%;
-  }
+  .sprint-game-block .birds {
+    
+    .bird-1 {
+      top: 26%;
+      left: 1%;
+    }
 
-  .birds .bird-2 {
-    top: 40%;
-    left: 24%;
-  }
+    .bird-2 {
+      top: 40%;
+      left: 24%;
+    }
 
-  .birds .bird-3 {
-    top: 33%;
-    left: 47%;
+    .bird-3 {
+      top: 33%;
+      left: 47%;
+    }
+
+    .bird-4 {
+      top: 32%;
+      left: 66%;
+    }
   }
 
   .birds span {
     width: 90%;
+  }
+}
+
+@media (max-width: 320px) {
+  .sprint-game-block .birds {
+    min-height: 55px;
+
+    .bird-1 {
+      top: -7%;
+    }
+
+    .bird-2 {
+      top: 15%;
+    }
+
+    .bird-3 {
+      top: 4%;
+    }
+
+    .bird-4 {
+      top: 2%;
+    }
   }
 }
 

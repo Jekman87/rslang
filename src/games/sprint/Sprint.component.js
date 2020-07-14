@@ -55,8 +55,6 @@ export default class SprintGame extends Component {
         id: data[i].id,
       };
     }
-    console.log(state.dictionary);
-    console.log(Object.keys(state.dictionary).length);
   }
 
   onClick(event) {
@@ -174,7 +172,16 @@ export default class SprintGame extends Component {
     setTimeout(keyDownListener.bind(this), 5000);
   }
 
-  prepareStatisticForSend(roundResult) {
+  sendBonusStatistic() {
+    const allAnswers = state.correctAnswers + state.wrongAnswers;
+
+    if (allAnswers === 0) return;
+
+    const result = (state.correctAnswers / allAnswers) * 10;
+    this.options.observer.emit('saveCommonProgress', result);
+  }
+
+  updateStatistic(roundResult) {
     let sprintLongStatistic = [];
 
     if (this.statistic.optional.SprintLong) {
@@ -190,6 +197,8 @@ export default class SprintGame extends Component {
 
     this.statistic.optional.SprintLong = JSON.stringify(sprintLongStatistic);
     this.mainApi.updateStatistics(this.statistic);
+
+    this.sendBonusStatistic();
   }
 
   prepareLongTimeStatistic(objectWithStatistic) {
@@ -234,7 +243,7 @@ export default class SprintGame extends Component {
       clearTimeout(timer);
       rewritePointsResult();
       rewriteCorrectAndWrongAnswers();
-      this.prepareStatisticForSend(rewriteLongTimeStatistic());
+      this.updateStatistic(rewriteLongTimeStatistic());
       showShortTimeStatistic();
       this.showLongTimeStatistic();
       removeKeyDownListeners.call(this);
@@ -303,13 +312,13 @@ export default class SprintGame extends Component {
   addBonusTime = () => {
     switch (state.comboAnswers) {
       case 4:
-        this.currentTime += 3;
+        this.currentTime += 1;
         break;
       case 8:
-        this.currentTime += 5;
+        this.currentTime += 3;
         break;
       case 12:
-        this.currentTime += 10;
+        this.currentTime += 3;
         break;
       default:
         break;

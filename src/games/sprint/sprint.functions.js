@@ -14,6 +14,8 @@ const state = {
   colorCount: 0,
   wordCount: 0,
   dictionary: {},
+  correctAnswers: 0,
+  wrongAnswers: 0,
 };
 
 async function getWords(level, page = 0, count = 60) {
@@ -44,8 +46,6 @@ async function getWords(level, page = 0, count = 60) {
       id: content[i].id,
     };
   }
-  console.log(state.dictionary)
-  console.log(Object.keys(state.dictionary).length);
   return content;
 }
 
@@ -218,8 +218,7 @@ function generateCorrectWordCouple() {
   state.translateWord = randomRusWord;
   state.correctTranslateWord = randomRusWord;
   state.audioWord = randomAudioWord;
-  // dev
-  console.log(true);
+
   state.roundStatus = true;
 }
 
@@ -238,8 +237,7 @@ function generateWrongWordCouple() {
   state.translateWord = randomRusWord;
   state.correctTranslateWord = translateForStatistic;
   state.audioWord = randomAudioWord;
-  // dev
-  console.log(false);
+
   state.roundStatus = false;
 }
 
@@ -381,7 +379,7 @@ function pointsCount() {
       resetBonusPlaces();
       addBirdsPicture(2);
       resetPointsPlaces();
-      showBonusTime(3);
+      showBonusTime(1);
       setTimeout(markBonusTimer, 0);
       setTimeout(markBonusTimer, 200);
       break;
@@ -390,7 +388,7 @@ function pointsCount() {
       resetBonusPlaces();
       addBirdsPicture(3);
       resetPointsPlaces();
-      showBonusTime(5);
+      showBonusTime(3);
       setTimeout(markBonusTimer, 0);
       setTimeout(markBonusTimer, 200);
       break;
@@ -400,7 +398,7 @@ function pointsCount() {
       addBirdsPicture(4);
       showBestIndicator();
       resetPointsPlaces();
-      showBonusTime(10);
+      showBonusTime(5);
       setTimeout(markBonusTimer, 0);
       setTimeout(markBonusTimer, 200);
       break;
