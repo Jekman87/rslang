@@ -62,7 +62,7 @@ export default function createAuthorizationForm() {
             РЕГИСТРАЦИЯ
           </button>
           <p
-            class="display-6 text-center font-weight-light sign-in-text my-2 px-3"
+            class="display-6 text-center font-weight-light sign-in-text my-2"
           >
             Уже зарегистрированы?
             <a href="#" class="text-primary change-form-link font-weight-bolder">
@@ -92,7 +92,7 @@ export default function createAuthorizationForm() {
           <button type="submit" class="btn btn-primary btn-lg btn-block">
             ВОЙТИ
           </button>
-          <p class="display-6 text-center font-weight-light sign-in-text my-2 px-3">
+          <p class="display-6 text-center font-weight-light sign-in-text my-2 ">
             Не зарегистрированы?
             <a href="#" class="text-primary  change-form-link">
               Создать аккаунт
