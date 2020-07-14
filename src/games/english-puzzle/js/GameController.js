@@ -57,7 +57,7 @@ export default class GameController {
       handleAnswer: this.handleAnswer.bind(this),
       handleUserAction: this.handleUserAction.bind(this),
       closePopUp: this.closePopUp.bind(this),
-      startGame: this.startGame.bind(this),
+      handleStartBtnClick: this.handleStartBtnClick.bind(this),
       exit: this.exit.bind(this),
       playAudio: this.playAudio.bind(this),
       playByClick: this.playByClick.bind(this),
@@ -75,7 +75,7 @@ export default class GameController {
 
     this.elems.closeBtn.addEventListener('click', this.bindedMethods.closePopUp);
 
-    this.elems.startBtn.addEventListener('click', this.bindedMethods.startGame);
+    this.elems.startBtn.addEventListener('click', this.bindedMethods.handleStartBtnClick);
     this.elems.exitBtn.addEventListener('click', this.bindedMethods.exit);
 
     this.elems.playBtn.addEventListener('click', this.bindedMethods.playAudio);
@@ -105,13 +105,29 @@ export default class GameController {
     document.removeEventListener('click', this.bindedFn);
   }
 
+  handleStartBtnClick(e) {
+    if (e.target.textContent === 'Старт') {
+      this.startGame();
+    } else {
+      this.exit();
+    }
+  }
+
   startGame() {
     this.elems.spinner.classList.add('visible');
     this.defineNextRound();
     document.dispatchEvent(new CustomEvent('dataRequired'));
   }
 
-  async handleNewData() {
+  handleNewData(e) {
+    if (e.detail === 'success') {
+      this.runRound();
+    } else {
+      this.suggestExit();
+    }
+  }
+
+  async runRound() {
     this.sentenceIndex = 0;
     this.correctCounter = 0;
     this.results = [];
@@ -123,6 +139,11 @@ export default class GameController {
     this.getAvailableWords();
     this.setPaintingInfo();
     this.switchPage();
+  }
+
+  suggestExit() {
+    this.elems.spinner.classList.remove('visible');
+    this.elems.startBtn.textContent = 'Вернуться';
   }
 
   switchElementsVisibility(isEndOfRound) {

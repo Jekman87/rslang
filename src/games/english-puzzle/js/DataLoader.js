@@ -39,7 +39,7 @@ export default class Loader {
     } else {
       this.set('sentencesData', this.data[`${group}_${page}`].sentencesInfo);
       this.set('paintingData', this.data[`${group}_${page}`].pictureInfo);
-      document.dispatchEvent(new CustomEvent('newData'));
+      document.dispatchEvent(new CustomEvent('newData', { detail: 'success' }));
     }
   }
 
@@ -83,9 +83,10 @@ export default class Loader {
       this.set('sentencesData', sentencesInfo);
       this.set('paintingData', pictureInfo);
 
-      document.dispatchEvent(new CustomEvent('newData'));
+      document.dispatchEvent(new CustomEvent('newData', { detail: 'success' }));
     } catch (e) {
-      this.report(e.message, false);
+      this.report(`Ошибка! ${e.message}`, false);
+      document.dispatchEvent(new CustomEvent('newData', { detail: 'failure' }));
     }
   }
 
