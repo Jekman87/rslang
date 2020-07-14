@@ -1,3 +1,8 @@
+html {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+}
+
 body {
   background: url("/assets/img/authorizationBack.jpg");
   background-size: cover;
@@ -17,6 +22,9 @@ body {
   &::-webkit-scrollbar-thumb {
     background: #ccd4d8d9;
     border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #98b7c7d9;
   }
 }
 
