@@ -7,6 +7,9 @@ const state = {
   riddleTranslate: '',
   riddleOptions: '',
   lvlStatistic: [],
+  optionsPromp: false,
+  translatePrompt: false,
+  voice: true,
 };
 
 function restartStatistic() {
@@ -269,6 +272,14 @@ function playWrongAudio() {
   document.querySelector('.riddle-wrong-voice').play().catch(() => true);
 }
 
+function switchVoice() {
+  if (state.voice) {
+    swithchOnVoice();
+  } else {
+    swithchOffVoice();
+  }
+}
+
 function swithchOffVoice() {
   document.querySelector('.riddle-mute').style.display = 'none';
   document.querySelector('.riddle-unmute').style.display = 'flex';
@@ -276,6 +287,8 @@ function swithchOffVoice() {
   document.querySelector('.riddle-correct-voice').src = '';
   document.querySelector('.riddle-wrong-voice').src = '';
   document.querySelector('.riddle-pass-voice').src = '';
+
+  state.voice = false;
 }
 
 function swithchOnVoice() {
@@ -285,6 +298,8 @@ function swithchOnVoice() {
   document.querySelector('.riddle-correct-voice').src = 'assets/voices/pew.mp3';
   document.querySelector('.riddle-wrong-voice').src = 'assets/voices/wrong.mp3';
   document.querySelector('.riddle-pass-voice').src = 'assets/voices/pass.mp3';
+
+  state.voice = true;
 }
 
 function upLevel() {
@@ -352,12 +367,57 @@ function hideTwoWrongAnswers() {
   });
 }
 
+function checkPromps() {
+  if (localStorage.getItem('rsspr') === null) return;
+  const data = JSON.parse(localStorage.getItem('rsspr'));
+  state.optionsPromp = data.optionsPromp;
+  state.translatePrompt = data.translatePrompt;
+  state.voice = data.voice;
+  console.log(state)
+}
+
+function rememberPrompts() {
+  localStorage.setItem('rsspr', JSON.stringify({
+    optionsPromp: state.optionsPromp,
+    translatePrompt: state.translatePrompt,
+    voice: state.voice,
+  }));
+}
+
+function switchTranslatePromps() {
+  if (state.translatePrompt) {
+    state.translatePrompt = false;
+  } else {
+    state.translatePrompt = true;
+  }
+}
+
 function showOrHideTranslatePrompt() {
-  document.querySelector('.riddle-translate-block').classList.toggle('riddle-hide-prompt');
+  if (state.translatePrompt) {
+    document.querySelector('.riddle-translate-block').classList.remove('riddle-hide-prompt');
+    document.querySelector('[data-click="show-translate"]').classList.add('riddle-active-prompt');
+  } else {
+    document.querySelector('.riddle-translate-block').classList.add('riddle-hide-prompt');
+    document.querySelector('[data-click="show-translate"]').classList.remove('riddle-active-prompt');
+  }
+}
+
+function switchOptionsPromps() {
+  if (state.optionsPromp) {
+    state.optionsPromp = false;
+  } else {
+    state.optionsPromp = true;
+  }
 }
 
 function showOrHideOptionsPrompt() {
-  document.querySelector('.riddle-answer-blocks').classList.toggle('riddle-hide-prompt');
+  if (state.optionsPromp) {
+    document.querySelector('.riddle-answer-blocks').classList.remove('riddle-hide-prompt');
+    document.querySelector('[data-click="show-options"]').classList.add('riddle-active-prompt');
+  } else {
+    document.querySelector('.riddle-answer-blocks').classList.add('riddle-hide-prompt');
+    document.querySelector('[data-click="show-options"]').classList.remove('riddle-active-prompt');
+  }
 }
 
 function passHandler() {
@@ -398,10 +458,11 @@ function backToGameFromStatistic() {
 export {
   hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
-  showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput, passHandler, swithchOffVoice,
-  showStatistic, recountStatistic, removeStatistic, swithchOnVoice,
-  showCorrectPartOfStatistic, showWrongPartOfStatistic,
+  showOrHideTranslatePrompt, showOrHideOptionsPrompt, checkPromps,
+  compareAnswers, moveAnswerIntoInput, passHandler, swithchOnVoice,
+  showStatistic, recountStatistic, removeStatistic, rememberPrompts,
+  showCorrectPartOfStatistic, showWrongPartOfStatistic, switchVoice,
   backToStatisticScreen, backToGameFromStatistic, state,
   prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
+  switchTranslatePromps, switchOptionsPromps, swithchOffVoice,
 };
