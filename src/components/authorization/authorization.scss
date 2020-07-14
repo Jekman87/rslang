@@ -23,6 +23,9 @@ body {
     background: #ccd4d8d9;
     border-radius: 10px;
   }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #98b7c7d9;
+  }
 }
 
 .sign-in-text {
