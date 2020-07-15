@@ -71,6 +71,7 @@ export default class MainPage extends Component {
       cardsPerDay,
       learnedWords,
       learnedCards,
+      commonProgress: this.dataForApp.settings.optional.commonProgress,
     };
 
     return createMainPageHTML(data).trim();
