@@ -12,6 +12,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
+  overflow: auto;
   z-index: 4;
 
   h2 {
@@ -66,12 +67,14 @@
       display: flex;
       justify-content: center;
     }
+
     span {
       text-align: center;
       font-size: 1.2rem;
       color: #fff;
       margin: 10px auto;
     }
+  
     input {
       user-select: none;
     }
@@ -103,6 +106,7 @@
     @include activeShadow();
     min-width: 190px;
     padding: 10px 20px;
+    margin-bottom: 20px;
     font-size: 1.5rem;
     color: #fff;
     opacity: 0.8;
