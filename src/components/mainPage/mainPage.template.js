@@ -103,7 +103,7 @@ export default function createMainPageHTML(data) {
           <p class="lead">Изучай английский язык - время не ждет!</p>
         </div>
         <div class="greeting mb-3">
-          <h5 class="greeting-text">Добро пожаловать, <i class="fas fa-user-graduate"></i> 
+          <h5 class="greeting-text">Добро пожаловать, <i class="fas fa-user-graduate"></i>
             <span class="text-warning">${username}</span>!
           </h5>
         </div>
@@ -143,7 +143,7 @@ export default function createMainPageHTML(data) {
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Очки уровня</h5>
-                      <span class="h2 font-weight-bold mb-0 text-gradient-green">${userPoints}</span>
+                      <span class="h2 font-weight-bold mb-0 text-gradient-green">${Math.round(userPoints)}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -164,7 +164,7 @@ export default function createMainPageHTML(data) {
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Всего очков</h5>
-                      <span class="h2 font-weight-bold mb-0 text-gradient-info">${commonProgress}</span>
+                      <span class="h2 font-weight-bold mb-0 text-gradient-info">${Math.round(commonProgress)}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -186,7 +186,7 @@ export default function createMainPageHTML(data) {
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">лига</h5>
                       <span class="h2 font-weight-bold mb-0 text-gradient-orange">${leagueRome}</span>
-                      <img src="/assets/main-page/Ranks0${rang}.png" class="position-absolute rounded rounded-circle" 
+                      <img src="/assets/main-page/Ranks0${rang}.png" class="position-absolute rounded rounded-circle"
                       style="top: 40px;left: 55%;width: 80px;height: auto;">
                     </div>
                     <div class="col-auto">
@@ -200,7 +200,7 @@ export default function createMainPageHTML(data) {
                 </div>
               </div>
             </div>
-          </div>     
+          </div>
         </div>
         <hr class="my-4">
         <div class="statistics bg-white p-2 rounded">
@@ -254,7 +254,7 @@ export default function createMainPageHTML(data) {
             </div>
           </div>
           <!--<div class="progress bg-secondary my-3">
-            <div class="progress-bar bg-info" role="progressbar" 
+            <div class="progress-bar bg-info" role="progressbar"
               style="width: 15%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
             </div>
           </div> -->

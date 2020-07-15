@@ -2,7 +2,7 @@ export default function createStatisticsHTML() {
   return `
   <div class="container mt-3">
     <div class="jumbotron mb-0">
-      <h3 class="stat-header"><i class="fas fa-user-chart"></i> Статистика:</h3>
+      <h1 class="stat-header display-4"><i class="fas fa-user-chart"></i> Статистика:</h1>
 
       <h4 class="stat-header"><i class="fas fa-calendar-day"></i> Статистика за сегодня:</h3>
       <div class="today-stats-wrapper">

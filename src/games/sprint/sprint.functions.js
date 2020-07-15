@@ -1,5 +1,3 @@
-/* import DICTIONARY from './sprint.data'; */
-
 import './scss/sprint.scss';
 
 const state = {

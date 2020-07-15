@@ -35,7 +35,7 @@ const gameCards = [
   },
   {
     dataAttr: 'Riddle',
-    title: 'Загадка-отгадка',
+    title: 'Riddle',
     img: '/assets/games-img/riddle/1.png',
     preview:
       'Задействуй знания английского языка и кругозор для решения лучших загадок со всего мира.',
