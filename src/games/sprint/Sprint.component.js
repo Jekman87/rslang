@@ -8,9 +8,9 @@ import {
   compareAnswers, rewriteStatistic, resetLongTimeStatistic,
   muteGameVoice, onGameVoice, rewriteCorrectAndWrongAnswers,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic,
-  removeKeyDownListeners, convertDate, showCountdown, rememberLevel,
-  ready, set, go, hideCountdown, keyDownListener, resetProgress,
+  switchToLongTimeStatistic, switchToRoundStatistic, state,
+  convertDate, showCountdown, rememberLevel, getWords,
+  ready, set, go, hideCountdown, resetProgress, getAllLevelWords,
   opacityOn, opacityOff, playTickAudio, playStartAudio, writeUserAnswer,
   removeShortTimeStatistic, hideBestIndicator, hideShortTimeStatistic,
   rewritePointsResult, rewriteLongTimeStatistic, showShortTimeStatistic,
@@ -26,6 +26,7 @@ export default class SprintGame extends Component {
       ...options,
     });
     this.options = options;
+    this.settings = this.options.dataForApp.settings;
     this.statistic = this.options.dataForApp.statistics;
     this.mainApi = this.options.api;
     this.currentTime = 60;
@@ -33,16 +34,38 @@ export default class SprintGame extends Component {
 
   init() {
     super.init();
-    callRandomFunction();
-    showWordsInThePage();
+    getWords(2, 13, 13);
+  }
+
+  async loadUserWords() {
+    if (!document.querySelector('.sprint-check').checked) return;
+    if (!this.options.dataForApp.userWords) return;
+
+    const data = this.options.dataForApp.userWords;
+    const dataLength = Object.keys(data).length;
+
+    if (dataLength < 10) return;
+
+    for (let i = 0; i < dataLength; i += 1) {
+      state.dictionary[`${data[i].word}`] = {
+        word: data[i].word,
+        translate: data[i].wordTranslate,
+        transcription: data[i].transcription,
+        audio: data[i].audio,
+        id: data[i].id,
+      };
+    }
   }
 
   onClick(event) {
     switch (event.target.dataset.button) {
       case 'start':
-        hideIntro();
         rememberLevel();
+        this.loadUserWords();
+        getWords(state.currentLevel);
+        hideIntro();
         this.restartGame();
+        getAllLevelWords();
         break;
       case 'Wrong':
         writeUserAnswer(event.target.dataset.button);
@@ -61,9 +84,11 @@ export default class SprintGame extends Component {
     switch (event.target.dataset.click) {
       case 'minus-level':
         changeLevelAndPage(event.target.dataset.click);
+        rememberLevel();
         break;
       case 'plus-level':
         changeLevelAndPage(event.target.dataset.click);
+        rememberLevel();
         break;
       case 'mute':
         muteGameVoice();
@@ -75,8 +100,9 @@ export default class SprintGame extends Component {
         playWordAudio();
         break;
       case 'home':
+        state.dictionary = {};
         this.destroy();
-        removeKeyDownListeners();
+        removeKeyDownListeners.call(this);
         this.options.observer.emit('selectPage', 'MainPage');
         break;
       case 'destroy':
@@ -143,10 +169,19 @@ export default class SprintGame extends Component {
     setTimeout(playStartAudio, 5000);
     setTimeout(hideCountdown, 5000);
     setTimeout(this.countdown, 5000);
-    setTimeout(keyDownListener, 5000);
+    setTimeout(keyDownListener.bind(this), 5000);
   }
 
-  prepareStatisticForSend(roundResult) {
+  sendBonusStatistic() {
+    const allAnswers = state.correctAnswers + state.wrongAnswers;
+
+    if (allAnswers === 0) return;
+
+    const result = (state.correctAnswers / allAnswers) * 10;
+    this.options.observer.emit('saveCommonProgress', result);
+  }
+
+  updateStatistic(roundResult) {
     let sprintLongStatistic = [];
 
     if (this.statistic.optional.SprintLong) {
@@ -162,6 +197,8 @@ export default class SprintGame extends Component {
 
     this.statistic.optional.SprintLong = JSON.stringify(sprintLongStatistic);
     this.mainApi.updateStatistics(this.statistic);
+
+    this.sendBonusStatistic();
   }
 
   prepareLongTimeStatistic(objectWithStatistic) {
@@ -194,22 +231,22 @@ export default class SprintGame extends Component {
   countdown = () => {
     let timer;
 
-    if (document.querySelector('.timer') === null) {
+    if (document.querySelector('.sprint-timer') === null) {
       clearTimeout(timer);
       return false;
     }
 
     this.currentTime -= 1;
-    document.querySelector('.timer').innerHTML = this.currentTime;
+    document.querySelector('.sprint-timer').innerHTML = this.currentTime;
 
     if (this.currentTime < 1) {
       clearTimeout(timer);
       rewritePointsResult();
       rewriteCorrectAndWrongAnswers();
-      this.prepareStatisticForSend(rewriteLongTimeStatistic());
+      this.updateStatistic(rewriteLongTimeStatistic());
       showShortTimeStatistic();
       this.showLongTimeStatistic();
-      removeKeyDownListeners();
+      removeKeyDownListeners.call(this);
     } else {
       timer = setTimeout(this.countdown, 1000);
     }
@@ -232,7 +269,73 @@ export default class SprintGame extends Component {
     showWordsInThePage();
   }
 
+  keyUp = (event) => {
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        writeUserAnswer(event.key);
+        compareAnswers();
+        this.addBonusTime();
+        rewriteStatistic();
+        unmarkLeftKeys();
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        writeUserAnswer(event.key);
+        compareAnswers();
+        this.addBonusTime();
+        rewriteStatistic();
+        unmarkRightKeys();
+        break;
+      default:
+        return true;
+    }
+    return true;
+  }
+
+  keyDown(event) {
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        markLeftKeys();
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        markRightKeys();
+        break;
+      default:
+        return true;
+    }
+    return true;
+  }
+
+  addBonusTime = () => {
+    switch (state.comboAnswers) {
+      case 4:
+        this.currentTime += 1;
+        break;
+      case 8:
+        this.currentTime += 3;
+        break;
+      case 12:
+        this.currentTime += 3;
+        break;
+      default:
+        break;
+    }
+  }
+
   toHTML() {
     return createGameField().trim();
   }
+}
+
+function keyDownListener() {
+  document.addEventListener('keydown', this.keyDown);
+  document.addEventListener('keyup', this.keyUp);
+}
+
+function removeKeyDownListeners() {
+  document.removeEventListener('keydown', this.keyDown);
+  document.removeEventListener('keyup', this.keyUp);
 }

@@ -1,4 +1,4 @@
-.main-sp {
+.sprint-spinner {
   display: flex;
   position: fixed;
   top: 0;
@@ -7,14 +7,14 @@
   height: 100%;
   background-color: #fffffff5;
   z-index: 3;
-  
+
   .spinner {
     position: absolute;
     left: 50%;
     top: 45%;
     transform: translate(-50%, -50%);
 
-    .countdown {
+    .sprint-countdown {
       width: 170px;
       height: 170px;
       font-size: 1.3rem;
@@ -52,10 +52,6 @@
       animation: spin 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s infinite;
     }
   }
-}
-
-.hide-spinner {
-  display: none;
 }
 
 @keyframes spin {
