@@ -11,7 +11,7 @@ export default class Riddle {
   }
 
   getRoot() {
-    const $root = $$.create('div', 'sprint-container');
+    const $root = $$.create('div', 'riddle-main-container');
 
     this.components = this.components.map((Component) => {
       const element = $$.create('div', Component.className);

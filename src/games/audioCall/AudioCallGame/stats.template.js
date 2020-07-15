@@ -27,6 +27,9 @@ export default function createAudioCallStats() {
         <button class="btn btn-primary statistic-button" type="button" data-event="back-to-short-stat">
           Вернуться
         </button>
+        <button class="btn btn-primary statistic-button" type="button" data-event="close">
+          На главную
+        </button>
       </div>
     </div>
     `;
