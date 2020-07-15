@@ -1,11 +1,10 @@
 .riddle-container {
   width: 90%;
   max-width: 700px;
-  max-height: 80vh;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: auto;
+  margin: 0 auto 15px;
   padding: 20px;
   border: 2px solid transparent;
   border-radius: 10px;
@@ -21,7 +20,7 @@
   margin: 10px;
   padding: 20px;
   text-align: center;
-  background-color: #ffffff5c;
+  background-color: #ffffff9c;
   border: 1px solid #2d303a;
   border-radius: 5px;
   overflow: auto;
@@ -29,6 +28,14 @@
 
 .riddle-hide-prompt {
   display: none !important;
+}
+
+.riddle-prompts .riddle-active-prompt {
+  background-color: #95a5a6;
+  box-shadow: 1px 1px 1px black;
+  i {
+    color: #ffffff;
+  }
 }
 
 .riddle-prompts {
@@ -73,7 +80,7 @@
     margin: 10px;
     padding: 5px;
     text-align: center;
-    background-color: #ffffff5c;
+    background-color: #ffffff9c;
     border: 1px solid #2d303a;
     border-radius: 5px;
     animation: blink 0.7s infinite;
@@ -104,6 +111,10 @@
     border: 1px solid #2d303a;
     border-radius: 5px;
     transition: all 0.4s;
+  }
+
+  button {
+    color: #000000;
   }
 }
 

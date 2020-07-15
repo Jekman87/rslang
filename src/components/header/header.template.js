@@ -50,7 +50,9 @@ export default function createHeaderHTML() {
     <div class="main-app-sp d-none">
       <div class="spinner">
         <div class="circle-1"></div>
-        <div class="countdown"></div>
+        <div class="countdown">
+          <img class="img-fluid" src="/assets/main-page/logo.png" alt="RS Lang">
+        </div>
         <div class="circle-2"></div>
       </div>
     </div>

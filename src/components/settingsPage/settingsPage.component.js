@@ -1,6 +1,7 @@
 import Component from '../../core/Component';
 import createSettingsHTML from './settingsPage.template';
 import BASE_SETTINGS from '../../constants/settings.constants';
+import './settings.scss';
 
 const maxCardsPerDay = 500;
 const minCardsPerDay = 3;
@@ -84,11 +85,11 @@ export default class Settings extends Component {
     this.el.$cardExample.$el.checked = this.optional.cardExample === true;
     this.el.$cardTranscription.$el.checked = this.optional.cardTranscription === true;
     this.el.$cardImage.$el.checked = this.optional.cardImage === true;
-    this.el.$cardTranslationAfter.$el.checked = this.optional.cardTranslationAfter === true;
+    this.el.$cardTranslationAfter.$el.checked = this.optional.cardTranslationAfterSuccess === true;
     if (this.el.$cardTranslationAfter.$el.checked === true) {
       this.el.$cardTranslationAfter.$el.disabled = false;
     }
-    this.el.$cardExplTranslation.$el.checked = this.optional.cardExplTranslation === true;
+    this.el.$cardExplTranslation.$el.checked = this.optional.cardExplanationTranslation === true;
     if (this.el.$cardExplTranslation.$el.checked === true) {
       this.el.$cardExplTranslation.$el.disabled = false;
     }
@@ -122,8 +123,8 @@ export default class Settings extends Component {
     this.optional.cardExample = this.el.$cardExample.$el.checked === true;
     this.optional.cardTranscription = this.el.$cardTranscription.$el.checked === true;
     this.optional.cardImage = this.el.$cardImage.$el.checked === true;
-    this.optional.cardTranslationAfter = this.el.$cardTranslationAfter.$el.checked === true;
-    this.optional.cardExplTranslation = this.el.$cardExplTranslation.$el.checked === true;
+    this.optional.cardTranslationAfterSuccess = this.el.$cardTranslationAfter.$el.checked === true;
+    this.optional.cardExplanationTranslation = this.el.$cardExplTranslation.$el.checked === true;
     this.optional.cardExampleTranslation = this.el.$cardExampleTranslation.$el.checked === true;
     this.optional.autoSound = this.el.$cardAutoSound.$el.checked === true;
     this.optional.answerButton = this.el.$cardAnswerButton.$el.checked === true;
@@ -183,8 +184,8 @@ export default class Settings extends Component {
     this.optional.cardExample = BASE_SETTINGS.optional.cardExample;
     this.optional.cardTranscription = BASE_SETTINGS.optional.cardTranscription;
     this.optional.cardImage = BASE_SETTINGS.optional.cardImage;
-    this.optional.cardTranslationAfter = BASE_SETTINGS.optional.cardTranslationAfterSuccess;
-    this.optional.cardExplTranslation = BASE_SETTINGS.optional.cardExplanationTranslation;
+    this.optional.cardTranslationAfterSuccess = BASE_SETTINGS.optional.cardTranslationAfterSuccess;
+    this.optional.cardExplanationTranslation = BASE_SETTINGS.optional.cardExplanationTranslation;
     this.optional.cardExampleTranslation = BASE_SETTINGS.optional.cardExampleTranslation;
     this.optional.autoSound = BASE_SETTINGS.optional.autoSound;
     this.optional.answerButton = BASE_SETTINGS.optional.answerButton;
@@ -265,7 +266,7 @@ export default class Settings extends Component {
       this.optional.mixedCards = BASE_SETTINGS.optional.mixedCards;
     }
     if (this.optional.cardTranslation === true) {
-      this.optional.cardTranslationAfter = false;
+      this.optional.cardTranslationAfterSuccess = false;
     }
     if (this.optional.cardExplanation === false) {
       this.optional.cardExplanationTranslation = false;
@@ -314,6 +315,7 @@ export default class Settings extends Component {
     if (event.target.id === 'settingsPageResetButton' && this.isClickAble) {
       this.setStandardSettings();
       this.setCheckboxFields();
+      this.watchThreeMainCardsField();
       this.options.api.updateSettings(this.settings)
         .then(() => {
           this.isClickAble = false;

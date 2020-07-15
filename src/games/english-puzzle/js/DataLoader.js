@@ -2,9 +2,10 @@ import paintings from './paintingsInfo';
 import { BASE_URL, FILE_URL } from '../../../constants/constants';
 
 export default class Loader {
-  constructor(storage, reporter) {
+  constructor(storage, reporter, observer) {
     this.storage = storage;
     this.reporter = reporter;
+    this.externalObserver = observer;
     this.data = {};
   }
 
@@ -35,11 +36,12 @@ export default class Loader {
 
   getData(group, page) {
     if (!this.data[`${group}_${page}`]) {
+      this.externalObserver.emit('mainAppSpinner', true);
       this.loadData(group, page);
     } else {
       this.set('sentencesData', this.data[`${group}_${page}`].sentencesInfo);
       this.set('paintingData', this.data[`${group}_${page}`].pictureInfo);
-      document.dispatchEvent(new CustomEvent('newData'));
+      document.dispatchEvent(new CustomEvent('newData', { detail: 'success' }));
     }
   }
 
@@ -83,9 +85,10 @@ export default class Loader {
       this.set('sentencesData', sentencesInfo);
       this.set('paintingData', pictureInfo);
 
-      document.dispatchEvent(new CustomEvent('newData'));
+      document.dispatchEvent(new CustomEvent('newData', { detail: 'success' }));
     } catch (e) {
-      this.report(e.message, false);
+      this.report(`Ошибка! ${e.message}`, false);
+      document.dispatchEvent(new CustomEvent('newData', { detail: 'failure' }));
     }
   }
 

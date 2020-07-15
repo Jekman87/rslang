@@ -3,7 +3,7 @@
         background-color: #ffffff;
         padding: 2rem 0;
         @media (min-width: 576px) {
-            padding: 4rem 2rem;
+            padding: 4rem 2rem 2rem;
         }
     }
     .display-4 {
@@ -35,7 +35,6 @@
         color: #ffffff !important;
         background-color: #7b8a8b;
     }
-
     .nav-link {
         padding: 0;
 
@@ -50,7 +49,9 @@
 
     .tab-content {
         padding-top: 4rem;
-        height: 60vh;
+        // min-height: 60vh;
+        height: 58vh;
+        // max-height: 100%;
         overflow-y: auto;
         &::-webkit-scrollbar {
             width: 0.5rem;
@@ -63,7 +64,8 @@
         }
     }
     .tab-pane {
-        width: 98%;
+        // width: 98%;
+        width: 100%;
         margin: 0 auto;
     }
     // карточка
@@ -147,6 +149,7 @@
         font-size: 2rem;
         line-height: 2rem;
         padding: 0.115rem 0.15rem !important;
+        pointer-events: none;
     }
     .icon-container{
         min-width: 3rem;
@@ -170,6 +173,21 @@
         width:inherit;
         height: inherit;
         text-align: center;
+        @media (min-width: 320px) {
+            font-size: 2rem;
+        }
+
+        @media (min-width: 375px) {
+            font-size: 2.4rem;
+        }
+
+        @media (min-width: 411px) {
+            font-size: 2.7rem;
+        }
+
+        @media (min-width: 576px) {
+            font-size: 3.5rem;
+        }
         // font-size: 5rem;
         // color: gray;
     }

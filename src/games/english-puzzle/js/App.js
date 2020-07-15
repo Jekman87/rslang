@@ -10,7 +10,7 @@ export default class App {
   constructor(api, statistics, settings, observer) {
     this.storage = new Storage(api, statistics, settings);
     this.reporter = new Reporter();
-    this.loader = new DataLoader(this.storage, this.reporter);
+    this.loader = new DataLoader(this.storage, this.reporter, observer);
     this.gameController = new GameController(this.storage, this.reporter, observer);
     this.dragger = new Dragger();
     this.helpController = new HelpersController(this.storage);

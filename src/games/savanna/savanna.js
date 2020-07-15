@@ -116,6 +116,13 @@ export default class Savannah {
       };
     }
     window.savanna = this;
+    // const tmp1 = Date.now();
+    // this.options.api.getAllUserAggregatedWords(null, 600, null).then((e) => {
+    //   console.log('then', e);
+    //   console.log('time =', Date.now() - tmp1);
+    // }).catch((e) => {
+    //   console.log('catch', e);
+    // });
   }
 
   render() {
@@ -161,6 +168,7 @@ export default class Savannah {
     this.settingsElemetns.isLearnedWords1 = document.getElementById('savannaisLearnedWords1');
     this.settingsElemetns.isLearnedWords2 = document.getElementById('savannaisLearnedWords2');
     this.settingsElemetns.gameInvert = document.getElementById('savannaSettingsGameInvert');
+    this.savannaStepWordCounter = document.getElementById('savannaStepWordCounter');
     this.settingsElemetns.gameIrregularVerbs = document.getElementById(
       'savannaSettingsGameIrregularVerbs',
     );
@@ -523,6 +531,7 @@ export default class Savannah {
       case 'gameStart':
         if (showConsoleLog) console.log('gameStart');
         this.gameState.step = 0;
+        this.savannaStepWordCounter.innerHTML = '1';
         this.gameState.statisticCorrectAnswers = [];
         this.gameState.statisticWrongAnswers = [];
         if (this.localSettings.gameInvert) {
@@ -675,6 +684,7 @@ export default class Savannah {
           el.classList.remove('savannaWrongAnswerBtn', 'savannaCorrectAnswerBtn');
         });
         if (this.gameState.step < 30) {
+          this.savannaStepWordCounter.innerHTML = `${this.gameState.step + 1}`;
           this.gameState.wrAnsArr = this.gameWordArray.filter(
             (el) => (this.gameWordArray[this.gameState.step] !== el),
           );
@@ -745,6 +755,16 @@ export default class Savannah {
           this.options.api.updateUserWord(el._id, el.userWord).catch((err) => {
             if (showConsoleLog) console.log('ошибка при работе с апи', err);
           });
+          const index = this.options.dataForApp.userWords.findIndex((element) => {
+            if (element._id === el._id) {
+              return true;
+            }
+            return false;
+          });
+          if (index >= 0) {
+            this.options.dataForApp.userWords[index].userWord.optional.gameError = true;
+            if (showConsoleLog) console.log('поменял в статистике юзера !!', index, this.options.dataForApp.userWords[index].word);
+          }
         }
       });
     }
@@ -757,22 +777,18 @@ export default class Savannah {
     this.statsSavannaMain.totalWordsFalse += wrongCount;
     this.statsSavannaMain.roundsForTeamLead[`${roundMain}`] += 1;
     const roundSecond = this.statsSavannaMain.roundsForTeamLead[`${roundMain}`];
-
+    this._upUserLevel((wrongCount === 5), correctCount, 30);
     const toBackend = {};
-    toBackend.correctAnswer = correctCount;
-    toBackend.wrongAnswer = wrongCount;
     toBackend.date = Date.now();
     toBackend.round = `${roundMain}-${roundSecond}`;
+    toBackend.result = `${correctCount}-${wrongCount}`;
     if (wrongCount === 0) {
       this.savannaStatisticHeadingElement.textContent = gameWinHeaderText;
       this.statsSavannaMain.totalWins += 1;
-      toBackend.result = 'Победа';
     } else if (wrongCount === 5) {
       this.savannaStatisticHeadingElement.textContent = gameFailHeaderText;
       this.statsSavannaMain.totalLose += 1;
-      toBackend.result = 'Поражение';
     } else {
-      toBackend.result = 'Победа со штрафом';
       this.savannaStatisticHeadingElement.textContent = gameWinWithErrorHeaderText;
       this.statsSavannaMain.totalWinsWithErr += 1;
     }
@@ -900,18 +916,41 @@ export default class Savannah {
       statObj.LTLi[i].li1 = createEssence('li', 'statistics-info-item',
         `${tmpData.toLocaleString()}`,
         statObj.LTLi[i].ul);
+      let gameResult = 'Победа!';
+      const mySweetLittleTemporaryConstant = this.statsSavannahLong[i].result.split('-');
+      const gameCorrectAnswers = mySweetLittleTemporaryConstant[0];
+      const gameWrongAnswers = mySweetLittleTemporaryConstant[1];
+      if (gameWrongAnswers === '0') {
+        gameResult = 'Победа';
+      } else if (gameWrongAnswers === '5') {
+        gameResult = 'Поражение';
+      } else {
+        gameResult = 'Победа со штрафом';
+      }
       statObj.LTLi[i].li2 = createEssence('li', 'statistics-info-item',
-        `Результат игры - ${this.statsSavannahLong[i].result}`,
+        `Результат игры - ${gameResult}`,
         statObj.LTLi[i].ul);
       statObj.LTLi[i].li3 = createEssence('li', 'statistics-info-item',
-        `Правильных ответов - ${this.statsSavannahLong[i].correctAnswer}`,
+        `Правильных ответов - ${gameCorrectAnswers}`,
         statObj.LTLi[i].ul);
       statObj.LTLi[i].li3 = createEssence('li', 'statistics-info-item',
-        `Ошибок -  ${this.statsSavannahLong[i].wrongAnswer}`,
+        `Ошибок -  ${gameWrongAnswers}`,
         statObj.LTLi[i].ul);
     }
     this.savannaLongtermStatistics.innerHTML = '';
     this.savannaLongtermStatistics.append(statObj.LTDiv);
+  }
+
+  _upUserLevel(isLose, correctAnswers, maxAnswers) {
+    let value = 10;
+    if (isLose === true) {
+      value = 5;
+    }
+    value *= correctAnswers / maxAnswers;
+    if (typeof this.options.dataForApp.settings.optional.commonProgress !== 'number') {
+      this.options.dataForApp.settings.optional.commonProgress = 0;
+    }
+    this.options.observer.emit('saveCommonProgress', value);
   }
 
   _returnStartGamePage() {

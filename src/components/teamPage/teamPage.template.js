@@ -10,7 +10,7 @@ function createMembersHTML(data) {
         <div class="col-lg-12">
           <div class="card card-shadow border-0 mb-4 p-3">
             <!-- Row -->
-            <div class="row no-gutters">
+            <div class="row no-gutters align-items-center">
               <div class="col-md-3 justify-content-center align-content-center">
                 <div class="team-img d-flex justify-content-center align-content-center m-3">
                     <img class="team-img-avatar img-fluid rounded-circle " src="${avatar}" alt="team member"></p>
@@ -32,7 +32,7 @@ function createMembersHTML(data) {
                 </div>
                 <div class="p-1">
                   <p class="m-0 text-info">Вклад в разработку:</p>
-                  <p class="m-0 text-justify">${about}</p>
+                  <p class="m-0">${about}</p>
                 </div>
               </div>
             </div>
