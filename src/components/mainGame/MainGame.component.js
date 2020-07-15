@@ -265,7 +265,12 @@ export default class MainGame extends Component {
         this.elements.$cardFooter.removeClass('invisible');
       }
 
-      this.state.studiedСardNum += 1;
+      const maxСards = this.userCards.length > this.settingsOptional.cardsPerDay
+        ? this.settingsOptional.cardsPerDay : this.userCards.length;
+
+      if (this.state.studiedСardNum !== maxСards) {
+        this.state.studiedСardNum += 1;
+      }
 
       if (this.settingsOptional.autoSound) {
         await this.speakText();
@@ -340,8 +345,11 @@ export default class MainGame extends Component {
   changeCard(step = 1) {
     const nextCandNum = this.state.currentCardNum + step;
 
+    const maxСards = this.userCards.length > this.settingsOptional.cardsPerDay
+      ? this.settingsOptional.cardsPerDay : this.userCards.length;
+
     if (nextCandNum < 0 || nextCandNum + 1 < this.state.studiedСardNum
-      || nextCandNum + 1 > this.settingsOptional.cardsPerDay) {
+      || nextCandNum + 1 > maxСards) {
       return;
     }
 
@@ -359,10 +367,9 @@ export default class MainGame extends Component {
     }
 
     this.elements.$cardFooter.addClass('invisible');
-
     this.elements.$studiedСardNum.text(this.state.studiedСardNum);
-    this.elements.$maxStudiedCards.text(this.userCards.length);
-    const percent = (this.state.studiedСardNum / this.userCards.length) * 100;
+    this.elements.$maxStudiedCards.text(maxСards);
+    const percent = (this.state.studiedСardNum / maxСards) * 100;
     this.elements.$progressBar.css({ width: `${percent}%` });
 
     const word = this.userCards[nextCandNum];

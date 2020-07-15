@@ -15,6 +15,9 @@ export default function createMainGameHTML(dataForApp) {
   const wordSpans = getWordSpans(word.word);
   console.log('Подсказка: ', word.word);
 
+  const maxСards = dataForApp.userCards.length > settingsOptional.cardsPerDay
+    ? settingsOptional.cardsPerDay : dataForApp.userCards.length;
+
   return `
     <div class="container mt-3">
       <div class="jumbotron pt-4">
@@ -99,10 +102,10 @@ export default function createMainGameHTML(dataForApp) {
           <div class="col-1 text-center" id="studied-card-num">${studiedСardNum}</div>
           <div class="col-10">
             <div class="progress bg-secondary">
-              <div class="progress-bar bg-info" role="progressbar" style="width: ${((studiedСardNum) / settingsOptional.cardsPerDay) * 100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-info" role="progressbar" style="width: ${((studiedСardNum) / maxСards) * 100}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
-          <div class="col-1 text-center" id="max-studied-cards">${dataForApp.userCards.length}</div>
+          <div class="col-1 text-center" id="max-studied-cards">${maxСards}</div>
         </div>
       </div>
     </div>
