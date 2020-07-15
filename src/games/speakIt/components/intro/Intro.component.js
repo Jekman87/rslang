@@ -1,7 +1,6 @@
 import Component from '../../../../core/Component';
 import $$ from '../../../../core/domManipulation';
 import createIntroHTML from './intro.template';
-import createButtonSpinnerHTML from './button-spinner.template';
 import { delay } from '../../../../core/utils';
 import {
   GAME_DEFAULT_STATE, PER_GAME_WORDS,
@@ -41,36 +40,39 @@ export default class Intro extends Component {
   async onClick(event) {
     const clickedElement = $$(event.target);
     if (clickedElement.data.action === 'start') {
-      const startButtonHtml = clickedElement.html();
-      clickedElement.clear().html(createButtonSpinnerHTML().trim()).attr('disabled', true);
+      this.mainObserver.emit('mainAppSpinner', true);
+      this.$root.addClass('d-none');
       await delay(1500);
       const { level: gr, round: pg } = this.dataForApp.state.gameLevel;
       if (this.dataForApp.state.mode === 'rounds') {
         try {
           this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
+          this.emit('intro:start', '');
+          this.emit('alert:close', '');
         } catch (e) {
-          if (e.message === '401') {
-            this.emit('alert:open', {
-              type: 'danger',
-              text: 'Ошибка авторизации.',
-            });
-            await delay(1500);
-            this.mainObserver.emit('mainLogout');
-            return;
-          }
-          clickedElement.html(startButtonHtml).removeAttr('disabled');
           this.emit('alert:open', {
             type: 'danger',
             text: 'Ошибка связи с сервером, попробуйте позже.',
           });
+          this.$root.removeClass('d-none');
+          this.mainObserver.emit('mainAppSpinner', false);
         }
       }
       if (this.dataForApp.state.mode === 'dictionary') {
         this.dataForApp.state.words = this.mainUserWords;
+        try {
+          this.dataForApp.testConnect = await this.mainApi.getWords(pg, gr);
+          this.emit('intro:start', '');
+          this.emit('alert:close', '');
+        } catch (e) {
+          this.emit('alert:open', {
+            type: 'danger',
+            text: 'Ошибка связи с сервером, попробуйте позже.',
+          });
+          this.$root.removeClass('d-none');
+          this.mainObserver.emit('mainAppSpinner', false);
+        }
       }
-      this.$root.addClass('none');
-      this.emit('intro:start', '');
-      this.emit('alert:close', '');
     }
     if (clickedElement.data.action === 'exit') {
       this.dataForApp.destroy();

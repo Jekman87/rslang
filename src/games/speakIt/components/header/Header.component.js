@@ -40,6 +40,7 @@ export default class Header extends Component {
         this.$gameRoundSelectors.addClass('d-none');
         this.$dicitonaryMode.removeClass('d-none');
       }
+      this.mainObserver.emit('mainAppSpinner', false);
     });
     this.subscribe('results:continue', async () => {
       if (this.dataForApp.state.mode === 'rounds') {
