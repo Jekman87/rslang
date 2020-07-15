@@ -126,6 +126,8 @@ export default class RiddleGame extends Component {
   }
 
   addBonusStatistic() {
+    if (document.querySelector('.input-page').value === '15'
+    && document.querySelector('.input-level').value === '6') return;
     if (state.lastAnswer) {
       this.options.observer.emit('saveCommonProgress', 1);
     }

@@ -81,8 +81,7 @@ export default function createGameField() {
             <div class="answer-block"></div>
           </div>
         </div>
-
-
+        
       </div>
     </div>
 
