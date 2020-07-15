@@ -1,7 +1,7 @@
 export default function createGameField() {
   return `
     <div class="riddle__intro">
-    <div class="riddle__name"><h2>ЗАГАДКА</h2><h2>ОТГАДКА</h2></div>
+    <div class="riddle__name"><h2>RIDDLE</h2><h2>RIDDLE</h2></div>
       <p>Задействуй знания английского языка и кругозор<br> для решения лучших загадок со всего мира.</p>
       <button type="button" class="btn btn-outline-secondary" data-click="start">Начать</button>
     </div>
