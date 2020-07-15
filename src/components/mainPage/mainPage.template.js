@@ -129,7 +129,7 @@ export default function createMainPageHTML(data) {
                   <p class="mt-3 mb-0 text-sm">
                     <span class="text-gradient-orange mr-2" title="следующий уровень"><i class="fa fa-arrow-up"></i> ${userLvl + 1}</span>
                     <div class="progress-container rounded">
-                        <div class="progress-tiny bg-gradient-orange" title="до следующего уровня нужно набрать ${lvlFullPoints} очков"
+                        <div class="progress-tiny bg-gradient-orange" title="до следующего уровня осталось ${lvlFullPoints - Math.round(userPoints)}"
                         style="width:${lvlProgress}%"></div>
                     </div>
                   </p>
