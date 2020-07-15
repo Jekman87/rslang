@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 
-// exapmle of file string https://raw.githubusercontent.com/av-shell/rslang-data/master/files/01_0009.jpg
 import book1 from './js/book1';
 import createEssence from './js/createEssence';
 import showTemplate from './js/template';
@@ -25,7 +24,7 @@ export default class Savannah {
     }
     this.options = options;
     if (showConsoleLog) console.log(options);
-
+    window.savanna = this;
     const { statistics, settings } = this.options.dataForApp;
 
     if (showConsoleLog) console.log(statistics, settings);
@@ -115,14 +114,6 @@ export default class Savannah {
         },
       };
     }
-    window.savanna = this;
-    // const tmp1 = Date.now();
-    // this.options.api.getAllUserAggregatedWords(null, 600, null).then((e) => {
-    //   console.log('then', e);
-    //   console.log('time =', Date.now() - tmp1);
-    // }).catch((e) => {
-    //   console.log('catch', e);
-    // });
   }
 
   render() {
@@ -133,6 +124,10 @@ export default class Savannah {
     this.audioCorrect = document.getElementById('SavannaAudioCorrect');
     this.audioWrong = document.getElementById('SavannaAudioWrong');
     this.audioResults = document.getElementById('SavannaAudioResults');
+    this.audioUp = document.getElementById('SavannaAudioCrystallUp');
+    this.audioLoss = document.getElementById('SavannaAudioLoss');
+    this.audioWin = document.getElementById('SavannaAudioWin');
+
     this.gameWordArray = [];
     this.fallingWordContainer = document.getElementById('fallingWordContainer');
     this.fallingEnergyContainer = document.getElementById('fallingEnergyContainer');
@@ -353,7 +348,6 @@ export default class Savannah {
           tmpArray = tmpArray.concat(tmpArray2.slice(0, 30 - tmpArray.length));
           if (showConsoleLog) console.log('learned words sorting', tmpArray.slice(0, 30));
         } else {
-          // TODO: возможно нужно сделать шафл части без ошибок.
           tmpArray = tmpArray.slice(0, 30);
         }
         if (showConsoleLog) console.log('learned words sorting', tmpArray);
@@ -636,6 +630,8 @@ export default class Savannah {
             this.crystall.classList.add(
               `crystall-stage${Math.round(this.gameState.rightAnswersCounter / 5)}`,
             );
+            this._audioStopAllSound();
+            this.audioUp.play().catch(() => true);
           }
           this.gameState.timers.gameResolve = setTimeout(() => {
             this.gameState.currentState = 'nextQuestion';
@@ -713,10 +709,14 @@ export default class Savannah {
         break;
       case 'endGame':
         if (showConsoleLog) console.log('endGame');
+        this._audioStopAllSound();
+        this.audioResults.play().catch(() => true);
         this._showStatistic();
         break;
       case 'gameLose':
         if (showConsoleLog) console.log('gameLose');
+        this._audioStopAllSound();
+        this.audioLoss.play().catch(() => true);
         this._showStatistic();
 
         break;
@@ -734,18 +734,6 @@ export default class Savannah {
     const statObj = this.gameState.statisticObj;
 
     if (this.gameState.isWordsFromBackend) {
-      // temporarily disabled to match logic
-      // this.gameState.statisticCorrectAnswers.forEach((e) => {
-      //   const el = e;
-      //   if (el.userWord) {
-      //     el.userWord.optional.gameError = false;
-      //     // todo Send word to backand;
-      //     this.options.api.updateUserWord(el._id, el.userWord).catch((err) => {
-      //       if (showConsoleLog) console.log('ошибка при работе с апи', err);
-      //       if (showConsoleLog) console.log('Update UserWord', el);
-      //     });
-      //   }
-      // });
       this.gameState.statisticWrongAnswers.forEach((e) => {
         const el = e;
         if (el.userWord) {
@@ -840,7 +828,6 @@ export default class Savannah {
           'audio', 'savanna-audio-source-statistic', null, statObj.WLi[i].div1,
           ['id', `savannaAudioWrongStatistic${i}`],
           ['src', `${FILE_URL}/${this.gameState.statisticWrongAnswers[i].audio}`],
-          // ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticWrongAnswers[i].audio}`],
         );
         statObj.WLi[i].li = createEssence(
           'li', 'statistics-word',
@@ -889,7 +876,6 @@ export default class Savannah {
           'audio', 'savanna-audio-source-statistic', null, statObj.CLi[i].div1,
           ['id', `savannaAudioCorrectStatistic${i}`],
           ['src', `${FILE_URL}/${this.gameState.statisticCorrectAnswers[i].audio}`],
-          // ['src', `https://raw.githubusercontent.com/av-shell/rslang-data/master/${this.gameState.statisticCorrectAnswers[i].audio}`],
         );
         statObj.CLi[i].li = createEssence(
           'li', 'statistics-word',
