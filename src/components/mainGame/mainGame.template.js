@@ -48,8 +48,8 @@ export default function createMainGameHTML(dataForApp) {
                     <i class="fas fa-keyboard"></i>
                   </button>
                 </div>
-                <div>
-                  <button type="button" class="btn btn-secondary my-sm-2 justify-self-end ${settingsOptional.difficultWordsButton ? '' : 'd-none'}" data-name="difficult-btn">
+                <div class="d-none" id="setting-words-top">
+                  <button type="button" class="btn btn-secondary my-sm-2 justify-self-end ${settingsOptional.difficultWordsButton ? '' : 'd-none'}" data-name="difficult-btn" id="difficult-btn">
                     <i class="fas fa-chess"></i><span class="button-text ml-1">Сложное</span></button>
                   <button type="button" class="btn btn-secondary my-sm-2 ml-sm-2 justify-self-end ${settingsOptional.deleteButton ? '' : 'd-none'}" data-name="delete-btn">
                     <i class="fas fa-trash"></i><span class="button-text ml-1">Удалить</span></button>
@@ -66,6 +66,9 @@ export default function createMainGameHTML(dataForApp) {
                 <div class="card mb-3">
                   <div class="row no-gutters ${settingsOptional.cardImage ? 'justify-content-lg-between' : 'justify-content-lg-center'}">
                     <div class="col-lg-6 order-lg-2 image-container ${settingsOptional.cardImage ? '' : 'd-none'}">
+                      <div class="image-responsive">
+
+                      </div>
                       <img src="${FILE_URL}/${word.image}" class="card-img " id="word-image" alt="img">
                     </div>
                     <div class="order-lg-1 col-lg-6">
