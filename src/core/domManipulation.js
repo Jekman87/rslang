@@ -82,6 +82,10 @@ class Dom {
   }
 
   attr(name, value) {
+    if (value === null) {
+      this.$el.removeAttribute(name, value);
+      return this;
+    }
     if (value) {
       this.$el.setAttribute(name, value);
       return this;

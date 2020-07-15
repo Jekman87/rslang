@@ -1,12 +1,63 @@
 .Statistics {
-  h3 {
-    @media (max-width: 767px) {
-      font-size: 1.6rem;
+  .display-4 {
+    @media (min-width: 320px) {
+      font-size: 2rem;
     }
-    @media (max-width: 575px) {
-      font-size: 1.2rem;
+
+    @media (min-width: 375px) {
+      font-size: 2.4rem;
+    }
+
+    @media (min-width: 411px) {
+      font-size: 2.7rem;
+    }
+
+    @media (min-width: 576px) {
+      font-size: 3.5rem;
     }
   }
+  .nav-link {
+    color: #3498db;
+  }
+  .charts-tab-wrapper {
+    width: 100%;
+    margin: auto;
+    // background-color: #ffffff;
+    @media (min-width: 992px) {
+      width: 80%;
+    }
+  }
+  .charts-tab-wrapper .tab-content {
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+  }
+  .nav-tabs .nav-link.active {
+    border: none;
+  }
+  .nav-tabs .nav-item {
+    margin-bottom: -3px;
+  }
+  // tbody {
+  //   max-height: 375px;
+  //   overflow: auto;
+  //   &::-webkit-scrollbar {
+  //     width: 0.5rem;
+  //     background: transparent;
+  //     border-radius: 0 0 5px 0;
+  //   }
+  //   &::-webkit-scrollbar-thumb {
+  //     background: #ccd4d8d9;
+  //     border-radius: 10px;
+  //   }
+  // }
+  // h3 {
+  //   @media (max-width: 767px) {
+  //     font-size: 1.6rem;
+  //   }
+  //   @media (max-width: 575px) {
+  //     font-size: 1.2rem;
+  //   }
+  // }
 
   h4 {
     margin-top: 25px;
@@ -23,7 +74,7 @@
   .all-stats-wrapper {
     margin: 0 auto;
     width: 80%;
-    & li{
+    & li {
       @media (max-width: 474px) {
         font-size: 0.8rem;
       }
@@ -54,13 +105,23 @@
     position: relative;
     max-height: 425px;
     overflow: auto;
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+      background: transparent;
+      border-radius: 0 0 5px 0;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #ccd4d8d9;
+      border-radius: 10px;
+    }
   }
 
   .table-wrapper-scroll-y {
     display: block;
   }
 
-  th, td {
+  th,
+  td {
     width: 15%;
     text-align: center;
     @media (max-width: 575px) {
@@ -84,6 +145,9 @@
     margin: auto;
     width: 700px;
     height: 350px;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-radius: 0.25rem;
     @media (max-width: 1199px) {
       width: 625px;
     }

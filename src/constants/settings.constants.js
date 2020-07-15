@@ -6,7 +6,7 @@ const BASE_SETTINGS = {
     cardTranslation: true,
     cardExplanation: true,
     cardExample: true,
-    cardTranscription: true,
+    cardTranscription: false,
     cardImage: true,
     cardTranslationAfterSuccess: false,
     cardExplanationTranslation: true,

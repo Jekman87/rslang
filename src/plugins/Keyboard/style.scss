@@ -1,0 +1,122 @@
+#keyboard-wrapper {
+  font-size: 13.33px;
+  padding: 0;
+  margin: 0;
+
+  #container {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .title {
+    margin: 20px 0;
+  }
+
+  .textarea {
+    font-size: 1.4rem;
+    height: 200px;
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+
+  #keyboard {
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background: #000000cc;
+  }
+
+  .help-text {
+    font-size: 1.6rem;
+  }
+
+  .help-text span {
+    display: none;
+  }
+
+  .En .help-text .En,
+  .Ru .help-text .Ru {
+    display: block;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .button {
+    min-width: 40px;
+    height: 40px;
+    margin: 5px;
+    outline: none;
+    border: none;
+    border-radius: 3px;
+    background: #ccc;
+  }
+
+  .button:hover {
+    background: #b4cfff;
+  }
+
+  .button.animated {
+    background: #7da2e3;
+    transform: scale(0.9);
+  }
+
+  .button.Backspace,
+  .button.CapsLock,
+  .button.ShiftLeft,
+  .button.ShiftRight,
+  .button.Enter {
+    width: 90px;
+  }
+
+  .Tab, .CapsLock, .ShiftLeft,
+  .ControlLeft, .MetaLeft, .AltLeft,
+  .Backspace, .Delete, .Enter,
+  .ShiftRight, .ControlRight, .ArrowRight,
+  .ArrowDown, .ArrowLeft, .ArrowUp,
+  .AltRight {
+    background: #999;
+  }
+
+  .MetaLeft {
+    background: #00cfa8;
+  }
+
+  .button.Tab,
+  .button.Del {
+    width: 60px;
+  }
+
+  .button.Space {
+    width: 370px;
+  }
+
+  .button .En,
+  .button .Ru {
+    display: none;
+  }
+
+  .En .button .En,
+  .Ru .button .Ru {
+    display: block;
+  }
+
+  .button span span {
+    display: none;
+  }
+
+  #keyboard.lower .lower,
+  #keyboard.shift .shift,
+  #keyboard.caps .caps,
+  #keyboard.capsShift .capsShift {
+    display: block;
+  }
+}

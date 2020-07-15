@@ -1,6 +1,7 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createMainGameHTML from './mainGame.template';
+import MyKeyboard from '../../plugins/Keyboard';
 
 import { delay, getResetDayTime, getStartDayTime } from '../../core/utils';
 import { getIntervalsOfRepeat, findCommonSubstring, getWordSpans } from './mainGame.utils';
@@ -9,6 +10,7 @@ import UserWord from '../../core/UserWord';
 import {
   FILE_URL, ONE_MINUTE, ONE_DAY, RESET_HOUR, WORD_PARAM,
 } from '../../constants/constants';
+import progressConfig from '../../constants/progress-config.constants';
 
 const AGAIN_STEP = 4;
 const BASE_STATE = {
@@ -33,6 +35,7 @@ export default class MainGame extends Component {
       ...options,
     });
     console.log('MainGame this.options', options);
+    console.log('MyKeyboard', MyKeyboard);
     this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
@@ -59,6 +62,7 @@ export default class MainGame extends Component {
 
     this.elements = null;
     this.audio = new Audio();
+    this.myKeyboard = null;
   }
 
   updateState() {
@@ -99,9 +103,11 @@ export default class MainGame extends Component {
 
   getCardElements() {
     this.elements = {
-      $wordProgress: this.$root.find('#word-progress'),
+      $settingWordsTop: this.$root.find('#setting-words-top'),
+      $difficultBtn: this.$root.find('#difficult-btn'),
+      $wordProgressbar: this.$root.find('#word-progressbar'),
+      $wordProgressText: this.$root.find('#word-progresText'),
       $wordImage: this.$root.find('#word-image'),
-      $wordEn: this.$root.find('#word-en'),
       $wordBackground: this.$root.find('#word-background'),
       $wordSpans: this.$root.findAll('#word-background span'),
       $wordInput: this.$root.find('#word-input'),
@@ -111,14 +117,15 @@ export default class MainGame extends Component {
       $wordExampleTranslate: this.$root.find('#word-example-translate'),
       $wordMeaning: this.$root.find('#word-meaning'),
       $wordMeaningTranslate: this.$root.find('#word-meaning-translate'),
-      $cardFooter: this.$root.find('.card-footer'),
+      $feedbackButtons: this.$root.find('#feedback-buttons'),
+      $answerButton: this.$root.find('#answer-button'),
       $volumeUp: this.$root.find('.fa-volume-up'),
       $volumeMute: this.$root.find('.fa-volume-mute'),
       $prevBtn: this.$root.find('.navigate-button.prev i'),
       $nextBtn: this.$root.find('.navigate-button.next i'),
       $studiedСardNum: this.$root.find('#studied-card-num'),
       $maxStudiedCards: this.$root.find('#max-studied-cards'),
-      $progressBar: this.$root.find('.progress-bar'),
+      $cardsProgressbar: this.$root.find('#cards-progressbar'),
     };
   }
 
@@ -132,7 +139,6 @@ export default class MainGame extends Component {
 
     switch (buttonName) {
       case 'prev-btn':
-        // пофиксить перелистывание назад перед когда идет ожидание статистики
         this.changeCard(-1);
         break;
 
@@ -142,72 +148,33 @@ export default class MainGame extends Component {
         break;
 
       case 'again-btn':
-        // над кнопками ставить время
-        // ручное уплавление алгоритмом - again
-        // пометка - слово повторить скоро - 1 мин?
-        // переход на след карту
-        this.setDifficulty(WORD_PARAM.again);
-        this.changeCard();
-        this.createUserStats();
+        this.settingWordBtnHandler(WORD_PARAM.hard);
         break;
 
       case 'hard-btn':
-        // ручное уплавление алгоритмом - hard
-        // пометка - слово повторить скоро - 10 мин?
-        // переход на след карту
-        this.setDifficulty(WORD_PARAM.hard);
-        this.changeCard();
-        this.createUserStats();
+        this.settingWordBtnHandler(WORD_PARAM.hard);
         break;
 
       case 'good-btn':
-        // ручное уплавление алгоритмом - good
-        // пометка - слово повторить скоро - 1 день?
-        // переход на след карту
-        this.setDifficulty(WORD_PARAM.good);
-        this.changeCard();
-        this.createUserStats();
+        this.settingWordBtnHandler(WORD_PARAM.good);
         break;
 
       case 'easy-btn':
-        // ручное уплавление алгоритмом - easy
-        // пометка - слово повторить скоро - 3 дня?
-        // переход на след карту
-        this.setDifficulty(WORD_PARAM.easy);
-        this.changeCard();
-        this.createUserStats();
+        this.settingWordBtnHandler(WORD_PARAM.easy);
         break;
 
       case 'delete-btn':
-        // перенос слова в удаленные
-        // убираем из карточек
-        // переход на след карту
-        this.setDifficulty(WORD_PARAM.deleted);
-        this.changeCard();
-        this.createUserStats();
+        this.settingWordBtnHandler(WORD_PARAM.deleted);
         break;
 
       case 'difficult-btn':
-        // перенос слова в сложные
-        // айди слова - сохраняем персональную? статистику - в сложные
-        // статистика по слову меняется
-        // переход на след карту
-        // кнопку открывать только после угадывания!!
-        this.setDifficulty(WORD_PARAM.difficult);
-        this.changeCard();
-        this.createUserStats();
+        this.settingWordBtnHandler(WORD_PARAM.difficult);
         break;
 
       case 'show-answer-btn':
-        // заполняем инпут? или просто показываем скрытый спан
-        // открываем скрытые слова в предложениях с примером и определением
-        // showWordInSentence();
-        // аудио
-        // переходим автоматом или пользователю нужно ввести слово?
-        // переход на след карту
-
-        // this.setDifficulty(WORD_PARAM.again, false);
-        this.changeCard();
+        this.nextBtnHandler();
+        this.elements.$wordExample.addClass('show-word');
+        this.elements.$wordMeaning.addClass('show-word');
         break;
 
       case 'volume-btn':
@@ -215,6 +182,10 @@ export default class MainGame extends Component {
         this.audio.pause();
         this.elements.$volumeUp.toggle('d-none');
         this.elements.$volumeMute.toggle('d-none');
+        break;
+
+      case 'keyboard-btn':
+        this.keyboardButtonHandler();
         break;
 
       default:
@@ -236,13 +207,35 @@ export default class MainGame extends Component {
   nextBtnHandler() {
     if (this.state.currentCardNum === this.state.studiedСardNum) {
       this.checkWord();
-    } else if (this.state.currentWord
-      && this.userCards[this.state.currentCardNum]._id === this.state.currentWord._id) {
-      this.changeCard();
     } else {
-      this.setDifficulty(WORD_PARAM.good);
-      this.changeCard();
-      this.createUserStats();
+      this.settingWordBtnHandler(WORD_PARAM.good);
+    }
+  }
+
+  settingWordBtnHandler(wordParam) {
+    this.setDifficulty(wordParam);
+    this.changeCard();
+    this.createUserStats();
+  }
+
+  keyboardButtonHandler() {
+    if (!this.myKeyboard) {
+      this.myKeyboard = new MyKeyboard(
+        '#keyboard-wrapper',
+        '#word-input',
+        '#next-btn',
+      );
+      this.myKeyboard.renderKeyboard();
+    }
+
+    const keyboardWrapper = document.querySelector('#keyboard-wrapper');
+
+    if (keyboardWrapper.classList.contains('keyboard-wrapper_show')) {
+      keyboardWrapper.classList.remove('keyboard-wrapper_show');
+      this.myKeyboard.removeListeners();
+    } else {
+      keyboardWrapper.classList.add('keyboard-wrapper_show');
+      this.myKeyboard.addListeners();
     }
   }
 
@@ -252,78 +245,78 @@ export default class MainGame extends Component {
     }
 
     this.state.isChecking = true;
-    const inputWord = this.elements.$wordInput.text().toLowerCase();
-    const currentWord = this.elements.$wordEn.text().toLowerCase();
+    const currentWord = this.userCards[this.state.currentCardNum];
+    const currentWordText = currentWord.word.trim().toLowerCase();
+    const inputWordText = this.elements.$wordInput.text().trim().toLowerCase();
 
-    // проверяем инпут на соответствие
-    if (inputWord === currentWord) {
-      // отметка ок в статистике слова
-      // статистика пользователя дневная и долгосрочная
+    if (inputWordText === currentWordText) {
       // учесть окончание карточек
-
-      // перенести в функцию? showWordInSentence()
-      this.elements.$wordExample.addClass('show-word');
-      this.elements.$wordMeaning.addClass('show-word');
       this.elements.$wordInput.addClass('underline');
-      // зеленый цвет если с первого раза
-      // this.state.isNewWord && this.state.isCorrect
 
-      // повялвение кнопок сложности (если настроены) +
-      if (this.settingsOptional.feedbackButtons) {
-        this.elements.$cardFooter.removeClass('invisible');
+      if (this.settingsOptional.cardTranslationAfterSuccess) {
+        this.elements.$wordTranslate.removeClass('d-none');
       }
 
-      // статистика пользователя
-      // считаем карту изученной до всех задержек
-      this.state.studiedСardNum += 1;
+      this.elements.$prevBtn.addClass('arrow-disabled');
+      this.elements.$settingWordsTop.removeClass('d-none');
+      this.elements.$wordExample.addClass('show-word');
+      this.elements.$wordMeaning.addClass('show-word');
+      // зеленый цвет если с первого раза
 
-      // воспроизведение аудио в зависимости от настроек +
+      if (this.state.isCorrect) {
+        let newWordProgress = 1;
+
+        if (currentWord.userWord) {
+          const wordProgress = currentWord.userWord.optional.progress;
+          newWordProgress = (wordProgress < 5) ? (wordProgress + 1) : wordProgress;
+        } else {
+          newWordProgress = 5;
+        }
+
+        this.setWordProgressElements(newWordProgress);
+      }
+
+      if (this.settingsOptional.feedbackButtons) {
+        this.elements.$answerButton.addClass('invisible');
+        this.elements.$feedbackButtons.removeClass('invisible');
+      }
+
+      const maxСards = this.userCards.length > this.settingsOptional.cardsPerDay
+        ? this.settingsOptional.cardsPerDay : this.userCards.length;
+
+      if (this.state.studiedСardNum !== maxСards) {
+        this.state.studiedСardNum += 1;
+      }
+
       if (this.settingsOptional.autoSound) {
         await this.speakText();
-      } else if (!this.settingsOptional.feedbackButtons) { // добавить '!'
-        // небольшая задержка если звук отключен
-        // чтобы пользователь увидел слово
-        // возможно анимация правильного ответа?
+      } else if (!this.settingsOptional.feedbackButtons) {
         await delay(1500);
       }
 
-      // после аудио либо автоматом на след слово
-      // либо ждем реакции через кнопки фидбэка, если они включены
       if (!this.settingsOptional.feedbackButtons) {
-        // переход на след карту
-        // если кнопки выкючены - сами определяем алгоритм
         this.setDifficulty(WORD_PARAM.good);
         this.changeCard();
         this.createUserStats();
       }
-
-      // через кнопки сложности переход на след слово
     } else {
       this.state.isCorrect = false;
-
-      // если не соответствует - показываем ошибки
-      // алгоритм показа ошибок
-
-      // показываем ответ как по кнопке "показать ответ"?
-      // или просто на время показываем слово в инпуте?
-
-      this.setDifficulty(WORD_PARAM.again);
-      this.showWordErrors(inputWord, currentWord);
+      this.showWordErrors(inputWordText, currentWordText);
     }
 
     this.state.isChecking = false;
   }
 
-  async showWordErrors(inputWord, currentWord) {
-    console.log('ошибочка', inputWord, currentWord);
-    const commonSubstring = findCommonSubstring(inputWord, currentWord);
+  async showWordErrors(inputWordText, currentWordText) {
+    console.log('ошибочка', inputWordText, currentWordText);
+    const commonSubstring = findCommonSubstring(inputWordText, currentWordText);
 
     this.elements.$wordInput.text('');
 
     const substrlength = commonSubstring.length;
-    const wordlength = currentWord.length;
+    const wordlength = currentWordText.length;
     const errorClass = ((substrlength / wordlength) * 100) > 50 ? 'orange' : 'red';
-    const startIndex = currentWord.indexOf(commonSubstring);
+    const startIndex = currentWordText.indexOf(commonSubstring);
     const endIndex = startIndex + substrlength - 1;
 
     this.elements.$wordSpans.forEach((element, idx) => {
@@ -368,8 +361,11 @@ export default class MainGame extends Component {
   changeCard(step = 1) {
     const nextCandNum = this.state.currentCardNum + step;
 
+    const maxСards = this.userCards.length > this.settingsOptional.cardsPerDay
+      ? this.settingsOptional.cardsPerDay : this.userCards.length;
+
     if (nextCandNum < 0 || nextCandNum + 1 < this.state.studiedСardNum
-      || nextCandNum + 1 > this.settingsOptional.cardsPerDay) {
+      || nextCandNum + 1 > maxСards) {
       return;
     }
 
@@ -386,14 +382,20 @@ export default class MainGame extends Component {
       this.elements.$nextBtn.removeClass('arrow-disabled');
     }
 
-    this.elements.$cardFooter.addClass('invisible');
-
+    this.elements.$settingWordsTop.addClass('d-none');
+    this.elements.$difficultBtn.attr('disabled', null);
+    this.elements.$feedbackButtons.addClass('invisible');
+    this.elements.$answerButton.removeClass('invisible');
     this.elements.$studiedСardNum.text(this.state.studiedСardNum);
-    this.elements.$maxStudiedCards.text(this.userCards.length);
-    const percent = (this.state.studiedСardNum / this.userCards.length) * 100;
-    this.elements.$progressBar.css({ width: `${percent}%` });
+    this.elements.$maxStudiedCards.text(maxСards);
+    const percentCardsProgressbar = (this.state.studiedСardNum / maxСards) * 100;
+    this.elements.$cardsProgressbar.css({ width: `${percentCardsProgressbar}%` });
 
     const word = this.userCards[nextCandNum];
+
+    if (word.userWord && word.userWord.optional.status === 'difficult') {
+      this.elements.$difficultBtn.attr('disabled', 'true');
+    }
 
     let progress = 1;
 
@@ -401,18 +403,19 @@ export default class MainGame extends Component {
       progress = word.userWord.optional.progress;
     }
 
-    const wordDifficult = progress;
+    this.setWordProgressElements(progress);
 
-    this.elements.$wordProgress.text(wordDifficult);
     this.elements.$wordImage.$el.src = `${FILE_URL}/${word.image}`;
     // предзагрузка картинки следующей карты?
-    // убрать подсказку
-    this.elements.$wordEn.text(word.word);
-    console.log('Подсказка: ', word.word);
+    console.log('Подсказка для проверяющих: ', word.word);
 
     const wordSpans = getWordSpans(word.word);
     this.elements.$wordBackground.html(wordSpans);
     this.elements.$wordSpans = this.$root.findAll('#word-background span');
+
+    if (this.settingsOptional.cardTranslationAfterSuccess) {
+      this.elements.$wordTranslate.add('d-none');
+    }
 
     this.elements.$wordTranslate.html(word.wordTranslate);
     this.elements.$wordTranscription.html(word.transcription);
@@ -432,6 +435,17 @@ export default class MainGame extends Component {
     }
 
     this.state.currentCardNum = nextCandNum;
+    this.elements.$wordInput.$el.focus();
+  }
+
+  setWordProgressElements(wordProgress) {
+    const wordProgressbarBgColor = progressConfig.bgColor[wordProgress - 1];
+    const wordProgressbarBarWidth = progressConfig.barWidth[wordProgress - 1];
+    const wordProgressText = progressConfig.text[wordProgress - 1];
+
+    this.elements.$wordProgressbar.$el.className = `progress-bar progress-bar-striped ${wordProgressbarBgColor}`;
+    this.elements.$wordProgressbar.css({ width: `${wordProgressbarBarWidth}%` });
+    this.elements.$wordProgressText.html(wordProgressText);
   }
 
   setDifficulty(wordDifficulty) {
@@ -523,17 +537,17 @@ export default class MainGame extends Component {
       success += 1;
       this.state.commonProgress += 1;
       gameError = false;
+    }
 
-      if (this.state.isNewWord) {
-        progress = 5;
-      } else {
-        progress = (progress < 5) ? (progress + 1) : progress;
-      }
+    if (this.state.isCorrect && this.state.isNewWord) {
+      progress = 5;
+    } else {
+      progress = (progress < 5) ? (progress + 1) : progress;
     }
 
     if (wordDifficulty === WORD_PARAM.deleted) {
-      difficulty = WORD_PARAM.good;
-      nextRepeat = lastRepeat + timeGood;
+      difficulty = WORD_PARAM.easy;
+      nextRepeat = lastRepeat + timeEasy;
       status = wordDifficulty;
     } else if (wordDifficulty === WORD_PARAM.difficult) {
       difficulty = WORD_PARAM.hard;
@@ -587,6 +601,8 @@ export default class MainGame extends Component {
     }
 
     console.log('setDifficulty this.dataForApp', this.dataForApp);
+    console.log('setDifficulty cardsCount', this.state.cardsCount);
+    console.log('setDifficulty currentCardNum', this.state.currentCardNum);
   }
 
   createUserStats() {
@@ -702,14 +718,15 @@ export default class MainGame extends Component {
     this.options.api.updateSettings(this.dataForApp.settings);
 
     this.state.isCorrect = true;
-    console.log('createUserStats shortTermStats', this.shortTermStats);
-    console.log('createUserStats longTermStats', this.longTermStats);
-    console.log('createUserStats commonProgress', this.settingsOptional.commonProgress);
+    console.log('createUserStats cardsCount', this.state.cardsCount);
+    console.log('createUserStats currentCardNum', this.state.currentCardNum);
   }
 
   destroy() {
     super.destroy();
+    this.audio.pause();
     this.audio = null;
+    this.myKeyboard = null;
   }
 
   toHTML() {
