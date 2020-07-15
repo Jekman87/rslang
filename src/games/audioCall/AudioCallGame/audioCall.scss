@@ -1,8 +1,13 @@
 .audio-call-wrapper {
   min-height: 100vh;
-  // background-image: linear-gradient(to top, #a7a6cb 0%, #8989ba 100%);
   background: rgb(111, 108, 157);
-  background: linear-gradient(90deg, rgba(111, 108, 157, 0.7) 0%, rgba(79, 138, 185, 0.7) 0%, rgb(164, 207, 216) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(111, 108, 157, 0.7) 0%,
+    rgba(79, 138, 185, 0.7) 0%,
+    rgb(164, 207, 216) 100%
+  );
+  padding-bottom: 2%;
 
   .btn-sound-off:focus,
   .btn-tip:focus {
@@ -24,17 +29,14 @@
 
     span:first-child {
       font-size: 0.7em;
-      color: rgb(184, 184, 184);
+      // color: rgb(216, 216, 216);
+      color: #33295e6c;
     }
 
     &:focus {
       background: transparent;
       color: white;
     }
-  }
-
-  .btn-group button:focus {
-    // background: #ffffff2a;
   }
 
   i {
@@ -68,15 +70,12 @@
   background-color: #ffffff2a;
   border-radius: 75px;
   padding: 10%;
-
-  i {
-    // padding: 20%;
-  }
 }
 
 .btn-repeat.on-answer {
   padding: 3%;
-  height: 28%;
+  padding-right: 5%;
+  height: 22%;
   align-self: flex-end;
 
   i {
@@ -102,13 +101,14 @@
 }
 
 .answer-col {
-  // height: 20em;
   display: flex;
+  max-height: 300px;
 }
 
 .question-col {
   padding-top: 8%;
   padding-bottom: 5%;
+  max-height: 300px;
 }
 
 .answer-pic {
@@ -122,6 +122,10 @@
   width: fit-content;
   margin: 0 auto;
   font-size: 3.5em;
+}
+
+.buttons-col {
+  height: 100px;
 }
 
 .audio-call-stats-wrapper {
@@ -141,6 +145,11 @@
     width: 40%;
     height: 50%;
     overflow: scroll;
+  }
+
+  .correct-container,
+  .mistake-container {
+    flex-direction: column;
   }
 
   .mistake-container {
@@ -171,6 +180,14 @@
     p:nth-child(2) {
       margin-bottom: 0;
     }
+
+    .row {
+      margin-bottom: 3%;
+
+      .fa-music {
+        font-size: 1.5em;
+      }
+    }
   }
 }
 
@@ -200,10 +217,25 @@
   }
 }
 
+@media only screen and (max-width: 700px) {
+  .audio-call-stats-wrapper .stat-container,
+  .audio-call-stats-wrapper .long-stat-container {
+    width: 80%;
+  }
+}
+
 @media only screen and (max-width: 576px) {
-  i {
-    &.fa-volume-up {
-      font-size: 3em;
+  .audio-call-wrapper {
+    i {
+      &.fa-volume-up {
+        font-size: 3em;
+      }
     }
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .buttons-col {
+    height: 150px;
   }
 }

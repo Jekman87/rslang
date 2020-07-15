@@ -333,6 +333,8 @@ function upLevel() {
 function compareAnswers() {
   const currentAnswer = document.querySelector('.riddle-answer-input').value.toLowerCase();
   if (state.riddleAnswer.toLowerCase() === currentAnswer) {
+    state.lastAnswer = true;
+
     playCorrectAudio();
     rememberLevelStatistic();
     markAnswer(true);
@@ -340,6 +342,8 @@ function compareAnswers() {
     rewriteLevelStatistic();
     prepareLongTimeStatistic();
   } else {
+    state.lastAnswer = false;
+
     playWrongAudio();
     markAnswer(false);
   }
@@ -353,6 +357,7 @@ function moveAnswerIntoInput(element, answer) {
     elem.style.opacity = '100';
   });
   currentElement.style.opacity = '0';
+  document.querySelector('.riddle-answer-input').focus();
 }
 
 function hideTwoWrongAnswers() {
@@ -373,7 +378,6 @@ function checkPromps() {
   state.optionsPromp = data.optionsPromp;
   state.translatePrompt = data.translatePrompt;
   state.voice = data.voice;
-  console.log(state)
 }
 
 function rememberPrompts() {

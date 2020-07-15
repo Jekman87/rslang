@@ -19,6 +19,10 @@ function hideIntro() {
   document.querySelector('.intro__sprint').style.display = 'none';
 }
 
+function rememberLevel() {
+  state.currentLevel = document.querySelector('.input-level').value;
+}
+
 function hideBestIndicator() {
   document.querySelector('[data-score-place="2"]').style.display = 'flex';
   document.querySelector('[data-score-place="3"]').style.display = 'flex';
@@ -40,15 +44,15 @@ function rewriteLongTimeStatistic() {
   const currentDate = Date.now();
   const currentGameResults = {
     date: '',
+    round: '',
     result: '',
-    correctAnswers: '',
-    wrongAnswers: '',
+    points: '',
   };
 
   currentGameResults.date = currentDate;
-  currentGameResults.result = state.points;
-  currentGameResults.correctAnswers = state.correctAnswers;
-  currentGameResults.wrongAnswers = state.wrongAnswers;
+  currentGameResults.round = `${state.currentLevel}-0`;
+  currentGameResults.result = `${state.correctAnswers}-${state.wrongAnswers}`;
+  currentGameResults.points = state.points;
 
   return currentGameResults;
 }
@@ -91,7 +95,7 @@ function go() {
 }
 
 function markRightAnswer() {
-  document.querySelector('.sprint-game-block').classList.toggle('correct-color');
+  document.querySelector('.sprint-game-block').classList.toggle('sprint-correct-color');
 }
 
 function markWrongAnswer() {
@@ -187,17 +191,20 @@ function generateWrongWordCouple() {
 
 function addAnswerToStatistic(answer) {
   const url = `https://raw.githubusercontent.com/Alexandr-Voytekhovich/rslang-data/master/data/${state.audioWord}`;
+  const dataAtribute = `data-statistic="statistic-${state.wordCount}"`;
+
   const currentAnswer = `
-  <div class="sprint-statistic-block" id="statistic-block-${state.wordCount}">
-    <span>
-      <i class="fa fa-volume-down icon-parameters" aria-hidden="true" data-statistic="statistic-${state.wordCount}"></i>
+  <div class="sprint-statistic-block" id="statistic-block-${state.wordCount}" ${dataAtribute}>
+    <span ${dataAtribute}>
+      <i class="fa fa-volume-down icon-parameters" aria-hidden="true" ${dataAtribute}></i>
       <audio id="statistic-audio-${state.wordCount}" src="${url}"></i>
     </span>
-    <p>${state.word}</p>
-    <p>[${state.word}]</p>
-    <p>[${state.correctTranslateWord}]</p>
+    <p ${dataAtribute}>${state.word}</p>
+    <p ${dataAtribute}>[${state.word}]</p>
+    <p ${dataAtribute}>[${state.correctTranslateWord}]</p>
   </div>
   `;
+
   if (answer === 'correct') {
     document.querySelector('.correct-block').insertAdjacentHTML('beforeend', currentAnswer);
   }
@@ -305,7 +312,7 @@ function resetBonusPlaces() {
 
 function addBirdsPicture(birdNumber) {
   document.querySelector('.birds').insertAdjacentHTML('afterbegin',
-    `<img class="bird bird-${birdNumber}" src="assets/img/bird-${birdNumber}.png" alt="bird" />`);
+    `<img class="bird bird-${birdNumber}" src="assets/sprint/bird-${birdNumber}.png" alt="bird" />`);
 }
 
 function resetPointsPlaces() {
@@ -472,7 +479,7 @@ export {
   muteGameVoice, onGameVoice, rewriteCorrectAndWrongAnswers,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
   switchToLongTimeStatistic, switchToRoundStatistic,
-  removeKeyDownListeners, convertDate, showCountdown,
+  removeKeyDownListeners, convertDate, showCountdown, rememberLevel,
   ready, set, go, hideCountdown, keyDownListener, resetProgress,
   opacityOn, opacityOff, playTickAudio, playStartAudio, writeUserAnswer,
   removeShortTimeStatistic, hideBestIndicator, hideShortTimeStatistic,

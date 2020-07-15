@@ -50,10 +50,10 @@
 
 @media (hover:hover) {
   .intro__sprint button:hover {
-    transform: scale(0.9);
+    transform: scale(0.96);
     opacity: 0.8;
-    color: #005986;
-    background-color: #faffcd;
+    color: white;
+    background-color: #95a5a680;
     box-shadow: 1px 1px 1px black;
     transition: all 0.8s;
     cursor: pointer;
@@ -133,6 +133,12 @@
   .sprint-statistic-button:hover {
     box-shadow: 1px 1px 1px #7b8a8b;
     color: #002e46;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .sprint-statistic-block:hover {
+    transform: scale(1.02);
     transition: all 0.8s;
     cursor: pointer;
   }

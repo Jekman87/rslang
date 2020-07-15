@@ -6,6 +6,7 @@ export default class LevelsController {
 
   init() {
     this.defineElems();
+    this.bindMethods();
     this.addListeners();
   }
 
@@ -25,12 +26,29 @@ export default class LevelsController {
     };
   }
 
+  bindMethods() {
+    this.bindedMethods = {
+      renderNavigation: this.renderNavigation.bind(this),
+      handleClick: this.handleClick.bind(this),
+      toggleRoundBtn: this.toggleRoundBtn.bind(this),
+      moveToNextRound: this.moveToNextRound.bind(this),
+    };
+  }
+
   addListeners() {
-    document.addEventListener('newData', this.renderNavigation.bind(this));
-    this.elems.selectionGroup.addEventListener('click', this.handleClick.bind(this));
-    this.elems.roundSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
-    this.elems.levelSelectEl.addEventListener('click', this.toggleRoundBtn.bind(this));
-    this.elems.nextRoundBtn.addEventListener('click', this.moveToNextRound.bind(this));
+    document.addEventListener('newData', this.bindedMethods.renderNavigation);
+    this.elems.selectionGroup.addEventListener('click', this.bindedMethods.handleClick);
+    this.elems.roundSelectEl.addEventListener('click', this.bindedMethods.toggleRoundBtn);
+    this.elems.levelSelectEl.addEventListener('click', this.bindedMethods.toggleRoundBtn);
+    this.elems.nextRoundBtn.addEventListener('click', this.bindedMethods.moveToNextRound);
+  }
+
+  destroy() {
+    document.removeEventListener('newData', this.bindedMethods.renderNavigation);
+    this.elems.selectionGroup.removeEventListener('click', this.bindedMethods.handleClick);
+    this.elems.roundSelectEl.removeEventListener('click', this.bindedMethods.toggleRoundBtn);
+    this.elems.levelSelectEl.removeEventListener('click', this.bindedMethods.toggleRoundBtn);
+    this.elems.nextRoundBtn.removeEventListener('click', this.bindedMethods.moveToNextRound);
   }
 
   renderNavigation() {

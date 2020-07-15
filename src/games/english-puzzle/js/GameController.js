@@ -1,19 +1,20 @@
-/* eslint-disable no-param-reassign */
 import PuzzleDrawer from './PuzzleDrawer';
 import { monthNames } from './variables';
 import paintings from './paintingsInfo';
 import { defaultSlide, tableHeader } from './templates';
 
 export default class GameController {
-  constructor(storage, reporter) {
+  constructor(storage, reporter, observer) {
     this.storage = storage;
     this.repoter = reporter;
     this.puzzleDrawer = new PuzzleDrawer();
     this.audioHelp = new Audio();
+    this.externalObserver = observer;
   }
 
   init() {
     this.defineElems();
+    this.bindMethods();
     this.addListeners();
   }
 
@@ -48,23 +49,59 @@ export default class GameController {
     };
   }
 
+  bindMethods() {
+    this.bindedMethods = {
+      handleWindowResize: this.handleWindowResize.bind(this),
+      handleNewData: this.handleNewData.bind(this),
+      handleHelperStatusChange: this.handleHelperStatusChange.bind(this),
+      handleAnswer: this.handleAnswer.bind(this),
+      handleUserAction: this.handleUserAction.bind(this),
+      closePopUp: this.closePopUp.bind(this),
+      startGame: this.startGame.bind(this),
+      exit: this.exit.bind(this),
+      playAudio: this.playAudio.bind(this),
+      playByClick: this.playByClick.bind(this),
+      removePlayEffect: this.removePlayEffect.bind(this),
+    };
+  }
+
   addListeners() {
-    window.addEventListener('resize', this.handleWindowResize.bind(this));
-    document.addEventListener('newData', this.handleNewData.bind(this));
-    document.addEventListener('helperStatusChange', this.handleHelperStatusChange.bind(this));
+    window.addEventListener('resize', this.bindedMethods.handleWindowResize);
+    document.addEventListener('newData', this.bindedMethods.handleNewData);
+    document.addEventListener('helperStatusChange', this.bindedMethods.handleHelperStatusChange);
 
-    this.elems.answerBlock.addEventListener('click', this.handleAnswer.bind(this));
-    this.elems.nextRoundBlock.addEventListener('click', this.handleUserAction.bind(this));
+    this.elems.answerBlock.addEventListener('click', this.bindedMethods.handleAnswer);
+    this.elems.nextRoundBlock.addEventListener('click', this.bindedMethods.handleUserAction);
 
-    this.elems.closeBtn.addEventListener('click', this.closePopUp.bind(this));
+    this.elems.closeBtn.addEventListener('click', this.bindedMethods.closePopUp);
 
-    this.elems.startBtn.addEventListener('click', this.startGame.bind(this));
-    this.elems.exitBtn.addEventListener('click', this.exit.bind(this));
+    this.elems.startBtn.addEventListener('click', this.bindedMethods.startGame);
+    this.elems.exitBtn.addEventListener('click', this.bindedMethods.exit);
 
-    this.elems.playBtn.addEventListener('click', this.playAudio.bind(this));
-    this.elems.resultsBlock.addEventListener('click', this.playByClick.bind(this));
-    this.audioHelp.addEventListener('ended', this.removePlayEffect.bind(this));
-    this.audioHelp.addEventListener('abort', this.removePlayEffect.bind(this));
+    this.elems.playBtn.addEventListener('click', this.bindedMethods.playAudio);
+    this.elems.resultsBlock.addEventListener('click', this.bindedMethods.playByClick);
+    this.audioHelp.addEventListener('ended', this.bindedMethods.removePlayEffect);
+    this.audioHelp.addEventListener('abort', this.bindedMethods.removePlayEffect);
+  }
+
+  destroy() {
+    window.removeEventListener('resize', this.bindedMethods.handleWindowResize);
+    document.removeEventListener('newData', this.bindedMethods.handleNewData);
+    document.removeEventListener('helperStatusChange', this.bindedMethods.handleHelperStatusChange);
+    this.elems.answerBlock.removeEventListener('click', this.bindedMethods.handleAnswer);
+    this.elems.nextRoundBlock.removeEventListener('click', this.bindedMethods.handleUserAction);
+    this.elems.closeBtn.removeEventListener('click', this.bindedMethods.closePopUp);
+    this.elems.startBtn.removeEventListener('click', this.bindedMethods.startGame);
+    this.elems.exitBtn.removeEventListener('click', this.bindedMethods.exit);
+    this.elems.playBtn.removeEventListener('click', this.bindedMethods.playAudio);
+    this.elems.resultsBlock.removeEventListener('click', this.bindedMethods.playByClick);
+    this.audioHelp.removeEventListener('ended', this.bindedMethods.removePlayEffect);
+    this.audioHelp.removeEventListener('abort', this.bindedMethods.removePlayEffect);
+
+    this.elems.imgHelp.onload = '';
+    this.audioHelp.onplay = '';
+    this.audioHelp.onended = '';
+    document.removeEventListener('click', this.bindedFn);
   }
 
   startGame() {
@@ -218,11 +255,13 @@ export default class GameController {
 
     document.querySelector('img.painting-pic_small').src = data.link;
     document.querySelectorAll('figcaption:not(.art-name)').forEach((el) => {
-      el.textContent = info;
+      const caption = el;
+      caption.textContent = info;
     });
   }
 
-  shuffle(arr) {
+  shuffle(array) {
+    const arr = array;
     for (let i = arr.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -310,15 +349,20 @@ export default class GameController {
   }
 
   compare(e) {
+    const correctAnswers = this.get('sentencesData')[this.sentenceIndex].text;
     const answers = this.elems.sentenceConstructor.querySelectorAll('.word');
     this.isCorrect = true;
 
-    answers.forEach((word, i) => {
-      if (Number(word.dataset.idx) !== i) {
+    answers.forEach((answer, i) => {
+      const word = answer;
+      if (word.dataset.content !== correctAnswers[i]) {
         this.isCorrect = false;
         word.classList.add('incorrect');
       } else {
         word.classList.add('correct');
+        if (Number(word.dataset.idx) !== i) {
+          word.dataset.idx = i;
+        }
       }
     });
 
@@ -373,21 +417,19 @@ export default class GameController {
     this.saveRoundResult();
     this.savePassedRound();
     this.saveGallery();
-    document.dispatchEvent(new CustomEvent('userDataChange'));
+    document.dispatchEvent(new CustomEvent('userDataChange', { detail: 'statistics' }));
   }
 
   saveRoundResult() {
     const roundResult = {
       date: Date.now(),
       round: `${this.get('currentLevel')}-${this.get('currentRound')}`,
-      result: `${this.correctCounter} / 10`,
+      result: `${this.correctCounter}-${10 - this.correctCounter}`,
     };
     const statistics = this.get('statistics');
 
-    statistics.unshift(roundResult);
-    if (statistics.length > 25) {
-      statistics.length = 25;
-    }
+    if (statistics.length === 20) statistics.shift();
+    statistics.push(roundResult);
 
     this.set('statistics', statistics);
   }
@@ -501,22 +543,26 @@ export default class GameController {
 
   fillStatistics() {
     this.elems.statTable.innerHTML = '';
-    const rows = [tableHeader];
+    const rows = [];
     const statistics = this.get('statistics');
+
     statistics.forEach((mark) => {
       const [level, round] = mark.round.split('-');
       const date = new Date(mark.date);
-      const score = mark.result;
+      const [score] = mark.result.split('-');
       const tr = `
       <tr class="tr">
         <td class="td">${level}</td>
         <td class="td">${round}</td>
         <td class="td">${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}</td>
-        <td class="td">${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
-        <td class="td">${score}</td>
+        <td class="td">${date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</td>
+        <td class="td">${score} из 10</td>
       </tr>`;
       rows.push(tr);
     });
+
+    rows.push(tableHeader);
+    rows.reverse();
     this.elems.statTable.innerHTML = rows.join('');
   }
 
@@ -568,7 +614,7 @@ export default class GameController {
   }
 
   exit() {
-    document.location.reload(true);
+    this.externalObserver.emit('selectPage', 'MainPage');
   }
 
   get(prop) {

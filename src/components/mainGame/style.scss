@@ -1,53 +1,116 @@
-.navigate-button {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  i {
-    font-size: 40px;
-    cursor: pointer;
-  }
-}
-
-.image-container {
-  img {
+.MainGame {
+  .navigate-button {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i {
+      font-size: 40px;
+      cursor: pointer;
+    }
   }
-}
 
-.btn  {
-  min-width: 50px;
-  i {
+  .image-container {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .btn  {
+    min-width: 50px;
+    i {
+      pointer-events: none;
+    }
+  }
+
+  .none {
+    opacity: 0;
+    visibility: hidden;
     pointer-events: none;
   }
-}
 
-.none {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
+  .arrow-disabled {
+    cursor: default !important;
+    opacity: 0.2;
+  }
 
-.arrow-disabled {
-  cursor: default !important;
-  opacity: 0.2;
-}
+  #word-meaning i,
+  #word-example b {
+    color: #0000ff00;
+    font-weight: bold;
+    background: #e2e2e2;
+    border-radius: 5px;
+    padding: 3px;
+    user-select: none;
+  }
 
-#word-meaning i,
-#word-example b {
-  color: #0000ff00;
-  font-weight: bold;
-  background: #e2e2e2;
-  border-radius: 5px;
-  padding: 3px;
-  user-select: none;
-}
+  #word-meaning.show-word i,
+  #word-example.show-word b {
+    color: #0000ff;
+    user-select: unset;
+  }
 
-#word-meaning.show-word i,
-#word-example.show-word b {
-  color: #0000ff;
-  user-select: unset;
+  .input-container {
+    display: inline-block;
+    position: relative;
+    padding: 0;
+    margin: .25rem 0;
+    white-space: nowrap;
+    font-size: 1.4rem;
+    font-weight: bold;
+
+    .background {
+      background: #e0ebef;
+      color: #18BC9C;
+      margin: 0;
+      border-radius: 0.25rem;
+      padding: .2rem .25em;
+      user-select: none;
+      transition: 1s;
+
+      &.hidden span {
+        visibility: hidden;
+      }
+
+      &.opacity {
+        opacity: .5;
+      }
+
+      .orange {
+        color: #F39C12;
+      }
+
+      .red {
+        color: #E74C3C;
+      }
+    }
+
+    .answer-input {
+      background: transparent;
+      font: inherit;
+      outline: none;
+      resize: none;
+      -webkit-appearance: none;
+      -webkit-font-smoothing: antialiased;
+      display: inline;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: #338c99;
+      margin: 0;
+      padding: 0 0.18em;
+      height: auto;
+      line-height: 1.4em;
+
+      &.underline {
+        text-decoration: underline;
+      }
+    }
+  }
+
+
 }

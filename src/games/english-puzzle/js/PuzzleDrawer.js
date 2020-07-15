@@ -34,9 +34,10 @@ export default class PuzzleDrawer {
     this.sentenceParams.forEach((sentence, i) => {
       const canvases = [];
       sentence.lengths.forEach((length, j) => {
+        const text = this.textSentences[i][j];
         const className = j + 1 === sentence.words ? 'word word_colored word_last' : 'word word_colored';
         const height = this.containerHeight / this.sizes.partsAmount;
-        canvases.push(`<canvas class="${className}" data-idx="${j}" width="${length}" height="${height}"></canvas>`);
+        canvases.push(`<canvas class="${className}" data-idx="${j}" data-content="${text}" width="${length}" height="${height}"></canvas>`);
       });
       this.sentenceEls[i].innerHTML = '';
       this.sentenceEls[i].innerHTML = canvases.join('');
@@ -171,6 +172,7 @@ export default class PuzzleDrawer {
     const newCanvas = document.createElement('canvas');
     newCanvas.className = oldCanvas.className;
     newCanvas.dataset.idx = oldCanvas.dataset.idx;
+    newCanvas.dataset.content = oldCanvas.dataset.content;
 
     newCanvas.width = width || oldCanvas.width;
     newCanvas.height = this.containerHeight / this.sizes.partsAmount;

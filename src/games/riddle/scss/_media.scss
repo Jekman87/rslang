@@ -44,11 +44,12 @@
 
 @media (max-width: 480px) {
   .riddle__intro .riddle__name h2 {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .riddle__intro p {
     font-size: 0.8rem;
+    color: #212529;
   }
 
   .riddle__intro button {
@@ -124,7 +125,7 @@
   .riddle__intro button:hover {
     transform: scale(0.96);
     opacity: 0.8;
-    color: black;
+    color: #212529;
     background-color: #ffffff73;
     box-shadow: 1px 1px 1px black;
     transition: all 0.8s;

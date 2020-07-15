@@ -1,6 +1,6 @@
 export default function createResultsHTML() {
   return `
-  <dialog id="resultsDialog" class="p-0" style="max-width: 600px; min-width: 320px">
+  <dialog id="resultsDialog" class="p-0 m-auto" style="max-width: 600px; min-width: 320px">
     <div class="modal-dialog modal-dialog-scrollable m-0" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -27,7 +27,7 @@ export default function createResultsHTML() {
       </div>
     </div>
   </dialog>
-  <dialog id="historyDialog" class="p-0" style="max-width: 600px; min-width: 320px">
+  <dialog id="historyDialog" class="p-0 m-auto" style="max-width: 600px; min-width: 320px">
     <div class="modal-dialog modal-dialog-scrollable m-0" role="document">
       <div class="modal-content">
         <div class="modal-header">

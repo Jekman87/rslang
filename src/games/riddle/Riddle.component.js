@@ -82,6 +82,7 @@ export default class RiddleGame extends Component {
       case 'check':
         compareAnswers();
         this.prepareStatisticForSend(prepareLongTimeStatistic());
+        this.addBonusStatistic();
         break;
       case 'pass':
         passHandler();
@@ -124,6 +125,12 @@ export default class RiddleGame extends Component {
     }
   }
 
+  addBonusStatistic() {
+    if (state.lastAnswer) {
+      this.options.observer.emit('saveCommonProgress', 1);
+    }
+  }
+
   prepareStatisticForSend(roundResult) {
     let longTimeStatisic = [];
     const shortTimeStatisic = [state.lvlStatistic, state.round];
@@ -157,6 +164,8 @@ export default class RiddleGame extends Component {
     event.preventDefault();
     compareAnswers();
     this.prepareStatisticForSend(prepareLongTimeStatistic());
+
+    this.addBonusStatistic();
   }
 
   toHTML() {

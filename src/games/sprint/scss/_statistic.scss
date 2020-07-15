@@ -6,11 +6,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(to right, #faffc4, #d5f1b7, #b0e3b0, #89d4ac, #5fc4ab, #39b0ab, #149ba8, #0086a1, #006890, #004a7b, #002c62, #090e44);
-  background-attachment: fixed;
+  background: url('/assets/sprint/intro.jpg') bottom no-repeat;
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top center;
   z-index: 4;
   display: none;
 }
@@ -25,7 +22,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ebebeba8;
+  background-color: #ffffff99;
   border: 2px solid #2d303a;
   border-radius: 10px;
   overflow: auto;
@@ -62,8 +59,8 @@
   margin-bottom: 2%;
 }
 
-.mistake-container,
-.correct-container {
+.sprint-mistake-container,
+.sprint-correct-container {
   display: flex;
   text-align: left;
   margin: 20px 0 20px;
@@ -96,6 +93,17 @@
   min-height: 40px;
   border: 0;
   box-shadow: none;
+
+  > span {
+    @include flexible();
+    min-height: 40px;
+  }
+
+  p {
+    @include flexible();
+    margin-left: 15px;
+    margin-bottom: 0;
+  }
 }
 
 .sprint-statistic-block {
@@ -104,11 +112,6 @@
 
 .sprint-games {
   padding: 0 0 0 10px;
-}
-
-.sprint-statistic-block p {
-  margin-left: 15px;
-  margin-bottom: 10px;
 }
 
 .hide-statistic {
@@ -133,7 +136,7 @@
   }
 }
 
-.long-time span i {
+.sprint-long-time span i {
     font-size: 2rem;
     color: #7b8a8b;
     margin: 10px;
@@ -144,6 +147,7 @@
   width: 87%;
   display: flex;
   flex-direction: column;
+  justify-content: left;
   margin: 0 0 10px 20px;
   border-left: 2px solid #005e8d;
 

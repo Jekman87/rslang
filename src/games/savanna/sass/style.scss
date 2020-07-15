@@ -3,12 +3,18 @@
 // @import "base/footer";
 // @import "base/main";
 // @import "base/modal";
-
+$enable-hover-media-query: true;
 .savanna-main-container {
-  background-image: url(../assets/img/background.svg);
-  background-position: bottom 0vh center;
+  background-image: url("/assets/savanna/img/background.svg");
+
+  background-position-x: center;
+  // background-position-y: bottom;
+  background-position-y: calc(((4272px - 100vh) / 30) * -30);
+  background-attachment: fixed;
+  transition: background-position-y, linear, 1s;
 
   .savanna-audioSource,
+  .savanna-audio-source-statistic,
   .savanna-display-none {
     display: none !important;
   }
@@ -79,7 +85,7 @@
       // top: 0px;
       width: 50px;
       height: 80px;
-      background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 75%);
+      background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 75%);
       background-size: contain;
       background-repeat: no-repeat;
       transition-property: width, height;
@@ -117,8 +123,11 @@
 
   .word-container,
   .energy-container {
+    text-shadow: -5px -5px 20px #000000, 5px -5px 20px #000000, -5px 5px 20px #000000, 5px 5px 20px #000000;
+    z-index: 5;
+    pointer-events: none;
     position: absolute;
-    top: 100px;
+    top: 25%;
     left: 50%;
     display: flex;
     justify-content: center;
@@ -127,11 +136,12 @@
     // width: 100px;
     height: 100px;
     border-radius: 50%;
-    font-size: 2rem;
+    font-size: 3rem;
     color: whitesmoke;
     // transition-property: top;
     // transition-duration: 0.75s;
     // transition-timing-function: linear;
+    // transition: top, linear, 1s;
   }
   .energy-container {
     top: -100px;
@@ -148,7 +158,7 @@
   .energy-rotate {
     width: 40px;
     height: 40px;
-    background-image: url(../assets/img/energy.png), radial-gradient(#9100ff, #00a9b500 25%);
+    background-image: url("/assets/savanna/img/energy.png"), radial-gradient(#9100ff, #00a9b500 25%);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -158,6 +168,7 @@
   }
 
   .gaming-word-guess {
+    pointer-events: none;
     display: flex;
     border-radius: 4px;
     height: 36px;
@@ -174,7 +185,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #fffffff7;
+    background-color: #ffffff;
     z-index: 3;
   }
 
@@ -247,18 +258,31 @@
     }
   }
 
-  .savannaWrongAnswerBtn {
-    background-color: rgb(255, 0, 0);
-    &:hover {
-      background-color: rgb(255, 0, 0);
+  .savanna-answer-btn {
+    box-sizing:border-box;
+    font-size: 1.25rem;
+    color: rgb(255, 255, 255);
+    padding: 1rem;
+    margin: 5px 0;
+    background-color: #18bc9c54;
+    border-color: #18bc9c54;
+
+    &.savannaWrongAnswerBtn {
+      // background-color: rgb(255, 0, 0);
+      background-color: rgba(255, 0, 0, 0.49);
+      &:hover {
+        background-color: rgb(255, 0, 0);
+      }
     }
-  }
-  .savannaCorrectAnswerBtn {
-    background-color: rgb(0, 255, 0);
-    &:hover {
-      background-color: rgb(0, 255, 0);
+    &.savannaCorrectAnswerBtn {
+      background-color: rgb(24, 188, 156);
+      &:hover {
+        background-color: rgb(0, 255, 0);
+      }
     }
+
   }
+
 
   .savanna-lives {
     .fa-heart {
@@ -281,11 +305,11 @@
     }
   }
 
-  .savanna-abort-game {
+  .savanna-abort-game-button {
     color: rgb(220, 220, 220);
     transition: color, linear, 0, 5s;
     &:hover {
-      color: red;
+      color: rgb(255, 0, 0);
     }
   }
 
@@ -328,17 +352,27 @@
       line-height: 3.5rem;
     }
   }
+
   .savanna-game-statistic {
     align-items: center;
   }
+
+  .savanna-statistic-sound-button {
+    &:hover {
+      color: rgb(0, 0, 0) !important;
+    }
+    ::after {
+      color: rgb(0, 0, 0);
+    }
+  }
   .statistics-content {
-    max-height: 50vh;
-    width: 90%;
+    height: 50vh;
+    flex-shrink: 0;
+    width: 100%;
     overflow: auto;
     margin: 2rem auto;
     @media (min-width: 576px) {
-      max-height: 40vh;
-      width: 80%;
+      height: 40vh;
     }
     &::-webkit-scrollbar {
       width: 0.5rem;
@@ -350,16 +384,55 @@
       border-radius: 10px;
     }
   }
+
   .word-list {
     padding-left: 0;
     @media (min-width: 576px) {
       padding-left: 3rem;
     }
   }
+
   .statistics-word {
     list-style: none;
     margin-bottom: 1rem;
     display: flex;
+  }
+
+  .statistics-icon {
+    width: 3rem;
+    height: 2rem;
+    background: url("/assets/savanna/img/savanna.svg") no-repeat 50%;
+    background-size: cover;
+  }
+
+  .statistics-info {
+    border-left: 2px solid #3498db;
+  }
+  .statistics-info-item {
+    list-style: none;
+  }
+  .statistics-info-item:first-child {
+    font-weight: 70;
+  }
+
+  // modal
+  .savanna-game-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .savanna-modal-heading {
+      // text-align: center;
+      text-indent: 4rem;
+      font-size: 2rem;
+    }
+  }
+  .savanna-animation-pause {
+    animation-play-state: paused;
   }
 }
 
@@ -392,15 +465,15 @@
 @keyframes savannaMyAnimation {
   0% {
     top: 0px;
-    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 0%);
+    background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 0%);
   }
   50% {
     top: -20px;
-    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 75%);
+    background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 75%);
   }
   100% {
     top: 0px;
-    background-image: url(../assets/img/pilon.png), radial-gradient(#0089ff, #00a9b500 0%);
+    background-image: url("/assets/savanna/img/pilon.png"), radial-gradient(#0089ff, #00a9b500 0%);
   }
 }
 
@@ -413,3 +486,46 @@
     transform: rotate(360deg);
   }
 }
+// @media (hover:hover) {
+//   .savanna-answer-btn {
+//     transform: scale(0.9);
+//     opacity: 0.8;
+//     color: #005986;
+//     background-color: #faffcd;
+//     box-shadow: 1px 1px 1px black;
+//     transition: all 0.8s;
+//     cursor: pointer;
+//   }
+// }
+
+@media (hover: hover) {
+  .savanna-answer-btn:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(24, 188, 156);
+    border-color: rgb(24, 188, 156);
+  }
+}
+// .savanna-answer-btn-container{
+//   white-space: nowrap;
+//   width: fit-content!important;
+// }
+// .savanna-answer-buttons {
+//   // justify-content: space-evenly;
+//   white-space: nowrap;
+//   width: fit-content!important;
+// }
+
+// @media only screen and (max-width: 768px) {
+//   .savanna-main-container {
+//     .savanna-answer-btn-container {
+//       margin-bottom: 0.5rem;
+//       margin-top: 0.5rem;
+//       width: 100%;
+//       .savanna-answer-btn {
+//         width: 100%;
+//         box-sizing: border-box;
+//         text-align: left;
+//       }
+//     }
+//   }
+// }
