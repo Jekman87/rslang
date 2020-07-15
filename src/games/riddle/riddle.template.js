@@ -1,7 +1,7 @@
 export default function createGameField() {
   return `
     <div class="riddle__intro">
-    <div class="riddle__name"><h2>ЗАГАДКА</h2><h2>ОТГАДКА</h2></div>
+    <div class="riddle__name"><h2>RIDDLE</h2><h2>RIDDLE</h2></div>
       <p>Задействуй знания английского языка и кругозор<br> для решения лучших загадок со всего мира.</p>
       <button type="button" class="btn btn-outline-secondary" data-click="start">Начать</button>
     </div>
@@ -37,25 +37,25 @@ export default function createGameField() {
 
           <button type="button" class="btn btn-outline-secondary riddle-button" data-click="start-game">Запустить игру</button>
 
-          <button class="btn btn-outline-danger riddle-button" data-click="home">
+          <button class="btn btn-outline-danger riddle-button" title="Вернуться на главную страницу" data-click="home">
             <i class="fa fa-times riddle-icon-parameters" aria-hidden="true" data-click="home"></i>
           </button>
         </header>
 
         <div class="riddle-prompts">
           <div>
-            <button type="button" class="btn btn-outline-secondary riddle-button" data-click="show-options">
+            <button type="button" class="btn btn-outline-secondary riddle-button" title="Подсказка: показать ответы" data-click="show-options">
               <i class="fas fa-eye" data-click="show-options"></i>
             </button>
-            <button type="button" class="btn btn-outline-secondary riddle-button" data-click="remove-wrong">50/50</button>
-            <button type="button" class="btn btn-outline-secondary riddle-button" data-click="show-translate">
+            <button type="button" class="btn btn-outline-secondary riddle-button" title="Подсказка: убрать два неправильных ответа" data-click="remove-wrong">50/50</button>
+            <button type="button" class="btn btn-outline-secondary riddle-button" title="Подсказка: перевод предложения" data-click="show-translate">
               <i class="fas fa-language" data-click="show-translate"></i>
             </button>
           </div>
-          <button type="button" class="btn btn-outline-secondary riddle-button riddle-mute" data-click="riddle-mute">
+          <button type="button" class="btn btn-outline-secondary riddle-button riddle-mute" title="Отключить системные звуки" data-click="riddle-mute">
             <i class="fas fa-music sprint-icon-parameters riddle-mute" data-click="riddle-mute"></i>
           </button>
-          <button type="button" class="btn btn-outline-secondary riddle-button riddle-unmute" data-click="riddle-unmute">
+          <button type="button" class="btn btn-outline-secondary riddle-button riddle-unmute" title="Включить системные звуки" data-click="riddle-unmute">
             <i class="fas fa-music sprint-icon-parameters" data-click="riddle-unmute"></i>
             <i class="fas fa-slash sprint-icon-parameters riddle-line" data-click="riddle-unmute"></i>
           </button>
@@ -81,8 +81,7 @@ export default function createGameField() {
             <div class="answer-block"></div>
           </div>
         </div>
-
-
+        
       </div>
     </div>
 

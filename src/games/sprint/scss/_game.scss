@@ -156,9 +156,13 @@
   position: relative;
   border: none;
 
-  .score {
-    font-size: 2.4rem;
+  .sprint-score-table {
+    font-size: 2.1rem;
     color: $fontColor;
+    padding: 0px 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #ffffff5c;
   }
 
   .sprint-mute {

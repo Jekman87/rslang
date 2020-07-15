@@ -6,6 +6,7 @@
   button {
     box-shadow: 6px 6px 10px #7b8a8b;
     transition: all 0.8s;
+    margin: 0 10px;
   }
 
   button i {
@@ -18,19 +19,26 @@
     height: 40px;
     background-color: #ffffff5c;
     border: 1px solid #005e8d;
+    
     i {
       color: $fontColor;
     }
   }
 
-  .timer {
+  .sprint-timer {
     @include flexible;
     width: 80px;
+    margin: 0 10px;
     min-height: 80px;
     border-radius: 50%;
     background-color: #ffffff5c;
     border: 1px solid #005e8d;
     font-size: 1.5rem;
     color: $fontColor;
+  }
+
+  .sprint-bonus-timer {
+    background-color: #18bc9c4d;
+    transition: all 0.2s;
   }
 }
