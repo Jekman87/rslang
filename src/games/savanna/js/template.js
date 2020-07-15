@@ -379,6 +379,10 @@ export default function showTemplate() {
     <audio class="savanna-audioSource" id="SavannaAudioCorrect" src="./assets/savanna/voices/correct.mp3"></audio>
     <audio class="savanna-audioSource" id="SavannaAudioWrong" src="./assets/savanna/voices/wrong.mp3"></audio>
     <audio class="savanna-audioSource" id="SavannaAudioResults" src="./assets/savanna/voices/show_result.mp3"></audio>
+    <audio class="savanna-audioSource" id="SavannaAudioWin" src="./assets/savanna/voices/savanna-win.mp3"></audio>
+    <audio class="savanna-audioSource" id="SavannaAudioLoss" src="./assets/savanna/voices/savanna-loss.mp3"></audio>
+    <audio class="savanna-audioSource" id="SavannaAudioCrystallUp" src="./assets/savanna/voices/savanna-crystall-up.mp3"></audio>
+
   </div>
   `;
 }
