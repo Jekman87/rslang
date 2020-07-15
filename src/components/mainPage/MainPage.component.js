@@ -44,7 +44,7 @@ export default class MainPage extends Component {
     let learnedCards = 0;
     let wordsToday = 0;
     let cardsToday = 0;
-    let cardsPerDay = 0;
+    let { cardsPerDay } = this.dataForApp.settings.optional;
 
     if (this.dataForApp.longTermStats) {
       const lastIndex = this.dataForApp.longTermStats.length - 1;
@@ -55,7 +55,6 @@ export default class MainPage extends Component {
     if (this.dataForApp.shortTermStats) {
       wordsToday = this.dataForApp.shortTermStats.newWordsCount;
       cardsToday = this.dataForApp.shortTermStats.cardsCount;
-      cardsPerDay = this.dataForApp.settings.optional.cardsPerDay;
     }
 
     cardsPerDay = this.dataForApp.userCards.length > cardsPerDay
@@ -74,6 +73,7 @@ export default class MainPage extends Component {
       commonProgress: this.dataForApp.settings.optional.commonProgress,
     };
 
+    console.log('main page', this.dataForApp)
     return createMainPageHTML(data).trim();
   }
 }

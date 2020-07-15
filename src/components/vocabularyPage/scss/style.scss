@@ -1,6 +1,5 @@
 .Vocabulary {
     .vocabulary-wrapper {
-        background-color: #ffffff;
         padding: 2rem 0;
         @media (min-width: 576px) {
             padding: 4rem 2rem 2rem;
@@ -72,16 +71,16 @@
     .breadcrumb-item+.breadcrumb-item {
         padding-left: 0;
         @media (min-width: 992px) {
-            padding-left: 0.5rem; 
+            padding-left: 0.5rem;
         }
-        
+
     }
     .breadcrumb-item+.breadcrumb-item::before {
-       
+
         content: "";
         padding-right: 0;
         @media (min-width: 992px) {
-            content: "/"; 
+            content: "/";
             padding-right: 0.5rem
         }
     }
@@ -121,6 +120,7 @@
     .word-image {
         width: 100%;
         height: auto;
+        object-fit: cover;
         @media (min-width: 411px) {
             height: 10rem;
             width: 15rem;
@@ -164,7 +164,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-       
+
     }
     .hidden{
         display: none;
