@@ -30,7 +30,7 @@ export default function createMainGameHTML(dataForApp) {
           <i class="fas fa-graduation-cap"></i>
           Тренировка
         </h1>
-        <div class="row justify-content-center no-gutters mt-sm-5">
+        <div class="row justify-content-center no-gutters mt-sm-2">
           <div class="col-1 left-arrow">
             <div class="navigate-button prev">
               <i class="fas fa-chevron-left ${studiedСardNum === 0 ? 'arrow-disabled' : ''} text-primary" data-name="prev-btn"></i>
@@ -44,7 +44,7 @@ export default function createMainGameHTML(dataForApp) {
                     <i class="fas fa-volume-up ${settingsOptional.autoSound ? '' : 'd-none'}"></i>
                     <i class="fas fa-volume-mute ${!settingsOptional.autoSound ? '' : 'd-none'}"></i>
                   </button>
-                  <button type="button" class="btn btn-info my-sm-2 d-none d-md-inline" data-name="keyboard">
+                  <button type="button" class="btn btn-info my-sm-2" data-name="keyboard-btn" id="keyboard-btn">
                     <i class="fas fa-keyboard"></i>
                   </button>
                 </div>
@@ -126,7 +126,7 @@ export default function createMainGameHTML(dataForApp) {
           </div>
           <div class="col-1 right-arrow">
             <div class="navigate-button next">
-              <i class="fas fa-chevron-right ${studiedСardNum + 1 === settingsOptional.cardsPerDay ? 'arrow-disabled' : ''}  text-primary" data-name="next-btn"></i>
+              <i class="fas fa-chevron-right ${studiedСardNum + 1 === settingsOptional.cardsPerDay ? 'arrow-disabled' : ''}  text-primary" data-name="next-btn" id="next-btn"></i>
             </div>
           </div>
         </div>
@@ -140,6 +140,7 @@ export default function createMainGameHTML(dataForApp) {
           <div class="col-1 text-center" id="max-studied-cards">${maxСards}</div>
         </div>
       </div>
+      <div id="keyboard-wrapper"></div>
     </div>
   `;
 }

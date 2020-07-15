@@ -1,4 +1,3 @@
-import $$ from '../../core/domManipulation';
 import Component from '../../core/Component';
 import createAuthorizationForm from './authorization.template';
 

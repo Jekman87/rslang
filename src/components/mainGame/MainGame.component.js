@@ -1,6 +1,7 @@
 import Component from '../../core/Component';
 import $$ from '../../core/domManipulation';
 import createMainGameHTML from './mainGame.template';
+import MyKeyboard from '../../plugins/Keyboard';
 
 import { delay, getResetDayTime, getStartDayTime } from '../../core/utils';
 import { getIntervalsOfRepeat, findCommonSubstring, getWordSpans } from './mainGame.utils';
@@ -34,6 +35,7 @@ export default class MainGame extends Component {
       ...options,
     });
     console.log('MainGame this.options', options);
+    console.log('MyKeyboard', MyKeyboard);
     this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
@@ -60,6 +62,7 @@ export default class MainGame extends Component {
 
     this.elements = null;
     this.audio = new Audio();
+    this.myKeyboard = null;
   }
 
   updateState() {
@@ -181,6 +184,10 @@ export default class MainGame extends Component {
         this.elements.$volumeMute.toggle('d-none');
         break;
 
+      case 'keyboard-btn':
+        this.keyboardButtonHandler();
+        break;
+
       default:
         break;
     }
@@ -209,6 +216,27 @@ export default class MainGame extends Component {
     this.setDifficulty(wordParam);
     this.changeCard();
     this.createUserStats();
+  }
+
+  keyboardButtonHandler() {
+    if (!this.myKeyboard) {
+      this.myKeyboard = new MyKeyboard(
+        '#keyboard-wrapper',
+        '#word-input',
+        '#next-btn',
+      );
+      this.myKeyboard.renderKeyboard();
+    }
+
+    const keyboardWrapper = document.querySelector('#keyboard-wrapper');
+
+    if (keyboardWrapper.classList.contains('keyboard-wrapper_show')) {
+      keyboardWrapper.classList.remove('keyboard-wrapper_show');
+      this.myKeyboard.removeListeners();
+    } else {
+      keyboardWrapper.classList.add('keyboard-wrapper_show');
+      this.myKeyboard.addListeners();
+    }
   }
 
   async checkWord() {
@@ -407,6 +435,7 @@ export default class MainGame extends Component {
     }
 
     this.state.currentCardNum = nextCandNum;
+    this.elements.$wordInput.$el.focus();
   }
 
   setWordProgressElements(wordProgress) {
@@ -695,7 +724,9 @@ export default class MainGame extends Component {
 
   destroy() {
     super.destroy();
+    this.audio.pause();
     this.audio = null;
+    this.myKeyboard = null;
   }
 
   toHTML() {
