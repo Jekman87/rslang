@@ -196,14 +196,6 @@ export default class AudioCall extends Component {
         } else this.gameSound = true;
         break;
       case 'repeat':
-        // this.btnRepeat.forEach((btn) => {
-        //   btn.classList.add('btn-repeat-animation');
-        // });
-        // setTimeout(() => {
-        //   this.btnRepeat.forEach((btn) => {
-        //     btn.classList.remove('btn-repeat-animation');
-        //   });
-        // }, 2500);
         this.sayRoundWord();
         break;
       case 'next':
@@ -217,6 +209,7 @@ export default class AudioCall extends Component {
           };
 
           this.sendStatistic(gameResult);
+          this.gameRound += 1;
           this.appendStats();
         }
         break;
@@ -328,6 +321,7 @@ export default class AudioCall extends Component {
             };
 
             this.sendStatistic(gameResult);
+            this.gameRound += 1;
             this.appendStats();
           }
         }
