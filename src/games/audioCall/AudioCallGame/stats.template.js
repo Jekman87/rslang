@@ -1,6 +1,5 @@
 export default function createAudioCallStats() {
   return `
-  
     <div class="container bg-light py-4 stat-container">
       <h5 class="d-flex justify-content-center mb-5">Результат раунда</h5>
       <div class="container mistake-container">
@@ -32,16 +31,3 @@ export default function createAudioCallStats() {
     </div>
     `;
 }
-
-/*
-<div class="container word-container pl-0">
-          <p class="">
-            <i class="fas fa-play text-dark"></i>
-            <span class="ml-2">Amount</span>
-            <span class="text-muted ml-1">- Количество</span>
-          </p>
-        </div>
-
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" >
-          </div>
-*/

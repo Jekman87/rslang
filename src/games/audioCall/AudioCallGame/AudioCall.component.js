@@ -35,6 +35,7 @@ export default class AudioCall extends Component {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.destroy = this.destroy.bind(this);
     this.appendStats = this.appendStats.bind(this);
+    this.sendStatistic = this.sendStatistic.bind(this);
     this.fillRoundWords = this.fillRoundWords.bind(this);
   }
 
@@ -135,24 +136,29 @@ export default class AudioCall extends Component {
   }
 
   sendStatistic(roundResult) {
-    let AudioCallLongStats = [];
+    let AudioCallLong = [];
     try {
-      if (JSON.parse(this.statistic.optional.AudioCallLongStats)) {
-        AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
+      if (JSON.parse(this.statistic.optional.AudioCallLong)) {
+        AudioCallLong = JSON.parse(this.statistic.optional.AudioCallLong);
       }
     } catch {
       console.log('Запись в пустой объект статистики');
     }
 
-    if (AudioCallLongStats.length < 20) {
-      AudioCallLongStats.push(roundResult);
+    if (AudioCallLong.length < 20) {
+      AudioCallLong.push(roundResult);
     } else {
-      AudioCallLongStats.shift();
-      AudioCallLongStats.push(roundResult);
+      AudioCallLong.shift();
+      AudioCallLong.push(roundResult);
     }
 
-    this.statistic.optional.AudioCallLongStats = JSON.stringify(AudioCallLongStats);
+    this.statistic.optional.AudioCallLong = JSON.stringify(AudioCallLong);
     this.mainApi.updateStatistics(this.statistic);
+
+    const [correct] = roundResult.result.split('-');
+    const gameValue = (correct / this.maxProgress) * 10;
+
+    this.options.observer.emit('saveCommonProgress', gameValue);
   }
 
   onClick(event) {
@@ -416,8 +422,8 @@ export default class AudioCall extends Component {
   }
 
   appendStats() {
-    const AudioCallLongStats = JSON.parse(this.statistic.optional.AudioCallLongStats);
-    AudioCallLongStats.forEach((stat) => {
+    const AudioCallLong = JSON.parse(this.statistic.optional.AudioCallLong);
+    AudioCallLong.forEach((stat) => {
       this.longStatResults.insertAdjacentHTML(
         'afterbegin',
         insertLongStats(stat.date, stat.result)

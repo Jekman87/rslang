@@ -59,6 +59,10 @@ $enable-hover-media-query: true;
     width: 100%;
     flex-direction: column;
     justify-content: space-between;
+
+    .savanna-step-word-counter {
+      color: rgb(207, 176, 64);
+    }
   }
   .balasned_element {
     opacity: 0;
