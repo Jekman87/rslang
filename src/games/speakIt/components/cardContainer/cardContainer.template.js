@@ -3,7 +3,7 @@ export default function createCardContainerHTML() {
   <div class="card-container-content d-flex justify-content-center mt-3">
     <div
       class="word-card card mb-3 word-card text-white bg-primary"
-      style="max-width: 20rem;"
+      style="max-width: 290px;"
     >
       <div class="text-center">
         <img

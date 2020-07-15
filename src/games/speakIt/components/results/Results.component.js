@@ -44,7 +44,6 @@ export default class Results extends Component {
         this.$successNum.text('0');
       }
     });
-    this.subscribe('cardsDesk:finishGame', () => {});
     this.subscribe('header:results', () => {
       if (this.dataForApp.state.mode === 'dictionary') {
         const count = this.dataForApp.state.dictionaryCount;
@@ -76,6 +75,13 @@ export default class Results extends Component {
       updateResults.call(this);
     });
     this.subscribe('cardsDesk:finishGame', () => {
+      if (this.dataForApp.state.mode === 'dictionary') {
+        const count = this.dataForApp.state.dictionaryCount;
+        const wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+        if (wordsTen.length < 10) {
+          this.$continueBtn.addClass('d-none');
+        }
+      }
       this.$resultsDialog.$el.showModal();
     });
   }
