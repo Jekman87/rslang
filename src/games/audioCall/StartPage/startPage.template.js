@@ -28,7 +28,7 @@ export default function createStartPage() {
             <label for="audiocall-game-lvl">Сложность игры</label>
           </div>
           <div class="custom-control custom-radio mb-2">
-            <input type="radio" id="audiocallisLearnedWords1" name="audicallisLearnedWords" class="custom-control-input" checked="">
+            <input type="radio" id="audiocallisLearnedWords1" name="audiocallisLearnedWords" class="custom-control-input" checked="">
             <label class="custom-control-label" for="audiocallisLearnedWords1">Играть с изучаемыми словами</label>
           </div>
           <div class="custom-control custom-radio mb-3">

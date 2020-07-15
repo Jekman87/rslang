@@ -27,6 +27,7 @@ export default class AudioCall extends Component {
     this.app = document.querySelector($root);
     this.gameSound = true;
     this.statistics = [];
+    this.gameRound = 1;
 
     this.statistic = this.options.dataForApp.statistics;
     this.userWords = this.options.dataForApp.userWords;
@@ -45,7 +46,7 @@ export default class AudioCall extends Component {
     const page = Math.floor(Math.random() * (30 - 0 + 1));
 
     if (this.userWords.length < 70 || this.gameWithNewWords) {
-      roundWordsArr = await this.mainApi.getWords(page, this.gameLevel, 10, 5);
+      roundWordsArr = await this.mainApi.getWords(page, this.gameLevel - 1, 10, 5);
     } else {
       const filter = '{"userWord":{"$ne":null}}';
       const words = await this.mainApi.getAllUserAggregatedWords(null, 60, filter);
@@ -99,6 +100,15 @@ export default class AudioCall extends Component {
   }
 
   sayRoundWord() {
+    this.btnRepeat.forEach((btn) => {
+      btn.classList.add('btn-repeat-animation');
+    });
+    setTimeout(() => {
+      this.btnRepeat.forEach((btn) => {
+        btn.classList.remove('btn-repeat-animation');
+      });
+    }, 2500);
+
     const audio = new Audio();
     audio.src = `https://raw.githubusercontent.com/Jekman87/rslang-data/master/${this.roundWord.audio}`;
     audio.play().catch((err) => console.log(err));
@@ -174,7 +184,7 @@ export default class AudioCall extends Component {
         document.querySelector('.audiocall-setting-card').classList.toggle('setting-card-opened');
         break;
       case 'startGame':
-        this.gameLevel = document.getElementById('audiocallGameLevel').value - 1;
+        this.gameLevel = document.getElementById('audiocallGameLevel').value;
         this.gameWithNewWords = document.getElementById('audiocallisLearnedWords2').checked;
         this.app.innerHTML = '';
         this.renderGame();
@@ -186,14 +196,14 @@ export default class AudioCall extends Component {
         } else this.gameSound = true;
         break;
       case 'repeat':
-        this.btnRepeat.forEach((btn) => {
-          btn.classList.add('btn-repeat-animation');
-        });
-        setTimeout(() => {
-          this.btnRepeat.forEach((btn) => {
-            btn.classList.remove('btn-repeat-animation');
-          });
-        }, 2500);
+        // this.btnRepeat.forEach((btn) => {
+        //   btn.classList.add('btn-repeat-animation');
+        // });
+        // setTimeout(() => {
+        //   this.btnRepeat.forEach((btn) => {
+        //     btn.classList.remove('btn-repeat-animation');
+        //   });
+        // }, 2500);
         this.sayRoundWord();
         break;
       case 'next':
@@ -202,7 +212,7 @@ export default class AudioCall extends Component {
         } else {
           const gameResult = {
             date: Date.now(),
-            round: `${this.gameLevel}-${this.progress}`,
+            round: `${this.gameLevel}-${this.gameRound}`,
             result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
 
@@ -313,7 +323,7 @@ export default class AudioCall extends Component {
           } else {
             const gameResult = {
               date: Date.now(),
-              round: `${this.gameLevel}-${this.progress}`,
+              round: `${this.gameLevel}-${this.gameRound}`,
               result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
 
