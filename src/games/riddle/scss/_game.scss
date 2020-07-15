@@ -21,7 +21,7 @@
   margin: 10px;
   padding: 20px;
   text-align: center;
-  background-color: #ffffff5c;
+  background-color: #ffffff9c;
   border: 1px solid #2d303a;
   border-radius: 5px;
   overflow: auto;
@@ -29,6 +29,14 @@
 
 .riddle-hide-prompt {
   display: none !important;
+}
+
+.riddle-prompts .riddle-active-prompt {
+  background-color: #95a5a6;
+  box-shadow: 1px 1px 1px black;
+  i {
+    color: #ffffff;
+  }
 }
 
 .riddle-prompts {
@@ -73,7 +81,7 @@
     margin: 10px;
     padding: 5px;
     text-align: center;
-    background-color: #ffffff5c;
+    background-color: #ffffff9c;
     border: 1px solid #2d303a;
     border-radius: 5px;
     animation: blink 0.7s infinite;
