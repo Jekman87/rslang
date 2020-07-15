@@ -168,6 +168,7 @@ export default class Savannah {
     this.settingsElemetns.isLearnedWords1 = document.getElementById('savannaisLearnedWords1');
     this.settingsElemetns.isLearnedWords2 = document.getElementById('savannaisLearnedWords2');
     this.settingsElemetns.gameInvert = document.getElementById('savannaSettingsGameInvert');
+    this.savannaStepWordCounter = document.getElementById('savannaStepWordCounter');
     this.settingsElemetns.gameIrregularVerbs = document.getElementById(
       'savannaSettingsGameIrregularVerbs',
     );
@@ -530,6 +531,7 @@ export default class Savannah {
       case 'gameStart':
         if (showConsoleLog) console.log('gameStart');
         this.gameState.step = 0;
+        this.savannaStepWordCounter.innerHTML = '1';
         this.gameState.statisticCorrectAnswers = [];
         this.gameState.statisticWrongAnswers = [];
         if (this.localSettings.gameInvert) {
@@ -682,6 +684,7 @@ export default class Savannah {
           el.classList.remove('savannaWrongAnswerBtn', 'savannaCorrectAnswerBtn');
         });
         if (this.gameState.step < 30) {
+          this.savannaStepWordCounter.innerHTML = `${this.gameState.step + 1}`;
           this.gameState.wrAnsArr = this.gameWordArray.filter(
             (el) => (this.gameWordArray[this.gameState.step] !== el),
           );
@@ -752,6 +755,16 @@ export default class Savannah {
           this.options.api.updateUserWord(el._id, el.userWord).catch((err) => {
             if (showConsoleLog) console.log('ошибка при работе с апи', err);
           });
+          const index = this.options.dataForApp.userWords.findIndex((element) => {
+            if (element._id === el._id) {
+              return true;
+            }
+            return false;
+          });
+          if (index >= 0) {
+            this.options.dataForApp.userWords[index].userWord.optional.gameError = true;
+            if (showConsoleLog) console.log('поменял в статистике юзера !!', index, this.options.dataForApp.userWords[index].word);
+          }
         }
       });
     }
@@ -764,7 +777,7 @@ export default class Savannah {
     this.statsSavannaMain.totalWordsFalse += wrongCount;
     this.statsSavannaMain.roundsForTeamLead[`${roundMain}`] += 1;
     const roundSecond = this.statsSavannaMain.roundsForTeamLead[`${roundMain}`];
-
+    this._upUserLevel((wrongCount === 5), correctCount, 30);
     const toBackend = {};
     toBackend.date = Date.now();
     toBackend.round = `${roundMain}-${roundSecond}`;
@@ -926,6 +939,18 @@ export default class Savannah {
     }
     this.savannaLongtermStatistics.innerHTML = '';
     this.savannaLongtermStatistics.append(statObj.LTDiv);
+  }
+
+  _upUserLevel(isLose, correctAnswers, maxAnswers) {
+    let value = 10;
+    if (isLose === true) {
+      value = 5;
+    }
+    value *= correctAnswers / maxAnswers;
+    if (typeof this.options.dataForApp.settings.optional.commonProgress !== 'number') {
+      this.options.dataForApp.settings.optional.commonProgress = 0;
+    }
+    this.options.observer.emit('saveCommonProgress', value);
   }
 
   _returnStartGamePage() {
