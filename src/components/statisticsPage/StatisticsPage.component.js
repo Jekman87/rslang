@@ -302,7 +302,7 @@ export default class Statistics extends Component {
 
     container.innerHTML = `
     <ul class="nav nav-tabs justify-content-center">${tabs}</ul>
-    <div class="tab-content ${isScrollNeed ? 'table-wrapper-scroll-y my-custom-scrollbar' : ''}">${content}</div>
+    <div class="tab-content ${isScrollNeed ? 'table-wrapper-scroll-y my-custom-scrollbar card' : ''}">${content}</div>
     `;
   }
 }
