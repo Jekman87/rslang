@@ -126,6 +126,8 @@ export default class RiddleGame extends Component {
   }
 
   addBonusStatistic() {
+    if (document.querySelector('.input-page').value === '15'
+    && document.querySelector('.input-level').value === '6') return;
     if (state.lastAnswer) {
       this.options.observer.emit('saveCommonProgress', 1);
     }
@@ -139,7 +141,7 @@ export default class RiddleGame extends Component {
       longTimeStatisic = JSON.parse(this.statistic.optional.RiddleLong);
     }
 
-    if (longTimeStatisic.length < 15) {
+    if (longTimeStatisic.length < 20) {
       longTimeStatisic.push(roundResult);
     } else {
       longTimeStatisic.shift();
@@ -152,7 +154,7 @@ export default class RiddleGame extends Component {
   }
 
   unpackStatistics() {
-    if (this.statistic.optional.RiddleShort) {
+    if (this.statistic.optional.RiddleShort && this.statistic.optional.RiddleShort.length > 2) {
       const shortTimeStatisic = JSON.parse(this.statistic.optional.RiddleShort);
       [state.lvlStatistic, state.round] = shortTimeStatisic;
     } else {

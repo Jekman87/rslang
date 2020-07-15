@@ -365,14 +365,6 @@ const RIDDLES_3 = {
     explain: 'cherry',
     id: 45,
   },
-  'Riddle-46': {
-    riddle: 'Mary has four daughters, and each of her daughters has a brother. How many children does Mary have?',
-    translate: 'У Марии четыре дочери, и у каждой из ее дочерей есть брат. Сколько детей у Мэри?',
-    answer: 'five',
-    options: ['eight', 'four', 'five', 'six'],
-    explain: 'Five — each daughter has the same brother.',
-    id: 46,
-  },
 };
 
 const RIDDLES_4 = {
@@ -443,11 +435,11 @@ const RIDDLES_4 = {
     id: 53,
   },
   'Riddle-54': {
-    riddle: 'I am born of water but when I return to water, I die. What am I?',
-    translate: 'Я рожден от воды и умираю, когда возращаюсь к состоянию рождения. Что это?',
-    answer: 'ice',
-    options: ['ground', 'wind', 'ice', 'dew'],
-    explain: 'ice',
+    riddle: 'Mary has four daughters, and each of her daughters has a brother. How many children does Mary have?',
+    translate: 'У Марии четыре дочери, и у каждой из ее дочерей есть брат. Сколько детей у Мэри?',
+    answer: 'five',
+    options: ['eight', 'four', 'five', 'six'],
+    explain: 'Five — each daughter has the same brother.',
     id: 54,
   },
   'Riddle-55': {
@@ -533,7 +525,7 @@ const RIDDLES_5 = {
   },
   'Riddle-64': {
     riddle: 'I shave every day, but my beard stays the same. What am I?',
-    translate: 'Если у вас есть это, вы хотите поделиться этим. Если вы поделитесь этим, вы навсегда это потеряете. Что это?',
+    translate: 'Я брею бороду каждый день, но длина моей бороды всего одинакова. Кто я?',
     answer: 'barber',
     options: ['pirate', 'soldier', 'grandfather', 'barber'],
     explain: 'barber',
@@ -597,7 +589,7 @@ const RIDDLES_5 = {
   },
   'Riddle-72': {
     riddle: 'Look at me in some moment. I can bring a smile to your face, A tear to your eye, Or even a thought to your mind. But, I can\'t be seen. What am I?',
-    translate: 'Посмотри на меня в любой момент. Я могу вызвать улыбку на твоем лице, слёзы в твоих глазах или любую другую мысль. Но я никогда не буду увидена вновь наяву. Что это?',
+    translate: 'Посмотри на меня в любой момент. Я могу вызвать улыбку на твоем лице, слёзы в твоих глазах или любую другую мысль. Но я никогда не буду увиден вновь наяву. Что это?',
     answer: 'memories',
     options: ['sunrise', 'tv', 'memories', 'sunset'],
     explain: 'memories',
@@ -634,7 +626,7 @@ const RIDDLES_6 = {
     riddle: 'What 4-letter word can be written forward, backward or upside down, and can still be read from left to right?',
     translate: 'Какое 4-буквенное слово может быть написано вперед, назад или вверх ногами, и все еще может читаться слева направо?',
     answer: 'NONE',
-    options: ['HOME', 'ROME', 'NOON', 'BONE'],
+    options: ['HOME', 'ROME', 'NONE', 'BONE'],
     explain: 'NONE',
     id: 76,
   },
