@@ -55,6 +55,38 @@ const getStringTime = (timeMs) => {
   return timeMs;
 };
 
+const findCommonSubstring = (inputWord, currentWord) => {
+  let minWord = '';
+  let maxWord = '';
+
+  if (inputWord.length < currentWord.length) {
+    minWord = inputWord;
+    maxWord = currentWord;
+  } else {
+    minWord = currentWord;
+    maxWord = inputWord;
+  }
+
+  for (let lengthSubstr = minWord.length; lengthSubstr > 0; lengthSubstr -= 1) {
+    for (let position = 0; position <= minWord.length - lengthSubstr; position += 1) {
+      const substr = minWord.slice(position, position + lengthSubstr);
+
+      if (maxWord.indexOf(substr) > -1) {
+        return substr;
+      }
+    }
+  }
+
+  return '';
+};
+
+const getWordSpans = (word) => {
+  return word.split('').map((letter, idx) => {
+    const span = `<span index="${idx}">${letter}</span>`;
+    return span;
+  }).join('');
+};
+
 export {
-  getIntervalsOfRepeat, getStringTime,
+  getIntervalsOfRepeat, getStringTime, findCommonSubstring, getWordSpans,
 };
