@@ -1,4 +1,4 @@
-import DICTIONARY from './sprint.data';
+/* import DICTIONARY from './sprint.data'; */
 
 import './scss/sprint.scss';
 
@@ -13,7 +13,47 @@ const state = {
   comboAnswers: 0,
   colorCount: 0,
   wordCount: 0,
+  dictionary: {},
+  correctAnswers: 0,
+  wrongAnswers: 0,
 };
+
+async function getWords(level, page = 0, count = 60) {
+  const currentLevel = +level - 1;
+  let url = 'https://afternoon-falls-25894.herokuapp.com/words?';
+  url += `group=${currentLevel}&page=${page}&wordsPerExampleSentenceLTE=20&wordsPerPage=${count}`;
+
+  const rawResponse = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+  });
+
+  if (rawResponse.status !== 200) {
+    throw new Error(rawResponse.status);
+  }
+
+  const content = await rawResponse.json();
+  const dataLength = Object.keys(content).length;
+
+  for (let i = 0; i < dataLength; i += 1) {
+    state.dictionary[`${content[i].word}`] = {
+      word: content[i].word,
+      translate: content[i].wordTranslate,
+      transcription: content[i].transcription,
+      audio: content[i].audio,
+      id: content[i].id,
+    };
+  }
+  return content;
+}
+
+function getAllLevelWords() {
+  for (let page = 0; page < 10; page += 1) {
+    getWords(state.currentLevel, page);
+  }
+}
 
 function hideIntro() {
   document.querySelector('.intro__sprint').style.display = 'none';
@@ -29,7 +69,7 @@ function hideBestIndicator() {
 }
 
 function hideCountdown() {
-  document.querySelector('.main-sp').style.display = 'none';
+  document.querySelector('.sprint-spinner').style.display = 'none';
 }
 
 function hideShortTimeStatistic() {
@@ -37,7 +77,7 @@ function hideShortTimeStatistic() {
 }
 
 function showCountdown() {
-  document.querySelector('.main-sp').style.display = 'flex';
+  document.querySelector('.sprint-spinner').style.display = 'flex';
 }
 
 function rewriteLongTimeStatistic() {
@@ -75,23 +115,23 @@ function showShortTimeStatistic() {
 }
 
 function opacityOn() {
-  document.querySelector('.countdown').style.opacity = '100';
+  document.querySelector('.sprint-countdown').style.opacity = '100';
 }
 
 function opacityOff() {
-  document.querySelector('.countdown').style.opacity = '0';
+  document.querySelector('.sprint-countdown').style.opacity = '0';
 }
 
 function ready() {
-  document.querySelector('.countdown').innerHTML = 'На старт ...';
+  document.querySelector('.sprint-countdown').innerHTML = 'На старт ...';
 }
 
 function set() {
-  document.querySelector('.countdown').innerHTML = 'Внимание ...';
+  document.querySelector('.sprint-countdown').innerHTML = 'Внимание ...';
 }
 
 function go() {
-  document.querySelector('.countdown').innerHTML = 'Марш!';
+  document.querySelector('.sprint-countdown').innerHTML = 'Марш!';
 }
 
 function markRightAnswer() {
@@ -102,10 +142,18 @@ function markWrongAnswer() {
   document.querySelector('.sprint-game-block').classList.toggle('sprint-wrong-color');
 }
 
+function markBonusTimer() {
+  document.querySelector('.sprint-timer').classList.toggle('sprint-bonus-timer');
+}
+
+function showBonusTime(bonusTime) {
+  document.querySelector('.sprint-timer').textContent = `+${bonusTime}`;
+}
+
 function removeShortTimeStatistic() {
   state.points = 0;
   state.pointsWeigth = 10;
-  document.querySelector('.score').innerHTML = 0;
+  document.querySelector('.sprint-score-table').innerHTML = 0;
   document.querySelector('.mistake-block').innerHTML = '';
   document.querySelector('.correct-block').innerHTML = '';
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
@@ -159,12 +207,14 @@ function getRandomNumber(min, max) {
 }
 
 function generateCorrectWordCouple() {
-  const keys = Object.keys(DICTIONARY);
-  const randomValue = keys[getRandomNumber(1, 50)];
-  const randomEngWord = DICTIONARY[randomValue].word;
-  const randomAudioWord = DICTIONARY[randomValue].audio.split('/').pop();
-  const randomRusWord = DICTIONARY[randomValue].translate;
+  const keys = Object.keys(state.dictionary);
+  const randomValue = keys[getRandomNumber(2, keys.length - 2)];
+  const randomEngWord = state.dictionary[randomValue].word;
+  const randomAudioWord = state.dictionary[randomValue].audio.split('/').pop();
+  const randomRusWord = state.dictionary[randomValue].translate;
+  const randomTranscription = state.dictionary[randomValue].transcription;
   state.word = randomEngWord;
+  state.transcription = randomTranscription;
   state.translateWord = randomRusWord;
   state.correctTranslateWord = randomRusWord;
   state.audioWord = randomAudioWord;
@@ -173,15 +223,17 @@ function generateCorrectWordCouple() {
 }
 
 function generateWrongWordCouple() {
-  const keys = Object.keys(DICTIONARY);
-  const randomNumber = getRandomNumber(1, 599);
+  const keys = Object.keys(state.dictionary);
+  const randomNumber = getRandomNumber(2, keys.length - 2);
   const randomValue = keys[randomNumber];
   const randomValue2 = keys[randomNumber + 1];
-  const randomEngWord = DICTIONARY[randomValue].word;
-  const randomAudioWord = DICTIONARY[randomValue].audio.split('/').pop();
-  const translateForStatistic = DICTIONARY[randomValue].translate;
-  const randomRusWord = DICTIONARY[randomValue2].translate;
+  const randomEngWord = state.dictionary[randomValue].word;
+  const randomAudioWord = state.dictionary[randomValue].audio.split('/').pop();
+  const translateForStatistic = state.dictionary[randomValue].translate;
+  const randomTranscription = state.dictionary[randomValue].transcription;
+  const randomRusWord = state.dictionary[randomValue2].translate;
   state.word = randomEngWord;
+  state.transcription = randomTranscription;
   state.translateWord = randomRusWord;
   state.correctTranslateWord = translateForStatistic;
   state.audioWord = randomAudioWord;
@@ -200,8 +252,8 @@ function addAnswerToStatistic(answer) {
       <audio id="statistic-audio-${state.wordCount}" src="${url}"></i>
     </span>
     <p ${dataAtribute}>${state.word}</p>
-    <p ${dataAtribute}>[${state.word}]</p>
-    <p ${dataAtribute}>[${state.correctTranslateWord}]</p>
+    <p ${dataAtribute}>${state.transcription}</p>
+    <p ${dataAtribute}>${state.correctTranslateWord}</p>
   </div>
   `;
 
@@ -316,7 +368,7 @@ function addBirdsPicture(birdNumber) {
 }
 
 function resetPointsPlaces() {
-  document.querySelector('.score').innerHTML = state.points;
+  document.querySelector('.sprint-score-table').innerHTML = state.points;
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
 }
 
@@ -327,13 +379,18 @@ function pointsCount() {
       resetBonusPlaces();
       addBirdsPicture(2);
       resetPointsPlaces();
-
+      showBonusTime(1);
+      setTimeout(markBonusTimer, 0);
+      setTimeout(markBonusTimer, 200);
       break;
     case 8:
       playBonusAudio();
       resetBonusPlaces();
       addBirdsPicture(3);
       resetPointsPlaces();
+      showBonusTime(3);
+      setTimeout(markBonusTimer, 0);
+      setTimeout(markBonusTimer, 200);
       break;
     case 12:
       playBonusAudio();
@@ -341,15 +398,17 @@ function pointsCount() {
       addBirdsPicture(4);
       showBestIndicator();
       resetPointsPlaces();
+      showBonusTime(5);
+      setTimeout(markBonusTimer, 0);
+      setTimeout(markBonusTimer, 200);
       break;
     default:
-      return true;
+      break;
   }
-  return true;
 }
 
 function rewriteStatistic() {
-  document.querySelector('.score').innerHTML = state.points;
+  document.querySelector('.sprint-score-table').innerHTML = state.points;
   document.querySelector('.points-progress').innerHTML = `+${state.pointsWeigth} очков за слово.`;
   pointsCount();
   callRandomFunction();
@@ -424,63 +483,15 @@ function switchToRoundStatistic() {
   document.querySelector('.sprint-game-history').style.display = 'none';
 }
 
-function keyUp(event) {
-  switch (event.key) {
-    case 'ArrowLeft':
-      event.preventDefault();
-      writeUserAnswer(event.key);
-      compareAnswers();
-      rewriteStatistic();
-      unmarkLeftKeys();
-      break;
-    case 'ArrowRight':
-      event.preventDefault();
-      writeUserAnswer(event.key);
-      compareAnswers();
-      rewriteStatistic();
-      unmarkRightKeys();
-      break;
-    default:
-      return true;
-  }
-  return true;
-}
-
-function keyDown(event) {
-  switch (event.key) {
-    case 'ArrowLeft':
-      event.preventDefault();
-      markLeftKeys();
-      break;
-    case 'ArrowRight':
-      event.preventDefault();
-      markRightKeys();
-      break;
-    default:
-      return true;
-  }
-  return true;
-}
-
-function keyDownListener() {
-  document.addEventListener('keydown', keyDown);
-  document.addEventListener('keyup', keyUp);
-}
-
-function removeKeyDownListeners() {
-  document.removeEventListener('keydown', keyDown);
-  document.removeEventListener('keyup', keyUp);
-}
-
 export {
   hideIntro, callRandomFunction, showWordsInThePage,
   playWordAudio, playStatisticAudio, changeLevelAndPage,
   compareAnswers, rewriteStatistic, resetLongTimeStatistic,
   muteGameVoice, onGameVoice, rewriteCorrectAndWrongAnswers,
   markLeftKeys, markRightKeys, unmarkLeftKeys, unmarkRightKeys,
-  switchToLongTimeStatistic, switchToRoundStatistic,
-  removeKeyDownListeners, convertDate, showCountdown, rememberLevel,
-  ready, set, go, hideCountdown, keyDownListener, resetProgress,
+  switchToLongTimeStatistic, switchToRoundStatistic, state,
+  convertDate, showCountdown, rememberLevel, getWords,
+  ready, set, go, hideCountdown, resetProgress, getAllLevelWords,
   opacityOn, opacityOff, playTickAudio, playStartAudio, writeUserAnswer,
   removeShortTimeStatistic, hideBestIndicator, hideShortTimeStatistic,
   rewritePointsResult, rewriteLongTimeStatistic, showShortTimeStatistic,
