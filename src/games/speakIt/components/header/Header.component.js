@@ -250,6 +250,21 @@ async function saveGameHistory() {
   this.mainStatistic.optional.SpeakItLong = JSON.stringify(histories);
   this.mainStatistic.optional.SpeakItMain = JSON.stringify(speakItMain);
 
+  if (this.dataForApp.state.mode === 'dictionary') {
+    this.dataForApp.state.gameWords.forEach((word) => {
+      const _word = word;
+      _word.userWord.optional.gameError = true;
+      try {
+        this.mainApi.updateUserWord(_word._id, _word.userWord);
+      } catch (e) {
+        this.emit('alert:open', {
+          type: 'danger',
+          text: 'Ошибка связи с сервером, статистика не записалась, попробуйте позже.',
+        });
+      }
+    });
+  }
+
   upUserScore.apply(this, [correct, PER_GAME_WORDS]);
 
   try {
