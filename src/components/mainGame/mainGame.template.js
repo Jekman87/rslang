@@ -39,10 +39,12 @@ export default function createMainGameHTML(dataForApp) {
                     <i class="fas fa-volume-up ${settingsOptional.autoSound ? '' : 'd-none'}"></i>
                     <i class="fas fa-volume-mute ${!settingsOptional.autoSound ? '' : 'd-none'}"></i>
                   </button>
-                  <button type="button" class="btn btn-info my-sm-2 d-none d-md-inline"><i class="fas fa-keyboard"></i></button>
+                  <button type="button" class="btn btn-info my-sm-2 d-none d-md-inline" data-name="keyboard">
+                    <i class="fas fa-keyboard"></i>
+                  </button>
                 </div>
                 <div>
-                  
+
                   <button type="button" class="btn btn-secondary my-sm-2 justify-self-end ${settingsOptional.difficultWordsButton ? '' : 'd-none'}" data-name="difficult-btn">
                     <i class="fas fa-chess"></i><span class="button-text ml-1">Сложное</span></button>
                   <button type="button" class="btn btn-secondary my-sm-2 ml-sm-2 justify-self-end ${settingsOptional.deleteButton ? '' : 'd-none'}" data-name="delete-btn">
@@ -58,36 +60,20 @@ export default function createMainGameHTML(dataForApp) {
                     <small class="progress-info ml-2 ml-sm-0 ml-lg-2">Нужно ещё потренироваться!</small>
                 </div>
                 <div class="card mb-3">
-<<<<<<< HEAD
-                  <div class="row no-gutters">
-                    <div class="col-lg-6 order-lg-2 image-container">
-                      <img src="${FILE_URL}/${word.image}" class="card-img ${settingsOptional.cardImage ? '' : 'd-none'}" id="word-image" alt="img">
-                      <img src="/assets/speakit/img/blank.jpg" class="card-img ${settingsOptional.cardImage ? 'd-none' : ''}" alt="img">
-
-=======
                   <div class="row no-gutters ${settingsOptional.cardImage ? 'justify-content-lg-between' : 'justify-content-lg-center'}">
                     <div class="col-lg-6 order-lg-2 image-container ${settingsOptional.cardImage ? '' : 'd-none'}">
                       <img src="${FILE_URL}/${word.image}" class="card-img " id="word-image" alt="img">
->>>>>>> card-design
                     </div>
                     <div class="order-lg-1 col-lg-6">
                       <div class="card-body px-1 px-sm-3 text-center">
                         <p class="card-text text-info"><i>Введите английское слово:</i></p>
-
-<<<<<<< HEAD
-                        <p class="card-text" id="word-en">${word.word}</p>
-                        <i class="fas fa-keyboard"></i>
-=======
                         <p class="card-text d-none" id="word-en">${word.word}</p>
-
->>>>>>> card-design
                         <span class="input-container">
                           <span class="background hidden" id="word-background">
                             ${wordSpans}
                           </span>
                           <input class="answer-input form-control" id="word-input" type="text" maxlength="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         </span>
-
                         <input type="text" class="form-control d-none" autocomplete="off">
                         <div class="row">
                           <div class="col-6">
@@ -104,10 +90,10 @@ export default function createMainGameHTML(dataForApp) {
                 <div class="${settingsOptional.cardExample || settingsOptional.cardExampleTranslation ? 'd-flex' : 'd-none'} mb-3">
                   <div class="icon-container text-center text-info mr-1 d-none d-sm-block"><i class="fas fa-lightbulb"></i>
                   </div>
-                  <div>  
+                  <div>
                     <div class="card-text text-primary font-weight-bold ${settingsOptional.cardExample ? '' : 'd-none'}" id="word-example">${word.textExample}</div>
                     <div class="card-text ${settingsOptional.cardExampleTranslation ? '' : 'd-none'}" id="word-example-translate"><i>${word.textExampleTranslate}</i></div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="${settingsOptional.cardExplanation || settingsOptional.cardExplanationTranslation ? 'd-flex' : 'd-none'}">
                   <div class="icon-container text-center text-info mr-1 d-none d-sm-block"><i class="fas fa-graduation-cap d-none d-sm-inline"></i>

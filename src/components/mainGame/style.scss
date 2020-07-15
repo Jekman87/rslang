@@ -21,7 +21,7 @@
 
   .btn {
     min-width: 50px;
-    i {
+    > * {
       pointer-events: none;
     }
   }
