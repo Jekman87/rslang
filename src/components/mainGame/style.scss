@@ -132,7 +132,7 @@
   .left-arrow,
   .right-arrow {
     position: fixed;
-    z-index: 1000;
+    z-index: 5;
     top: calc(50% - 20px);
     @media (min-width: 576px) {
       position: static;
