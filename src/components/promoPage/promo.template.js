@@ -68,7 +68,7 @@ export default function createPromoPageLayout() {
 
         <span>
           <i class="fab fa-github"></i>
-          <a href="https://github.com/Jekman87/rslang">RSLang repository</a>
+          <a href="https://github.com/Jekman87/rslang" target="_blank">RSLang repository</a>
         </span>
 
       </div>
