@@ -52,6 +52,7 @@ export default class CardsDesk extends Component {
 
     this.subscribe('header:changeGameRound', () => {
       const cardsData = prepareCardsDataHTML.apply(this);
+      preloadCradsMedia.call(this);
       const cardsRow = this.$root.find('.row');
       cardsRow.html(cardsData);
     });
@@ -65,7 +66,7 @@ export default class CardsDesk extends Component {
     this.subscribe('results:playword', (wordId) => {
       if (wordId) {
         const data = this.dataForApp.state.words
-          .find((el) => el.id === wordId);
+          .find((el) => (el.id || el._id) === wordId);
         const { audio } = data;
         playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
       }
@@ -75,13 +76,25 @@ export default class CardsDesk extends Component {
     });
     this.subscribe('header:finishRound', () => {
       unSelectCards.call(this);
-      prepareCardsDataHTML.call(this);
+      let wordsTen;
+      if (this.dataForApp.state.mode === 'rounds') {
+        const { group } = this.dataForApp.state.gameLevel;
+        wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
+          : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
+      }
+      if (this.dataForApp.state.mode === 'dictionary') {
+        const count = this.dataForApp.state.dictionaryCount;
+        wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+      }
+      this.dataForApp.state.gameWords = wordsTen;
+      this.dataForApp.state.successWords = [];
     });
     this.subscribe('score:finishGame', async () => {
       await delay(1500);
       playAudio.apply(this, ['success.mp3', `${LOCAL_ASSETS_URL}/voices/`]);
       unSelectCards.call(this);
       prepareCardsDataHTML.call(this);
+      preloadCradsMedia.call(this);
       this.emit('cardsDesk:finishGame', '');
     });
     this.subscribe('header:rules', () => {
@@ -109,7 +122,7 @@ export default class CardsDesk extends Component {
         clickedElement.addClass('bg-success');
         cardBody.removeClass('bg-primary').addClass('bg-success');
         const data = this.dataForApp.state.gameWords
-          .find((el) => el.id === clickedElement.data.wordid);
+          .find((el) => (el.id || el._id) === clickedElement.data.wordid);
         const { audio } = data;
         this.emit('cardsDesk:clickOnCard', data);
         playAudio.apply(this, [audio.replace('files/', ''), ASSETS_URL]);
@@ -123,21 +136,43 @@ export default class CardsDesk extends Component {
 }
 
 function prepareCardsDataHTML() {
-  const { group } = this.dataForApp.state.gameLevel;
-  const wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
-    : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
+  let wordsTen;
+  if (this.dataForApp.state.mode === 'rounds') {
+    const { group } = this.dataForApp.state.gameLevel;
+    wordsTen = group ? this.dataForApp.state.words.slice(0, PER_GAME_WORDS)
+      : this.dataForApp.state.words.slice(PER_GAME_WORDS, PER_GAME_WORDS * 2);
+  }
+  if (this.dataForApp.state.mode === 'dictionary') {
+    const count = this.dataForApp.state.dictionaryCount;
+    wordsTen = this.dataForApp.state.words.slice(count, count + 10);
+    this.dataForApp.state.dictionaryCount += 10;
+  }
   const cards = wordsTen.map((name) => {
     const {
-      id, word: term, wordTranslate: translation, transcription,
+      id, _id, word: term, wordTranslate: translation, transcription,
     } = name;
     const card = createCardHTML({
-      id, term, translation, transcription,
+      id, _id, term, translation, transcription,
     });
     return card;
   });
   this.dataForApp.state.gameWords = wordsTen;
   this.dataForApp.state.successWords = [];
   return cards.join('');
+}
+
+function preloadCradsMedia() {
+  const images = this.dataForApp.state.words.map((word, i) => {
+    const image = `
+    <img src="${ASSETS_URL}/${word.image.replace('files/', '')}" width="1" height="1" alt="Image ${i}" />
+    <audio src="${ASSETS_URL}/${word.audio.replace('files/', '')}"></audio>
+    `;
+    return image;
+  });
+  const $preload = $$.create('div', 'preload');
+  $preload.addClass('d-none');
+  $preload.html(images.join(''));
+  this.$root.append($preload);
 }
 
 function playAudio(file, url) {
@@ -155,6 +190,7 @@ function toCardHTML() {
   const cardsData = prepareCardsDataHTML.apply(this);
   const cardsRow = this.$root.find('.row');
   cardsRow.html(cardsData);
+  preloadCradsMedia.call(this);
 }
 
 function unSelectCards() {

@@ -93,6 +93,10 @@ class Dom {
     return this.$el.getAttribute(name);
   }
 
+  removeAttr(name) {
+    this.$el.removeAttribute(name);
+  }
+
   append(node) {
     let nodeElement = node;
     if (node instanceof Dom) {

@@ -21,28 +21,29 @@ export default function createHeaderHTML() {
   return `
   <div class="header-content d-flex flex-column justify-content-center align-items-center mt-3">
     <nav class="nav flex-column">
-    <div class="row justify-content-center">
-    <div class="form-group mr-2">
-      <h5>
-        <label for="gameLevel" class="selector-title"><i class="fas fa-layer-group"></i>
-        <strong> Уровень(1-6)</strong>
-        </label>
-      </h5>
-      <select class="form-control" id="gameLevel">
-        ${createOptions(6)}
-      </select>
-    </div>
-    <div class="form-group mr-2">
-      <h5>
-        <label for="gameRound" class="selector-title"><i class="fas fa-object-group"></i>
-        <strong> Раунд(1-60)</strong>
-        </label>
-      </h5>
-      <select class="form-control" id="gameRound">
-      ${createOptionsRound(30)}
-      </select>
-    </div>
-    </div> 
+    <h3 id="dicitonary-mode" class="text-light d-none">Игра из слов словаря</h3>
+    <div id="game-round-selectors" class="row justify-content-center">
+      <div class="form-group mr-2">
+        <h5>
+          <label for="gameLevel" class="selector-title"><i class="fas fa-layer-group"></i>
+          <strong> Уровень(1-6)</strong>
+          </label>
+        </h5>
+        <select class="form-control" id="gameLevel">
+          ${createOptions(6)}
+        </select>
+      </div>
+      <div class="form-group mr-2">
+        <h5>
+          <label for="gameRound" class="selector-title"><i class="fas fa-object-group"></i>
+          <strong> Раунд(1-60)</strong>
+          </label>
+        </h5>
+        <select class="form-control" id="gameRound">
+        ${createOptionsRound(30)}
+        </select>
+      </div>
+    </h3> 
     </nav>
     <div class="buttons-container d-flex justify-content-center mt-3">
       <div class="btn-group" role="group">

@@ -5,6 +5,7 @@ import SpeechRecognition from '../../utils/SpeechRecognition.api';
 import {
   MAX_WORDS_PAGES, MAX_WORDS_LEVEL, PER_GAME_WORDS, MAX_HISTORY_LIST_COUNT,
 } from '../../constants/constants';
+import { delay } from '../../../../core/utils';
 
 export default class Header extends Component {
   static className = 'header';
@@ -22,6 +23,8 @@ export default class Header extends Component {
 
   init() {
     super.init();
+    this.$gameRoundSelectors = this.$root.find('#game-round-selectors');
+    this.$dicitonaryMode = this.$root.find('#dicitonary-mode');
     this.$level = this.$root.find('#gameLevel');
     this.$round = this.$root.find('#gameRound');
     this.speakBtn = this.$root.find('[data-type="speak"');
@@ -33,39 +36,46 @@ export default class Header extends Component {
       this.$root.removeClass('d-none');
       changeSelector.call(this, 'level');
       changeSelector.call(this, 'round');
+      if (this.dataForApp.state.mode === 'dictionary') {
+        this.$gameRoundSelectors.addClass('d-none');
+        this.$dicitonaryMode.removeClass('d-none');
+      }
+      this.mainObserver.emit('mainAppSpinner', false);
     });
     this.subscribe('results:continue', async () => {
-      let { level, round, group } = this.dataForApp.state.gameLevel;
-      if (group === 0) {
-        group += 1;
-        this.$round.$el.options.value = `${round}-${group}`;
-        this.dataForApp.state.gameLevel.group = group;
-        changeSelector.call(this, 'round');
-      } else if (group === 1 && round < MAX_WORDS_PAGES) {
-        group = 0;
-        round += 1;
-        this.$round.$el.options.value = `${round}-${group}`;
-        this.dataForApp.state.gameLevel.group = group;
-        this.dataForApp.state.gameLevel.round = round;
-        changeSelector.call(this, 'round');
-        await changeGameRoundWords.call(this);
-      } else if (group === 1 && round === MAX_WORDS_PAGES) {
-        group = 0;
-        round = 0;
-        this.$round.$el.options.value = `${round}-${group}`;
-        this.dataForApp.state.gameLevel.group = group;
-        this.dataForApp.state.gameLevel.round = round;
-        changeSelector.call(this, 'round');
-        if (level < MAX_WORDS_LEVEL) {
-          level += 1;
-          this.dataForApp.state.gameLevel.level = level;
-        } else {
-          level = 0;
-          this.dataForApp.state.gameLevel.level = level;
+      if (this.dataForApp.state.mode === 'rounds') {
+        let { level, round, group } = this.dataForApp.state.gameLevel;
+        if (group === 0) {
+          group += 1;
+          this.$round.$el.options.value = `${round}-${group}`;
+          this.dataForApp.state.gameLevel.group = group;
+          changeSelector.call(this, 'round');
+        } else if (group === 1 && round < MAX_WORDS_PAGES) {
+          group = 0;
+          round += 1;
+          this.$round.$el.options.value = `${round}-${group}`;
+          this.dataForApp.state.gameLevel.group = group;
+          this.dataForApp.state.gameLevel.round = round;
+          changeSelector.call(this, 'round');
+          await changeGameRoundWords.call(this);
+        } else if (group === 1 && round === MAX_WORDS_PAGES) {
+          group = 0;
+          round = 0;
+          this.$round.$el.options.value = `${round}-${group}`;
+          this.dataForApp.state.gameLevel.group = group;
+          this.dataForApp.state.gameLevel.round = round;
+          changeSelector.call(this, 'round');
+          if (level < MAX_WORDS_LEVEL) {
+            level += 1;
+            this.dataForApp.state.gameLevel.level = level;
+          } else {
+            level = 0;
+            this.dataForApp.state.gameLevel.level = level;
+          }
+          this.$level.$el.options.value = level;
+          changeSelector.call(this, 'level');
+          await changeGameRoundWords.call(this);
         }
-        this.$level.$el.options.value = level;
-        changeSelector.call(this, 'level');
-        await changeGameRoundWords.call(this);
       }
       if (this.dataForApp.state.speakMode) {
         saveGameHistory.call(this);
@@ -112,6 +122,7 @@ export default class Header extends Component {
     }
     if (clickedElement.data.type === 'exit') {
       this.dataForApp.destroy();
+      this.dataForApp = null;
       this.mainObserver.emit('selectPage', 'MainPage');
     }
     if (clickedElement.data.type === 'history') {
@@ -183,10 +194,18 @@ async function changeGameRoundWords() {
     this.dataForApp.state.words = await this.mainApi.getWords(pg, gr);
   } catch (e) {
     if (e.message === '401') {
+      this.emit('alert:open', {
+        type: 'danger',
+        text: 'Ошибка авторизации.',
+      });
+      await delay(1500);
       this.mainObserver.emit('mainLogout');
-    } else {
-      console.error(`${e.message}: something went wrong`);
+      return;
     }
+    this.emit('alert:open', {
+      type: 'danger',
+      text: 'Ошибка связи с сервером, попробуйте позже.',
+    });
   }
 }
 
@@ -200,11 +219,17 @@ async function saveGameHistory() {
   const { level, round, group } = this.dataForApp.state.gameLevel;
   const date = Date.now();
   let gameRound;
-  if (group === 0) {
-    gameRound = `${level + 1}-${(round + 1) * 2 - 1}`;
-  } else {
-    gameRound = `${level + 1}-${(round + 1) * 2}`;
+  if (this.dataForApp.state.mode === 'rounds') {
+    if (group === 0) {
+      gameRound = `${level + 1}-${(round + 1) * 2 - 1}`;
+    } else {
+      gameRound = `${level + 1}-${(round + 1) * 2}`;
+    }
   }
+  if (this.dataForApp.state.mode === 'dictionary') {
+    gameRound = 'Из словаря-';
+  }
+
   const speakItLongStat = {
     date,
     round: `${gameRound}`,
@@ -225,14 +250,40 @@ async function saveGameHistory() {
 
   this.mainStatistic.optional.SpeakItLong = JSON.stringify(histories);
   this.mainStatistic.optional.SpeakItMain = JSON.stringify(speakItMain);
+
+  if (this.dataForApp.state.mode === 'dictionary') {
+    this.dataForApp.state.gameWords.forEach((word) => {
+      const _word = word;
+      _word.userWord.optional.gameError = true;
+      try {
+        this.mainApi.updateUserWord(_word._id, _word.userWord);
+      } catch (e) {
+        this.emit('alert:open', {
+          type: 'danger',
+          text: 'Ошибка связи с сервером, статистика не записалась, попробуйте позже.',
+        });
+      }
+    });
+  }
+
+  upUserScore.apply(this, [correct, PER_GAME_WORDS]);
+
   try {
     await this.mainApi.updateStatistics(this.mainStatistic);
   } catch (e) {
     if (e.message === '401') {
+      this.emit('alert:open', {
+        type: 'danger',
+        text: 'Ошибка авторизации.',
+      });
+      await delay(1500);
       this.mainObserver.emit('mainLogout');
-    } else {
-      console.error(`${e.message}: something went wrong`);
+      return;
     }
+    this.emit('alert:open', {
+      type: 'danger',
+      text: 'Ошибка связи с сервером, статистика не записалась, попробуйте позже.',
+    });
   }
 }
 
@@ -247,4 +298,10 @@ function changeSelector(key) {
       this[`$${key}`].$el.selectedIndex = i;
     }
   });
+}
+
+function upUserScore(correct, maxAnswers) {
+  let value = 10;
+  value *= correct / maxAnswers;
+  this.mainObserver.emit('saveCommonProgress', value);
 }
