@@ -1,5 +1,5 @@
 @media (max-width: 480px) {
-  .intro__sprint h1 {
+  .intro__sprint h2 {
     font-size: 2rem;
   }
 
@@ -10,8 +10,23 @@
   }
 
   .intro__sprint p {
-    font-size: 1.3rem;
+    width: 90%;
+    font-size: 1.0rem;
+    color: #212529;
   }
+
+  .intro__sprint .sprint-difficulty-level span {
+    font-size: 0.9rem;
+  }
+
+  .intro__sprint .sprint-user-words span {
+    font-size: 0.9rem;
+  }
+
+  .intro__sprint .sprint-user-words input {
+    width: 20px;
+    height: 20px;
+}
 
   .sprint-game-block {
     width: 280px;
@@ -26,25 +41,56 @@
 
   .sprint-score {
     width: 270px;
+    height: 60px;
   }
 
-  .birds .bird-1 {
-    top: 26%;
-    left: 1%;
-  }
+  .sprint-game-block .birds {
+    
+    .bird-1 {
+      top: 26%;
+      left: 1%;
+    }
 
-  .birds .bird-2 {
-    top: 40%;
-    left: 24%;
-  }
+    .bird-2 {
+      top: 40%;
+      left: 24%;
+    }
 
-  .birds .bird-3 {
-    top: 33%;
-    left: 47%;
+    .bird-3 {
+      top: 33%;
+      left: 47%;
+    }
+
+    .bird-4 {
+      top: 32%;
+      left: 66%;
+    }
   }
 
   .birds span {
     width: 90%;
+  }
+}
+
+@media (max-width: 320px) {
+  .sprint-game-block .birds {
+    min-height: 55px;
+
+    .bird-1 {
+      top: -7%;
+    }
+
+    .bird-2 {
+      top: 15%;
+    }
+
+    .bird-3 {
+      top: 4%;
+    }
+
+    .bird-4 {
+      top: 2%;
+    }
   }
 }
 

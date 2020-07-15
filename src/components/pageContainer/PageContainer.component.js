@@ -85,6 +85,11 @@ export default class PageContainer extends Component {
       this.emit('hideHeader');
       this.renderPage(this.pages[AUTH_PAGE_NAME]);
     });
+
+    this.subscribe('saveCommonProgress', (val) => {
+      this.settings.optional.commonProgress += val;
+      this.options.api.updateSettings(this.settings);
+    });
   }
 
   async renderPage(NewPage) {

@@ -1,6 +1,5 @@
 .audio-call-wrapper {
   min-height: 100vh;
-  // background-image: linear-gradient(to top, #a7a6cb 0%, #8989ba 100%);
   background: rgb(111, 108, 157);
   background: linear-gradient(
     90deg,
@@ -30,7 +29,6 @@
 
     span:first-child {
       font-size: 0.7em;
-      // color: rgb(216, 216, 216);
       color: #33295e6c;
     }
 
@@ -103,11 +101,13 @@
 
 .answer-col {
   display: flex;
+  max-height: 300px;
 }
 
 .question-col {
   padding-top: 8%;
   padding-bottom: 5%;
+  max-height: 300px;
 }
 
 .answer-pic {
@@ -122,6 +122,14 @@
   margin: 0 auto;
   font-size: 3.5em;
 }
+
+.buttons-col {
+  height: 100px;
+}
+
+// .btn-word {
+//   border-radius: 8px;
+// }
 
 .audio-call-stats-wrapper {
   height: 100vh;
@@ -140,6 +148,13 @@
     width: 40%;
     height: 50%;
     overflow: scroll;
+
+    .long-stat-results {
+      height: 75%;
+      overflow: scroll;
+      overflow-x: hidden;
+      margin-bottom: 3%;
+    }
   }
 
   .correct-container,
@@ -212,12 +227,65 @@
   }
 }
 
+@media only screen and (max-width: 1167px) {
+  .answer-col .btn-repeat {
+    position: relative;
+    top: 7%;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .answer-col .btn-repeat {
+    background-color: transparent;
+  }
+
+  .answer-word {
+    font-size: 3em;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .audio-call-stats-wrapper .stat-container,
+  .audio-call-stats-wrapper .long-stat-container {
+    width: 80%;
+  }
+}
+
 @media only screen and (max-width: 576px) {
   .audio-call-wrapper {
-    i {
-      &.fa-volume-up {
-        font-size: 3em;
+    .question-col {
+      i {
+        &.fa-volume-up {
+          font-size: 3em;
+        }
       }
     }
+
+    .answer-col {
+      position: relative;
+      left: -7%;
+    }
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .buttons-col {
+    height: 150px;
+    margin-top: 3%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .answer-col {
+    position: relative;
+    left: -13%;
+  }
+
+  .answer-word {
+    font-size: 2.5em;
+  }
+
+  .buttons-col {
+    height: 200px;
   }
 }

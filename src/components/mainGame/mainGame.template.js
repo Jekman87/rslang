@@ -1,4 +1,5 @@
 import { FILE_URL } from '../../constants/constants';
+import { getWordSpans } from './mainGame.utils';
 // высчитывать интервалы
 
 export default function createMainGameHTML(dataForApp) {
@@ -10,6 +11,9 @@ export default function createMainGameHTML(dataForApp) {
   if (word.userWord) {
     progress = word.userWord.optional.progress;
   }
+
+  const wordSpans = getWordSpans(word.word);
+  console.log('Подсказка: ', word.word);
 
   return `
     <div class="container mt-3">
@@ -41,14 +45,23 @@ export default function createMainGameHTML(dataForApp) {
               <div class="card-body">
                 <div class="card mb-3">
                   <div class="row no-gutters">
-                    <div class="col-md-4 image-container">
+                    <div class="col-lg-6 order-lg-2 image-container">
                       <img src="${FILE_URL}/${word.image}" class="card-img ${settingsOptional.cardImage ? '' : 'd-none'}" id="word-image" alt="img">
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-lg-6 order-lg-1">
                       <div class="card-body">
                         <p class="card-text">Введите слово на англ</p>
+
                         <p class="card-text" id="word-en">${word.word}</p>
-                        <input type="text" class="form-control" id="word-input" autocomplete="off">
+
+                        <span class="input-container">
+                          <span class="background hidden" id="word-background">
+                            ${wordSpans}
+                          </span>
+                          <input class="answer-input form-control" id="word-input" type="text" maxlength="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        </span>
+
+                        <input type="text" class="form-control d-none" autocomplete="off">
                         <div class="row">
                           <div class="col-6">
                             <p class="card-text font-weight-bold ${settingsOptional.cardTranslation ? '' : 'd-none'}" id="word-translate">${word.wordTranslate}</p>
