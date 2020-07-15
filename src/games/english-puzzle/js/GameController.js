@@ -29,7 +29,6 @@ export default class GameController {
       playBtn: document.querySelector('button.play-pzl-btn'),
       startBtn: document.querySelector('button.start-button'),
       exitBtn: document.querySelector('button.exit-pzl-btn'),
-      spinner: document.querySelector('div.pzl-spinner'),
       popUp: document.querySelector('div.pop-up'),
       resultsBlock: document.querySelector('div.results-block'),
       statBlock: document.querySelector('div.statistics-block'),
@@ -57,7 +56,7 @@ export default class GameController {
       handleAnswer: this.handleAnswer.bind(this),
       handleUserAction: this.handleUserAction.bind(this),
       closePopUp: this.closePopUp.bind(this),
-      startGame: this.startGame.bind(this),
+      handleStartBtnClick: this.handleStartBtnClick.bind(this),
       exit: this.exit.bind(this),
       playAudio: this.playAudio.bind(this),
       playByClick: this.playByClick.bind(this),
@@ -75,7 +74,7 @@ export default class GameController {
 
     this.elems.closeBtn.addEventListener('click', this.bindedMethods.closePopUp);
 
-    this.elems.startBtn.addEventListener('click', this.bindedMethods.startGame);
+    this.elems.startBtn.addEventListener('click', this.bindedMethods.handleStartBtnClick);
     this.elems.exitBtn.addEventListener('click', this.bindedMethods.exit);
 
     this.elems.playBtn.addEventListener('click', this.bindedMethods.playAudio);
@@ -99,18 +98,34 @@ export default class GameController {
     this.audioHelp.removeEventListener('abort', this.bindedMethods.removePlayEffect);
 
     this.elems.imgHelp.onload = '';
+    this.audioHelp.pause();
     this.audioHelp.onplay = '';
     this.audioHelp.onended = '';
     document.removeEventListener('click', this.bindedFn);
   }
 
+  handleStartBtnClick(e) {
+    if (e.target.textContent === 'Старт') {
+      this.startGame();
+    } else {
+      this.exit();
+    }
+  }
+
   startGame() {
-    this.elems.spinner.classList.add('visible');
     this.defineNextRound();
     document.dispatchEvent(new CustomEvent('dataRequired'));
   }
 
-  async handleNewData() {
+  handleNewData(e) {
+    if (e.detail === 'success') {
+      this.runRound();
+    } else {
+      this.suggestExit();
+    }
+  }
+
+  async runRound() {
     this.sentenceIndex = 0;
     this.correctCounter = 0;
     this.results = [];
@@ -122,6 +137,11 @@ export default class GameController {
     this.getAvailableWords();
     this.setPaintingInfo();
     this.switchPage();
+  }
+
+  suggestExit() {
+    this.externalObserver.emit('mainAppSpinner', false);
+    this.elems.startBtn.textContent = 'Вернуться';
   }
 
   switchElementsVisibility(isEndOfRound) {
@@ -153,6 +173,7 @@ export default class GameController {
   }
 
   switchPage() {
+    this.externalObserver.emit('mainAppSpinner', false);
     this.elems.startPage.classList.add('hidden');
     this.elems.mainPage.classList.add('visible');
   }
@@ -417,6 +438,7 @@ export default class GameController {
     this.saveRoundResult();
     this.savePassedRound();
     this.saveGallery();
+    this.saveCommonProgress();
     document.dispatchEvent(new CustomEvent('userDataChange', { detail: 'statistics' }));
   }
 
@@ -457,6 +479,11 @@ export default class GameController {
         this.set('gallery', `${currentArt}`);
       }
     }
+  }
+
+  saveCommonProgress() {
+    const value = this.correctCounter;
+    this.externalObserver.emit('saveCommonProgress', value);
   }
 
   closePopUp() {

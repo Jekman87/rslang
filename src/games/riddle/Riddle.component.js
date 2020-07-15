@@ -5,12 +5,13 @@ import createGameField from './riddle.template';
 import {
   hideIntroScreen, hideTwoWrongAnswers, restartStatistic,
   changeLevelAndPage, chooseRiddleInformation, fillGameFields,
-  showOrHideTranslatePrompt, showOrHideOptionsPrompt,
-  compareAnswers, moveAnswerIntoInput, passHandler, swithchOffVoice,
-  showStatistic, recountStatistic, removeStatistic, swithchOnVoice,
-  showCorrectPartOfStatistic, showWrongPartOfStatistic,
+  showOrHideTranslatePrompt, showOrHideOptionsPrompt, checkPromps,
+  compareAnswers, moveAnswerIntoInput, passHandler, swithchOnVoice,
+  showStatistic, recountStatistic, removeStatistic, rememberPrompts,
+  showCorrectPartOfStatistic, showWrongPartOfStatistic, switchVoice,
   backToStatisticScreen, backToGameFromStatistic, state,
   prepareLongTimeStatistic, checkRound, rewriteLevelStatistic,
+  switchTranslatePromps, switchOptionsPromps, swithchOffVoice,
 } from './riddle.functions';
 
 export default class RiddleGame extends Component {
@@ -33,6 +34,10 @@ export default class RiddleGame extends Component {
     rewriteLevelStatistic();
     checkRound();
     recountStatistic();
+    checkPromps();
+    showOrHideTranslatePrompt();
+    showOrHideOptionsPrompt();
+    switchVoice();
   }
 
   onClick(event) {
@@ -57,20 +62,27 @@ export default class RiddleGame extends Component {
         fillGameFields();
         break;
       case 'show-options':
+        switchOptionsPromps();
         showOrHideOptionsPrompt();
+        rememberPrompts();
         break;
       case 'riddle-mute':
         swithchOffVoice();
+        rememberPrompts();
         break;
       case 'riddle-unmute':
         swithchOnVoice();
+        rememberPrompts();
         break;
       case 'show-translate':
+        switchTranslatePromps();
         showOrHideTranslatePrompt();
+        rememberPrompts();
         break;
       case 'check':
         compareAnswers();
         this.prepareStatisticForSend(prepareLongTimeStatistic());
+        this.addBonusStatistic();
         break;
       case 'pass':
         passHandler();
@@ -113,6 +125,12 @@ export default class RiddleGame extends Component {
     }
   }
 
+  addBonusStatistic() {
+    if (state.lastAnswer) {
+      this.options.observer.emit('saveCommonProgress', 1);
+    }
+  }
+
   prepareStatisticForSend(roundResult) {
     let longTimeStatisic = [];
     const shortTimeStatisic = [state.lvlStatistic, state.round];
@@ -146,6 +164,8 @@ export default class RiddleGame extends Component {
     event.preventDefault();
     compareAnswers();
     this.prepareStatisticForSend(prepareLongTimeStatistic());
+
+    this.addBonusStatistic();
   }
 
   toHTML() {
