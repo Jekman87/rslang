@@ -22,6 +22,7 @@ const BASE_SETTINGS = {
     vocabularyImage: true,
     MainGameShort: false,
     MainGameLong: false,
+    commonProgress: 0,
   },
 };
 
