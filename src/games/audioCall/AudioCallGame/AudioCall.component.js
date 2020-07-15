@@ -29,6 +29,7 @@ export default class AudioCall extends Component {
     this.statistics = [];
 
     this.statistic = this.options.dataForApp.statistics;
+    this.userWords = this.options.dataForApp.userWords;
     this.mainApi = this.options.api;
 
     this.onClick = this.onClick.bind(this);
@@ -41,10 +42,9 @@ export default class AudioCall extends Component {
 
   async fillRoundWords() {
     let roundWordsArr = [];
-    const userWords = await this.mainApi.getAllUserWords();
     const page = Math.floor(Math.random() * (30 - 0 + 1));
 
-    if (userWords.length < 50 || this.gameWithNewWords) {
+    if (this.userWords.length < 70 || this.gameWithNewWords) {
       roundWordsArr = await this.mainApi.getWords(page, this.gameLevel, 10, 5);
     } else {
       const filter = '{"userWord":{"$ne":null}}';
@@ -202,6 +202,7 @@ export default class AudioCall extends Component {
         } else {
           const gameResult = {
             date: Date.now(),
+            round: `${this.gameLevel}-${this.progress}`,
             result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
           };
 
@@ -312,6 +313,7 @@ export default class AudioCall extends Component {
           } else {
             const gameResult = {
               date: Date.now(),
+              round: `${this.gameLevel}-${this.progress}`,
               result: `${this.maxProgress - this.mistakesCounter}-${this.mistakesCounter}`,
             };
 

@@ -217,6 +217,23 @@
   }
 }
 
+@media only screen and (max-width: 1167px) {
+  .answer-col .btn-repeat {
+    position: relative;
+    top: 7%;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .answer-col .btn-repeat {
+    background-color: transparent;
+  }
+
+  .answer-word {
+    font-size: 3em;
+  }
+}
+
 @media only screen and (max-width: 700px) {
   .audio-call-stats-wrapper .stat-container,
   .audio-call-stats-wrapper .long-stat-container {
@@ -226,10 +243,17 @@
 
 @media only screen and (max-width: 576px) {
   .audio-call-wrapper {
-    i {
-      &.fa-volume-up {
-        font-size: 3em;
+    .question-col {
+      i {
+        &.fa-volume-up {
+          font-size: 3em;
+        }
       }
+    }
+
+    .answer-col {
+      position: relative;
+      left: -7%;
     }
   }
 }
@@ -237,5 +261,21 @@
 @media only screen and (max-width: 530px) {
   .buttons-col {
     height: 150px;
+    margin-top: 3%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .answer-col {
+    position: relative;
+    left: -13%;
+  }
+
+  .answer-word {
+    font-size: 2.5em;
+  }
+
+  .buttons-col {
+    height: 200px;
   }
 }
