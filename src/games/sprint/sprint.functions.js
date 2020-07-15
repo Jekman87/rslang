@@ -172,7 +172,7 @@ function changeLevelAndPage(answerFromHandler) {
 }
 
 function playTickAudio() {
-  document.querySelector('.tick-voice').play();
+  document.querySelector('.tick-voice').play().catch(() => true);
 }
 
 function playStartAudio() {
@@ -189,7 +189,7 @@ function playClickAudio() {
 }
 
 function playWordAudio() {
-  document.querySelector('.word-voice').play();
+  document.querySelector('.word-voice').play().catch(() => true);
 }
 
 function playWrongAudio() {
@@ -197,7 +197,7 @@ function playWrongAudio() {
 }
 
 function playStatisticAudio(wordNumber) {
-  document.querySelector(`#statistic-audio-${wordNumber}`).play();
+  document.querySelector(`#statistic-audio-${wordNumber}`).play().catch(() => true);
 }
 
 function getRandomNumber(min, max) {
