@@ -145,6 +145,13 @@
     width: 40%;
     height: 50%;
     overflow: scroll;
+
+    .long-stat-results {
+      height: 75%;
+      overflow: scroll;
+      overflow-x: hidden;
+      margin-bottom: 3%;
+    }
   }
 
   .correct-container,
