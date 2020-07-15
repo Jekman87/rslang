@@ -1,0 +1,184 @@
+@media (max-width: 800px) {
+  .riddle-header {
+    justify-content: center;
+
+    > button {
+      margin: 10px;
+    }
+  }
+
+  .difficulty-level, .difficulty-page {
+    width: 40%;
+  }
+
+  .riddle-answer-form {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .riddle-answer-form button {
+    min-width: 110px;
+    min-height: 40px;
+    margin: 0 5px;
+  }
+
+  .riddle-answer-input {
+    margin: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .riddle-spinner {
+    left: 40%;
+    top: 40%;
+  }
+
+  .riddle-answer-blocks button {
+    min-width: 60%;
+  }
+}
+
+@media (max-width: 480px) {
+  .riddle__intro .riddle__name h2 {
+    font-size: 0.9rem;
+  }
+
+  .riddle__intro p {
+    font-size: 0.8rem;
+    color: #212529;
+  }
+
+  .riddle__intro button {
+    min-width: 150px;
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .riddle-container {
+    padding: 10px;
+  }
+
+  .riddle-block {
+    margin: 0;
+  }
+
+  .riddle-answer-form input::placeholder {
+    font-size: 0.7rem;
+  }
+
+  .riddle-prompts {
+    margin-bottom: 20px;
+  }
+
+  .riddle-answer-form button {
+    margin: 5px;
+  }
+
+  .riddle-block {
+    margin: 0px 0px 5px 0;
+  }
+}
+
+@media (max-width: 450px) {
+  .riddle-spinner {
+    left: 30%;
+    top: 35%;
+  }
+
+  .riddle-block,
+  .riddle-translate-block {
+    font-size: 0.9rem;
+  }
+
+  .riddle-header .difficulty-level span,
+  .riddle-header .difficulty-page span {
+    margin: 5px auto;
+  }
+}
+
+@media (max-width: 350px) {
+  .riddle-spinner {
+    left: 25%;
+  }
+
+  .riddle-prompts div button {
+    font-size: 0.8rem;
+  }
+
+  .riddle-prompts {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .riddle-stats {
+    width: 40%;
+    margin: 20px 0;
+  }
+}
+
+
+@media (hover:hover) {
+  .riddle__intro button:hover {
+    transform: scale(0.96);
+    opacity: 0.8;
+    color: #212529;
+    background-color: #ffffff73;
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+    cursor: pointer;
+  }
+
+  .riddle-button:hover i {
+    color: rgba(255, 255, 255, 0.726);
+    transition: all 0.8s;
+  }
+
+  .riddle-answer-form button:hover {
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+  }
+
+  .riddle-answer-blocks button:hover {
+    transform: scale(0.96);
+    background-color: #95a5a6;
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+  }
+
+  .riddle-header button:hover {
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+  }
+
+  .riddle-prompts button:hover {
+    box-shadow: 1px 1px 1px black;
+    transition: all 0.8s;
+  }
+
+  .riddle-header button:hover i {
+    color: white;
+    transition: all 0.8s;
+    transform: rotate(360deg);
+  }
+
+  .riddle-mute:hover i {
+    color: #e74c3c;
+    transition: all 0.8s;
+  }
+
+  .riddle-unmute:hover i {
+    color: $fontColor;
+      transition: all 0.8s;
+  }
+
+  .riddle-unmute:hover .riddle-line {
+      opacity: 0;
+      transition: all 0.8s;
+  }
+
+  .riddle-statistic-screen button:hover {
+    box-shadow: 1px 1px 1px black !important;
+    color: white !important;
+    transition: all 0.8s;
+  }
+}

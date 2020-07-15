@@ -1,0 +1,24 @@
+@import '../../scss/constants';
+@import '../../scss/mixins';
+
+.speakit {
+  .header{
+    transition: .8s;
+    .header-content{
+      .selector-title{
+        color: #fff;
+      }
+    }
+    .fa-stack {
+      width: 2em;
+    }
+    .buttons-container {
+      .main-btn {
+        @include media-mobilesmall {
+          font-size: 0.8rem;
+          line-height: 1.55;
+        }
+      }
+    }
+  }
+}

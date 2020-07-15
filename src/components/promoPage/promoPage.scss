@@ -1,0 +1,212 @@
+.promo__main-container {
+  max-width: 1280px;
+  padding: 0 0 2% 0;
+  background-color: #ecf0f1;
+  margin: auto;
+}
+
+.promo__training-description {
+  padding: 2% 0 0 0;
+
+  h2 {
+    text-align: center;
+    margin: 0 auto 1rem;
+    font-size: 3.5rem;
+  }
+
+  .promo__greetings {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  span {
+    display: block;
+    width: 80%;
+    margin: 1.5rem auto 1rem;
+    font-size: 1.1rem;
+  }
+
+  .my_video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    box-shadow: 8px 11px 15px #00000085;
+  }
+
+  .my_video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  a {
+    color: #2C3E50;
+  }
+}
+
+.promo__list {
+  margin-top: 1rem;
+
+  li {
+    font-size: 1.0rem;
+  }
+}
+
+.promo__game-description {
+  margin: 4% auto;
+  padding: 2% 0;
+  width: 80%;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 8px 11px 15px #00000085;
+  transition: all 0.8s;
+
+  h3 {
+    text-align: center;
+    margin: 0 auto 2%;
+
+  }
+
+  .promo__preview,
+  .promo__description {
+    display: block;
+    width: 80%;
+    margin: 2% auto 2%;
+    font-size: 1.1rem;
+  }
+
+  .control-color-right-1,
+  .control-color-right-4 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23000000' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z'/%3e%3c/svg%3e");
+  }
+
+  .control-color-left-1,
+  .control-color-left-4 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23000000' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5L4.25 4l2.5-2.5L5.25 0z'/%3e%3c/svg%3e");
+  }
+
+  .control-color-right-2 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z'/%3e%3c/svg%3e");
+  }
+
+  .control-color-left-2 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5L4.25 4l2.5-2.5L5.25 0z'/%3e%3c/svg%3e");
+  }
+}
+
+.promo__slider {
+  margin: auto;
+  width: 80%;
+
+  img {
+    max-height: 660px;
+  }
+}
+
+.promo__preview {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 800px) {
+
+  .promo__training-description h2 {
+    text-align: center;
+    margin: 20px auto 30px;
+    font-size: 2.7rem;
+  }
+
+  .promo__game-description{
+    max-height: 600px;
+    overflow: auto;
+    margin: 2rem auto;
+    padding: 20px 0;
+  }
+
+  .promo__game-description .promo__preview {
+    font-size: 1.0rem;
+    margin: 20px auto;
+  }
+
+  .promo__game-description .promo__description {
+    margin: 20px auto;
+  }
+
+  .promo__game-description span {
+    font-size: 1rem;
+  }
+
+  .promo__training-description span {
+    display: block;
+    width: 80%;
+    margin: 1rem auto 1rem;
+    font-size: 1.1rem;
+  }
+
+  .promo__container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo__game-description {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+
+  .promo__game-description .promo__preview {
+    font-size: 0.8rem;
+    margin: 20px auto;
+  }
+
+  .promo__game-description .promo__description {
+    margin: 20px auto;
+  }
+
+  .promo__game-description{
+    max-height: 600px;
+    overflow: auto;
+    margin: 50px auto;
+    padding: 20px 0;
+  }
+
+  .promo__training-description {
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    span {
+      display: block;
+      width: 80%;
+      margin: 1rem auto 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  .promo__game-description span {
+    font-size: 0.9rem;
+  }
+
+  .promo__container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo__game-description {
+    width: 100%;
+
+    h3 {
+      font-size: 1.8rem;
+    }
+
+    span {
+      font-size: 0.9rem;
+    }
+  }
+}

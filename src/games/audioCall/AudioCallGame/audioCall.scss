@@ -1,0 +1,291 @@
+.audio-call-wrapper {
+  min-height: 100vh;
+  background: rgb(111, 108, 157);
+  background: linear-gradient(
+    90deg,
+    rgba(111, 108, 157, 0.7) 0%,
+    rgba(79, 138, 185, 0.7) 0%,
+    rgb(164, 207, 216) 100%
+  );
+  padding-bottom: 2%;
+
+  .btn-sound-off:focus,
+  .btn-tip:focus {
+    box-shadow: none;
+  }
+
+  .progress-bar {
+    background: rgba(216, 191, 216, 1);
+  }
+
+  .fa,
+  .fas {
+    font-weight: 300;
+  }
+
+  .btn-group button {
+    border: none;
+    font-size: 1.6em;
+
+    span:first-child {
+      font-size: 0.7em;
+      color: #33295e6c;
+    }
+
+    &:focus {
+      background: transparent;
+      color: white;
+    }
+  }
+
+  i {
+    font-size: 2em;
+    color: white;
+
+    &.fa-slash {
+      position: relative;
+      left: -50%;
+    }
+
+    &.fa-volume-up {
+      font-size: 4.5em;
+    }
+
+    &.fa-check-circle {
+      color: #8ac48a;
+    }
+
+    &.fa-play {
+      font-size: 1em;
+    }
+  }
+}
+
+.text-decoration {
+  text-decoration: line-through;
+}
+
+.btn-repeat {
+  background-color: #ffffff2a;
+  border-radius: 75px;
+  padding: 10%;
+}
+
+.btn-repeat.on-answer {
+  padding: 3%;
+  padding-right: 5%;
+  height: 22%;
+  align-self: flex-end;
+
+  i {
+    font-size: 2em;
+  }
+}
+
+.btn-repeat-animation {
+  animation: pulse 3s infinite;
+}
+
+.group-list-row {
+  margin-top: 7%;
+}
+
+.btn-dont-know {
+  font-size: 1.6em;
+  display: block;
+}
+
+.btn-next {
+  display: block;
+}
+
+.answer-col {
+  display: flex;
+  max-height: 300px;
+}
+
+.question-col {
+  padding-top: 8%;
+  padding-bottom: 5%;
+  max-height: 300px;
+}
+
+.answer-pic {
+  width: 100%;
+  height: 75%;
+  border-radius: 100px;
+  border: 2px solid white;
+}
+
+.answer-word {
+  width: fit-content;
+  margin: 0 auto;
+  font-size: 3.5em;
+}
+
+.buttons-col {
+  height: 100px;
+}
+
+// .btn-word {
+//   border-radius: 8px;
+// }
+
+.audio-call-stats-wrapper {
+  height: 100vh;
+  background: rgb(111, 108, 157);
+  background: linear-gradient(
+    90deg,
+    rgba(111, 108, 157, 0.7) 0%,
+    rgba(79, 138, 185, 0.7) 100%,
+    rgb(164, 207, 216) 100%
+  );
+  display: flex;
+  align-items: center;
+
+  .stat-container,
+  .long-stat-container {
+    width: 40%;
+    height: 50%;
+    overflow: scroll;
+
+    .long-stat-results {
+      height: 75%;
+      overflow: scroll;
+      overflow-x: hidden;
+      margin-bottom: 3%;
+    }
+  }
+
+  .correct-container,
+  .mistake-container {
+    flex-direction: column;
+  }
+
+  .mistake-container {
+    border-bottom: 0.2px solid gray;
+  }
+
+  .long-stat-container {
+    i {
+      color: rebeccapurple;
+      align-self: center;
+    }
+
+    .icon-col {
+      border-right: 0.2px solid rebeccapurple;
+    }
+
+    p {
+      line-height: inherit;
+      margin-bottom: 0;
+      font-size: 1.1em;
+    }
+
+    p:first-child {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    p:nth-child(2) {
+      margin-bottom: 0;
+    }
+
+    .row {
+      margin-bottom: 3%;
+
+      .fa-music {
+        font-size: 1.5em;
+      }
+    }
+  }
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(216, 191, 216, 1);
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 50px rgba(216, 191, 216, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(216, 191, 216, 0);
+  }
+}
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(216, 191, 216, 1);
+    box-shadow: 0 0 0 0 rgba(216, 191, 216, 1);
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 50px rgba(216, 191, 216, 0);
+    box-shadow: 0 0 0 50px rgba(216, 191, 216, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(216, 191, 216, 0);
+    box-shadow: 0 0 0 0 rgba(216, 191, 216, 0);
+  }
+}
+
+@media only screen and (max-width: 1167px) {
+  .answer-col .btn-repeat {
+    position: relative;
+    top: 7%;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .answer-col .btn-repeat {
+    background-color: transparent;
+  }
+
+  .answer-word {
+    font-size: 3em;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .audio-call-stats-wrapper .stat-container,
+  .audio-call-stats-wrapper .long-stat-container {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .audio-call-wrapper {
+    .question-col {
+      i {
+        &.fa-volume-up {
+          font-size: 3em;
+        }
+      }
+    }
+
+    .answer-col {
+      position: relative;
+      left: -7%;
+    }
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .buttons-col {
+    height: 150px;
+    margin-top: 3%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .answer-col {
+    position: relative;
+    left: -13%;
+  }
+
+  .answer-word {
+    font-size: 2.5em;
+  }
+
+  .buttons-col {
+    height: 200px;
+  }
+}

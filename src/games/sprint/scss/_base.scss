@@ -1,0 +1,17 @@
+.sprint-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/sprint/intro.jpg') bottom no-repeat;
+  background-size: cover;
+  font-family: 'Roboto', Helvetica, sans-serif;
+
+  .sprint-main-container {
+    max-width: 1280px;
+    max-height: 100vh;
+    margin: auto;
+    overflow: auto;
+  }
+}

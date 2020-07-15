@@ -1,0 +1,15 @@
+.speakit {
+  .intro {
+    position: absolute;
+    min-height: 100%;
+    min-width: 100%;
+    left:50%;
+    transform: translateX(-50%);
+    transition: .8s;
+    z-index: 1000;
+    color: white;
+    &__container {
+      background: rgba(0,0,0,.67);
+    }
+  }
+}

@@ -1,0 +1,57 @@
+.audio-call-start-page {
+  height: 100vh;
+  background: url("/assets/img/audioStart.jpg");
+  background-size: cover;
+
+  & .container {
+    height: 100vh;
+  }
+
+  .btn-settings:focus,
+  .btn-close:focus {
+    box-shadow: none;
+  }
+}
+
+.game-title {
+  letter-spacing: 0.03em;
+  font-size: 2.5em;
+}
+
+.game-desc {
+  font-size: 1.4em;
+}
+
+.btn-start-game {
+  font-size: 1.8em;
+}
+
+i {
+  &.fa-times {
+    font-size: 2em;
+    color: white;
+  }
+
+  &.fa-cogs {
+    color: white;
+    font-size: 1.7em;
+  }
+}
+
+.audiocall-setting-card {
+  position: absolute;
+  right: 15px;
+  top: 140%;
+  z-index: 4;
+  max-height: 0rem;
+  overflow: hidden;
+  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  max-width: 20rem;
+  border: 1px solid transparent !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.audiocall-setting-card.setting-card-opened {
+  max-height: 20rem;
+  background-color: white !important;
+}

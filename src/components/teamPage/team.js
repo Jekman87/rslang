@@ -1,0 +1,108 @@
+const team = [
+  {
+    name: 'Юрий Плешков',
+    title: 'Mentor',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'yury@pliashkou.com',
+    telegram: '@pliashkou',
+    github: 'pliashkou',
+    avatar: '/assets/team/yury.jpg',
+    about: 'Менторство. Участие в митингах. Ответы на возникающие вопросы. Помощь в поиске решений поставленных задач.',
+  },
+  {
+    name: 'Евгений Поляков',
+    title: 'Team Leader',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'evgeny.poliakou@gmail.com',
+    telegram: '@EvgenyPoliakov',
+    github: 'Jekman87',
+    avatar: '/assets/team/Jekman87.jpg',
+    about: 'Менторство. Распределение задач. Проведение митингов. Ответы на возникающие вопросы. Помощь в поиске решений поставленных задач. Реализация логики основного приложения. Реализация методов API backend. Реализация страницы "Тренировка слов". Разработка способов хранения данных пользователя на стороне сервера.',
+  },
+  {
+    name: 'Александ Войтехович',
+    title: 'Developer',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'avth.tec@gmail.com',
+    telegram: '@AVT_tec',
+    github: 'Alexandr-Voytekhovich',
+    avatar: '/assets/team/Alexandr-Voytekhovich.jpg',
+    about: 'Участие в митингах. Предложение способов решений поставленных задач. Помощь другим разработчикам. Реализация мини-игры "Спринт". Реализация мини-игры "Riddle". Реализация "Промо" страницы.',
+  },
+  {
+    name: 'Виталий Шелепков',
+    title: 'Developer',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'avshell.sj@gmail.com',
+    telegram: '@AV_Shell',
+    github: 'AV-Shell',
+    avatar: '/assets/team/av-shell.jpg',
+    about: 'Участие в митингах. Предложение способов решений поставленных задач. Помощь другим разработчикам. Реализация мини-игры "Саванна".',
+  },
+  {
+    name: 'Вячеслав Торчик',
+    title: 'Developer',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'torchik_slava@mail.ru',
+    telegram: '@torchik-slava',
+    github: 'torchik-slava',
+    avatar: '/assets/team/torchik-slava.jpg',
+    about: 'Участие в митингах. Предложение способов решений поставленных задач. Помощь другим разработчикам. Реализация мини-игры "English Puzzle". Реализация страницы "Статистика"',
+  },
+  {
+    name: 'Елена Якимович',
+    title: 'Developer',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'sj.a.yakimovich@gmail.com',
+    telegram: '@AYaki_coder',
+    github: 'AYaki-coder',
+    avatar: '/assets/team/ayaki-coder.jpg',
+    about: 'Участие в митингах. Предложение способов решений поставленных задач. Помощь другим разработчикам. Реализация страницы "Настройки". Реализация страницы  "Словарь". Разработка способов хранения данных пользователя на стороне сервера.',
+  },
+  {
+    name: 'Сергей Леонтьев',
+    title: 'Developer',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'leontevsi@gmail.com',
+    telegram: '@leontyevsi',
+    github: 'vviiiii',
+    avatar: '/assets/team/vviiiii.jpg',
+    about: 'Участие в митингах. Предложение способов решений поставленных задач. Помощь другим разработчикам. Реализация мини-игры "SpeakIt". Реализация страницы "О команде". Реализация страницы "Главная". Предложение организации архитектуры главного приложения.',
+  },
+  {
+    name: 'Юлия Пономарь',
+    title: 'Developer',
+    location: {
+      city: 'Минск',
+      country: 'Беларусь',
+    },
+    email: 'jponomar1984@mail.ru',
+    telegram: '@swordmaaster',
+    github: 'julia-dream',
+    avatar: '/assets/team/julia-dream.jpg',
+    about: 'Участие в митингах. Предложение способов решений поставленных задач. Помощь другим разработчикам. Реализация мини-игры "Аудиовызов". Реализация страницы "Авторизация".',
+  },
+];
+
+export { team as default };
