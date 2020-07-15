@@ -14,11 +14,17 @@
     font-size: 3.5rem;
   }
 
+  .promo__greetings {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
   span {
     display: block;
     width: 80%;
-    margin: 1rem auto 1rem;
-    font-size: 1.2rem;
+    margin: 1.5rem auto 1rem;
+    font-size: 1.1rem;
   }
 
   .my_video {
@@ -42,6 +48,14 @@
   }
 }
 
+.promo__list {
+  margin-top: 1rem;
+
+  li {
+    font-size: 1.0rem;
+  }
+}
+
 .promo__game-description {
   margin: 4% auto;
   padding: 2% 0;
@@ -57,7 +71,8 @@
 
   }
 
-  span {
+  .promo__preview,
+  .promo__description {
     display: block;
     width: 80%;
     margin: 2% auto 2%;
@@ -123,7 +138,7 @@
 
   .promo__game-description span {
     font-size: 1rem;
-}
+  }
 
   .promo__training-description span {
     display: block;
@@ -176,7 +191,7 @@
 
   .promo__game-description span {
     font-size: 0.9rem;
-}
+  }
 
   .promo__container {
     padding-left: 0;
