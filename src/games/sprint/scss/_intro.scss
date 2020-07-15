@@ -12,11 +12,12 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
+  overflow: auto;
   z-index: 4;
 
   h2 {
     font-size: 3rem;
-    margin: 40px auto 40px;
+    margin: 20px auto 40px;
     color: #212529;
     opacity: 0.9;
     letter-spacing: 13px;
@@ -58,7 +59,7 @@
   .sprint-difficulty-level {
     display: flex;
     flex-direction: column;
-    margin: 0 10px 30px 10px;
+    margin: 0 10px 0 10px;
     user-select: none;
     transition: all 0.8s;
 
@@ -66,14 +67,37 @@
       display: flex;
       justify-content: center;
     }
+
     span {
       text-align: center;
       font-size: 1.2rem;
       color: #fff;
       margin: 10px auto;
     }
+  
     input {
       user-select: none;
+    }
+  }
+
+  .sprint-user-words {
+    display: flex;
+    margin: 0 10px 30px 10px;
+    transition: all 0.8s;
+
+    span {
+      @include flexible();
+      text-align: center;
+      font-size: 1.2rem;
+      color: #fff;
+      margin: 10px auto;
+    }
+
+    input {
+      width: 25px;
+      height: 25px;
+      color: #fff;
+      margin: 10px 10px;
     }
   }
 
@@ -82,6 +106,7 @@
     @include activeShadow();
     min-width: 190px;
     padding: 10px 20px;
+    margin-bottom: 20px;
     font-size: 1.5rem;
     color: #fff;
     opacity: 0.8;
