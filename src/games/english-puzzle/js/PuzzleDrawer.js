@@ -195,11 +195,15 @@ export default class PuzzleDrawer {
       });
     });
 
+    console.log('resizePuzzles currentWords до', currentWords);
+
     currentWords = currentWords.map((word) => {
       const wordIdx = Number(word.dataset.idx);
       const newWord = this.cloneCanvas(word, this.sentenceParams[sentenceIdx].lengths[wordIdx]);
       return newWord;
     });
+
+    console.log('resizePuzzles currentWords после', currentWords);
 
     restContainers.forEach((container) => {
       const containerEls = [...container.children];

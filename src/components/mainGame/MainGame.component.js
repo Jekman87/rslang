@@ -35,7 +35,6 @@ export default class MainGame extends Component {
       ...options,
     });
     console.log('MainGame this.options', options);
-    console.log('MyKeyboard', MyKeyboard);
     this.options = options;
     this.dataForApp = options.dataForApp;
     this.settingsOptional = this.dataForApp.settings.optional;
@@ -84,7 +83,6 @@ export default class MainGame extends Component {
         ...this.shortTermStats,
       };
     } else {
-      // cardsLeft переделать
       this.state = {
         ...BASE_STATE,
         ...this.state,
@@ -121,6 +119,7 @@ export default class MainGame extends Component {
       $answerButton: this.$root.find('#answer-button'),
       $volumeUp: this.$root.find('.fa-volume-up'),
       $volumeMute: this.$root.find('.fa-volume-mute'),
+      $keyboardBtn: this.$root.find('#keyboard-btn'),
       $prevBtn: this.$root.find('.navigate-button.prev i'),
       $nextBtn: this.$root.find('.navigate-button.next i'),
       $studiedСardNum: this.$root.find('#studied-card-num'),
@@ -148,7 +147,7 @@ export default class MainGame extends Component {
         break;
 
       case 'again-btn':
-        this.settingWordBtnHandler(WORD_PARAM.hard);
+        this.settingWordBtnHandler(WORD_PARAM.again);
         break;
 
       case 'hard-btn':
@@ -232,9 +231,16 @@ export default class MainGame extends Component {
 
     if (keyboardWrapper.classList.contains('keyboard-wrapper_show')) {
       keyboardWrapper.classList.remove('keyboard-wrapper_show');
+      this.elements.$keyboardBtn.removeClass('active');
+      this.elements.$keyboardBtn.removeClass('focus');
+      this.elements.$keyboardBtn.attr('aria-pressed', null);
+
       this.myKeyboard.removeListeners();
     } else {
       keyboardWrapper.classList.add('keyboard-wrapper_show');
+      this.elements.$keyboardBtn.addClass('focus');
+      this.elements.$keyboardBtn.addClass('active');
+      this.elements.$keyboardBtn.attr('aria-pressed', 'true');
       this.myKeyboard.addListeners();
     }
   }
@@ -308,7 +314,6 @@ export default class MainGame extends Component {
   }
 
   async showWordErrors(inputWordText, currentWordText) {
-    console.log('ошибочка', inputWordText, currentWordText);
     const commonSubstring = findCommonSubstring(inputWordText, currentWordText);
 
     this.elements.$wordInput.text('');
@@ -601,8 +606,6 @@ export default class MainGame extends Component {
     }
 
     console.log('setDifficulty this.dataForApp', this.dataForApp);
-    console.log('setDifficulty cardsCount', this.state.cardsCount);
-    console.log('setDifficulty currentCardNum', this.state.currentCardNum);
   }
 
   createUserStats() {
@@ -718,8 +721,7 @@ export default class MainGame extends Component {
     this.options.api.updateSettings(this.dataForApp.settings);
 
     this.state.isCorrect = true;
-    console.log('createUserStats cardsCount', this.state.cardsCount);
-    console.log('createUserStats currentCardNum', this.state.currentCardNum);
+    console.log('createUserStats state', this.state);
   }
 
   destroy() {
