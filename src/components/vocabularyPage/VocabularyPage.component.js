@@ -116,9 +116,9 @@ export default class Vocabulary extends Component {
     </div>
 
     <ol class="d-lg-flex col-12 col-sm-7 col-md-5 mb-1 ${config.name === 'deleted' ? 'col-lg-5 col-xl-4' : 'col-lg-8 col-xl-7'}">
-      <li class="breadcrumb-item align-items-lg-center"><small>Последняя тренировка:&nbsp;&nbsp;${dataObj.lastTraining}</small></li>
-      <li class="breadcrumb-item align-items-lg-center"><small>Повторов:&nbsp;&nbsp;${dataObj.counter}</small></li>
-      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small>Следующая тренировка:&nbsp;&nbsp;${dataObj.nextTraining}</small></li>
+      <li class="breadcrumb-item align-items-lg-center"><small>Последняя тренировка: ${dataObj.lastTraining}</small></li>
+      <li class="breadcrumb-item align-items-lg-center"><small>Повторов: ${dataObj.counter}</small></li>
+      <li class="${config.name === 'deleted' ? 'd-none' : 'breadcrumb-item'} align-items-lg-center"><small>Следующая тренировка: ${dataObj.nextTraining}</small></li>
     </ol>
   </div>
 
@@ -164,7 +164,7 @@ export default class Vocabulary extends Component {
     <button type="button" class="btn ${config.systemBottonColor} px-1" data-systembutton="${config.name}"  style="border-color:transparent"><i class="${config.systemBottonIcon} retrieval-button"></i>
     </button>
   </div>
-  
+
   <div class="additional-info order-4 mobile-block d-md-none px-0 px-md-2 ${additionalFieldsOff ? 'd-none' : 'col-12'}">
     <div class="description ${this.settings.vocabularyExplanation ? 'd-flex' : 'd-none'}">
       <div class="icon-container col-1 text-center text-info p-0 px-md-2"><i class="fas fa-graduation-cap"></i>
@@ -177,7 +177,7 @@ export default class Vocabulary extends Component {
         <div class="text-gray">${dataObj.textMeaningTranslate}</div>
       </div>
     </div>
-    
+
 
     <div class="example  ${this.settings.vocabularyExample ? 'd-flex' : 'd-none'}">
       <div class="icon-container col-1 text-center text-info p-0 px-md-2"><i class="fas fa-lightbulb"></i></div>
