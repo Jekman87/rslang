@@ -10,6 +10,11 @@
     .lead {
       font-size: 0.85rem;
     }
+    .greeting-text {
+      i {
+        margin-right: 5px;
+      }
+    }
     .list-group-item {
       flex-direction: column;
       text-align: center;

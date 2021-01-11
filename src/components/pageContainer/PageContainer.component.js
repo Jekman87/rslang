@@ -95,21 +95,7 @@ export default class PageContainer extends Component {
   async renderPage(NewPage) {
     if (NewPage.className !== AUTH_PAGE_NAME
       && (!this.settings || !this.statistics)) {
-      this.emit('mainAppSpinner', true);
-
-      await this.initSettingsAndStats();
-      await this.loadWords();
-      this.createUserCards();
-      this.dataForApp = {
-        settings: this.settings,
-        statistics: this.statistics,
-        newWords: this.newWords,
-        wordsToRepeatToday: this.wordsToRepeatToday,
-        userWords: this.userWords,
-        userCards: this.userCards,
-        shortTermStats: this.shortTermStats,
-        longTermStats: this.longTermStats,
-      };
+      await this.loadData();
     }
 
     const componentOptions = { ...this.options, dataForApp: this.dataForApp };
@@ -128,6 +114,25 @@ export default class PageContainer extends Component {
 
     this.component.render();
     this.emit('mainAppSpinner', false);
+  }
+
+  async loadData() {
+    this.emit('mainAppSpinner', true);
+
+    await this.initSettingsAndStats();
+    await this.checkDaylyStats();
+    await this.loadWords();
+    this.createUserCards();
+    this.dataForApp = {
+      settings: this.settings,
+      statistics: this.statistics,
+      newWords: this.newWords,
+      wordsToRepeatToday: this.wordsToRepeatToday,
+      userWords: this.userWords,
+      userCards: this.userCards,
+      shortTermStats: this.shortTermStats,
+      longTermStats: this.longTermStats,
+    };
   }
 
   async initSettingsAndStats() {
@@ -169,6 +174,10 @@ export default class PageContainer extends Component {
     if (longStatsJson) {
       this.longTermStats = JSON.parse(longStatsJson);
     }
+  }
+
+  async checkDaylyStats() {
+    console.log('checkDaylyStats');
   }
 
   async loadWords() {

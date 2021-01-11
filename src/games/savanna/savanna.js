@@ -24,7 +24,6 @@ export default class Savannah {
     }
     this.options = options;
     if (showConsoleLog) console.log(options);
-    window.savanna = this;
     const { statistics, settings } = this.options.dataForApp;
 
     if (showConsoleLog) console.log(statistics, settings);
